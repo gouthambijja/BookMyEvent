@@ -69,9 +69,9 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                return await _db.Users.FirstOrDefaultAsync(x=>x.Email==email);
+                return await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return new User();
             }
@@ -84,7 +84,7 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await _db.Users.FindAsync(Id);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return new User();
             }
@@ -137,6 +137,41 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return (new User(), ex.Message);
             }
+        }
+        public async Task<bool> ChangePassword(Guid UserId, string Password)
+        {
+            try
+            {
+                var user = await _db.Users.FindAsync(UserId);
+                if (user.AccountCredentialsId != null)
+                {
+                    var credential = await _db.AccountCredentials.FindAsync(user.AccountCredentialsId);
+                    credential.Password = Password;
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<Guid> IsUserExists(string Email, string Password)
+        {
+            var user = await _db.Users.FindAsync(Email);
+            if (user is not null)
+            {
+                var password = await _db.AccountCredentials.FindAsync(Password);
+                if (password != null)
+                {
+                    return user.UserId;
+                }
+            }
+            return user.UserId;
         }
     }
 }

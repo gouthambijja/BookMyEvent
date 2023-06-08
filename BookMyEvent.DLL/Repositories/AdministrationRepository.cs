@@ -166,7 +166,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-
+        
         public async Task<List<Administration>?> GetPrimaryAdministrators()
         {
             try

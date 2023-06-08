@@ -1,6 +1,6 @@
 using AutoMapper;
-
-
+using BookMyEvent.BLL.Models;
+using db.Models;
 
 public class Automapper
 
@@ -23,11 +23,8 @@ public class Automapper
             //cfg.CreateMap<Transaction, TransactionBL>();
 
             //cfg.CreateMap<TransactionBL, Transaction>();
-
-
-
-         
-
+            cfg.CreateMap<BLUser, User>().ReverseMap();
+            cfg.CreateMap<BLAdministrator, Administration>().ReverseMap();
         });
 
         var mapper = new Mapper(config);

@@ -82,5 +82,19 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a list of User objects
         /// </returns>
         Task<List<User>> GetAllUsers();
+        /// <summary>
+        /// Method Used to Change the User Password
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="Password"></param>
+        /// <returns>returns true if Password Changes Successfully or else false</returns>
+        Task<bool> ChangePassword(Guid UserId, string Password);
+        /// <summary>
+        /// Method Used to Login User
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Password">Returns Id of the User</param>
+        /// <returns></returns>
+        Task<Guid> IsUserExists(string Email, string Password);
     }
 }
