@@ -20,6 +20,24 @@ namespace BookMyEvent.DLL.Repositories
         {
             return context.Transactions.Where(e => e.UserId.Equals(UserId)).ToList();
         }
+
+        public async Task<Guid> GetUserIdByTransactionId(Guid transactionId)
+        {
+            try
+            {
+                Transaction? transaction = await context.Transactions.FindAsync(transactionId);
+                if (transaction != null)
+                {
+                    Guid userId = transaction.UserId;
+                    return userId;
+                }
+                else { return Guid.Empty; }
+            }
+            catch
+            {
+                return Guid.Empty; // or any appropriate value indicating an error occurred
+            }
+        }
         public List<Transaction> GetTransactionsByEventId(Guid EventId)
         {
             return context.Transactions.Where(e => e.EventId.Equals(EventId)).ToList();

@@ -53,6 +53,23 @@ namespace BookMyEvent.DLL.Repositories
             }
             return new Ticket();
         }
+
+        public async Task<Ticket> GetTicketByFormId(Guid FormId)
+        {
+            if (!FormId.Equals(string.Empty))
+            {
+                return await context.Tickets.FirstOrDefaultAsync(e => e.UserInputFormId.Equals(FormId));
+            }
+            return new Ticket();
+        }
+        public async Task<List<Ticket>?> GetTicketByEventId(Guid EventId)
+        {
+            if (!EventId.Equals(string.Empty))
+            {
+                return await context.Tickets.Where(e => e.EventId.Equals(EventId)).ToListAsync();
+            }
+            return null;
+        }
         public async Task<Ticket> UpdateIsCanceled(Guid ticketId)
         {
             var ticket = context.Tickets.FirstOrDefault(e => e.TicketId.Equals(ticketId));

@@ -30,6 +30,7 @@ public class Automapper
             cfg.CreateMap<BLAdministrator, Administration>().ReverseMap();
             cfg.CreateMap<BLUserInputForm, UserInputForm>().ReverseMap();
             cfg.CreateMap<BLUserInputFormField, UserInputFormField>().ReverseMap();
+            cfg.CreateMap<BLTicket, Ticket>().ReverseMap();
         });
 
         var mapper = new Mapper(config);

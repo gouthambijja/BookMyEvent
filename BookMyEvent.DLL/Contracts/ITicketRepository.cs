@@ -28,12 +28,26 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="transactionId"></param>
         /// <returns>List of Tickets with transactionId</returns>
         public Task<List<Ticket>> GetTicketByTransactionId(Guid transactionId);
+
+        /// <summary>
+        /// This mehod is to get Ticket by UserInputFormId
+        /// </summary>
+        /// <param name="FormId"></param>
+        /// <returns> Ticket </returns>
+        public Task<Ticket> GetTicketByFormId(Guid FormId);
         /// <summary>
         /// It is to get a ticket by taking Id as input
         /// </summary>
         /// <param name="TicketId"></param>
         /// <returns>Ticket with ticketId</returns>
         public Task<Ticket> GetTicketByTicketId(Guid TicketId);
+
+        /// <summary>
+        /// This method is to get all the tickets of an Event
+        /// </summary>
+        /// <param name="EventId"> Event Id </param>
+        /// <returns> List of Tickets of an Event </returns>
+        public Task<List<Ticket>?> GetTicketByEventId(Guid EventId);
         /// <summary>
         /// It id for Cancelling the ticket by taking the ticket Id as Parameter
         /// </summary>

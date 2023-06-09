@@ -27,10 +27,10 @@ namespace BookMyEvent.BLL.Services
             {
                 List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> newFormsBL = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>();
                 int totalForms = userForms.Count;
+                var mapper = Automapper.InitializeAutomapper();
                 for (int i = 0; i < totalForms; i++)
                 {
                     var SingleForm = userForms[i];
-                    var mapper = Automapper.InitializeAutomapper();
                     UserInputForm DLInputForm = mapper.Map<UserInputForm>(SingleForm.userInputForm);
 
                     UserInputForm newInputForm = await _userInputForm.Add(DLInputForm);
