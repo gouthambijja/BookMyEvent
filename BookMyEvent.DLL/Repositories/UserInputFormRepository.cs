@@ -50,9 +50,42 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public Task<UserInputForm> Get(Guid inputFormId)
+        public async Task<List<Guid>?> GetInputFormIdByUserIdAndEventId(Guid userId, Guid eventId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<Guid> inputFormIds = await _DBContext.UserInputForms.Where(f => f.UserId == userId && f.EventId == eventId)
+                     .Select(f => f.UserInputFormId)
+                     .ToListAsync();
+                if (inputFormIds != null)
+                {
+
+                    return inputFormIds;
+                }
+                else { return null; }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<UserInputForm>?> GetUserInputFormsByEventId( Guid eventId)
+        {
+            try
+            {
+                List<UserInputForm> inputForms = await _DBContext.UserInputForms.Where(f => f.EventId == eventId).ToListAsync();
+                if (inputForms != null)
+                {
+
+                    return inputForms;
+                }
+                else { return null; }
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public Task<UserInputForm> Update(UserInputForm inputForm)
