@@ -33,6 +33,20 @@ public partial class Event
 
     public DateTime CreatedOn { get; set; }
 
+    public Guid RejectedBy { get; set; }
+
+    public DateTime? RejectedOn { get; set; }
+
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
+    public string? RejectedReason { get; set; }
+
+    public decimal EventStartingPrice { get; set; }
+
+    public decimal EventEndingPrice { get; set; }
+
     public bool IsFree { get; set; }
 
     public bool? IsActive { get; set; }
@@ -47,6 +61,8 @@ public partial class Event
 
     public Guid AcceptedBy { get; set; }
 
+    public Guid ImgId { get; set; }
+
     public virtual Administration AcceptedByNavigation { get; set; } = null!;
 
     public virtual EventCategory Category { get; set; } = null!;
@@ -55,13 +71,19 @@ public partial class Event
 
     public virtual Form Form { get; set; } = null!;
 
+    public virtual EventImage Img { get; set; } = null!;
+
     public virtual Organisation Organisation { get; set; } = null!;
 
     public virtual RegistrationStatus RegistrationStatus { get; set; } = null!;
 
+    public virtual Administration RejectedByNavigation { get; set; } = null!;
+
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+
+    public virtual Administration? UpdatedByNavigation { get; set; }
 
     public virtual ICollection<UserInputForm> UserInputForms { get; set; } = new List<UserInputForm>();
 }

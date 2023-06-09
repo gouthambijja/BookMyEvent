@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookMyEvent.DLL.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__AccountC__8537A84B7944D818", x => x.AccountCredentialsId);
+                    table.PrimaryKey("PK__AccountC__8537A84B61ED7E9E", x => x.AccountCredentialsId);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,7 +34,21 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__EventCat__19093A0B3E6FEC7F", x => x.CategoryId);
+                    table.PrimaryKey("PK__EventCat__19093A0BB8F2E5D2", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventImages",
+                columns: table => new
+                {
+                    ImgId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImgBody = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImgType = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    ImgName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__EventIma__352F54F36BDC329E", x => x.ImgId);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,7 +61,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__FieldTyp__74418AE21B92E18C", x => x.FieldTypeId);
+                    table.PrimaryKey("PK__FieldTyp__74418AE297847293", x => x.FieldTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,7 +78,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Organisa__722346DCDFF6BC95", x => x.OrganisationId);
+                    table.PrimaryKey("PK__Organisa__722346DC26169D2A", x => x.OrganisationId);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,7 +91,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Registra__17166AA520EF1092", x => x.RegistrationStatusId);
+                    table.PrimaryKey("PK__Registra__17166AA51651A11A", x => x.RegistrationStatusId);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +104,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Roles__8AFACE1AB01D79C2", x => x.RoleId);
+                    table.PrimaryKey("PK__Roles__8AFACE1A65D1B1F5", x => x.RoleId);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,17 +122,18 @@ namespace BookMyEvent.DLL.Migrations
                     UpdatedOn = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
                     RoleId = table.Column<byte>(type: "tinyint", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))"),
+                    ImgBody = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RejectedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BlockedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Administ__ACDEFED38699AA44", x => x.AdministratorId);
+                    table.PrimaryKey("PK__Administ__ACDEFED343AA4E48", x => x.AdministratorId);
                     table.ForeignKey(
                         name: "FK_ADMINISTRATION_AccountCredentialsID",
                         column: x => x.AccountCredentialsId,
@@ -137,11 +152,6 @@ namespace BookMyEvent.DLL.Migrations
                     table.ForeignKey(
                         name: "FK__Administr__Accep__36B12243",
                         column: x => x.AcceptedBy,
-                        principalTable: "Administration",
-                        principalColumn: "AdministratorId");
-                    table.ForeignKey(
-                        name: "FK__Administr__Block__3C69FB99",
-                        column: x => x.BlockedBy,
                         principalTable: "Administration",
                         principalColumn: "AdministratorId");
                     table.ForeignKey(
@@ -174,7 +184,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Forms__FB05B7DDF7915A23", x => x.FormId);
+                    table.PrimaryKey("PK__Forms__FB05B7DD5A5ADCFC", x => x.FormId);
                     table.ForeignKey(
                         name: "FK_createrId",
                         column: x => x.CreatedBy,
@@ -197,14 +207,17 @@ namespace BookMyEvent.DLL.Migrations
                     Email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     PhoneNumber = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     AccountCredentialsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserAddress = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
                     UpdatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))"),
+                    ImgBody = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Users__1788CC4C1CFBDA92", x => x.UserId);
+                    table.PrimaryKey("PK__Users__1788CC4C7FDE0DA1", x => x.UserId);
                     table.ForeignKey(
                         name: "FK_USERS_ADMINISTRATORID",
                         column: x => x.DeletedBy,
@@ -235,17 +248,25 @@ namespace BookMyEvent.DLL.Migrations
                     IsCancelled = table.Column<bool>(type: "bit", nullable: false),
                     MaxNoOfTicketsPerTransaction = table.Column<byte>(type: "tinyint", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())"),
+                    RejectedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RejectedOn = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    RejectedReason = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    EventStartingPrice = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
+                    EventEndingPrice = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     IsFree = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))"),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FormId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RegistrationStatusId = table.Column<byte>(type: "tinyint", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImgId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Events__7944C810F1B08D70", x => x.EventId);
+                    table.PrimaryKey("PK__Events__7944C81054279AF9", x => x.EventId);
                     table.ForeignKey(
                         name: "FK_EVENTS_ACCEPTEDBY",
                         column: x => x.AcceptedBy,
@@ -267,6 +288,11 @@ namespace BookMyEvent.DLL.Migrations
                         principalTable: "Forms",
                         principalColumn: "FormId");
                     table.ForeignKey(
+                        name: "FK_EVENTS_IMGID",
+                        column: x => x.ImgId,
+                        principalTable: "EventImages",
+                        principalColumn: "ImgId");
+                    table.ForeignKey(
                         name: "FK_EVENTS_ORGANISATIONID",
                         column: x => x.OrganisationId,
                         principalTable: "Organisations",
@@ -276,6 +302,16 @@ namespace BookMyEvent.DLL.Migrations
                         column: x => x.RegistrationStatusId,
                         principalTable: "RegistrationStatus",
                         principalColumn: "RegistrationStatusId");
+                    table.ForeignKey(
+                        name: "FK_EVENTS_REJECTEDBY",
+                        column: x => x.RejectedBy,
+                        principalTable: "Administration",
+                        principalColumn: "AdministratorId");
+                    table.ForeignKey(
+                        name: "FK_EVENTS_UPDATEDBY",
+                        column: x => x.UpdatedBy,
+                        principalTable: "Administration",
+                        principalColumn: "AdministratorId");
                 });
 
             migrationBuilder.CreateTable(
@@ -286,13 +322,13 @@ namespace BookMyEvent.DLL.Migrations
                     FormId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FieldTypeId = table.Column<byte>(type: "tinyint", nullable: false),
                     Lable = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Validations = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     Options = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    IsRequired = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))"),
-                    Validations = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false)
+                    IsRequired = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Registra__6823EFDD8FEFB85D", x => x.RegistrationFormFieldId);
+                    table.PrimaryKey("PK__Registra__6823EFDD4809FA0A", x => x.RegistrationFormFieldId);
                     table.ForeignKey(
                         name: "FK_fieldId",
                         column: x => x.FieldTypeId,
@@ -312,13 +348,14 @@ namespace BookMyEvent.DLL.Migrations
                     TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(newid())"),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     NoOfTickets = table.Column<int>(type: "int", nullable: false),
                     TransactionTime = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
                     IsSuccessful = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Transact__55433A6BCBECA592", x => x.TransactionId);
+                    table.PrimaryKey("PK__Transact__55433A6B86BD076C", x => x.TransactionId);
                     table.ForeignKey(
                         name: "FK_Transactions_Events",
                         column: x => x.EventId,
@@ -341,7 +378,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__UserInpu__A2369B984BFCF7AD", x => x.UserInputFormId);
+                    table.PrimaryKey("PK__UserInpu__A2369B98D4D521DB", x => x.UserInputFormId);
                     table.ForeignKey(
                         name: "FK_EVENTID_EVENTS",
                         column: x => x.EventId,
@@ -367,7 +404,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tickets__712CC607FB2A66F7", x => x.TicketId);
+                    table.PrimaryKey("PK__Tickets__712CC607296FFC27", x => x.TicketId);
                     table.ForeignKey(
                         name: "FK_Tickets_Events",
                         column: x => x.EventId,
@@ -399,7 +436,7 @@ namespace BookMyEvent.DLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__UserInpu__AC5D36229AB3B81B", x => x.UserInputFormFieldid);
+                    table.PrimaryKey("PK__UserInpu__AC5D3622FE397643", x => x.UserInputFormFieldid);
                     table.ForeignKey(
                         name: "FK_RegistrationFormFieldId_RegistrationFormFields",
                         column: x => x.RegistrationFormFieldId,
@@ -421,11 +458,6 @@ namespace BookMyEvent.DLL.Migrations
                 name: "IX_Administration_AccountCredentialsId",
                 table: "Administration",
                 column: "AccountCredentialsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Administration_BlockedBy",
-                table: "Administration",
-                column: "BlockedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Administration_CreatedBy",
@@ -480,6 +512,11 @@ namespace BookMyEvent.DLL.Migrations
                 column: "FormId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Events_ImgId",
+                table: "Events",
+                column: "ImgId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Events_OrganisationId",
                 table: "Events",
                 column: "OrganisationId");
@@ -488,6 +525,16 @@ namespace BookMyEvent.DLL.Migrations
                 name: "IX_Events_RegistrationStatusId",
                 table: "Events",
                 column: "RegistrationStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_RejectedBy",
+                table: "Events",
+                column: "RejectedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_UpdatedBy",
+                table: "Events",
+                column: "UpdatedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Forms_CreatedBy",
@@ -500,7 +547,7 @@ namespace BookMyEvent.DLL.Migrations
                 column: "OrganisationId");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Organisa__1B62E33D149CEBD7",
+                name: "UQ__Organisa__1B62E33DBBDA62E6",
                 table: "Organisations",
                 column: "OrganisationName",
                 unique: true);
@@ -578,13 +625,13 @@ namespace BookMyEvent.DLL.Migrations
                 filter: "([GoogleId] IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Users__A6FBF2FBCCDB160B",
+                name: "UQ__Users__A6FBF2FBFCCB1DBA",
                 table: "Users",
                 column: "GoogleId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Users__A9D1053429665D24",
+                name: "UQ__Users__A9D10534B14A2F5D",
                 table: "Users",
                 column: "Email",
                 unique: true);
@@ -622,6 +669,9 @@ namespace BookMyEvent.DLL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Forms");
+
+            migrationBuilder.DropTable(
+                name: "EventImages");
 
             migrationBuilder.DropTable(
                 name: "RegistrationStatus");

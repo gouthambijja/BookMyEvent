@@ -11,6 +11,8 @@ public partial class Transaction
 
     public Guid EventId { get; set; }
 
+    public decimal Amount { get; set; }
+
     public int NoOfTickets { get; set; }
 
     public DateTime? TransactionTime { get; set; }

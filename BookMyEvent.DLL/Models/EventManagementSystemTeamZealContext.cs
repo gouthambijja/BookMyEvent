@@ -15,7 +15,6 @@ public partial class EventManagementSystemTeamZealContext : DbContext
     {
     }
 
-
     public virtual DbSet<AccountCredential> AccountCredentials { get; set; }
 
     public virtual DbSet<Administration> Administrations { get; set; }
@@ -23,6 +22,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
     public virtual DbSet<Event> Events { get; set; }
 
     public virtual DbSet<EventCategory> EventCategories { get; set; }
+
+    public virtual DbSet<EventImage> EventImages { get; set; }
 
     public virtual DbSet<FieldType> FieldTypes { get; set; }
 
@@ -45,11 +46,12 @@ public partial class EventManagementSystemTeamZealContext : DbContext
     public virtual DbSet<UserInputForm> UserInputForms { get; set; }
 
     public virtual DbSet<UserInputFormField> UserInputFormFields { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AccountCredential>(entity =>
         {
-            entity.HasKey(e => e.AccountCredentialsId).HasName("PK__AccountC__8537A84B7944D818");
+            entity.HasKey(e => e.AccountCredentialsId).HasName("PK__AccountC__8537A84B61ED7E9E");
 
             entity.Property(e => e.AccountCredentialsId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Password)
@@ -60,7 +62,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Administration>(entity =>
         {
-            entity.HasKey(e => e.AdministratorId).HasName("PK__Administ__ACDEFED38699AA44");
+            entity.HasKey(e => e.AdministratorId).HasName("PK__Administ__ACDEFED343AA4E48");
 
             entity.ToTable("Administration");
 
@@ -84,6 +86,9 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.GoogleId)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.ImageName)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.IsAccepted).HasDefaultValueSql("((0))");
             entity.Property(e => e.IsActive).HasDefaultValueSql("((0))");
             entity.Property(e => e.PhoneNumber)
@@ -100,10 +105,6 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.HasOne(d => d.AccountCredentials).WithMany(p => p.Administrations)
                 .HasForeignKey(d => d.AccountCredentialsId)
                 .HasConstraintName("FK_ADMINISTRATION_AccountCredentialsID");
-
-            entity.HasOne(d => d.BlockedByNavigation).WithMany(p => p.InverseBlockedByNavigation)
-                .HasForeignKey(d => d.BlockedBy)
-                .HasConstraintName("FK__Administr__Block__3C69FB99");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.InverseCreatedByNavigation)
                 .HasForeignKey(d => d.CreatedBy)
@@ -130,7 +131,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.EventId).HasName("PK__Events__7944C810F1B08D70");
+            entity.HasKey(e => e.EventId).HasName("PK__Events__7944C81054279AF9");
 
             entity.Property(e => e.EventId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.AvailableSeats).HasComputedColumnSql("([Capacity])", false);
@@ -141,9 +142,11 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasMaxLength(1024)
                 .IsUnicode(false);
             entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.EventEndingPrice).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.EventName)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.EventStartingPrice).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.IsActive)
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
@@ -153,7 +156,12 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.Location)
                 .HasMaxLength(1024)
                 .IsUnicode(false);
+            entity.Property(e => e.RejectedOn).HasColumnType("datetime");
+            entity.Property(e => e.RejectedReason).IsUnicode(false);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
 
             entity.HasOne(d => d.AcceptedByNavigation).WithMany(p => p.EventAcceptedByNavigations)
                 .HasForeignKey(d => d.AcceptedBy)
@@ -175,6 +183,11 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EVENTS_FORMID");
 
+            entity.HasOne(d => d.Img).WithMany(p => p.Events)
+                .HasForeignKey(d => d.ImgId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EVENTS_IMGID");
+
             entity.HasOne(d => d.Organisation).WithMany(p => p.Events)
                 .HasForeignKey(d => d.OrganisationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -184,11 +197,20 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.RegistrationStatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EVENTS_REGISTRATIONSTATUSID");
+
+            entity.HasOne(d => d.RejectedByNavigation).WithMany(p => p.EventRejectedByNavigations)
+                .HasForeignKey(d => d.RejectedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EVENTS_REJECTEDBY");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.EventUpdatedByNavigations)
+                .HasForeignKey(d => d.UpdatedBy)
+                .HasConstraintName("FK_EVENTS_UPDATEDBY");
         });
 
         modelBuilder.Entity<EventCategory>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__EventCat__19093A0B3E6FEC7F");
+            entity.HasKey(e => e.CategoryId).HasName("PK__EventCat__19093A0BB8F2E5D2");
 
             entity.Property(e => e.CategoryId).ValueGeneratedOnAdd();
             entity.Property(e => e.CategoryName)
@@ -196,9 +218,22 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<EventImage>(entity =>
+        {
+            entity.HasKey(e => e.ImgId).HasName("PK__EventIma__352F54F36BDC329E");
+
+            entity.Property(e => e.ImgId).ValueGeneratedNever();
+            entity.Property(e => e.ImgName)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.ImgType)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<FieldType>(entity =>
         {
-            entity.HasKey(e => e.FieldTypeId).HasName("PK__FieldTyp__74418AE21B92E18C");
+            entity.HasKey(e => e.FieldTypeId).HasName("PK__FieldTyp__74418AE297847293");
 
             entity.Property(e => e.FieldTypeId).ValueGeneratedOnAdd();
             entity.Property(e => e.Type)
@@ -208,7 +243,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Form>(entity =>
         {
-            entity.HasKey(e => e.FormId).HasName("PK__Forms__FB05B7DDF7915A23");
+            entity.HasKey(e => e.FormId).HasName("PK__Forms__FB05B7DD5A5ADCFC");
 
             entity.Property(e => e.FormId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.CreatedOn)
@@ -234,9 +269,9 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Organisation>(entity =>
         {
-            entity.HasKey(e => e.OrganisationId).HasName("PK__Organisa__722346DCDFF6BC95");
+            entity.HasKey(e => e.OrganisationId).HasName("PK__Organisa__722346DC26169D2A");
 
-            entity.HasIndex(e => e.OrganisationName, "UQ__Organisa__1B62E33D149CEBD7").IsUnique();
+            entity.HasIndex(e => e.OrganisationName, "UQ__Organisa__1B62E33DBBDA62E6").IsUnique();
 
             entity.Property(e => e.OrganisationId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.CreatedOn)
@@ -259,7 +294,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<RegistrationFormField>(entity =>
         {
-            entity.HasKey(e => e.RegistrationFormFieldId).HasName("PK__Registra__6823EFDD8FEFB85D");
+            entity.HasKey(e => e.RegistrationFormFieldId).HasName("PK__Registra__6823EFDD4809FA0A");
 
             entity.Property(e => e.RegistrationFormFieldId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.IsRequired)
@@ -286,7 +321,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<RegistrationStatus>(entity =>
         {
-            entity.HasKey(e => e.RegistrationStatusId).HasName("PK__Registra__17166AA520EF1092");
+            entity.HasKey(e => e.RegistrationStatusId).HasName("PK__Registra__17166AA51651A11A");
 
             entity.ToTable("RegistrationStatus");
 
@@ -298,7 +333,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE1AB01D79C2");
+            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE1A65D1B1F5");
 
             entity.Property(e => e.RoleId).ValueGeneratedOnAdd();
             entity.Property(e => e.RoleName)
@@ -308,7 +343,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Ticket>(entity =>
         {
-            entity.HasKey(e => e.TicketId).HasName("PK__Tickets__712CC607FB2A66F7");
+            entity.HasKey(e => e.TicketId).HasName("PK__Tickets__712CC607296FFC27");
 
             entity.Property(e => e.TicketId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.IsCancelled).HasDefaultValueSql("((0))");
@@ -332,9 +367,10 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__55433A6BCBECA592");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__55433A6B86BD076C");
 
             entity.Property(e => e.TransactionId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TransactionTime)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -352,11 +388,11 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C1CFBDA92");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C7FDE0DA1");
 
-            entity.HasIndex(e => e.GoogleId, "UQ__Users__A6FBF2FBCCDB160B").IsUnique();
+            entity.HasIndex(e => e.GoogleId, "UQ__Users__A6FBF2FBFCCB1DBA").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053429665D24").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534B14A2F5D").IsUnique();
 
             entity.HasIndex(e => e.GoogleId, "Unique_Users_Google_Id")
                 .IsUnique()
@@ -372,6 +408,9 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.GoogleId)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.ImageName)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.IsActive)
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
@@ -384,6 +423,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.UpdatedOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.UserAddress).IsUnicode(false);
 
             entity.HasOne(d => d.AccountCredentials).WithMany(p => p.Users)
                 .HasForeignKey(d => d.AccountCredentialsId)
@@ -396,7 +436,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<UserInputForm>(entity =>
         {
-            entity.HasKey(e => e.UserInputFormId).HasName("PK__UserInpu__A2369B984BFCF7AD");
+            entity.HasKey(e => e.UserInputFormId).HasName("PK__UserInpu__A2369B98D4D521DB");
 
             entity.ToTable("UserInputForm");
 
@@ -415,7 +455,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
         modelBuilder.Entity<UserInputFormField>(entity =>
         {
-            entity.HasKey(e => e.UserInputFormFieldid).HasName("PK__UserInpu__AC5D36229AB3B81B");
+            entity.HasKey(e => e.UserInputFormFieldid).HasName("PK__UserInpu__AC5D3622FE397643");
 
             entity.Property(e => e.UserInputFormFieldid).ValueGeneratedNever();
             entity.Property(e => e.DateResponse).HasColumnType("datetime");

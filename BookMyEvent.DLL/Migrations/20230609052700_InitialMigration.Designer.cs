@@ -12,8 +12,8 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    [Migration("20230606100841_initial")]
-    partial class initial
+    [Migration("20230609052700_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("datetime");
 
                     b.HasKey("AccountCredentialsId")
-                        .HasName("PK__AccountC__8537A84B7944D818");
+                        .HasName("PK__AccountC__8537A84B61ED7E9E");
 
                     b.ToTable("AccountCredentials");
                 });
@@ -72,9 +72,6 @@ namespace BookMyEvent.DLL.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<Guid?>("BlockedBy")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -96,6 +93,14 @@ namespace BookMyEvent.DLL.Migrations
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<byte[]>("ImgBody")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool?>("IsAccepted")
                         .ValueGeneratedOnAdd()
@@ -128,13 +133,11 @@ namespace BookMyEvent.DLL.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("AdministratorId")
-                        .HasName("PK__Administ__ACDEFED38699AA44");
+                        .HasName("PK__Administ__ACDEFED343AA4E48");
 
                     b.HasIndex("AcceptedBy");
 
                     b.HasIndex("AccountCredentialsId");
-
-                    b.HasIndex("BlockedBy");
 
                     b.HasIndex("CreatedBy");
 
@@ -191,13 +194,22 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime");
 
+                    b.Property<decimal>("EventEndingPrice")
+                        .HasColumnType("decimal(18, 0)");
+
                     b.Property<string>("EventName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<decimal>("EventStartingPrice")
+                        .HasColumnType("decimal(18, 0)");
+
                     b.Property<Guid>("FormId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImgId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsActive")
@@ -236,11 +248,29 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<byte>("RegistrationStatusId")
                         .HasColumnType("tinyint");
 
+                    b.Property<Guid>("RejectedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("RejectedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RejectedReason")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime");
 
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
                     b.HasKey("EventId")
-                        .HasName("PK__Events__7944C810F1B08D70");
+                        .HasName("PK__Events__7944C81054279AF9");
 
                     b.HasIndex("AcceptedBy");
 
@@ -250,9 +280,15 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.HasIndex("FormId");
 
+                    b.HasIndex("ImgId");
+
                     b.HasIndex("OrganisationId");
 
                     b.HasIndex("RegistrationStatusId");
+
+                    b.HasIndex("RejectedBy");
+
+                    b.HasIndex("UpdatedBy");
 
                     b.ToTable("Events");
                 });
@@ -272,9 +308,33 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("CategoryId")
-                        .HasName("PK__EventCat__19093A0B3E6FEC7F");
+                        .HasName("PK__EventCat__19093A0BB8F2E5D2");
 
                     b.ToTable("EventCategories");
+                });
+
+            modelBuilder.Entity("db.Models.EventImage", b =>
+                {
+                    b.Property<Guid>("ImgId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("ImgBody")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImgName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ImgType")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("ImgId")
+                        .HasName("PK__EventIma__352F54F36BDC329E");
+
+                    b.ToTable("EventImages");
                 });
 
             modelBuilder.Entity("db.Models.FieldType", b =>
@@ -292,7 +352,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.HasKey("FieldTypeId")
-                        .HasName("PK__FieldTyp__74418AE21B92E18C");
+                        .HasName("PK__FieldTyp__74418AE297847293");
 
                     b.ToTable("FieldTypes");
                 });
@@ -328,7 +388,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FormId")
-                        .HasName("PK__Forms__FB05B7DDF7915A23");
+                        .HasName("PK__Forms__FB05B7DD5A5ADCFC");
 
                     b.HasIndex("CreatedBy");
 
@@ -377,9 +437,9 @@ namespace BookMyEvent.DLL.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.HasKey("OrganisationId")
-                        .HasName("PK__Organisa__722346DCDFF6BC95");
+                        .HasName("PK__Organisa__722346DC26169D2A");
 
-                    b.HasIndex(new[] { "OrganisationName" }, "UQ__Organisa__1B62E33D149CEBD7")
+                    b.HasIndex(new[] { "OrganisationName" }, "UQ__Organisa__1B62E33DBBDA62E6")
                         .IsUnique();
 
                     b.ToTable("Organisations");
@@ -421,7 +481,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("varchar(max)");
 
                     b.HasKey("RegistrationFormFieldId")
-                        .HasName("PK__Registra__6823EFDD8FEFB85D");
+                        .HasName("PK__Registra__6823EFDD4809FA0A");
 
                     b.HasIndex("FieldTypeId");
 
@@ -445,7 +505,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("RegistrationStatusId")
-                        .HasName("PK__Registra__17166AA520EF1092");
+                        .HasName("PK__Registra__17166AA51651A11A");
 
                     b.ToTable("RegistrationStatus", (string)null);
                 });
@@ -465,7 +525,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("RoleId")
-                        .HasName("PK__Roles__8AFACE1AB01D79C2");
+                        .HasName("PK__Roles__8AFACE1A65D1B1F5");
 
                     b.ToTable("Roles");
                 });
@@ -495,7 +555,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TicketId")
-                        .HasName("PK__Tickets__712CC607FB2A66F7");
+                        .HasName("PK__Tickets__712CC607296FFC27");
 
                     b.HasIndex("EventId");
 
@@ -512,6 +572,9 @@ namespace BookMyEvent.DLL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18, 0)");
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
@@ -531,7 +594,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TransactionId")
-                        .HasName("PK__Transact__55433A6BCBECA592");
+                        .HasName("PK__Transact__55433A6B86BD076C");
 
                     b.HasIndex("EventId");
 
@@ -570,6 +633,14 @@ namespace BookMyEvent.DLL.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("ImageName")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<byte[]>("ImgBody")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool?>("IsActive")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -593,17 +664,21 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<string>("UserAddress")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
                     b.HasKey("UserId")
-                        .HasName("PK__Users__1788CC4C1CFBDA92");
+                        .HasName("PK__Users__1788CC4C7FDE0DA1");
 
                     b.HasIndex("AccountCredentialsId");
 
                     b.HasIndex("DeletedBy");
 
-                    b.HasIndex(new[] { "GoogleId" }, "UQ__Users__A6FBF2FBCCDB160B")
+                    b.HasIndex(new[] { "GoogleId" }, "UQ__Users__A6FBF2FBFCCB1DBA")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Users__A9D1053429665D24")
+                    b.HasIndex(new[] { "Email" }, "UQ__Users__A9D10534B14A2F5D")
                         .IsUnique();
 
                     b.HasIndex(new[] { "GoogleId" }, "Unique_Users_Google_Id")
@@ -625,7 +700,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserInputFormId")
-                        .HasName("PK__UserInpu__A2369B984BFCF7AD");
+                        .HasName("PK__UserInpu__A2369B98D4D521DB");
 
                     b.HasIndex("EventId");
 
@@ -662,7 +737,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserInputFormFieldid")
-                        .HasName("PK__UserInpu__AC5D36229AB3B81B");
+                        .HasName("PK__UserInpu__AC5D3622FE397643");
 
                     b.HasIndex("RegistrationFormFieldId");
 
@@ -682,11 +757,6 @@ namespace BookMyEvent.DLL.Migrations
                         .WithMany("Administrations")
                         .HasForeignKey("AccountCredentialsId")
                         .HasConstraintName("FK_ADMINISTRATION_AccountCredentialsID");
-
-                    b.HasOne("db.Models.Administration", "BlockedByNavigation")
-                        .WithMany("InverseBlockedByNavigation")
-                        .HasForeignKey("BlockedBy")
-                        .HasConstraintName("FK__Administr__Block__3C69FB99");
 
                     b.HasOne("db.Models.Administration", "CreatedByNavigation")
                         .WithMany("InverseCreatedByNavigation")
@@ -718,8 +788,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Navigation("AcceptedByNavigation");
 
                     b.Navigation("AccountCredentials");
-
-                    b.Navigation("BlockedByNavigation");
 
                     b.Navigation("CreatedByNavigation");
 
@@ -758,6 +826,12 @@ namespace BookMyEvent.DLL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_EVENTS_FORMID");
 
+                    b.HasOne("db.Models.EventImage", "Img")
+                        .WithMany("Events")
+                        .HasForeignKey("ImgId")
+                        .IsRequired()
+                        .HasConstraintName("FK_EVENTS_IMGID");
+
                     b.HasOne("db.Models.Organisation", "Organisation")
                         .WithMany("Events")
                         .HasForeignKey("OrganisationId")
@@ -770,6 +844,17 @@ namespace BookMyEvent.DLL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_EVENTS_REGISTRATIONSTATUSID");
 
+                    b.HasOne("db.Models.Administration", "RejectedByNavigation")
+                        .WithMany("EventRejectedByNavigations")
+                        .HasForeignKey("RejectedBy")
+                        .IsRequired()
+                        .HasConstraintName("FK_EVENTS_REJECTEDBY");
+
+                    b.HasOne("db.Models.Administration", "UpdatedByNavigation")
+                        .WithMany("EventUpdatedByNavigations")
+                        .HasForeignKey("UpdatedBy")
+                        .HasConstraintName("FK_EVENTS_UPDATEDBY");
+
                     b.Navigation("AcceptedByNavigation");
 
                     b.Navigation("Category");
@@ -778,9 +863,15 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.Navigation("Form");
 
+                    b.Navigation("Img");
+
                     b.Navigation("Organisation");
 
                     b.Navigation("RegistrationStatus");
+
+                    b.Navigation("RejectedByNavigation");
+
+                    b.Navigation("UpdatedByNavigation");
                 });
 
             modelBuilder.Entity("db.Models.Form", b =>
@@ -935,11 +1026,13 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.Navigation("EventCreatedByNavigations");
 
+                    b.Navigation("EventRejectedByNavigations");
+
+                    b.Navigation("EventUpdatedByNavigations");
+
                     b.Navigation("Forms");
 
                     b.Navigation("InverseAcceptedByNavigation");
-
-                    b.Navigation("InverseBlockedByNavigation");
 
                     b.Navigation("InverseCreatedByNavigation");
 
@@ -960,6 +1053,11 @@ namespace BookMyEvent.DLL.Migrations
                 });
 
             modelBuilder.Entity("db.Models.EventCategory", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("db.Models.EventImage", b =>
                 {
                     b.Navigation("Events");
                 });

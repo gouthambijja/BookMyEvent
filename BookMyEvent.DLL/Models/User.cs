@@ -17,11 +17,17 @@ public partial class User
 
     public Guid? AccountCredentialsId { get; set; }
 
+    public string? UserAddress { get; set; }
+
     public DateTime CreatedOn { get; set; }
 
     public DateTime UpdatedOn { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public byte[]? ImgBody { get; set; }
+
+    public string? ImageName { get; set; }
 
     public Guid? DeletedBy { get; set; }
 
