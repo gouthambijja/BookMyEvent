@@ -61,8 +61,6 @@ public partial class Event
 
     public Guid AcceptedBy { get; set; }
 
-    public Guid ImgId { get; set; }
-
     public virtual Administration AcceptedByNavigation { get; set; } = null!;
 
     public virtual EventCategory Category { get; set; } = null!;
@@ -70,8 +68,6 @@ public partial class Event
     public virtual Administration CreatedByNavigation { get; set; } = null!;
 
     public virtual Form Form { get; set; } = null!;
-
-    public virtual EventImage Img { get; set; } = null!;
 
     public virtual Organisation Organisation { get; set; } = null!;
 
@@ -86,4 +82,5 @@ public partial class Event
     public virtual Administration? UpdatedByNavigation { get; set; }
 
     public virtual ICollection<UserInputForm> UserInputForms { get; set; } = new List<UserInputForm>();
+    public virtual ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
 }

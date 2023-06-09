@@ -288,8 +288,8 @@ namespace BookMyEvent.DLL.Repositories
                     eventToUpdate.Description = _event.Description;
                     eventToUpdate.StartDate = _event.StartDate;
                     eventToUpdate.EndDate = _event.EndDate;
-                    //eventToUpdate.StartingPrice = _event.StartingPrice;
-                    //eventToUpdate.EndingPrice = _event.EndingPrice;
+                    eventToUpdate.EventStartingPrice = _event.EventStartingPrice;
+                    eventToUpdate.EventEndingPrice = _event.EventEndingPrice;
                     eventToUpdate.IsFree = _event.IsFree;
                     eventToUpdate.IsOffline = _event.IsOffline;
                     eventToUpdate.Location = _event.Location;
@@ -299,8 +299,8 @@ namespace BookMyEvent.DLL.Repositories
                     eventToUpdate.OrganisationId = _event.OrganisationId;
                     eventToUpdate.AcceptedBy = _event.AcceptedBy;
                     eventToUpdate.CreatedBy = _event.CreatedBy;
-                    //eventToUpdate.UpdatedBy = _event.UpdatedBy;
-                    //eventToUpdate.Update = _event.UpdatedDate;
+                    eventToUpdate.UpdatedBy = _event.UpdatedBy;
+                    eventToUpdate.UpdatedOn = _event.UpdatedOn;
                     await _db.SaveChangesAsync();
                     await _db.Entry(eventToUpdate).ReloadAsync();
                     return (eventToUpdate, "Event Updated Successfully");

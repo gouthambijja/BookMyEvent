@@ -23,6 +23,9 @@ public class Automapper
             //cfg.CreateMap<Transaction, TransactionBL>();
 
             //cfg.CreateMap<TransactionBL, Transaction>();
+            cfg.CreateMap<BLEvent,Event>().ReverseMap();
+            cfg.CreateMap<List<BLEvent>,List<Event>>().ReverseMap();
+            cfg.CreateMap<BLTransaction,Transaction>().ReverseMap();
             cfg.CreateMap<BLUser, User>().ReverseMap();
             cfg.CreateMap<BLAdministrator, Administration>().ReverseMap();
             cfg.CreateMap<BLUserInputForm, UserInputForm>().ReverseMap();

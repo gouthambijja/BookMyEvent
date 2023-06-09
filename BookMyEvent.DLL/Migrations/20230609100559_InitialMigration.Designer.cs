@@ -12,7 +12,7 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    [Migration("20230609052700_InitialMigration")]
+    [Migration("20230609100559_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -209,9 +209,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<Guid>("FormId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ImgId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool?>("IsActive")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -280,8 +277,6 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.HasIndex("FormId");
 
-                    b.HasIndex("ImgId");
-
                     b.HasIndex("OrganisationId");
 
                     b.HasIndex("RegistrationStatusId");
@@ -318,6 +313,9 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<Guid>("ImgId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("ImgBody")
                         .HasColumnType("varbinary(max)");
 
@@ -333,6 +331,8 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.HasKey("ImgId")
                         .HasName("PK__EventIma__352F54F36BDC329E");
+
+                    b.HasIndex("EventId");
 
                     b.ToTable("EventImages");
                 });
@@ -826,12 +826,6 @@ namespace BookMyEvent.DLL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_EVENTS_FORMID");
 
-                    b.HasOne("db.Models.EventImage", "Img")
-                        .WithMany("Events")
-                        .HasForeignKey("ImgId")
-                        .IsRequired()
-                        .HasConstraintName("FK_EVENTS_IMGID");
-
                     b.HasOne("db.Models.Organisation", "Organisation")
                         .WithMany("Events")
                         .HasForeignKey("OrganisationId")
@@ -863,8 +857,6 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.Navigation("Form");
 
-                    b.Navigation("Img");
-
                     b.Navigation("Organisation");
 
                     b.Navigation("RegistrationStatus");
@@ -872,6 +864,17 @@ namespace BookMyEvent.DLL.Migrations
                     b.Navigation("RejectedByNavigation");
 
                     b.Navigation("UpdatedByNavigation");
+                });
+
+            modelBuilder.Entity("db.Models.EventImage", b =>
+                {
+                    b.HasOne("db.Models.Event", "Event")
+                        .WithMany("EventImages")
+                        .HasForeignKey("EventId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Img_EventID_Events");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("db.Models.Form", b =>
@@ -1045,6 +1048,8 @@ namespace BookMyEvent.DLL.Migrations
 
             modelBuilder.Entity("db.Models.Event", b =>
                 {
+                    b.Navigation("EventImages");
+
                     b.Navigation("Tickets");
 
                     b.Navigation("Transactions");
@@ -1053,11 +1058,6 @@ namespace BookMyEvent.DLL.Migrations
                 });
 
             modelBuilder.Entity("db.Models.EventCategory", b =>
-                {
-                    b.Navigation("Events");
-                });
-
-            modelBuilder.Entity("db.Models.EventImage", b =>
                 {
                     b.Navigation("Events");
                 });

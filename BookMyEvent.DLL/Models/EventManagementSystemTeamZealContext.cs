@@ -183,11 +183,6 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EVENTS_FORMID");
 
-            entity.HasOne(d => d.Img).WithMany(p => p.Events)
-                .HasForeignKey(d => d.ImgId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_EVENTS_IMGID");
-
             entity.HasOne(d => d.Organisation).WithMany(p => p.Events)
                 .HasForeignKey(d => d.OrganisationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -229,6 +224,10 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.ImgType)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.HasOne(d => d.Event).WithMany(p => p.EventImages)
+            .HasForeignKey(d => d.EventId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_Img_EventID_Events");
         });
 
         modelBuilder.Entity<FieldType>(entity =>
@@ -452,7 +451,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserID_Users");
         });
-
+     
         modelBuilder.Entity<UserInputFormField>(entity =>
         {
             entity.HasKey(e => e.UserInputFormFieldid).HasName("PK__UserInpu__AC5D3622FE397643");
@@ -475,6 +474,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasConstraintName("FK_UserInputFormIdd_UserInputForm");
         });
 
+        OnModelCreatingPartial(modelBuilder);
     }
 
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

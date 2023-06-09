@@ -38,20 +38,6 @@ namespace BookMyEvent.DLL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventImages",
-                columns: table => new
-                {
-                    ImgId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImgBody = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    ImgType = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    ImgName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__EventIma__352F54F36BDC329E", x => x.ImgId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FieldTypes",
                 columns: table => new
                 {
@@ -261,8 +247,7 @@ namespace BookMyEvent.DLL.Migrations
                     FormId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RegistrationStatusId = table.Column<byte>(type: "tinyint", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImgId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -287,11 +272,6 @@ namespace BookMyEvent.DLL.Migrations
                         column: x => x.FormId,
                         principalTable: "Forms",
                         principalColumn: "FormId");
-                    table.ForeignKey(
-                        name: "FK_EVENTS_IMGID",
-                        column: x => x.ImgId,
-                        principalTable: "EventImages",
-                        principalColumn: "ImgId");
                     table.ForeignKey(
                         name: "FK_EVENTS_ORGANISATIONID",
                         column: x => x.OrganisationId,
@@ -339,6 +319,26 @@ namespace BookMyEvent.DLL.Migrations
                         column: x => x.FormId,
                         principalTable: "Forms",
                         principalColumn: "FormId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventImages",
+                columns: table => new
+                {
+                    ImgId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImgBody = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImgType = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    ImgName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__EventIma__352F54F36BDC329E", x => x.ImgId);
+                    table.ForeignKey(
+                        name: "FK_Img_EventID_Events",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -492,6 +492,11 @@ namespace BookMyEvent.DLL.Migrations
                 filter: "([GoogleId] IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EventImages_EventId",
+                table: "EventImages",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Events_AcceptedBy",
                 table: "Events",
                 column: "AcceptedBy");
@@ -510,11 +515,6 @@ namespace BookMyEvent.DLL.Migrations
                 name: "IX_Events_FormId",
                 table: "Events",
                 column: "FormId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_ImgId",
-                table: "Events",
-                column: "ImgId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OrganisationId",
@@ -641,6 +641,9 @@ namespace BookMyEvent.DLL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EventImages");
+
+            migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
@@ -669,9 +672,6 @@ namespace BookMyEvent.DLL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Forms");
-
-            migrationBuilder.DropTable(
-                name: "EventImages");
 
             migrationBuilder.DropTable(
                 name: "RegistrationStatus");
