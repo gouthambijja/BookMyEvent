@@ -3,6 +3,7 @@ using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,13 @@ namespace BookMyEvent.BLL.Services
             }
             return (false, string.Empty);
         }
-        public bool BlockUser(Guid UserId)
+        public async Task<(Guid UserId,string Message)> BlockUser(Guid UserId)
         {
-            throw new NotImplementedException();
+            if(!UserId.Equals(string.Empty))
+            {
+                return await UserRepositoryDal.BlockUser(UserId);
+            }
+            return (UserId,"Bll Block Error");
         }
         public async Task<bool> ChangePassword(Guid UserId, string Password)
         {
@@ -66,21 +71,34 @@ namespace BookMyEvent.BLL.Services
             var mapper = Automapper.InitializeAutomapper();
             return mapper.Map<List<User>, List<BLUser>>(UsersList);
         }
-        public Task<int> Login(BLLoginModel login)
+        public async Task<Guid> Login(BLLoginModel login)
         {
-            throw new NotImplementedException();
+            if (login is not null)
+            {
+                return await UserRepositoryDal.IsUserExists(login.Email, login.Password);
+            }
+            return Guid.Empty;
         }
-        public Task<BLUser> ToggleIsActiveById(Guid Id)
+        public async Task<BLUser> ToggleIsActiveById(Guid Id)
         {
-            throw new NotImplementedException();
+            if (!Id.Equals(string.Empty))
+            {
+                User user = await UserRepositoryDal.ToggleIsActiveById(Id);
+                var mapper = Automapper.InitializeAutomapper();
+                return mapper.Map<User, BLUser>(user);
+            }
+            return new BLUser();
         }
-        public Task<BLUser> UpdateUser(BLUser user)
+        public async Task<(BLUser, string Message)> UpdateUser(BLUser user)
         {
-            throw new NotImplementedException();
-        }
-        public Task<(User, string Message)> UpdateUser(User _user)
-        {
-            throw new NotImplementedException();
+            if (user is not null)
+            {
+                var mapper = Automapper.InitializeAutomapper();
+                User user1 = mapper.Map<BLUser, User>(user);
+                await UserRepositoryDal.UpdateUser(user1);
+                return (user, "Updated");
+            }
+            return (new BLUser(), "Not Updated");
         }
     }
 }

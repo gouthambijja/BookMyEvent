@@ -173,5 +173,16 @@ namespace BookMyEvent.DLL.Repositories
             }
             return user.UserId;
         }
+        public async Task<(Guid UserId,string Message)> BlockUser(Guid UserId)
+        {
+            var user = await _db.Users.FindAsync(UserId);
+            if (user is not null)
+            {
+                user.IsActive = false;
+                await _db.SaveChangesAsync();
+                return (user.UserId,"User Blocked");
+            }
+            return (UserId,"User Not Blocked");
+        }
     }
 }

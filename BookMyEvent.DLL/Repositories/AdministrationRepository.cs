@@ -13,9 +13,9 @@ namespace BookMyEvent.DLL.Repositories
     public class AdministrationRepository : IAdministrationRepository
     {
         private readonly EventManagementSystemTeamZealContext _dbcontext;
-        public AdministrationRepository(EventManagementSystemTeamZealContext dbcontext) 
+        public AdministrationRepository(EventManagementSystemTeamZealContext dbcontext)
         {
-            _dbcontext = dbcontext; 
+            _dbcontext = dbcontext;
         }
 
         public async Task<Administration?> AddAdministrator(Administration administrator)
@@ -61,7 +61,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-       
+
         public async Task<Administration?> GetAdministratorByEmail(string email)
         {
             try
@@ -166,7 +166,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        
+
         public async Task<List<Administration>?> GetPrimaryAdministrators()
         {
             try
@@ -441,6 +441,27 @@ namespace BookMyEvent.DLL.Repositories
                 }
             }
             catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> ChangeAdminPassword(Guid AdminID, string Password)
+        {
+            try
+            {
+                var Admin = await _dbcontext.Administrations.FindAsync(AdminID);
+                if (Admin != null)
+                {
+                    var password = await _dbcontext.AccountCredentials.FindAsync(Admin.AccountCredentials);
+                    if (password != null)
+                    {
+                        password.Password = Password;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
             {
                 return false;
             }

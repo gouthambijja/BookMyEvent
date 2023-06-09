@@ -169,7 +169,12 @@ namespace BookMyEvent.DLL.Contracts
         /// False:If delete operation fails</returns>
         public Task<bool> DeleteAdministratorsByOrgId(Guid deletedByUserId, Guid OrgId);
 
-
-
+        /// <summary>
+        /// Method to Change Admin Password
+        /// </summary>
+        /// <param name="AdminID"></param>
+        /// <param name="Password"></param>
+        /// <returns>return true if Password Changes Successfully else false</returns>
+        Task<bool> ChangeAdminPassword(Guid AdminID, string Password);
     }
 }
