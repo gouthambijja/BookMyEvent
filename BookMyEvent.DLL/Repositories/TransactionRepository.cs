@@ -38,9 +38,18 @@ namespace BookMyEvent.DLL.Repositories
                 return Guid.Empty; // or any appropriate value indicating an error occurred
             }
         }
-        public List<Transaction> GetTransactionsByEventId(Guid EventId)
+        public async Task<List<Transaction>> GetTransactionsByEventId(Guid EventId)
         {
-            return context.Transactions.Where(e => e.EventId.Equals(EventId)).ToList();
+            try
+            {
+
+            List<Transaction> transactions= await context.Transactions.Where(e => e.EventId.Equals(EventId) && e.IsSuccessful.Equals(true)).ToListAsync();
+            return transactions;
+            }
+            catch
+            {
+                return new List<Transaction>();
+            }
         }
         public async Task<Transaction> AddTransaction(Transaction transaction)
         {

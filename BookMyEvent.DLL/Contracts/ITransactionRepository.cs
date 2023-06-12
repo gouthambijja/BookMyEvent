@@ -16,7 +16,7 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns>List of transactions with User id</returns>
-        public List<Transaction> GetTransactionsByUserId(Guid UserId);
+        public Task<List<Transaction>> GetTransactionsByUserId(Guid UserId);
 
         /// <summary>
         /// Method to get userId by TransactionId
@@ -29,7 +29,7 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <param name="EventId"></param>
         /// <returns>Lis of Transactions with Event Id</returns>
-        public List<Transaction> GetTransactionsByEventId(Guid EventId);
+        public Task<List<Transaction>> GetTransactionsByEventId(Guid EventId);
         /// <summary>
         /// Method for Adding Transaction by taking transaction object as input
         /// </summary>

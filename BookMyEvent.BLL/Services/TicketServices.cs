@@ -127,8 +127,14 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var mapper = Automapper.InitializeAutomapper();
-                List<Ticket> ticketDL = mapper.Map<List<Ticket>>(ticketList);
-                bool newTicketDL = await _ticketRepository.AddMultipleTickets(ticketDL);
+                //List<Ticket> ticketDL = mapper.Map<List<Ticket>>(ticketList);
+                List<Ticket> ticketListDL = new List<Ticket>();
+                foreach (var ticket in ticketList)
+                {
+                    Ticket ticketDL=mapper.Map<Ticket>(ticket);
+                    ticketListDL.Add(ticketDL);
+                }
+                bool newTicketDL = await _ticketRepository.AddMultipleTickets(ticketListDL);
                 return newTicketDL;
             }
             catch

@@ -13,6 +13,7 @@ namespace BookMyEvent.BLL.Contracts
         Task<BLTransaction> Add((BLTransaction transaction, List<UserInputForm> forms) transaction);
         Task<BLTransaction> Update(BLTransaction transaction);
         Task<bool> Delete(Guid TransactionId);
-        Task<List<BLTransaction>> GetAll();
+        Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId);
+        Task<List<BLTransaction>> GetAllTransactionsByUserId(Guid userId);
     }
 }

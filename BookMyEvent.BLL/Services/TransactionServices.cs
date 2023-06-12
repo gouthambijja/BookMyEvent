@@ -62,9 +62,43 @@ namespace BookMyEvent.BLL.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<BLTransaction>> GetAll()
+        public async Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<Transaction> transactionsListDL = await transactionRepository.GetTransactionsByEventId(eventId);
+                List<BLTransaction> transactionsListBL = new List<BLTransaction>();
+                foreach(var transaction in transactionsListDL)
+                {
+                    BLTransaction transactionBL = _mapper.Map<BLTransaction>(transaction);
+                    transactionsListBL.Add(transactionBL);
+                }
+                return transactionsListBL;
+            }
+            catch
+            {
+                return new List<BLTransaction>();
+            }
+        }
+
+
+        public async Task<List<BLTransaction>> GetAllTransactionsByUserId(Guid userId)
+        {
+            try
+            {
+                List<Transaction> transactionsListDL = await transactionRepository.GetTransactionsByUserId(userId);
+                List<BLTransaction> transactionsListBL = new List<BLTransaction>();
+                foreach (var transaction in transactionsListDL)
+                {
+                    BLTransaction transactionBL = _mapper.Map<BLTransaction>(transaction);
+                    transactionsListBL.Add(transactionBL);
+                }
+                return transactionsListBL;
+            }
+            catch
+            {
+                return new List<BLTransaction>();
+            }
         }
 
         public Task<BLTransaction> Update(BLTransaction transaction)
