@@ -46,7 +46,7 @@ namespace BookMyEvent.BLL.Services
         {
             if (AdminId != null)
             {
-                return await _administrationRepository.ChangeAdministratorPassword(AdminId, Password);
+                return await _administrationRepository.ChangeAdminPassword(AdminId, Password);
             }
             return false;
         }
