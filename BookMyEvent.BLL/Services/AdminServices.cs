@@ -16,12 +16,12 @@ namespace BookMyEvent.BLL.Services
     {
         private readonly IAdministrationRepository _administrationRepository;
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
-        public AdminServices(IAdministrationRepository administrationRepository,IAccountCredentialsRepository accountCredentialsRepository)
+        public AdminServices(IAdministrationRepository administrationRepository, IAccountCredentialsRepository accountCredentialsRepository)
         {
             this._administrationRepository = administrationRepository;
             this._accountCredentialsRepository = accountCredentialsRepository;
         }
-        public async Task<BLAdministrator> AddSecondaryAdministrator(BLAdministrator secondaryAdmin)
+        public async Task<BLAdministrator> CreateAdministrator(BLAdministrator secondaryAdmin)
         {
             if (secondaryAdmin is not null)
             {
@@ -46,7 +46,7 @@ namespace BookMyEvent.BLL.Services
         {
             if (AdminId != null)
             {
-                return await _administrationRepository.ChangeAdminPassword(AdminId, Password);
+                return await _administrationRepository.ChangeAdministratorPassword(AdminId, Password);
             }
             return false;
         }
@@ -93,32 +93,38 @@ namespace BookMyEvent.BLL.Services
             }
             return new BLAdministrator();
         }
-
-        public async Task<BLAdministrator> LoginAdmin(string email,string password,string role)
+        public async Task<BLAdministrator> LoginAdmin(string email, string password, string role)
         {
             try
             {
                 Mapper mapper = Automapper.InitializeAutomapper();
-                Console.WriteLine(role );
+                Console.WriteLine(role);
                 Console.WriteLine(" ------ " + Roles.Admin.ToString());
                 if (role == Roles.Admin.ToString())
                 {
-                Console.WriteLine("hello");
-                    Console.WriteLine(email);
-
                     Administration? Admin = await _administrationRepository.GetAdministratorByEmail(email);
-                    if(await _accountCredentialsRepository.IsValidCredential(Admin.AccountCredentialsId, password))
+                    if (await _accountCredentialsRepository.IsValidCredential(Admin.AccountCredentialsId, password))
                     {
                         Console.WriteLine(Admin.PhoneNumber);
                         return mapper.Map<BLAdministrator>(Admin);
                     }
                 }
-                return null;
+                return new BLAdministrator();
             }
             catch
             {
                 return null;
             }
+        }
+        public async Task<List<BLAdministrator>> AdminsCreatedByAdmin(Guid AdminId)
+        {
+            if (AdminId != null)
+            {
+                List<Administration> CreatedAdmins = await _administrationRepository.GetCreatedAdministratorsById(AdminId);
+                var mapper = Automapper.InitializeAutomapper();
+                return mapper.Map<List<Administration>, List<BLAdministrator>>(CreatedAdmins);
+            }
+            return new List<BLAdministrator>();
         }
     }
 }

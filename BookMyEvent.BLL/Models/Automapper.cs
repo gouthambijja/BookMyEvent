@@ -9,12 +9,19 @@ public static class Automapper
     {
         var config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<BLEvent, Event>().ReverseMap();
-            cfg.CreateMap<BLTransaction, Transaction>().ReverseMap();
+
+            //cfg.CreateMap<User, UserBL>();
+
+            //cfg.CreateMap<UserBL, User>();
+
+            //cfg.CreateMap<UserBL, LoginUserModel>();
+
+            //cfg.CreateMap<Transaction, TransactionBL>();
+
+            //cfg.CreateMap<TransactionBL, Transaction>();
             cfg.CreateMap<BLEvent,Event>().ReverseMap();
             //cfg.CreateMap<List<BLEvent>,List<Event>>().ReverseMap();
             cfg.CreateMap<BLTransaction,Transaction>().ReverseMap();
-            //cfg.CreateMap<List<BLTicket>,List<Ticket>>().ReverseMap();    
             cfg.CreateMap<BLUser, User>().ReverseMap();
             cfg.CreateMap<BLAdministrator, Administration>().ReverseMap();
             cfg.CreateMap<BLForm, Form>().ReverseMap();

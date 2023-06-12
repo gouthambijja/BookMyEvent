@@ -18,7 +18,7 @@ namespace BookMyEvent.BLL.Contracts
         /// </summary>
         /// <param name="secondaryAdmin"></param>
         /// <returns>returns added Admin object</returns>
-        Task<BLAdministrator> AddSecondaryAdministrator(BLAdministrator secondaryAdmin);
+        Task<BLAdministrator> CreateAdministrator(BLAdministrator secondaryAdmin);
         /// <summary>
         /// Method to Block admin
         /// </summary>
@@ -63,6 +63,19 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="secondaryAdmin"></param>
         /// <returns>returns the Updated Admin</returns>
         Task<BLAdministrator> UpdateAdministrator(BLAdministrator secondaryAdmin);
+        /// <summary>
+        /// Method to Login Admin
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="role"></param>
+        /// <returns>returns the Admin Object</returns>
         Task<BLAdministrator> LoginAdmin(string email,string password,string role);
+        /// <summary>
+        /// Method to get Admins Created By Specific Admin.
+        /// </summary>
+        /// <param name="AdminId"></param>
+        /// <returns>List of Created Admins</returns>
+        Task<List<BLAdministrator>> AdminsCreatedByAdmin(Guid AdminId);
     }
 }

@@ -465,17 +465,19 @@ namespace BookMyEvent.DLL.Repositories
                 return false;
             }
         }
-        public async Task<bool> ChangeAdminPassword(Guid AdminID, string Password)
+        public async Task<bool> ChangeAdministratorPassword(Guid AdministratorID, string Password)
         {
             try
             {
-                var Admin = await _dbcontext.Administrations.FindAsync(AdminID);
+                var Admin = await _dbcontext.Administrations.FindAsync(AdministratorID);
                 if (Admin != null)
                 {
-                    var password = await _dbcontext.AccountCredentials.FindAsync(Admin.AccountCredentials);
+                    var password = await _dbcontext.AccountCredentials.FindAsync(Admin.AccountCredentialsId);
+                    Console.WriteLine(password.Password);
                     if (password != null)
                     {
                         password.Password = Password;
+                        await _dbcontext.SaveChangesAsync();
                         return true;
                     }
                 }
