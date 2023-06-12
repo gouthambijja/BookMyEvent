@@ -69,10 +69,6 @@ namespace BookMyEvent.WebApi.Controllers
         {
             return Ok(await _adminService.ChangeAdminPassword(ChangePassword.AdminId, ChangePassword.Password));
         }
-        [HttpDelete("BlockAdmin")]
-        public async Task<IActionResult> RejectAdmin(Guid Rejectedby, Guid AdminId)
-        {
-            return Ok(await _adminService.RejectAdminRequest(Rejectedby, AdminId));
-        }
+        
     }
 }

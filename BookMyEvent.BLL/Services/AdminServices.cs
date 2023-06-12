@@ -75,14 +75,6 @@ namespace BookMyEvent.BLL.Services
             }
             return false;
         }
-        public async Task<bool> RejectAdminRequest(Guid Rejectedby, Guid AdminId)
-        {
-            if (AdminId != null)
-            {
-                return await _administrationRepository.UpdateRejectedByAndIsActive(Rejectedby, AdminId);
-            }
-            return false;
-        }
         public async Task<BLAdministrator> UpdateAdministrator(BLAdministrator secondaryAdmin)
         {
             if (secondaryAdmin is not null)

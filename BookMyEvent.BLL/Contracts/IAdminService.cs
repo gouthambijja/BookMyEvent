@@ -50,13 +50,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="SecondaryAdminId"></param>
         /// <returns>returns true if deleted else false</returns>
         Task<bool> DeleteAdmin(Guid Deletedby, Guid SecondaryAdminId);
-        /// <summary>
-        /// Method to reject a request
-        /// </summary>
-        /// <param name="Rejectedby"></param>
-        /// <param name="AdminId"></param>
-        /// <returns>True if rejected else false</returns>
-        Task<bool> RejectAdminRequest(Guid Rejectedby, Guid AdminId);
+
         /// <summary>
         /// Mehtod to Update an Admin
         /// </summary>
