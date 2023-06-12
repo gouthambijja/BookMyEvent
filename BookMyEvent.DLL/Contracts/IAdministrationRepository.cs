@@ -177,7 +177,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="AdminID"></param>
         /// <param name="Password"></param>
         /// <returns>return true if Password Changes Successfully else false</returns>
-        Task<bool> ChangeAdminPassword(Guid AdminID, string Password);
+        Task<bool> ChangeAdministratorPassword(Guid AdministratorID, string Password);
 
         /// <summary>
         /// Method to update IsActive field of all the Organisation Organisers
