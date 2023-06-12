@@ -26,5 +26,6 @@ namespace BookMyEvent.BLL.Models
         public Guid OrganisationId { get; set; }
         public Guid? BlockedBy { get; set; }
         public bool? IsActive { get; set; }
+        public string Password { get; set; }
     }
 }

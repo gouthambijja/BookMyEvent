@@ -58,6 +58,21 @@ namespace BookMyEvent.DLL.Repositories
             return await context.AccountCredentials.FirstOrDefaultAsync(e => e.AccountCredentialsId.Equals(AccountCredentialId));
         }
 
+        public async Task<bool> CheckPassword(Guid? credId, string password)
+        {
+            try
+            {
+                var cred = await context.AccountCredentials.FirstOrDefaultAsync(e => e.AccountCredentialsId.Equals(credId));
+                if (cred.Password.Equals(password))
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> IsValidCredential(Guid? AccountCredentialId, string password)
         {
             try

@@ -48,5 +48,15 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="CreatorId"></param>
         /// <returns>Form Model if success , NULL if there's any exception</returns>
         Task<List<Form>> GetByCreatorId(Guid creatorId);
+
+        /// <summary>
+        /// This method is used to get all the forms of an organisation.It takes one parameter as input which is an organisationId.
+        /// </summary>
+        /// <param name="formId"></param>
+        /// <returns>
+        /// Returns a tuple of bool saying isForm deleted successfully or not and a string message
+        /// </returns>
+        Task<(bool IsActiveToggled, string Message)> UpdateIsActive(Guid formId);
+
     }
 }

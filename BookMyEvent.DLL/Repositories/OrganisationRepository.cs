@@ -17,27 +17,18 @@ namespace BookMyEvent.DLL.Repositories
             _dbcontext = dbcontext;
         }
 
-        public async Task<Organisation?> AddOrganisation(Organisation organisation)
+        public async Task<(Organisation? org, bool IsSuccessfull, string Message)> AddOrganisation(Organisation organisation)
         {
             try
             {
-                if (organisation != null)
-                {
-                    _dbcontext.Organisations.Add(organisation);
-                    await _dbcontext.SaveChangesAsync();
-                    await _dbcontext.Entry(organisation).GetDatabaseValuesAsync();
-                    return organisation;
-
-                }
-                else
-                {
-                    return null;
-                }
-
+                _dbcontext.Organisations.Add(organisation);
+                await _dbcontext.SaveChangesAsync();
+                await _dbcontext.Entry(organisation).GetDatabaseValuesAsync();
+                return (organisation, true, "Organisation created successfully");
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                return (null, false, ex.Message);
             }
         }
 
@@ -118,6 +109,48 @@ namespace BookMyEvent.DLL.Repositories
                 if (organisation != null)
                 {
                     organisation.IsActive = false;
+                    await _dbcontext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> IsOrgNameAvailable(string orgName)
+        {
+            try
+            {
+                Organisation? organisation = await _dbcontext.Organisations.FirstOrDefaultAsync(o => o.OrganisationName == orgName);
+                if (organisation != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ToggleIsActive(Guid orgId)
+        {
+            try
+            {
+                Organisation? organisation = await _dbcontext.Organisations.FindAsync(orgId);
+                if (organisation != null)
+                {
+                    organisation.IsActive = !organisation.IsActive;
                     await _dbcontext.SaveChangesAsync();
                     return true;
                 }

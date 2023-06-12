@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace BookMyEvent.DLL.Repositories
 {
-    
+
     public class FormRepository : IFormRepository
     {
 
         private readonly EventManagementSystemTeamZealContext _DBContext;
         public FormRepository(EventManagementSystemTeamZealContext dBContext) { _DBContext = dBContext; }
-        
+
         public async Task<Form> Add(Form form)
         {
             try
@@ -30,7 +30,7 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
-        
+
         public async Task<bool> Delete(Guid FormId)
         {
             try
@@ -48,7 +48,7 @@ namespace BookMyEvent.DLL.Repositories
                 return false;
             }
         }
-        
+
         public async Task<Form> Get(Guid FormId)
         {
             try
@@ -61,19 +61,19 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
-        
+
         public async Task<List<Form>> GetByOrganisationId(Guid OrganisationId)
         {
             try
             {
-                return await _DBContext.Forms.Where(e => e.OrganisationId ==  OrganisationId).ToListAsync();
+                return await _DBContext.Forms.Where(e => e.OrganisationId == OrganisationId).ToListAsync();
             }
             catch
             {
                 return null;
             }
         }
-        
+
         public async Task<List<Form>> GetByCreatorId(Guid CreatorId)
         {
             try
@@ -85,7 +85,7 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
-        
+
         public async Task<Form> Update(Form Form)
         {
             try
@@ -103,6 +103,20 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-
+        public Task<(bool IsActiveToggled, string Message)> UpdateIsActive(Guid formId)
+        {
+            try
+            {
+                var form = _DBContext.Forms.Where(e => e.FormId == formId).FirstOrDefault();
+                if (form == null) return Task.FromResult((false, "Form not found"));
+                form.IsActive = !form.IsActive;
+                _DBContext.SaveChanges();
+                return Task.FromResult((true, "Form updated"));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult((false, ex.Message));
+            }
+        }
     }
 }

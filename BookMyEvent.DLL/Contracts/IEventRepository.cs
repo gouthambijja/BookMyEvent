@@ -306,7 +306,5 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a Event object
         /// </returns>
         Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
-
-
     }
 }

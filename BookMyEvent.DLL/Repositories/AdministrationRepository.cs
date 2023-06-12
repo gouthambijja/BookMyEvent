@@ -390,7 +390,7 @@ namespace BookMyEvent.DLL.Repositories
         }
 
 
-        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedByUserId, Guid rejectedAccountId)
+        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid rejectedByUserId, string reason)
         {
             try
             {
@@ -399,6 +399,7 @@ namespace BookMyEvent.DLL.Repositories
                 {
 
                     administrator.AcceptedBy = rejectedByUserId;
+                    //administrator.RejectedReason = reason;
                     administrator.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
                     return true;
@@ -481,6 +482,60 @@ namespace BookMyEvent.DLL.Repositories
                 return false;
             }
             catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateAllOrganisationOrganisersIsActive(Guid orgId)
+        {
+            try
+            {
+                _dbcontext.Administrations.Where(a => a.OrganisationId == orgId && a.RoleId == 2).ToList().ForEach(a => a.IsActive = !a.IsActive);
+                _dbcontext.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<Administration>> GetAdministrationsByOrgId(Guid OrgId)
+        {
+            try
+            {
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.IsActive == true).ToListAsync();
+                if (administrators != null)
+                {
+                    return administrators;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> IsEmailExists(string Email)
+        {
+            try
+            {
+                var admin = await _dbcontext.Administrations.Where(a => a.Email == Email).FirstOrDefaultAsync();
+                if (admin != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
             {
                 return false;
             }

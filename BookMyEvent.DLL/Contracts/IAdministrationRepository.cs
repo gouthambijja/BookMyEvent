@@ -141,13 +141,14 @@ namespace BookMyEvent.DLL.Contracts
         /// Method to update rejectedBy field
         /// Used when administrator rejects new administrator account request
         /// </summary>
-        /// <param name="rejectedByUserId"> Id of administrator who is rejecting the Account </param>
         /// <param name="rejectedAccountId"> Id of the administrator whose account need to be rejected </param>
+        /// <param name="rejectedByUserId"> Id of administrator who is rejecting the Account </param>
+        /// <param name="reason"> Reason for rejecting the account </param>
         /// <returns>
         /// True:If updated successfully
         /// False:If update operation fails
         /// </returns>
-        public Task<bool> UpdateRejectedByAndIsActive(Guid rejectedByUserId, Guid rejectedAccountId);
+        public Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid rejectedByUserId, string reason);
 
         /// <summary>
         /// Method to Delete Administrator Account
@@ -177,5 +178,25 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="Password"></param>
         /// <returns>return true if Password Changes Successfully else false</returns>
         Task<bool> ChangeAdminPassword(Guid AdminID, string Password);
+
+        /// <summary>
+        /// Method to update IsActive field of all the Organisation Organisers
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns>
+        /// Returns bool value indicating whether IsActive field of all the Organisation Organisers is updated or not
+        /// </returns>
+        Task<bool> UpdateAllOrganisationOrganisersIsActive(Guid orgId);
+
+        /// <summary>
+        /// Method to get all the Administrators of an Organisation
+        /// </summary>
+        /// <param name="OrgId"></param>
+        /// <returns>
+        /// Returns list of all the Administrators of an Organisation
+        /// </returns>
+        Task<List<Administration>> GetAdministrationsByOrgId(Guid OrgId);
+
+        Task<bool> IsEmailExists(string Email);
     }
 }
