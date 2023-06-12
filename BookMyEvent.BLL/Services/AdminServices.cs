@@ -8,15 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using db.Models;
+using BookMyEvent.WebApi.Utilities;
 
 namespace BookMyEvent.BLL.Services
 {
     public class AdminServices : IAdminService
     {
-        IAdministrationRepository _administrationRepository;
-        public AdminServices(IAdministrationRepository administrationRepository)
+        private readonly IAdministrationRepository _administrationRepository;
+        private readonly IAccountCredentialsRepository _accountCredentialsRepository;
+        public AdminServices(IAdministrationRepository administrationRepository,IAccountCredentialsRepository accountCredentialsRepository)
         {
             this._administrationRepository = administrationRepository;
+            this._accountCredentialsRepository = accountCredentialsRepository;
         }
         public async Task<BLAdministrator> AddSecondaryAdministrator(BLAdministrator secondaryAdmin)
         {
@@ -127,6 +130,33 @@ namespace BookMyEvent.BLL.Services
                 return secondaryAdmin;
             }
             return new BLAdministrator();   
+        }
+
+        public async Task<BLAdministrator> LoginAdmin(string email,string password,string role)
+        {
+            try
+            {
+                Mapper mapper = Automapper.InitializeAutomapper();
+                Console.WriteLine(role );
+                Console.WriteLine(" ------ " + Roles.Admin.ToString());
+                if (role == Roles.Admin.ToString())
+                {
+                Console.WriteLine("hello");
+                    Console.WriteLine(email);
+
+                    Administration? Admin = await _administrationRepository.GetAdministratorByEmail(email);
+                    if(await _accountCredentialsRepository.IsValidCredential(Admin.AccountCredentialsId, password))
+                    {
+                        Console.WriteLine(Admin.PhoneNumber);
+                        return mapper.Map<BLAdministrator>(Admin);
+                    }
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

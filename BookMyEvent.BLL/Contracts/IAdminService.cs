@@ -98,5 +98,6 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="secondaryAdmin"></param>
         /// <returns>returns the Updated Admin</returns>
         Task<BLAdministrator> UpdateAdministrator(BLAdministrator secondaryAdmin);
+        Task<BLAdministrator> LoginAdmin(string email,string password,string role);
     }
 }

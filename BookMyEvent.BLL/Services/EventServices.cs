@@ -22,11 +22,12 @@ namespace BookMyEvent.BLL.Services
             _mapper = Automapper.InitializeAutomapper();
 
         }
-        public async Task<BLEvent> Add(BLEvent bLEvent)
+
+        public Task<BLEvent> Add((BLEvent EventDetails, List<(BLUserInputForm, List<BLUserInputFormField>)> RegistrationFormDetails) Event)
         {
             try
             {
-                return _mapper.Map<BLEvent>(await eventRepository.AddEvent(_mapper.Map<Event>(bLEvent)));
+                return null;
             }
             catch
             {

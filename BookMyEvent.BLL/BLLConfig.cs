@@ -14,6 +14,7 @@ namespace BookMyEvent.BLL
             DLLConfig.DLLConfigure(services, configuration);
             services.AddScoped<ITicketServices,TicketServices>();
             services.AddScoped<IUserInputFormService,UserInputFormService>();
+            services.AddScoped<IAdminService,AdminServices>();
         }
     }
 }

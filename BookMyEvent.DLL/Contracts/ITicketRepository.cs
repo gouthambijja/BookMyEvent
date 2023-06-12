@@ -17,16 +17,17 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>Newly Added Ticket.</returns>
         public Task<Ticket> AddTicket(Ticket ticket);
         /// <summary>
-        /// It is for adding Multiple tickets for a single user
+        /// This method is used to add many tickets to the tickets table
         /// </summary>
         /// <param name="ticketList"></param>
-        /// <returns>Return Newly Added Multiple Tickets.</returns>
-        public Task<List<Ticket>> AddMultipleTickets(List<Ticket> ticketList);
+        /// <returns>It returns newly added tickets list</returns>
+        
+        public Task<bool> AddMultipleTickets(List<Ticket> ticketList);
         /// <summary>
         /// it id used to get all the tickets associated with transaction Id
         /// </summary>
         /// <param name="transactionId"></param>
-        /// <returns>List of Tickets with transactionId</returns>
+        /// <returns>It true if tickets were added succesfully and NUll if there's any exception </returns>
         public Task<List<Ticket>> GetTicketByTransactionId(Guid transactionId);
 
         /// <summary>

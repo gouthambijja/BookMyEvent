@@ -1,4 +1,5 @@
 ﻿using BookMyEvent.BLL.Models;
+using db.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,12 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="ticket"></param>
         /// <returns> Added new Ticket </returns>
         public Task<BLTicket> AddTickect(BLTicket ticket);
-
+        /// <summary>
+        /// It is for adding Multiple tickets for a single user
+        /// </summary>
+        /// <param name="ticketList"></param>
+        /// <returns>Return true if success else returns false.</returns>
+        public Task<bool> AddManyTickets(List<BLTicket> ticketList);
         /// <summary>
         /// This method is to Get all the tickets by Transaction Id
         /// The organiser is displayed with all the Transactions of an Event and when clicked on that Transaction,

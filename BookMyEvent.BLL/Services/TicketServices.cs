@@ -5,6 +5,7 @@ using db.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -119,6 +120,21 @@ namespace BookMyEvent.BLL.Services
             {
                 return false;
             }
+        }
+
+        public async Task<bool> AddManyTickets(List<BLTicket> ticketList)
+        {
+            try
+            {
+                var mapper = Automapper.InitializeAutomapper();
+                List<Ticket> ticketDL = mapper.Map<List<Ticket>>(ticketList);
+                bool newTicketDL = await _ticketRepository.AddMultipleTickets(ticketDL);
+                return newTicketDL;
+            }
+            catch
+            {
+                return false;
+            } 
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,14 +82,28 @@ namespace BookMyEvent.DLL.Repositories
             }
             return new Ticket();
         }
-        public async Task<List<Ticket>> AddMultipleTickets(List<Ticket> ticketList)
+        //public async Task<List<Ticket>> AddMultipleTickets(List<Ticket> ticketList)
+        //{
+        //    if (ticketList.Count != 0)
+        //    {
+        //        await context.Tickets.AddRangeAsync(ticketList);
+        //        return ticketList;
+        //    }
+        //    return new List<Ticket>();
+        //}
+
+        public async Task<bool> AddMultipleTickets(List<Ticket> ticketList)
         {
-            if (ticketList.Count != 0)
+            try
             {
                 await context.Tickets.AddRangeAsync(ticketList);
-                return ticketList;
+                await context.SaveChangesAsync();
+                return true;
             }
-            return new List<Ticket>();
+            catch
+            {
+                return false;
+            }
         }
     }
 }

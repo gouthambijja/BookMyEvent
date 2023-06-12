@@ -10,7 +10,7 @@ namespace BookMyEvent.BLL.Contracts
 {
     public interface IEventServices
     {
-        Task<BLEvent> Add(BLEvent bLEvent);
+        Task<BLEvent> Add((BLEvent EventDetails, List<(BLUserInputForm, List<BLUserInputFormField>)> RegistrationFormDetails) Event);
         Task<(bool, string)> Delete(Guid EventId);
         Task<BLEvent> Update(BLEvent bLEvent);
         Task<List<BLEvent>> GetAllActivePublishedEvents();
