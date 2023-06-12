@@ -16,9 +16,9 @@ namespace BookMyEvent.DLL.Repositories
         {
             this.context = context;
         }
-        public List<Transaction> GetTransactionsByUserId(Guid UserId)
+        public async Task<List<Transaction>> GetTransactionsByUserId(Guid UserId)
         {
-            return context.Transactions.Where(e => e.UserId.Equals(UserId)).ToList();
+            return await context.Transactions.Where(e => e.UserId.Equals(UserId)).ToListAsync();
         }
 
         public async Task<Guid> GetUserIdByTransactionId(Guid transactionId)
