@@ -1,32 +1,32 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.WebApi.Utilities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BookMyEvent.WebApi.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    public class AdministrationController : ControllerBase
+    public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
         private readonly AuthController _authController;
-        public AdministrationController(IAdminService adminService, AuthController auth)
+        public AdminController(IAdminService adminService, AuthController auth)
         {
             _adminService = adminService;
             _authController = auth;
         }
         [HttpPost("loginAdmin")]
-        public async Task<string> LoginAdmin(string email, string password)
+        public async Task<string> LoginAdmin([FromBody] BLLoginModel login)
         {
-            var user = await _adminService.LoginAdmin(email, password, Roles.Admin.ToString());
+            var user = await _adminService.LoginAdmin(login.Email, login.Password, Roles.Admin.ToString());
             if (user != null)
             {
                 Console.WriteLine(user.AdministratorAddress);
-                var accessToken = _authController.GenerateJwtToken(email, user.AdministratorId, Roles.Admin.ToString(), TokenType.AccessToken);
-                string refreshToken = _authController.GenerateJwtToken(email, user.AdministratorId, Roles.Admin.ToString(), TokenType.RefreshToken);
+                var accessToken = _authController.GenerateJwtToken(login.Email, user.AdministratorId, Roles.Admin.ToString(), TokenType.AccessToken);
+                string refreshToken = _authController.GenerateJwtToken(login.Email, user.AdministratorId, Roles.Admin.ToString(), TokenType.RefreshToken);
                 Response.Cookies.Append(
                             "RefreshToken",
                             refreshToken,
@@ -69,6 +69,6 @@ namespace BookMyEvent.WebApi.Controllers
         {
             return Ok(await _adminService.ChangeAdminPassword(ChangePassword.AdminId, ChangePassword.Password));
         }
-        
+
     }
 }
