@@ -16,23 +16,63 @@ namespace BookMyEvent.BLL.Services
     internal class EventServices : IEventServices
     {
         private readonly IEventRepository eventRepository;
+        private readonly IOrganiserFormServices organiserFormServices;
+        private readonly IEventImageRepository eventImageRepository;
         private Mapper _mapper;
-        public EventServices(IEventRepository service)
+        public EventServices(IEventRepository service,IOrganiserFormServices _organiserFormServices,IEventImageRepository _eventImageRepository)
         {
             eventRepository = service;
+            organiserFormServices = _organiserFormServices;
+            eventImageRepository = _eventImageRepository;
             _mapper = Automapper.InitializeAutomapper();
 
         }
 
-        public Task<BLEvent> Add((BLEvent EventDetails, List<(BLUserInputForm, List<BLUserInputFormField>)> RegistrationFormDetails) Event)
+        public async Task<(BLEvent _NewEvent,string message)> Add((BLEvent EventDetails, List<BLRegistrationFormFields> RegistrationFormFields,BLForm EventForm,List<BLEventImages> EventImages) NewEvent)
         {
             try
             {
-                return null;
+                if(NewEvent.EventDetails != null)
+                {
+
+                    (Guid FormId, string Message) AddForms = await organiserFormServices.AddForm(NewEvent.EventForm, NewEvent.RegistrationFormFields);
+                    if(AddForms.FormId==Guid.Empty) { return (null,AddForms.Message); }
+                    NewEvent.EventDetails.FormId = AddForms.FormId;
+                    Event NewEventDL = _mapper.Map<Event>(NewEvent.EventDetails);
+                    Event EventDL=await eventRepository.AddEvent(NewEventDL);
+                    if (EventDL == null)
+                    {
+                        return (null, "Failed to Add New Event");
+                    }
+                    BLEvent bLEvent=_mapper.Map<BLEvent>(EventDL);
+
+
+
+
+                    List<EventImage> imagesDL = new List<EventImage>();
+                    foreach(var image in NewEvent.EventImages)
+                    {
+                        EventImage imageDL = _mapper.Map<EventImage>(image);
+                        imageDL.EventId = bLEvent.EventId;
+                        imagesDL.Add(imageDL);
+                    }
+                    bool isImagesAdded= await eventImageRepository.AddMultipleImages(imagesDL);
+                    if (!isImagesAdded)
+                    {
+                        return (bLEvent, "Failed to Add Event Images");
+                    }
+                    return (bLEvent, "Added New Event Successfully");
+
+                }
+                else
+                {
+                    return (null, "Failed to New Event");
+
+                }
             }
             catch
             {
-                return null;
+                return (null,"Failed to New Event");
             }
         }
         public async Task<BLEvent> GetEventById(Guid EventId)

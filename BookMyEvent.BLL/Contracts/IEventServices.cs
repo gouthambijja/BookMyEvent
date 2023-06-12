@@ -10,6 +10,16 @@ namespace BookMyEvent.BLL.Contracts
 {
     public interface IEventServices
     {
+        /// <summary>
+        /// This method is to add a New Event by an Event Organiser
+        /// This method is responsible for adding Event Details,Event Images,Event Forms and Registration Form Fields(Dynamic Form)
+        /// </summary>
+        /// <param name="NewEvent"></param>
+        /// <returns> New Event </returns>
+        Task<(BLEvent _NewEvent, string message)> Add((BLEvent EventDetails, List<BLRegistrationFormFields> RegistrationFormFields, BLForm EventForm, List<BLEventImages> EventImages) NewEvent);
+
+        Task<(bool, string)> Delete(Guid EventId);
+        Task<BLEvent> Update(BLEvent bLEvent);
         Task<BLEvent> Add((BLEvent EventDetails, List<(BLUserInputForm, List<BLUserInputFormField>)> RegistrationFormDetails) Event);
         Task<BLEvent> GetEventById(Guid EventId);
         Task<(BLEvent, string Message)> UpdateEvent(BLEvent _event);

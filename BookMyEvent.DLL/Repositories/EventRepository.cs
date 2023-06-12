@@ -25,7 +25,7 @@ namespace BookMyEvent.DLL.Repositories
                 await _db.Entry(_event).GetDatabaseValuesAsync();
                 return _event;
             }
-            catch (Exception ex) { return _event; }
+            catch (Exception ex) { return null; }
         }
 
         public async Task<(bool, string Message)> DeleteEvent(Guid id)

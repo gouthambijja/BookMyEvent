@@ -57,10 +57,7 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public Task<bool> Delete(Guid TransactionId)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId)
         {
@@ -101,9 +98,6 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public Task<BLTransaction> Update(BLTransaction transaction)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
