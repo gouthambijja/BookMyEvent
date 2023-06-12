@@ -35,7 +35,7 @@ namespace BookMyEvent.BLL.Services
 
         public async Task<bool> BlockAdmin(Guid AdminId)
         {
-            if (!AdminId.Equals(string.Empty))
+            if (AdminId != null)
             {
                 return await _administrationRepository.ToggleIsActive(AdminId);
             }
@@ -44,7 +44,7 @@ namespace BookMyEvent.BLL.Services
 
         public async Task<bool> ChangeAdminPassword(Guid AdminId, string Password)
         {
-            if (AdminId.Equals(string.Empty))
+            if (AdminId != null)
             {
                 return await _administrationRepository.ChangeAdminPassword(AdminId, Password);
             }
@@ -52,84 +52,46 @@ namespace BookMyEvent.BLL.Services
         }
         public async Task<BLAdministrator> GetAdminById(Guid AdminId)
         {
-            if (!AdminId.Equals(string.Empty))
+            if (AdminId != null)
             {
                 Administration Admin = await _administrationRepository.GetAdministratorById(AdminId);
                 var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<Administration, BLAdministrator>(Admin);
             }
             return new BLAdministrator();
-
         }
         public async Task<List<BLAdministrator>> GetAllSecondaryAdmins()
         {
-            List<Administration> ListOfAdmins = await _administrationRepository.GetAdministrators();
+            List<Administration> ListOfAdmins = await _administrationRepository.GetSecondaryAdministrators();
+            Console.WriteLine(ListOfAdmins.Count);
             var mapper = Automapper.InitializeAutomapper();
             return mapper.Map<List<Administration>, List<BLAdministrator>>(ListOfAdmins);
         }
-        public async Task<List<BLAdministrator>> GetAllOrganizationOwners()
+        public async Task<bool> DeleteAdmin(Guid Deletedby, Guid SecondaryAdminId)
         {
-            List<Administration> ListOrganizationOwners = await _administrationRepository.GetPrimaryAdministrators();
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<List<Administration>, List<BLAdministrator>>(ListOrganizationOwners);
-        }
-        public async Task<List<BLAdministrator>> GetAllSecondaryOrganizationOwners(Guid OrgId)
-        {
-            List<Administration> ListOrganizationOwners = await _administrationRepository.GetSecondaryAdministratorsByOrgId(OrgId);
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<List<Administration>, List<BLAdministrator>>(ListOrganizationOwners);
-        }
-        public async Task<List<BLAdministrator>> GetAllPeers(Guid OrgId)
-        {
-            List<Administration> Peers = await _administrationRepository.GetPeerAdministratorsByOrgId(OrgId);
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<List<Administration>, List<BLAdministrator>>(Peers);
-        }
-        public async Task<List<BLAdministrator>> GetOrganizationPrimaryOwnersRequests()
-        {
-            List<Administration> SecondaryAdminRequests = await _administrationRepository.GetPrimaryAdministratorRequests();
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<List<Administration>, List<BLAdministrator>>(SecondaryAdminRequests);
-        }
-        public async Task<List<BLAdministrator>> GetAllPeerRequests(Guid OrgId)
-        {
-            List<Administration> PeerRequests = await _administrationRepository.GetPeerAdministratorRequests(OrgId);
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<List<Administration>, List<BLAdministrator>>(PeerRequests);
-        }
-        public async Task<bool> DeleteAdmin(Guid Deletedby,Guid SecondaryAdminId)
-        {
-            if (!SecondaryAdminId.Equals(Guid.Empty))
+            if (SecondaryAdminId != null)
             {
-                return await _administrationRepository.UpdateDeletedByAndIsActive(Deletedby,SecondaryAdminId);
+                return await _administrationRepository.UpdateDeletedByAndIsActive(Deletedby, SecondaryAdminId);
             }
             return false;
         }
         public async Task<bool> RejectAdminRequest(Guid Rejectedby, Guid AdminId)
         {
-            if (AdminId.Equals(Guid.Empty))
+            if (AdminId != null)
             {
                 return await _administrationRepository.UpdateRejectedByAndIsActive(Rejectedby, AdminId);
             }
             return false;
         }
-        public async Task<bool> DeleteOrganizationAdmins(Guid Deletedby, Guid OrgId)
-        {
-            if (OrgId.Equals(Guid.Empty))
-            {
-                return await _administrationRepository.DeleteAdministratorsByOrgId(Deletedby, OrgId);   
-            }
-            return false;
-        }
         public async Task<BLAdministrator> UpdateAdministrator(BLAdministrator secondaryAdmin)
         {
-            if(secondaryAdmin is not null)
+            if (secondaryAdmin is not null)
             {
                 var mapper = Automapper.InitializeAutomapper();
-                Administration Admin = await _administrationRepository.UpdateAdministrator(mapper.Map<BLAdministrator,Administration>(secondaryAdmin));
+                Administration Admin = await _administrationRepository.UpdateAdministrator(mapper.Map<BLAdministrator, Administration>(secondaryAdmin));
                 return secondaryAdmin;
             }
-            return new BLAdministrator();   
+            return new BLAdministrator();
         }
 
         public async Task<BLAdministrator> LoginAdmin(string email,string password,string role)

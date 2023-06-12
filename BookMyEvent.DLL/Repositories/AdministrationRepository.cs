@@ -123,6 +123,25 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
+        public async Task<List<Administration>> GetSecondaryAdministrators()
+        {
+            try
+            {
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 1 && a.IsActive == true).ToListAsync();
+                if (administrators != null)
+                {
+                    return administrators;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
 
         public async Task<List<Administration>?> GetAcceptedAdministratorsById(Guid Id)

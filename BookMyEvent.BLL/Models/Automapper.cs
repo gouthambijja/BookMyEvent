@@ -2,17 +2,15 @@ using AutoMapper;
 using BookMyEvent.BLL.Models;
 using db.Models;
 
-public class Automapper
+public static class Automapper
 
 {
-
     public static Mapper InitializeAutomapper()
-
     {
-
         var config = new MapperConfiguration(cfg =>
-
         {
+            cfg.CreateMap<BLEvent, Event>().ReverseMap();
+            cfg.CreateMap<BLTransaction, Transaction>().ReverseMap();
             cfg.CreateMap<BLEvent,Event>().ReverseMap();
             //cfg.CreateMap<List<BLEvent>,List<Event>>().ReverseMap();
             cfg.CreateMap<BLTransaction,Transaction>().ReverseMap();
@@ -23,11 +21,7 @@ public class Automapper
             cfg.CreateMap<BLUserInputFormField, UserInputFormField>().ReverseMap();
             cfg.CreateMap<BLTicket, Ticket>().ReverseMap();
         });
-
         var mapper = new Mapper(config);
-
         return mapper;
-
     }
-
 }

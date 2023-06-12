@@ -47,6 +47,7 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <returns> List of Administrators who are active and accepted </returns>
         public Task<List<Administration>?> GetAdministrators();
+        Task<List<Administration>?> GetSecondaryAdministrators();
 
         /// <summary>
         /// Method to get all the active Accounts that are accepted by provided Id

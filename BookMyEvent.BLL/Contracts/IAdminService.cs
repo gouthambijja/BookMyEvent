@@ -44,34 +44,6 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>list of Admins</returns>
         Task<List<BLAdministrator>> GetAllSecondaryAdmins();
         /// <summary>
-        /// Method To get list of Organization Owners
-        /// </summary>
-        /// <returns>list of Org Owners</returns>
-        Task<List<BLAdministrator>> GetAllOrganizationOwners();
-        /// <summary>
-        /// Method to Get all the Secondary Owners of a Particular Organization
-        /// </summary>
-        /// <param name="OrgId"></param>
-        /// <returns>List of secondary owners</returns>
-        Task<List<BLAdministrator>> GetAllSecondaryOrganizationOwners(Guid OrgId);
-        /// <summary>
-        /// Method to Get all the Requests of Organization Owners
-        /// </summary>
-        /// <returns>List of Requests of Owners</returns>
-        Task<List<BLAdministrator>> GetOrganizationPrimaryOwnersRequests();
-        /// <summary>
-        /// Method to get the requests of all the peers in an Organization
-        /// </summary>
-        /// <param name="OrgId"></param>
-        /// <returns> list of all the requested peers</returns>
-        Task<List<BLAdministrator>> GetAllPeerRequests(Guid OrgId);
-        /// <summary>
-        /// Method to Get ll the peers in an Organization
-        /// </summary>
-        /// <param name="OrgId"></param>
-        /// <returns>List of peer in an organization</returns>
-        Task<List<BLAdministrator>> GetAllPeers(Guid OrgId);
-        /// <summary>
         /// Method to Delete an admin
         /// </summary>
         /// <param name="Deletedby"></param>
@@ -85,13 +57,6 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="AdminId"></param>
         /// <returns>True if rejected else false</returns>
         Task<bool> RejectAdminRequest(Guid Rejectedby, Guid AdminId);
-        /// <summary>
-        /// Method to Delete the Organization
-        /// </summary>
-        /// <param name="Deletedby"></param>
-        /// <param name="OrgId"></param>
-        /// <returns>true if deleted else false</returns>
-        Task<bool> DeleteOrganizationAdmins(Guid Deletedby, Guid OrgId);
         /// <summary>
         /// Mehtod to Update an Admin
         /// </summary>
