@@ -25,10 +25,12 @@ namespace BookMyEvent.DLL.Repositories
                     await context.AccountCredentials.AddAsync(credential);
                     await context.SaveChangesAsync();
                     await context.Entry(credential).GetDatabaseValuesAsync();
+                    Console.WriteLine("Credential Added succefully   ", credential.Password);
                     return credential;
                 }
                 else
                 {
+                    Console.WriteLine("Credential is null");
                     return new AccountCredential();
                 }
             }

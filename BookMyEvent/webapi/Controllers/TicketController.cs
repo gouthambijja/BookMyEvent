@@ -14,37 +14,54 @@ namespace BookMyEvent.WebApi.Controllers
             _ticketServices = ticketServices;
         }
         [HttpGet("getallticketsbytransactionid")]
-        public async Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>> Get(Guid transactionId)
+        public async Task<IActionResult> Get(Guid transactionId)
+        //public async Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>> Get(Guid transactionId)
         {
             try
             {
-                return await _ticketServices.GetAllTicketsByTransactionId(transactionId);
+                List<(BLTicket ticket, List<BLUserInputFormField> userDetails)> allTickets= await _ticketServices.GetAllTicketsByTransactionId(transactionId);
+                if (allTickets == null)
+                {
+                    return BadRequest("error in BL");
+                }
+                return Ok(allTickets);
             }
             catch
             {
-                return null;
+                return BadRequest("error in controller");
             }
         }
 
         [HttpGet("getusereventtickets")]
-        public async Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>?> GetAllUserEventTickets(Guid userId, Guid eventId)
+        public async Task<IActionResult> GetAllUserEventTickets(Guid userId, Guid eventId)
+        //public async Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>?> GetAllUserEventTickets(Guid userId, Guid eventId)
         {
             try
             {
-                return await _ticketServices.GetUserEventTickets(userId, eventId);
+                List<(BLTicket ticket, List<BLUserInputFormField> userDetails)> allTickets= await _ticketServices.GetUserEventTickets(userId, eventId);
+                if (allTickets == null)
+                {
+                    return BadRequest("error in BL");
+                }
+                return Ok(allTickets);
             }
-            catch { return null; }
+            catch
+            {
+                return BadRequest("error in controller");
+            }
         }
 
         [HttpPut("cancelticket")]
-        public async Task<bool> CancelTicket(Guid ticketId)
+        public async Task<IActionResult> CancelTicket(Guid ticketId)
         {
             try
             {
-                return await _ticketServices.CancelTicket(ticketId);
+                bool isCancelled= await _ticketServices.CancelTicket(ticketId);
+                if (!isCancelled) { return BadRequest("Error in BL"); }
+                return Ok(true);
 
             }
-            catch { return false; }
+            catch { return BadRequest("Error in Controller"); }
         }
 
     }

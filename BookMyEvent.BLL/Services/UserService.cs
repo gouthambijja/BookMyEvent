@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;

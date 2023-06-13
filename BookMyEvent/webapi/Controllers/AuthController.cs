@@ -1,17 +1,6 @@
-﻿using BookMyEvent.BLL.Contracts;
-using BookMyEvent.BLL.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
 using System.Text;
 using BookMyEvent.WebApi.Utilities;
@@ -109,7 +98,7 @@ namespace BookMyEvent.WebApi.Controllers
             string token = string.Empty;
             //token = GenerateJwtToken(user);
             Console.WriteLine(token);
-            return token;
+            return  token;
         }
         //public async Task<ActionResult<LoginCredintials>> GetUserByJwt([FromBody] string jwtToken)
       

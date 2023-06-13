@@ -1,5 +1,8 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.BLL.RequestModels;
+using db.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyEvent.WebApi.Controllers
@@ -15,42 +18,69 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpPost("submitform")]
-        public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm([FromBody] List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
+        public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm> InputUserForms)
+        //public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm([FromBody] List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
         {
             try
             {
-                return await _userInputFormService.SubmitUserInputForm(userForms);
+                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)>();
+                foreach(var _userInputForm in InputUserForms)
+                {
+                    (BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields) SingleForm;
+                    SingleForm.userInputForm = _userInputForm.UserInputFormBL;
+                    SingleForm.userInputFormFields = _userInputForm.UserInputFormFields;
+                    userForms.Add(SingleForm);
+                }
+
+                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> newUserForms= await _userInputFormService.SubmitUserInputForm(userForms);
+                if(newUserForms==null) { return BadRequest("Error in Business layer"); }
+                List<SubmitUserInputForm> newInputUserForm = new List<SubmitUserInputForm>();
+                foreach(var form in newUserForms)
+                {
+                    SubmitUserInputForm _form=new SubmitUserInputForm();
+                    _form.UserInputFormBL = form.userInputForm;
+                    _form.UserInputFormFields=form.userInputFormFields;
+                    newInputUserForm.Add(_form);
+                }
+                return Ok(newInputUserForm);
             }
             catch
             {
-                return null;
+                return BadRequest("Error occured in controller");
             }
         }
 
         [HttpGet("GetUserFormsOfUserIdByEventId")]
 
-        public async Task<List<List<BLUserInputFormField>>?> GetUserFormsOfUserIdByEventId(Guid userId, Guid EventId)
+        public async Task<IActionResult> GetUserFormsOfUserIdByEventId(Guid userId, Guid EventId)
+        //public async Task<List<List<BLUserInputFormField>>?> GetUserFormsOfUserIdByEventId(Guid userId, Guid EventId)
         {
             try
             {
-                return await _userInputFormService.GetUserFormsOfUserIdByEventId(userId, EventId);
+                List<List<BLUserInputFormField>> userForms= await _userInputFormService.GetUserFormsOfUserIdByEventId(userId, EventId);
+                if(userForms==null) { return BadRequest("Error in BL"); }
+                return Ok(userForms);
             }
             catch
             {
-                return null;
+                return BadRequest("Error in controller");
             }
         }
 
         [HttpGet("GetAllUserFormsByEventId")]
-        public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> GetAllUserFormsByEventId(Guid eventId)
+        public async Task<IActionResult> GetAllUserFormsByEventId(Guid eventId)
+        //public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> GetAllUserFormsByEventId(Guid eventId)
         {
             try
             {
-                return await _userInputFormService.GetAllUserFormsByEventId(eventId);
+                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> userForms= await _userInputFormService.GetAllUserFormsByEventId(eventId);
+                if (userForms==null) { return BadRequest("Error in BL"); }
+                return Ok(userForms);
             }
             catch
             {
-                return null;
+                return BadRequest("Error in controller");
+
             }
         }
 

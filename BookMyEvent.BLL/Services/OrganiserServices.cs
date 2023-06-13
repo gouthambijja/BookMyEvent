@@ -56,7 +56,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                if(await _administrationRepository.ToggleIsActive(administratorId))
+                if (await _administrationRepository.ToggleIsActive(administratorId))
                 {
                     return (true, "Organiser Blocked");
                 }
@@ -83,14 +83,27 @@ namespace BookMyEvent.BLL.Services
                 else
                 {
                     var mapper = Automapper.InitializeAutomapper();
-                    var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
-                    if (IsAvailable)
+                    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn=DateTime.Now });
+                    administrator.AccountCredentialsId = passModel.AccountCredentialsId;
+                    Console.WriteLine(administrator.AccountCredentialsId);
+                    Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                    if (passModel != null)
                     {
-                        return (true, Message, mapper.Map<BLAdministrator>(newAdministrator));
+                        var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
+                        Console.WriteLine(newAdministrator.AdministratorId);
+                        Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                        if (newAdministrator != null)
+                        {
+                            return (true, "Organiser registration successfull", mapper.Map<BLAdministrator>(newAdministrator));
+                        }
+                        else
+                        {
+                            return (false, "Organiser registration unsuccessfull", new BLAdministrator());
+                        }
                     }
                     else
                     {
-                        return (false, Message, null);
+                        return (false, "Organiser password is not createded", new BLAdministrator());
                     }
                 }
             }
@@ -111,7 +124,7 @@ namespace BookMyEvent.BLL.Services
             catch (Exception ex)
             {
                 return null;
-            }   
+            }
         }
 
         public async Task<List<BLAdministrator>> GetAllOwners()
@@ -175,7 +188,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                if(await _administrationRepository.IsEmailExists(email))
+                if (await _administrationRepository.IsEmailExists(email))
                 {
                     return (true, "Email already exists");
                 }
@@ -195,7 +208,7 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var result = await _administrationRepository.GetAdministratorById(id);
-                if(result.RoleId == 2)
+                if (result.RoleId == 2)
                 {
                     return true;
                 }
@@ -206,7 +219,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return false; 
+                return false;
             }
         }
 
@@ -240,7 +253,7 @@ namespace BookMyEvent.BLL.Services
 
         public async Task<(bool IsSuccessfull, string Message)> RegisterOwner(BLAdministrator owner, BLOrganisation bLOrganisation)
         {
-           try
+            try
             {
                 var mapper = Automapper.InitializeAutomapper();
                 var newOrg = await _organisationServices.CreateOrganisation(bLOrganisation);
@@ -303,7 +316,7 @@ namespace BookMyEvent.BLL.Services
             catch (Exception ex)
             {
                 return (false, ex.Message);
-            }   
+            }
         }
 
         public async Task<bool> RejectOrganiser(Guid administratorId, Guid rejectedBy, string reason)
@@ -322,7 +335,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return false; 
+                return false;
             }
         }
 

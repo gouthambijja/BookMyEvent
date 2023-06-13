@@ -3,8 +3,9 @@
     public enum Roles
     {
         Admin,
-        User,
         Owner,
-        Peer
+        Seconday_Owner,
+        Peer, 
+        User
     }
 }

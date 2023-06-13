@@ -25,5 +25,6 @@ namespace BookMyEvent.DLL.Contracts
        /// False:if Add operation fails or in case of exception
        /// </returns>
         Task<bool> AddMultipleImages(List<EventImage> eventImages);
+        Task<Byte[]> GetProfileImageByEventId(Guid eventId);
     }
 }
