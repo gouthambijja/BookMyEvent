@@ -1,6 +1,7 @@
-﻿using BookMyEvent.BLL.Contracts;
+using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.WebApi.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using db.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace BookMyEvent.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        public UserController(IUserService userService)
         private readonly AuthController _authController;
 
         public UserController(IUserService userService, AuthController auth)
@@ -20,6 +22,8 @@ namespace BookMyEvent.WebApi.Controllers
             this._userService = userService;
             _authController = auth;
         }
+        
+       
         // GET: api/<UserController>
         [HttpGet("Users")]
         public async Task<IActionResult> GetAllUsers()
