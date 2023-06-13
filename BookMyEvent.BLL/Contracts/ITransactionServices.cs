@@ -18,7 +18,7 @@ namespace BookMyEvent.BLL.Contracts
        /// </summary>
        /// <param name="transaction"> A tuple of Transaction Object and List of UserInputForm Objects </param>
        /// <returns> Transaction Object </returns>
-        Task<BLTransaction> Add((BLTransaction transaction, List<UserInputForm> forms) transaction);
+        Task<BLTransaction> Add((BLTransaction transaction, List<BLUserInputForm> forms) transaction);
        
        /// <summary>
        /// Method to get all Transactions of an Event

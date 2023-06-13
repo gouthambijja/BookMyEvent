@@ -1,13 +1,14 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
-using db.Models;
+using BookMyEvent.BLL.RequestModels;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TransactionController:ControllerBase
+    public class TransactionController : ControllerBase
     {
         private readonly ITransactionServices _transactionServices;
         public TransactionController(ITransactionServices transactionServices)
@@ -16,28 +17,28 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpPost("addtransaction")]
-        public async Task<BLTransaction> Add([FromBody] (BLTransaction transaction, List<UserInputForm> forms) bLTransaction)
+        public async Task<IActionResult> Add([FromBody] AddTransaction bLTransaction)
         {
             try
             {
-                return await _transactionServices.Add(bLTransaction);
+                return Ok(await _transactionServices.Add((bLTransaction.transaction, bLTransaction.ListOfUserInputForm)));
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetAllTransactionsByEventId")]
-        public async Task<List<BLTransaction>> GetTransactionsByEventId(Guid eventId)
+        public async Task<IActionResult> GetTransactionsByEventId(Guid eventId)
         {
             try
             {
-                return await _transactionServices.GetAllTransactionsByEventId(eventId);
+                return Ok(await _transactionServices.GetAllTransactionsByEventId(eventId));
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -52,9 +53,6 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 return null;
             }
-
         }
-
-
     }
 }
