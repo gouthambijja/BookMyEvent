@@ -1,5 +1,7 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.WebApi.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,11 +12,13 @@ namespace BookMyEvent.WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        IUserService _userService;
+        private readonly IUserService _userService;
         public UserController(IUserService userService)
         {
             this._userService = userService;
         }
+        
+       
         // GET: api/<UserController>
         [HttpGet("Users")]
         public async Task<IActionResult> GetAllUsers()

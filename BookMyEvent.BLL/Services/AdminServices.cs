@@ -18,8 +18,8 @@ namespace BookMyEvent.BLL.Services
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
         public AdminServices(IAdministrationRepository administrationRepository, IAccountCredentialsRepository accountCredentialsRepository)
         {
-            this._administrationRepository = administrationRepository;
-            this._accountCredentialsRepository = accountCredentialsRepository;
+            _administrationRepository = administrationRepository;
+            _accountCredentialsRepository = accountCredentialsRepository;
         }
         public async Task<BLAdministrator> CreateAdministrator(BLAdministrator secondaryAdmin)
         {
