@@ -43,15 +43,15 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpGet("GetAllTransactionsByUserId")]
-        public async Task<List<BLTransaction>> GetTransactionsByUserId(Guid userId)
+        public async Task<IActionResult> GetTransactionsByUserId(Guid userId)
         {
             try
             {
-                return await _transactionServices.GetAllTransactionsByUserId(userId);
+                return Ok(await _transactionServices.GetAllTransactionsByUserId(userId));
             }
-            catch
+            catch(Exception ex) 
             {
-                return null;
+                return BadRequest(ex.Message);
             }
         }
     }
