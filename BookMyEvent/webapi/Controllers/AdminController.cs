@@ -75,6 +75,25 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("AddAdmin")]
+        public async Task<IActionResult> AddAdmin(BLAdministrator Admin)
+        {
+            try
+            {
+                Console.WriteLine(Admin.AdministratorAddress);
+                BLAdministrator result = await _adminService.CreateAdministrator(Admin);
+                var id = result.RoleId;
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPut("UpdateAdmin")]
         public async Task<IActionResult> UpdateAdmin(BLAdministrator Admin)
         {

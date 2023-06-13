@@ -22,43 +22,83 @@ namespace BookMyEvent.BLL.Services
         }
         public async Task<(bool IsUserAdded, string Message)> AddUser(BLUser user)
         {
-            if (user != null)
+            try
             {
-                var mapper = Automapper.InitializeAutomapper();
-                var User = mapper.Map<BLUser, User>(user);
-                return await UserRepositoryDal.AddUser(User);
+                if (user != null)
+                {
+                    var mapper = Automapper.InitializeAutomapper();
+                    var User = mapper.Map<BLUser, User>(user);
+                    return await UserRepositoryDal.AddUser(User);
+                }
+                return (false, "Error due to user is null");
             }
-            return (false, string.Empty);
+            catch (Exception ex)
+            {
+                return (false, string.Empty);
+            }
         }
-        public async Task<(Guid UserId,string Message)> BlockUser(Guid UserId)
+        public async Task<(Guid UserId, string Message)> BlockUser(Guid UserId)
         {
-            if(!UserId.Equals(string.Empty))
+            try
             {
-                return await UserRepositoryDal.BlockUser(UserId);
+                if (!UserId.Equals(string.Empty))
+                {
+                    return await UserRepositoryDal.BlockUser(UserId);
+                }
+                return (Guid.Empty, "Error in try Catch");
             }
-            return (UserId,"Bll Block Error");
+            catch (Exception ex)
+            {
+                return (UserId, "Bll Block Error");
+            }
         }
         public async Task<bool> ChangePassword(Guid UserId, string Password)
         {
-            if (Password is not null)
+            try
             {
-                return await UserRepositoryDal.ChangePassword(UserId, Password);
+                if (Password is not null)
+                {
+                    return await UserRepositoryDal.ChangePassword(UserId, Password);
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public async Task<(bool IsDeleted, string Message)> DeleteUser(Guid UserId)
         {
-            if (!UserId.Equals(string.Empty))
+            try
             {
-                return await UserRepositoryDal.DeleteUser(UserId);
+
+                if (!UserId.Equals(string.Empty))
+                {
+                    return await UserRepositoryDal.DeleteUser(UserId);
+                }
+                return (false, "Error in the tryCatch");
             }
-            return (false, "Bll Error");
+            catch (Exception ex)
+            {
+                return (false, "Bll Error");
+            }
         }
         public async Task<BLUser> GetUserByEmail(string Email)
         {
-            User user = await UserRepositoryDal.GetUserByEmail(Email);
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<User, BLUser>(user);
+            try
+            {
+                if (Email is not null)
+                {
+                    User user = await UserRepositoryDal.GetUserByEmail(Email);
+                    var mapper = Automapper.InitializeAutomapper();
+                    return mapper.Map<User, BLUser>(user);
+                }
+                return new BLUser();
+            }
+            catch (Exception ex)
+            {
+                return new BLUser();
+            }
         }
         public async Task<BLUser> GetUserById(Guid UserId)
         {

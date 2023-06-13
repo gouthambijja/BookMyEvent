@@ -76,7 +76,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                var transaction = await context.Transactions.FirstOrDefaultAsync(e => e.TransactionId.Equals(TransactionId));
+                var transaction = await context.Transactions.FindAsync(TransactionId);
                 if (transaction != null)
                 {
                     context.Transactions.Remove(transaction);

@@ -24,7 +24,9 @@ namespace BookMyEvent.DLL.Repositories
             {
                 if (administrator != null)
                 {
-                    _dbcontext.Administrations.Add(administrator);
+                    Console.WriteLine(administrator.AdministratorName);
+                    await _dbcontext.Administrations.AddAsync(administrator);
+
                     await _dbcontext.SaveChangesAsync();
                     await _dbcontext.Entry(administrator).GetDatabaseValuesAsync();
                     return administrator;

@@ -23,67 +23,127 @@ namespace BookMyEvent.BLL.Services
         }
         public async Task<BLAdministrator> CreateAdministrator(BLAdministrator secondaryAdmin)
         {
-            if (secondaryAdmin is not null)
+            try
             {
-                var mapper = Automapper.InitializeAutomapper();
-                Administration administration = mapper.Map<Administration>(secondaryAdmin);
-                await _administrationRepository.AddAdministrator(administration);
-                return secondaryAdmin;
+                if (secondaryAdmin is not null)
+                {
+                    Console.WriteLine(secondaryAdmin.AdministratorName);
+                    var acccred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = secondaryAdmin.Password, UpdatedOn =DateTime.Now });
+                    secondaryAdmin.AccountCredentialsId = acccred.AccountCredentialsId;
+                    var mapper = Automapper.InitializeAutomapper();
+                    Administration administration = mapper.Map<Administration>(secondaryAdmin);
+                    Console.WriteLine(administration.RoleId);
+                    Console.WriteLine(administration.AccountCredentialsId);
+                    return mapper.Map<BLAdministrator>(await _administrationRepository.AddAdministrator(administration));
+                }
+                else
+                {
+                    return null;
+                }
             }
-            return new BLAdministrator();
+            catch (Exception ex)
+            {
+                return new BLAdministrator();
+            }
         }
 
         public async Task<bool> BlockAdmin(Guid AdminId)
         {
-            if (AdminId != null)
+            try
             {
-                return await _administrationRepository.ToggleIsActive(AdminId);
+                if (AdminId != null)
+                {
+                    return await _administrationRepository.ToggleIsActive(AdminId);
+                }
+                else
+                {
+                    return false;
+                }
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> ChangeAdminPassword(Guid AdminId, string Password)
         {
-            if (AdminId != null)
+            try
             {
-                return await _administrationRepository.ChangeAdministratorPassword(AdminId, Password);
+                if (AdminId != null)
+                {
+                    return await _administrationRepository.ChangeAdministratorPassword(AdminId, Password);
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public async Task<BLAdministrator> GetAdminById(Guid AdminId)
         {
-            if (AdminId != null)
+            try
             {
-                Administration Admin = await _administrationRepository.GetAdministratorById(AdminId);
-                var mapper = Automapper.InitializeAutomapper();
-                return mapper.Map<Administration, BLAdministrator>(Admin);
+                if (AdminId != null)
+                {
+                    Administration Admin = await _administrationRepository.GetAdministratorById(AdminId);
+                    var mapper = Automapper.InitializeAutomapper();
+                    return mapper.Map<Administration, BLAdministrator>(Admin);
+                }
+                return new BLAdministrator();
             }
-            return new BLAdministrator();
+            catch (Exception ex)
+            {
+                return new BLAdministrator();
+            }
         }
         public async Task<List<BLAdministrator>> GetAllSecondaryAdmins()
         {
-            List<Administration> ListOfAdmins = await _administrationRepository.GetSecondaryAdministrators();
-            Console.WriteLine(ListOfAdmins.Count);
-            var mapper = Automapper.InitializeAutomapper();
-            return mapper.Map<List<Administration>, List<BLAdministrator>>(ListOfAdmins);
+            try
+            {
+                List<Administration> ListOfAdmins = await _administrationRepository.GetSecondaryAdministrators();
+                Console.WriteLine(ListOfAdmins.Count);
+                var mapper = Automapper.InitializeAutomapper();
+                return mapper.Map<List<Administration>, List<BLAdministrator>>(ListOfAdmins);
+            }
+            catch (Exception ex)
+            {
+                return new List<BLAdministrator>();
+            }
         }
         public async Task<bool> DeleteAdmin(Guid Deletedby, Guid SecondaryAdminId)
         {
-            if (SecondaryAdminId != null)
+            try
             {
-                return await _administrationRepository.UpdateDeletedByAndIsActive(Deletedby, SecondaryAdminId);
+                if (SecondaryAdminId != null)
+                {
+                    return await _administrationRepository.UpdateDeletedByAndIsActive(Deletedby, SecondaryAdminId);
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public async Task<BLAdministrator> UpdateAdministrator(BLAdministrator secondaryAdmin)
         {
-            if (secondaryAdmin is not null)
+            try
             {
-                var mapper = Automapper.InitializeAutomapper();
-                Administration Admin = await _administrationRepository.UpdateAdministrator(mapper.Map<BLAdministrator, Administration>(secondaryAdmin));
-                return secondaryAdmin;
+
+                if (secondaryAdmin is not null)
+                {
+                    var mapper = Automapper.InitializeAutomapper();
+                    Administration Admin = await _administrationRepository.UpdateAdministrator(mapper.Map<BLAdministrator, Administration>(secondaryAdmin));
+                    return secondaryAdmin;
+                }
+                return new BLAdministrator();
             }
-            return new BLAdministrator();
+            catch (Exception ex)
+            {
+                return new BLAdministrator();
+            }
         }
         public async Task<BLAdministrator> LoginAdmin(string email, string password, string role)
         {
@@ -110,13 +170,20 @@ namespace BookMyEvent.BLL.Services
         }
         public async Task<List<BLAdministrator>> AdminsCreatedByAdmin(Guid AdminId)
         {
-            if (AdminId != null)
+            try
             {
-                List<Administration> CreatedAdmins = await _administrationRepository.GetCreatedAdministratorsById(AdminId);
-                var mapper = Automapper.InitializeAutomapper();
-                return mapper.Map<List<Administration>, List<BLAdministrator>>(CreatedAdmins);
+                if (AdminId != null)
+                {
+                    List<Administration> CreatedAdmins = await _administrationRepository.GetCreatedAdministratorsById(AdminId);
+                    var mapper = Automapper.InitializeAutomapper();
+                    return mapper.Map<List<Administration>, List<BLAdministrator>>(CreatedAdmins);
+                }
+                return new List<BLAdministrator>();
             }
-            return new List<BLAdministrator>();
+            catch (Exception ex)
+            {
+                return new List<BLAdministrator>();
+            }
         }
     }
 }
