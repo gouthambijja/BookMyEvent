@@ -22,7 +22,8 @@ namespace BookMyEvent.BLL.Services
             _userInputFormField = userInputFormField;
         }
 
-        public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm(List<SubmitUserInputForm> userForms)
+        public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm(List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
+
         {
             try
             {
