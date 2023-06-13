@@ -25,7 +25,7 @@ namespace BookMyEvent.BLL.Services
             _mapper = Automapper.InitializeAutomapper();
         }
 
-        public async Task<BLTransaction> Add((BLTransaction transaction,List<UserInputForm> forms) bLTransaction)
+        public async Task<BLTransaction> Add((BLTransaction transaction,List<BLUserInputForm> forms) bLTransaction)
         {
             try
             {
