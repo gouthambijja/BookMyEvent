@@ -22,6 +22,7 @@ namespace BookMyEvent.BLL.Models
         public int Capacity { get; set; }
 
         public int AvailableSeats { get; set; }
+        public byte[]? ImgBody { get; set; }
 
         public string Description { get; set; } = null!;
 
@@ -65,7 +66,7 @@ namespace BookMyEvent.BLL.Models
 
         public Guid AcceptedBy { get; set; }
 
-        public Guid ImgId { get; set; }
+      
 
     }
 }

@@ -49,6 +49,22 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
+        public async Task<Byte[]> GetProfileImageByEventId(Guid eventId)
+        {
+            try
+            {
+                EventImage eventProfileImage = await _context.EventImages.Where(i => i.EventId.Equals(eventId) && i.ImgType.Equals("profile")).FirstOrDefaultAsync();
+                if (eventProfileImage != null)
+                {
+                    return eventProfileImage.ImgBody;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
 
     }

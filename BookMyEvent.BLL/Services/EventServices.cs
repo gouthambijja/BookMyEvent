@@ -39,6 +39,7 @@ namespace BookMyEvent.BLL.Services
                     if(AddForms.FormId==Guid.Empty) { return (null,AddForms.Message); }
                     NewEvent.EventDetails.FormId = AddForms.FormId;
                     Event NewEventDL = _mapper.Map<Event>(NewEvent.EventDetails);
+                    
                     Event EventDL=await eventRepository.AddEvent(NewEventDL);
                     if (EventDL == null)
                     {
@@ -80,11 +81,15 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 Event Event = await eventRepository.GetEventById(EventId);
-                return _mapper.Map<BLEvent>(Event);
+                if (Event == null) { return null; }
+                BLEvent EventBL= _mapper.Map<BLEvent>(Event);
+            
+                return EventBL;
+
             }
-            catch (Exception ex)
+            catch 
             {
-                return new BLEvent();
+                return null;
             }
         }
         public async Task<(BLEvent, string Message)> UpdateEvent(BLEvent _event)
@@ -110,48 +115,57 @@ namespace BookMyEvent.BLL.Services
                 return (false, "error in the event services");
             }
         }
+       
         public async Task<List<BLEvent>> GetAllActivePublishedEvents()
         {
             try
             {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEvents());
+                List<BLEvent> AllEvents= _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEvents());
+
+                return AllEvents;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByCategoryId(byte categoryId)
         {
             try
             {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByCategoryId(categoryId));
+                List<BLEvent> AllEvents = _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByCategoryId(categoryId));
+              
+                return AllEvents;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByOrgId(Guid orgId)
         {
             try
             {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByOrgId(orgId));
+                List<BLEvent> AllEvents = _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByOrgId(orgId));
+               
+                return AllEvents;
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByLocation(string location)
         {
             try
             {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByLocation(location));
+                List<BLEvent> AllEvents = _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByLocation(location));
+               
+                return AllEvents;
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByStartDate(DateTime date)
@@ -160,9 +174,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByStartDate(date));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByEndDate(DateTime date)
@@ -171,9 +185,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByEndDate(date));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
@@ -182,9 +196,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByStartDateAndEndDate(startDate, endDate));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingMoreThanPrice(decimal startingPrice)
@@ -193,9 +207,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingMoreThanPrice(startingPrice));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingLessThanPrice(decimal endingPrice)
@@ -204,9 +218,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingLessThanPrice(endingPrice));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingPriceRange(decimal startingPrice, decimal endingPrice)
@@ -215,9 +229,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingPriceRange(startingPrice, endingPrice));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingName(string name)
@@ -226,9 +240,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingName(name));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByMode(bool isOffline)
@@ -237,9 +251,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByMode(isOffline));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActivePublishedIsFreeEvents(bool isFree)
@@ -248,9 +262,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedIsFreeEvents(isFree));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<List<BLEvent>> GetAllActiveEventsByIsPublished(bool isPublished)
@@ -259,9 +273,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActiveEventsByIsPublished(isPublished));
             }
-            catch (Exception ex)
+            catch
             {
-                return new List<BLEvent>();
+                return null;
             }
         }
         public async Task<BLEvent> UpdateEventRegistrationStatus(Guid eventId, byte registrationStatusId, Guid updatedBy, DateTime updatedAt)
@@ -270,9 +284,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<BLEvent>(await eventRepository.UpdateEventRegistrationStatus(eventId, registrationStatusId, updatedBy, updatedAt));
             }
-            catch (Exception ex)
+            catch
             {
-                return new BLEvent();
+                return null;
             }
         }
         public async Task<BLEvent> UpdateIsCancelledEvent(Guid eventId, Guid updatedBy, DateTime updatedAt)
@@ -281,9 +295,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<BLEvent>(await eventRepository.UpdateIsCancelledEvent(eventId, updatedBy, updatedAt));
             }
-            catch (Exception ex)
+            catch
             {
-                return new BLEvent();
+                return null;
             }
         }
         public async Task<BLEvent> UpdateIsPublishedEvent(Guid eventId, Guid updatedBy, DateTime updatedAt)
@@ -292,9 +306,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<BLEvent>(await eventRepository.UpdateIsPublishedEvent(eventId, updatedBy, updatedAt));
             }
-            catch (Exception ex)
+            catch
             {
-                return new BLEvent();
+                return null;
             }
         }
         public async Task<BLEvent> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt)
@@ -303,9 +317,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<BLEvent>(await eventRepository.UpdateAcceptedBy(eventId, acceptBy, updatedBy, updatedAt));
             }
-            catch (Exception ex)
+            catch
             {
-                return new BLEvent();
+                return null;
             }
         }
         public async Task<BLEvent> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt)
@@ -314,9 +328,9 @@ namespace BookMyEvent.BLL.Services
             {
                 return _mapper.Map<BLEvent>(await eventRepository.UpdateRejectedBy(eventId, rejectedBy, updatedBy, updatedAt));
             }
-            catch (Exception ex)
+            catch
             {
-                return new BLEvent();
+                return null;
             }
         }
 
