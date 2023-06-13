@@ -90,7 +90,6 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> GetOrganiserById(Guid id)
         {
             var result = await _organiserServices.GetOrganiserById(id);
-            var r =await _organiserServices.
             if (result is not null)
                 return Ok(result);
             else return BadRequest("Organiser not found");
@@ -114,7 +113,7 @@ namespace BookMyEvent.WebApi.Controllers
             else return Ok("No requests found");
         }
 
-        [HttpPut("Organiser/{id}/Accept")]
+        //[HttpPut("Organiser/{id}/Accept")]
 
     }
 }
