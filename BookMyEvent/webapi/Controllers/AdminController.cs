@@ -81,6 +81,11 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 Console.WriteLine(Admin.AdministratorAddress);
+                var image = Request.Form.Files[0];
+                var memoryStream = new MemoryStream();
+                await image.CopyToAsync(memoryStream);
+                var imageBody = memoryStream.ToArray();
+                Admin.ImgBody= imageBody;
                 BLAdministrator result = await _adminService.CreateAdministrator(Admin);
                 var id = result.RoleId;
                 if (result != null)
