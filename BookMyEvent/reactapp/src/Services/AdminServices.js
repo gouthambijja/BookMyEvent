@@ -1,16 +1,15 @@
 import axios from "axios";
 import Axios from "../Api/Axios";
 
-const getAdminById = async(formData) =>{
+const getAdminById = async(id) =>{
     // try{
-        const response = await Axios.post('/api/admin/getAdminById',
-            JSON.stringify(formData),
+        const response = await Axios.get(`/api/Admin/AdminById?AdminId=${id}`,
             {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             }
             );
-            return response;
+            return response.data;
             // console.log(jwtDecode(response.data?.AccessToken));
             // dispatch(setAuth(response?.data));
             // setPersist();

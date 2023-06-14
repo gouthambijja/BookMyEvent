@@ -20,6 +20,7 @@ import { setLoading } from "../Features/ReducerSlices/loadingSlice";
 import { setPersist } from "../Hooks/usePersist";
 import { getAdminById } from "../Services/AdminServices";
 import { getAdminByIdThunk } from "../Features/ReducerSlices/AdminSlice";
+import store from "../App/store";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -64,21 +65,24 @@ const Login = () => {
     password: "",
   });
   const isloading = useSelector((state) => state.isLoading);
-  const auth = useSelector((state) => state.auth);
+
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
-
-  const handleSubmit = async (e) => {
+  const UpdateProfile = async () => {
+    const auth = store.getState();
+    await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
+    return null;
+  };
+  const HandleSubmit = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
-      console.log("hey");
       await dispatch(loginAdminThunk(formData)).unwrap();
-      // await dispatch(getAdminByIdThunk(auth.id)).unwrap();
+      UpdateProfile();
       setPersist();
       navigate(from);
     } catch {
@@ -100,7 +104,7 @@ const Login = () => {
           <Typography variant="h5" component="h1" border={1}>
             Admin Login
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit}>
+          <form className={classes.form} onSubmit={HandleSubmit}>
             <FormControl variant="outlined" margin="normal" fullWidth>
               <InputLabel htmlFor="Email Address">Email Address</InputLabel>
               <Input

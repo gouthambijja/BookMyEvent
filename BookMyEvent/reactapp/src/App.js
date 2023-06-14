@@ -30,7 +30,7 @@ const App = () => {
             <Route path="login" element={<Login />}></Route>
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth allowedrole={"Admin"} />}>
-                <Route index  element={<AdminHomePage />}></Route>
+                <Route index  element={<AdminHomePage />} ></Route>
               </Route>
             </Route>
           </Route>

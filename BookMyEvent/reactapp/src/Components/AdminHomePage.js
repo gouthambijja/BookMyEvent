@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import useAxiosPrivate from '../Hooks/useAxiosPrivate';
+import { useSelector } from 'react-redux';
 
 const AdminHomePage = () => {
 const [fakeString,setFakeString] = useState(['hey']);
 const axiosPrivate = useAxiosPrivate();
+const admin = useSelector(store => store.admin.profile)
   useEffect(()=>{
+    console.log(admin);
     let isMounted = true;
      let getFakeString = async() =>{
       const fakeStringRes = await axiosPrivate.get("https://localhost:7101/api/user/getfakestring");

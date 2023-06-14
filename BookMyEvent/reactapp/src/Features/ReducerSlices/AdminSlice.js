@@ -4,7 +4,7 @@ import { getAdminById } from "../../Services/AdminServices";
 export const getAdminByIdThunk = createAsyncThunk(
   "admin/setAdminProfile",
   async (id) => {
-    const profile = await getAdminById.getProfile(id);
+    const profile = await getAdminById(id);
     return profile;
   }
 );
