@@ -32,6 +32,7 @@ public partial class Event
     public byte MaxNoOfTicketsPerTransaction { get; set; }
 
     public DateTime CreatedOn { get; set; }
+    public Byte[]? ProfileImgBody { get; set; }
 
     public Guid RejectedBy { get; set; }
 

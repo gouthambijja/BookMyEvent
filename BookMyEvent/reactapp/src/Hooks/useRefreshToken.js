@@ -1,18 +1,15 @@
+import { useDispatch } from 'react-redux';
 import axios from '../Api/Axios';
-import useAuth from './useAuth';
+import { loginAdminThunk} from '../Features/ReducerSlices/authSlice';
 
 const useRefreshToken = () => {
-    const { setAuth } = useAuth();
+    const dispatch = useDispatch();
 
     const refresh = async () => {
-        const response = await axios.get('/getNewAccessTokenUsingRefreshToken', {
+        const response = await axios.get('/auth/getNewAccessTokenUsingRefreshToken', {
             withCredentials: true
         });
-        setAuth(prev => {
-            console.log(JSON.stringify(prev));
-            console.log(response.data.accessToken);
-            return { ...prev, accessToken: response.data}
-        });
+        dispatch(loginAdminThunk(response?.data))
         return response.data;
     }
     return refresh;

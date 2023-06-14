@@ -22,8 +22,12 @@ namespace BookMyEvent.WebApi.Controllers
             this._userService = userService;
             _authController = auth;
         }
-        
-       
+        [Authorize]
+        [HttpGet("getFakestring")]
+        public IActionResult Get()
+        {
+            return Ok("faekString");
+        }
         // GET: api/<UserController>
         [HttpGet("Users")]
         public async Task<IActionResult> GetAllUsers()

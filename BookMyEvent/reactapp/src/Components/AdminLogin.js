@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { LoginAndStore, setAuth } from "../Features/ReducerSlices/authSlice";
-import jwtDecode from "jwt-decode"
+import { loginAdminThunk } from "../Features/ReducerSlices/authSlice";
 import {
   Container,
   Typography,
@@ -17,10 +16,8 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Box, Modal } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Axios from "../Api/Axios";
-import Navbar from "./Navbar";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
-
+import { setPersist } from "../Hooks/usePersist";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -53,7 +50,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const from = location.state?.from?.pathname || "/Admin/home";
+  const from = location.state?.pathname || "/";
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [errMsg, setErrMsg] = useState({ open: false, msg: "" });
@@ -62,7 +59,7 @@ const Login = () => {
     password: "",
   });
   const isloading = useSelector((state) => state.isLoading);
-
+  const auth = useSelector((state) => state.auth);
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -74,23 +71,19 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
-    try{
-        const response = await Axios.post(AdminLoginUrl,
-            JSON.stringify(formData),
-            {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            }
-            );
-            // console.log(jwtDecode(response.data?.AccessToken));
-            const authInfo =jwtDecode(response?.data) ;
-            dispatch(setAuth({accessToken:response?.data,role:authInfo.role,id:authInfo.nameid}));
-            navigate('home');
-        }
-        catch{
-            setErrMsg({open:true,msg:"Login Failed, please try again."})
-        }
-        dispatch(setLoading(false));
+    try {
+      console.log("hey");
+      await dispatch(loginAdminThunk(formData)).unwrap();
+      // await dispatch(setAdminProfile(setAdminProfile(auth?.id))).unwrap();
+      console.log(auth);
+      // console.log(jwtDecode(response.data?.AccessToken));
+      // dispatch(setAuth(response?.data));
+      setPersist();
+      navigate(from);
+    } catch {
+      setErrMsg({ open: true, msg: "Login Failed, please try again." });
+    }
+    dispatch(setLoading(false));
   };
 
   const handleTogglePasswordVisibility = () => {
@@ -106,10 +99,7 @@ const Login = () => {
           <Typography variant="h5" component="h1" border={1}>
             Admin Login
           </Typography>
-          <form
-            className={classes.form}
-            onSubmit={handleSubmit}
-          >
+          <form className={classes.form} onSubmit={handleSubmit}>
             <FormControl variant="outlined" margin="normal" fullWidth>
               <InputLabel htmlFor="Email Address">Email Address</InputLabel>
               <Input
@@ -119,6 +109,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 label="Email Address"
+                required
               />
             </FormControl>
             <FormControl variant="outlined" margin="normal" fullWidth>
@@ -129,6 +120,7 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleInputChange}
+                required
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton onClick={handleTogglePasswordVisibility}>

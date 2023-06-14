@@ -1,25 +1,43 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import Axios from '../../Api/Axios';
+import jwtDecode from 'jwt-decode';
+import { loginAdmin } from '../../Services/AdminServices';
 
 const authInitialState = {
     accessToken:'',
     role:'',
     id:'',
 }
+export const loginAdminThunk = createAsyncThunk(
+    'auth/loginAdminAction',
+    async(formData)=>{
+        const auth = await loginAdmin(formData);
+        return auth;
+    }
+)
 const authSlice = createSlice({
     name:'auth',
     initialState:authInitialState,
     reducers:{
-        setAuth(state,action){
-            state.accessToken = action.payload.accessToken;
-            state.role = action.payload.role;
-            state.id = action.payload.id;
-        },
+        clearAuth(state,action){
+            state.accessToken = '';
+            state.role = '';
+            state.id = '';
+        }
         
     },
+    extraReducers(builder){
+        builder.
+        addCase(loginAdminThunk.fulfilled,(state,action)=>{
+            state.accessToken = action.payload
+            const authInfo =jwtDecode(action.payload) ;
+            state.role = authInfo?.role;
+            state.id = authInfo?.nameid;
+        })
+
+    }
     
 })
 const{actions,reducer} = authSlice;
-const {setAuth} = actions;
-export {setAuth};
+const {clearAuth} = actions;
+export {clearAuth};
 export default reducer;

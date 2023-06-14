@@ -29,7 +29,7 @@ namespace BookMyEvent.WebApi.Controllers
             if (tokenType == TokenType.AccessToken)
             {
                 secretKey = _config["Authentication:JWTSettings:AccessTokenSecretKey"];
-                expiresIn = DateTime.Now.AddMinutes(5);
+                expiresIn = DateTime.Now.AddSeconds(30);
             }
             else
             {
@@ -101,10 +101,22 @@ namespace BookMyEvent.WebApi.Controllers
             return  token;
         }
         //public async Task<ActionResult<LoginCredintials>> GetUserByJwt([FromBody] string jwtToken)
-      
 
-        [HttpPost("getNewAccessTokenUsingRefreshToken")]
-        public async Task<dynamic> FetNewAccessTokenUsingRefreshToken()
+        [HttpPost("logout")]
+        public async Task<IActionResult> logout()
+        {
+            try
+            {
+                Response.Cookies.Delete("RefreshToken");
+                return Ok(true);
+            }
+            catch
+            {
+                return BadRequest(false);
+            }
+        }
+        [HttpGet("getNewAccessTokenUsingRefreshToken")]
+        public async Task<IActionResult> FetNewAccessTokenUsingRefreshToken()
         {
             try
             {
@@ -134,7 +146,7 @@ namespace BookMyEvent.WebApi.Controllers
                     var role = principle.FindFirst(ClaimTypes.Role)?.Value;
                     var email = principle.FindFirst(ClaimTypes.Email)?.Value;
                     var Id = principle.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                    return GenerateJwtToken(email, Guid.Parse(Id),role,TokenType.AccessToken);
+                    return Ok(GenerateJwtToken(email, Guid.Parse(Id),role,TokenType.AccessToken));
                 }
                 else
                 {

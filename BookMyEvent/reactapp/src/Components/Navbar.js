@@ -8,16 +8,18 @@ import IconButton from "@mui/material/IconButton";
 import Sidebar from "./Sidebar";
 import { Menu } from "@material-ui/icons";
 import { useState } from "react";
-import RequireAuth from "./RequireAuth";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-
-
+  const auth = useSelector(store => store.auth)
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <>
+    <Box sx={{ flexGrow: 1,position:'relative',zIndex:100 }}>
       <AppBar position="static" style={{ background: "#3f51b5" }}>
         <Toolbar>
+          {auth.accessToken?
+          
           <IconButton
             size="large"
             edge="start"
@@ -28,19 +30,18 @@ export default function Navbar() {
               setOpen(!open);
             }}
           >
-            <RequireAuth>
             <Menu />
-            </RequireAuth>
-          </IconButton>
+          </IconButton>:<></>}
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             BookMyEvent
           </Typography>
         </Toolbar>
       </AppBar>
-      <div style={{position:'absolute',zIndex:'100' }}>
+    </Box>
+      <div style={{position:'fixed',zIndex:`${open?"50":"-100"}` }}>
         <Sidebar open={open} setOpen={setOpen} />
       </div>
-    </Box>
+      </>
   );
 }

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Inbox as InboxIcon, Mail as MailIcon } from '@material-ui/icons';
+import { useNavigate } from 'react-router-dom';
+import useLogout from '../Hooks/useLogout';
+
 
 const drawerWidth = 240;
 
@@ -35,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    background:'#f5f5f5',
+    backdropFilter:'blur(6px)'
   },
   drawerHeader: {
     display: 'flex',
@@ -55,6 +60,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Sidebar({open,setOpen}) {
+  const navigate = useNavigate();
+  const logout = useLogout();
   const classes = useStyles();
 //   const [open, setOpen] = useState(false);
 
@@ -65,7 +72,12 @@ function Sidebar({open,setOpen}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const handleLogout = async() =>{
+      if(await logout()){
+        handleDrawerClose();
+        navigate('admin/login');
+      }
+  }
   return (
     <div className={classes.root}>
       <Drawer
@@ -83,17 +95,11 @@ function Sidebar({open,setOpen}) {
           </IconButton>
         </div>
         <List>
-          <ListItem button onClick={()=>{console.log("hey")}}>
+          <ListItem button onClick={handleLogout}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="Inbox" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <MailIcon />
-            </ListItemIcon>
-            <ListItemText primary="Mail" />
+            <ListItemText primary="Logout" />
           </ListItem>
         </List>
       </Drawer>
