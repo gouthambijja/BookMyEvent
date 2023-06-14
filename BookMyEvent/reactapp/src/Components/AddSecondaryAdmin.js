@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button,Typography,Container } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
+import store from '../App/store';
+import { Box, Modal } from "@mui/material";
+import { addAdmin } from "../Services/AdminServices";
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -19,35 +23,30 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(3, 0, 2),
     },
   }));
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+  
 
 const AddSecondaryAdmin = () => {
   const classes = useStyles();
-    const admin = useSelector((store) => store.admin);
+    const admin = store.getState().admin.profile;
     const [image, setImage] = useState(null);
     const [formData, setFormData] = useState({
+        AdministratorId:"",
         AdministratorName: "",
-        AdministratorAddress: "",
+        GoogleId: '',
+        AdministratorAddress: "kjsadfjlkkljsfd",
         Email: "",
         PhoneNumber: "",
-        CreatedOn: new Date(),
-        UpdatedOn: new Date(),
+        AccountCredentialsId:'',
+        CreatedOn: (new Date()).toLocaleTimeString(),
+        UpdatedOn: (new Date()).toLocaleTimeString(),
         RoleId: 1,
         IsAccepted: true,
         ImageName: "profile",
-        CreatedBy: admin.id,
-        AcceptedBy: admin.id,
-        OrganisationId: admin.OrganisationId,
+        CreatedBy: admin.administratorId,
+        AcceptedBy: admin.administratorId,
+        RejectedBy:'',
+        DeletedBy:'',
+        OrganisationId: admin.organisationId,
         IsActive: true,
         Password: "",
     });
@@ -83,11 +82,12 @@ const AddSecondaryAdmin = () => {
             [e.target.name]: e.target.value,
         }));
     };
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
+        console.log("before post call "+formData)
+        const data=await addAdmin(formData);
         // Perform registration logic here, e.g., make an API call
-
+        console.log("after call "+ data)
         // Reset form fields
        setFormData({AdministratorName: "",
        AdministratorAddress: "",
@@ -104,11 +104,15 @@ const AddSecondaryAdmin = () => {
        IsActive: true,
        Password: "",})
     };
-
+    useEffect(()=>{
+        console.log(admin);
+    },[])
     return (
         <>
       <Container component="main" maxWidth="xl" className={classes.container}>
-
+      <Box
+          sx={{ boxShadow: 3, p: 3, borderRadius: "16px", textAlign: "center" }}
+        >
         <Typography variant="h5" component="h1" border={1}>
             Add New Admin
           </Typography>
@@ -191,6 +195,7 @@ const AddSecondaryAdmin = () => {
                 Register
             </Button>
         </form>
+        </Box>
         </Container>
         </>
     );

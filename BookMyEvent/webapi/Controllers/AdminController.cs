@@ -76,22 +76,24 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
         [HttpPost("AddAdmin")]
-        public async Task<IActionResult> AddAdmin(BLAdministrator Admin)
+        public async Task<IActionResult> AddAdmin(dynamic Admin)
         {
             try
             {
-                Console.WriteLine(Admin.AdministratorAddress);
-                var image = Request.Form.Files[0];
-                var memoryStream = new MemoryStream();
-                await image.CopyToAsync(memoryStream);
-                var imageBody = memoryStream.ToArray();
-                Admin.ImgBody= imageBody;
-                BLAdministrator result = await _adminService.CreateAdministrator(Admin);
-                var id = result.RoleId;
-                if (result != null)
-                {
-                    return Ok(result);
-                }
+                Console.WriteLine(Admin.ToString());
+                //Console.WriteLine(Admin.AdministratorAddress);
+                //var image = Request.Form.Files[0];
+                //var memoryStream = new MemoryStream();
+                //await image.CopyToAsync(memoryStream);
+                //var imageBody = memoryStream.ToArray();
+                //Admin.ImgBody = imageBody;
+                //BLAdministrator result = await _adminService.CreateAdministrator(Admin);
+                //var id = result.RoleId;
+                //if (result != null)
+                //{
+                //    return Ok(result);
+                //}
+                return Ok();
                 return NotFound();
             }
             catch (Exception ex)
