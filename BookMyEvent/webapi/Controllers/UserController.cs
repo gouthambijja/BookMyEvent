@@ -5,6 +5,7 @@ using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using db.Models;
 using Microsoft.AspNetCore.Mvc;
+using BookMyEvent.BLL.RequestModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,7 +16,6 @@ namespace BookMyEvent.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
         private readonly AuthController _authController;
 
         public UserController(IUserService userService, AuthController auth)
