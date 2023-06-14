@@ -18,6 +18,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
 import { setPersist } from "../Hooks/usePersist";
+import { getAdminById } from "../Services/AdminServices";
+import { getAdminByIdThunk } from "../Features/ReducerSlices/AdminSlice";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -70,17 +72,13 @@ const Login = () => {
     }));
   };
 
-  const AdminLoginUrl = "Api/Admin/loginAdmin";
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
       console.log("hey");
       await dispatch(loginAdminThunk(formData)).unwrap();
-      // await dispatch(setAdminProfile(setAdminProfile(auth?.id))).unwrap();
-      console.log(auth);
-      // console.log(jwtDecode(response.data?.AccessToken));
-      // dispatch(setAuth(response?.data));
+      // await dispatch(getAdminByIdThunk(auth.id)).unwrap();
       setPersist();
       navigate(from);
     } catch {
