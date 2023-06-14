@@ -306,5 +306,23 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a Event object
         /// </returns>
         Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
+
+        /// <summary>
+        /// An asynchronous mthod to get list of all the events created by an organisation
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
+        Task<List<Event>> GetAllCreatedEventsByOrganisation(Guid orgId);
+
+        /// <summary>
+        /// An asynchronous mthod to get list of all the events created by an organiser
+        /// </summary>
+        /// <param name="organiserId"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
+        Task<List<Event>> GetAllCreatedEventsByOrganiser(Guid organiserId);
     }
 }
