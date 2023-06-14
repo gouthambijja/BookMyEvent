@@ -127,8 +127,8 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                Organisation? organisation = await _dbcontext.Organisations.FirstOrDefaultAsync(o => o.OrganisationName == orgName);
-                if (organisation != null)
+                Organisation? organisation = await _dbcontext.Organisations.Where(o => o.OrganisationName == orgName).FirstOrDefaultAsync();
+                if (organisation is null)
                 {
                     return false;
                 }

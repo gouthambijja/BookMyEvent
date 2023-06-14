@@ -86,13 +86,14 @@ namespace BookMyEvent.BLL.Contracts
         Task<List<BLAdministrator>> GetAllOrganisationOrganisers(Guid orgId);
 
         /// <summary>
-        /// An asynchronous method that blocks/unblocks the organiser
+        /// An asynchronous method that blocks the organiser
         /// </summary>
         /// <param name="administratorId"></param>
+        /// <param name="blockedBy"></param>
         /// <returns>
-        /// Returns a tuple with boolean value saying is organiser blocked/unblocked successfully or not and a string message
+        /// Returns a tuple with boolean value saying is organiser blocked successfully or not and a string message
         /// </returns>
-        Task<(bool IsSuccessfull, string Message)> BlockOrganiser(Guid administratorId);
+        Task<(bool IsSuccessfull, string Message)> BlockOrganiser(Guid administratorId, Guid blockedBy);
 
         /// <summary>
         /// An asynchronous method that unblocks the organiser
@@ -102,7 +103,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>
         /// Returns a bool value saying is organiser accepted successfully or not
         /// </returns>
-        Task<bool> AcceptOrganiser(Guid administratorId, Guid acceptedBy);
+        Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy);
 
         /// <summary>
         /// An asynchronous method that rejects the organiser
@@ -131,7 +132,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>
         /// Returns a tuple with boolean value saying is all organisers blocked successfully or not and a string message
         /// </returns>
-        Task<(bool IsSuccessfull, string Message)> BlockAllOrganisationOrganisers(Guid administratorId);
+        Task<(bool IsSuccessfull, string Message)> BlockAllOrganisationOrganisers(Guid administratorId, Guid blockedBy);
 
         /// <summary>
         /// An asynchronous method to check if the organiser is owner or not

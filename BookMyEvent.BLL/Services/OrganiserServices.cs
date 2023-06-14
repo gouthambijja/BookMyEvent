@@ -21,7 +21,7 @@ namespace BookMyEvent.BLL.Services
             _organisationServices = organisationServices;
             _accountCredentialsRepository = accountCredentialsRepository;
         }
-        public async Task<bool> AcceptOrganiser(Guid administratorId, Guid acceptedBy)
+        public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy)
         {
             try
             {
@@ -33,11 +33,11 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<(bool IsSuccessfull, string Message)> BlockAllOrganisationOrganisers(Guid orgId)
+        public async Task<(bool IsSuccessfull, string Message)> BlockAllOrganisationOrganisers(Guid orgId, Guid blockedBy)
         {
             try
             {
-                if (await _administrationRepository.UpdateAllOrganisationOrganisersIsActive(orgId))
+                if (await _administrationRepository.UpdateAllOrganisationOrganisersIsActive(orgId, blockedBy))
                 {
                     return (true, "All Organisers Blocked");
                 }
@@ -52,11 +52,11 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<(bool IsSuccessfull, string Message)> BlockOrganiser(Guid administratorId)
+        public async Task<(bool IsSuccessfull, string Message)> BlockOrganiser(Guid administratorId, Guid blockedBy)
         {
             try
             {
-                if (await _administrationRepository.ToggleIsActive(administratorId))
+                if (await _administrationRepository.UpdateDeletedByAndIsActive(administratorId, blockedBy))
                 {
                     return (true, "Organiser Blocked");
                 }
@@ -75,36 +75,73 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var (IsAvailable, Message) = await IsOrganiserAvailableWithEmail(administrator.Email);
+                //var (IsAvailable, Message) = await IsOrganiserAvailableWithEmail(administrator.Email);
+                //if (IsAvailable)
+                //{
+                //    return (false, Message, null);
+                //}
+                //else
+                //{
+                //    var mapper = Automapper.InitializeAutomapper();
+                //    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
+                //    administrator.AccountCredentialsId = passModel.AccountCredentialsId;
+                //    Console.WriteLine(administrator.AccountCredentialsId);
+                //    Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                //    if (passModel != null)
+                //    {
+                //        var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
+                //        Console.WriteLine(newAdministrator.AdministratorId);
+                //        Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                //        if (newAdministrator != null)
+                //        {
+                //            return (true, "Organiser registration successfull", mapper.Map<BLAdministrator>(newAdministrator));
+                //        }
+                //        else
+                //        {
+                //            return (false, "Organiser registration unsuccessfull", new BLAdministrator());
+                //        }
+                //    }
+                //    else
+                //    {
+                //        return (false, "Organiser password is not createded", new BLAdministrator());
+                //    }
+                //}
+
+
+                var mapper = Automapper.InitializeAutomapper();
+                (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(administrator.Email);
                 if (IsAvailable)
                 {
-                    return (false, Message, null);
+                    return (false, Message,null);
                 }
                 else
                 {
-                    var mapper = Automapper.InitializeAutomapper();
-                    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn=DateTime.Now });
+                    //var newOrg = await _organisationServices.CreateOrganisation(bLOrganisation);
+                    //if (newOrg.IsSuccessfull)
+                    //{
+                        var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
                     administrator.AccountCredentialsId = passModel.AccountCredentialsId;
-                    Console.WriteLine(administrator.AccountCredentialsId);
-                    Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                    if (passModel != null)
-                    {
-                        var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
-                        Console.WriteLine(newAdministrator.AdministratorId);
-                        Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                        if (newAdministrator != null)
+                        Console.WriteLine(administrator.AccountCredentialsId);
+                        Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                        if (passModel != null)
                         {
-                            return (true, "Organiser registration successfull", mapper.Map<BLAdministrator>(newAdministrator));
+                            var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
+                            Console.WriteLine(newAdministrator.AdministratorId);
+                            Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                            if (newAdministrator != null)
+                            {
+                                return (true, "Organiser registration successfull",mapper.Map<BLAdministrator>(newAdministrator));
+                            }
+                            else
+                            {
+                                return (false, "Organiser registration unsuccessfull",null);
+                            }
                         }
                         else
                         {
-                            return (false, "Organiser registration unsuccessfull", new BLAdministrator());
+                            return (false, "organiser password creation  unsuccessfull", null);
                         }
-                    }
-                    else
-                    {
-                        return (false, "Organiser password is not createded", new BLAdministrator());
-                    }
+                
                 }
             }
             catch (Exception ex)
@@ -256,32 +293,44 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var mapper = Automapper.InitializeAutomapper();
-                var newOrg = await _organisationServices.CreateOrganisation(bLOrganisation);
-                if (newOrg.IsSuccessfull)
+                (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(owner.Email);
+                if (IsAvailable)
                 {
-                    var res = await IsOrganiserAvailableWithEmail(owner.Email);
-                    if (res.IsOrganiserEmailAvailable)
-                    {
-                        return (false, res.Message);
-                    }
-                    else
-                    {
-                        var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = owner.Password });
-                        owner.AccountCredentialsId = passModel.AccountCredentialsId;
-                        var newOwner = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(owner));
-                        if (newOwner != null)
-                        {
-                            return (true, "Owner Registered");
-                        }
-                        else
-                        {
-                            return (false, "Owner Not Registered");
-                        }
-                    }
+                    return (false, Message);
                 }
                 else
                 {
-                    return (false, newOrg.Message);
+                    var newOrg = await _organisationServices.CreateOrganisation(bLOrganisation);
+                    if (newOrg.IsSuccessfull)
+                    {
+                        owner.OrganisationId = newOrg.org.OrganisationId;
+                        var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = owner.Password, UpdatedOn = DateTime.Now });
+                        owner.AccountCredentialsId = passModel.AccountCredentialsId;
+                        Console.WriteLine(owner.AccountCredentialsId);
+                        Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                        if (passModel != null)
+                        {
+                            var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(owner));
+                            Console.WriteLine(newAdministrator.AdministratorId);
+                            Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                            if (newAdministrator != null)
+                            {
+                                return (true, "Organiser registration successfull");
+                            }
+                            else
+                            {
+                                return (false, "Organiser registration unsuccessfull");
+                            }
+                        }
+                        else
+                        {
+                            return (false, "Organiser password creation  unsuccessfull");
+                        }
+                    }
+                    else
+                    {
+                        return (false, newOrg.Message);
+                    }
                 }
             }
             catch (Exception ex)
@@ -302,14 +351,16 @@ namespace BookMyEvent.BLL.Services
                 }
                 else
                 {
-                    var newPeer = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(peer));
-                    if (newPeer != null)
+                   var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = peer.Password, UpdatedOn = DateTime.Now });
+                    peer.AccountCredentialsId = passModel.AccountCredentialsId;
+                    var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(peer));
+                    if (newAdministrator != null)
                     {
-                        return (true, "Peer Registered");
+                        return (true, "Peer registration successfull");
                     }
                     else
                     {
-                        return (false, "Peer Not Registered");
+                        return (false, "Peer registration unsuccessfull");
                     }
                 }
             }

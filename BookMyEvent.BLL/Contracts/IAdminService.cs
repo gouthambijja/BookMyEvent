@@ -23,8 +23,9 @@ namespace BookMyEvent.BLL.Contracts
         /// Method to Block admin
         /// </summary>
         /// <param name="AdminId"></param>
+        /// <param name="BlockedBy"></param>
         /// <returns>returns bool</returns>
-        Task<bool> BlockAdmin(Guid AdminId);
+        Task<bool> BlockAdmin(Guid AdminId, Guid BlockedBy);
         /// <summary>
         /// Method to Chanage the Admin Password
         /// </summary>

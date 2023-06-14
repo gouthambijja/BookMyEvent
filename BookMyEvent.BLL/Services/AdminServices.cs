@@ -47,23 +47,13 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<bool> BlockAdmin(Guid AdminId)
+        public async Task<bool> BlockAdmin(Guid AdminId, Guid blockedBy)
         {
-            try
+            if (AdminId != null)
             {
-                if (AdminId != null)
-                {
-                    return await _administrationRepository.ToggleIsActive(AdminId);
-                }
-                else
-                {
-                    return false;
-                }
+                return await _administrationRepository.UpdateDeletedByAndIsActive(blockedBy, AdminId);
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            return false;
         }
 
         public async Task<bool> ChangeAdminPassword(Guid AdminId, string Password)

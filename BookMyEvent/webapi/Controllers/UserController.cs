@@ -148,6 +148,7 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> DeleteUser(Guid UserId)
         {

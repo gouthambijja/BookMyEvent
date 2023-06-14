@@ -28,16 +28,19 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-
-                var mapper = Automapper.InitializeAutomapper();
-                var newForm = await _organiserFormRepository.Add(mapper.Map<Form>(form));
-                foreach (var item in registrationFormFields)
+                if (form.FormId == Guid.Empty)
                 {
-                    item.FormId = newForm.FormId;
+                    var mapper = Automapper.InitializeAutomapper();
+                    var newForm = await _organiserFormRepository.Add(mapper.Map<Form>(form));
+                    foreach (var item in registrationFormFields)
+                    {
+                        item.FormId = newForm.FormId;
+                    }
+                    var newRegistrationFormFields = mapper.Map<List<RegistrationFormField>>(registrationFormFields);
+                    var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
+                    return (newForm.FormId, "Added Successfully");
                 }
-                var newRegistrationFormFields = mapper.Map<List<RegistrationFormField>>(registrationFormFields);
-                var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
-                return (newForm.FormId, "Added Successfully");
+                return (form.FormId, "Form already exists, so nothing to add");
             }
             catch (Exception ex)
             {

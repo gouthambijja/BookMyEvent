@@ -135,7 +135,7 @@ namespace BookMyEvent.DLL.Contracts
         /// True:If updated successfully
         /// False:If update operation fails
         /// </returns>
-        public Task<bool> UpdateIsAcceptedAndAcceptedBy(Guid acceptedByUserId, Guid acceptedAccountId);
+        public Task<bool> UpdateIsAcceptedAndAcceptedBy(Guid? acceptedByUserId, Guid acceptedAccountId);
 
         /// <summary>
         /// Method to update rejectedBy field
@@ -183,10 +183,11 @@ namespace BookMyEvent.DLL.Contracts
         /// Method to update IsActive field of all the Organisation Organisers
         /// </summary>
         /// <param name="orgId"></param>
+        /// <param name="updatedBy"
         /// <returns>
         /// Returns bool value indicating whether IsActive field of all the Organisation Organisers is updated or not
         /// </returns>
-        Task<bool> UpdateAllOrganisationOrganisersIsActive(Guid orgId);
+        Task<bool> UpdateAllOrganisationOrganisersIsActive(Guid orgId, Guid updatedBy);
 
         /// <summary>
         /// Method to get all the Administrators of an Organisation
