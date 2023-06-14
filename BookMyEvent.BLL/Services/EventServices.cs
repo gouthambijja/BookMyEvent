@@ -334,5 +334,30 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
+        public async Task<List<BLEvent>> GetAllCreatedEventsByOrganisation(Guid orgId)
+        {
+            try
+            {
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllCreatedEventsByOrganisation(orgId));
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<BLEvent>> GetAllCreatedEventsByOrganiser(Guid organiserId)
+        {
+            try
+            {
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllCreatedEventsByOrganiser(organiserId));
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

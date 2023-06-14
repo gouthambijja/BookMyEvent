@@ -387,5 +387,35 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetAllCreatedEventsByOrganisation")]
+        public async Task<IActionResult> GetAllCreatedEventsByOrganisation(Guid orgId)
+        {
+            try
+            {
+                List<BLEvent> AllEvents = await _eventServices.GetAllCreatedEventsByOrganisation(orgId);
+                if (AllEvents == null) { return BadRequest("error in BL"); }
+                return Ok(AllEvents);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAllCreatedEventsByOrganiser")]
+        public async Task<IActionResult> GetAllCreatedEventsByOrganiser(Guid organiserId)
+        {
+            try
+            {
+                List<BLEvent> AllEvents = await _eventServices.GetAllCreatedEventsByOrganiser(organiserId);
+                if (AllEvents == null) { return BadRequest("error in BL"); }
+                return Ok(AllEvents);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

@@ -40,5 +40,7 @@ namespace BookMyEvent.BLL.Contracts
         Task<BLEvent> UpdateIsPublishedEvent(Guid eventId, Guid updatedBy, DateTime updatedAt);
         Task<BLEvent> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt);
         Task<BLEvent> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
+        Task<List<BLEvent>> GetAllCreatedEventsByOrganisation(Guid orgId);
+        Task<List<BLEvent>> GetAllCreatedEventsByOrganiser(Guid organiserId);
     }
 }
