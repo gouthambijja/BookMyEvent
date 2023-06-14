@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import axios from '../Api/Axios';
-import { loginAdminThunk} from '../Features/ReducerSlices/authSlice';
+import { loginAdminThunk, setAuth} from '../Features/ReducerSlices/authSlice';
 
 const useRefreshToken = () => {
     const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const useRefreshToken = () => {
         const response = await axios.get('/auth/getNewAccessTokenUsingRefreshToken', {
             withCredentials: true
         });
-        dispatch(loginAdminThunk(response?.data))
+        dispatch(setAuth(response?.data))
         return response.data;
     }
     return refresh;

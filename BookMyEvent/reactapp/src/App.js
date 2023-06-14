@@ -10,7 +10,7 @@ import Admin from "./Components/Admin";
 import Error from "./Components/Error";
 import RequireAuth from "./Components/RequireAuth";
 import AdminHomePage from "./Components/AdminHomePage";
-import Login from "./Components/AdminLogin";
+import Login from "./Components/Login";
 import Layout from "./Components/Layout";
 import PersistLogin from "./Components/PersistLogin";
 

@@ -18,6 +18,12 @@ const authSlice = createSlice({
     name:'auth',
     initialState:authInitialState,
     reducers:{
+        setAuth(state,action){
+            state.accessToken = action.payload
+            const authInfo =jwtDecode(action.payload) ;
+            state.role = authInfo?.role;
+            state.id = authInfo?.nameid;
+        },
         clearAuth(state,action){
             state.accessToken = '';
             state.role = '';
@@ -38,6 +44,6 @@ const authSlice = createSlice({
     
 })
 const{actions,reducer} = authSlice;
-const {clearAuth} = actions;
-export {clearAuth};
+const {clearAuth,setAuth} = actions;
+export {clearAuth,setAuth};
 export default reducer;
