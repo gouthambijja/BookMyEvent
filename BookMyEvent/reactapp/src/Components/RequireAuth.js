@@ -9,7 +9,7 @@ const RequireAuth = ({allowedrole}) => {
   return (
     <>  {
         
-      allowedrole == auth.role?
+      allowedrole.includes(auth.role)?
         <Outlet/>:<Navigate to="login" replace={true} state= {location}> </Navigate>
         }
 

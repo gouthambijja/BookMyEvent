@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { loginAdminThunk } from "../Features/ReducerSlices/authSlice";
 import {
@@ -17,10 +17,11 @@ import { Box, Modal } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
-import { setPersist } from "../Hooks/usePersist";
+import { setPersist, unsetPersist } from "../Hooks/usePersist";
 import { getAdminById } from "../Services/AdminServices";
 import { getAdminByIdThunk } from "../Features/ReducerSlices/AdminSlice";
 import store from "../App/store";
+import useLogout from "../Hooks/useLogout";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -50,14 +51,28 @@ const style = {
 };
 
 const Login = () => {
+  const logout = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  let role = "";
+  const auth = useSelector(store => store.auth);
+
+  useLayoutEffect(()=>{
+    unsetPersist();
+    logout(); },[]);
   let from;
   if (location.pathname == "/admin/login") {
     from =  "/admin";
-  } else {
+    role = "Admin";
+  } 
+  else if(location.pathname == "/organiser/login"){
+    from = "/organiser";
+    role = "Organiser";
+  }
+  else {
     from = location.state?.pathname || "/";
+    role = "User";
   }
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
@@ -74,18 +89,15 @@ const Login = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  const UpdateProfile = async () => {
-    const auth = store.getState();
-    await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
-    return null;
-  };
+ 
   const HandleSubmit = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
       await dispatch(loginAdminThunk(formData)).unwrap();
-      UpdateProfile();
+      await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
       setPersist();
+      console.log(from);
       navigate(from);
     } catch {
       setErrMsg({ open: true, msg: "Login Failed, please try again." });
@@ -104,7 +116,7 @@ const Login = () => {
           sx={{ boxShadow: 3, p: 3, borderRadius: "16px", textAlign: "center" }}
         >
           <Typography variant="h5" component="h1" border={1}>
-            Admin Login
+            {role} Login
           </Typography>
           <form className={classes.form} onSubmit={HandleSubmit}>
             <FormControl variant="outlined" margin="normal" fullWidth>
@@ -147,7 +159,7 @@ const Login = () => {
             >
               Sign In
             </Button>
-            {isloading ? <div>hey</div> : <div>oops</div>}
+            {isloading ? <div>Loading...</div> : <></>}
           </form>
         </Box>
         <Modal

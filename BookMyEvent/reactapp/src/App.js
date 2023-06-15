@@ -16,8 +16,10 @@ import Events from "./Components/Events"
 import PersistLogin from "./Components/PersistLogin";
 import AddSecondaryAdmin from "./pages/AddSecondaryAdmin";
 import LandingPage from "./pages/LandingPage";
-import './App.css';
+import "./App.css";
 import Profile from "./pages/Profile";
+import OrganiserHomePage from "./pages/OrganiserHomePage";
+import Organiser from "./Components/Organiser";
 
 const App = () => {
     const router = createBrowserRouter(
@@ -39,17 +41,29 @@ const App = () => {
           //   action={actions}
           errorElement={<Error />}
         >
-          <Route index element={<LandingPage/>}>
-            
+          <Route index element={<LandingPage />}></Route>
+          <Route path="/login" element={<Login />} />
+          {/* ------------------------------------------------------------------------- */}
+
+          <Route path="organiser" element={<Organiser/>}>
+          <Route path="login" element={<Login />}></Route>
+            <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth allowedrole={["Owner","Peer"]} />}>
+                <Route index element={<OrganiserHomePage />}></Route>
+                <Route path="addOrganiser" element={<AddSecondaryAdmin />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
+            </Route>
           </Route>
 
+          {/* ------------------------------------------------------------------------------- */}
           <Route path="/admin" element={<Admin />}>
             <Route path="login" element={<Login />}></Route>
             <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedrole={"Admin"} />} >
+              <Route element={<RequireAuth allowedrole={["Admin"]} />}>
                 <Route index element={<AdminHomePage />}></Route>
                 <Route path="addadmin" element={<AddSecondaryAdmin />} />
-                <Route path="profile" element={<Profile/>}/>
+                <Route path="profile" element={<Profile />} />
               </Route>
             </Route>
           </Route>
