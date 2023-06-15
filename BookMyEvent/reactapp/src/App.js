@@ -9,11 +9,14 @@ import {
 import Admin from "./Components/Admin";
 import Error from "./Components/Error";
 import RequireAuth from "./Components/RequireAuth";
-import AdminHomePage from "./Components/AdminHomePage";
+import AdminHomePage from "./pages/AdminHomePage";
 import Login from "./Components/Login";
 import Layout from "./Components/Layout";
 import PersistLogin from "./Components/PersistLogin";
-import AddSecondaryAdmin from "./Components/AddSecondaryAdmin";
+import AddSecondaryAdmin from "./pages/AddSecondaryAdmin";
+import LandingPage from "./pages/LandingPage";
+import './App.css';
+import Profile from "./pages/Profile";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -25,15 +28,17 @@ const App = () => {
           //   action={actions}
           errorElement={<Error />}
         >
-          <Route index element={<Login />}></Route>
+          <Route index element={<LandingPage/>}>
+            
+          </Route>
 
           <Route path="/admin" element={<Admin />}>
             <Route path="login" element={<Login />}></Route>
             <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedrole={"Admin"} />}>
+              <Route element={<RequireAuth allowedrole={"Admin"} />} >
                 <Route index element={<AdminHomePage />}></Route>
                 <Route path="addadmin" element={<AddSecondaryAdmin />} />
-                <Route index  element={<AdminHomePage />} ></Route>
+                <Route path="profile" element={<Profile/>}/>
               </Route>
             </Route>
           </Route>

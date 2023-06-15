@@ -1,12 +1,22 @@
 .App {
   text-align: center;
 }
-
+*{
+  box-sizing: border-box;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+.BookMyEventLogo:hover{
+  cursor: pointer;
+}
 
+.ExternalContainer{
+  height: calc(100vh - 64px);
+  overflow: scroll;
+  overflow-x: hidden;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -34,5 +44,13 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+@media (max-width:1200px){
+  .profileImage{
+    flex-basis: 100% !important;
+  }
+  .profileInfo{
+    flex-basis: 100% !important;
   }
 }

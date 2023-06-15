@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Inbox as InboxIcon, Mail as MailIcon } from '@material-ui/icons';
+import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Inbox as InboxIcon,ExitToApp, GroupAdd, AccountCircle} from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import useLogout from '../Hooks/useLogout';
+import { useSelector } from 'react-redux';
 
 
 const drawerWidth = 240;
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Sidebar({open,setOpen}) {
   const navigate = useNavigate();
+  const auth = useSelector(store => store.auth);
   const logout = useLogout();
   const classes = useStyles();
 //   const [open, setOpen] = useState(false);
@@ -76,7 +78,18 @@ function Sidebar({open,setOpen}) {
       if(await logout()){
         handleDrawerClose();
         navigate('admin/login');
+        handleDrawerClose();
       }
+  }
+  const handleProfile = async() =>{
+    if(auth.role == "Admin"){
+      navigate("/admin/profile");
+      handleDrawerClose();
+    }
+  }
+  const handleAddAdmin = async() =>{
+    navigate("/admin/addadmin");
+    handleDrawerClose();
   }
   return (
     <div className={classes.root}>
@@ -95,9 +108,24 @@ function Sidebar({open,setOpen}) {
           </IconButton>
         </div>
         <List>
+        <ListItem button onClick={handleProfile}>
+            <ListItemIcon>
+              <AccountCircle/>
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListItem>
+          {auth.role === "Admin"?
+          
+        <ListItem button onClick={handleAddAdmin}>
+            <ListItemIcon>
+              <GroupAdd/>
+            </ListItemIcon>
+            <ListItemText primary="Add Admin" />
+          </ListItem>:<></>}
+          
           <ListItem button onClick={handleLogout}>
             <ListItemIcon>
-              <InboxIcon />
+              <ExitToApp/>
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItem>

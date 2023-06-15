@@ -9,10 +9,12 @@ import Sidebar from "./Sidebar";
 import { Menu } from "@material-ui/icons";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const auth = useSelector(store => store.auth)
+  const navigate = useNavigate();
   return (
     <>
     <Box sx={{ flexGrow: 1,position:'relative',zIndex:100 }}>
@@ -33,7 +35,7 @@ export default function Navbar() {
             <Menu />
           </IconButton>:<></>}
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" className="BookMyEventLogo" component="div" sx={{ flexGrow: 1}} onClick={()=>{navigate("/admin");setOpen(false)}}>
             BookMyEvent
           </Typography>
         </Toolbar>

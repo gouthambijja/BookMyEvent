@@ -54,9 +54,11 @@ const Login = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   let from;
-  if (location.pathname == "/admin/login")
-    from = location.state?.pathname || "/admin";
-  else from = location.state?.pathname || "/";
+  if (location.pathname == "/admin/login") {
+    from =  "/admin";
+  } else {
+    from = location.state?.pathname || "/";
+  }
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [errMsg, setErrMsg] = useState({ open: false, msg: "" });

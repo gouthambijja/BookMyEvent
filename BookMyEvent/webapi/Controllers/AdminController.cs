@@ -2,8 +2,11 @@
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.WebApi.Utilities;
+using db.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Web.Helpers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -76,24 +79,40 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
         [HttpPost("AddAdmin")]
-        public async Task<IActionResult> AddAdmin(dynamic Admin)
+        public async Task<IActionResult> AddAdmin()
         {
             try
             {
-                Console.WriteLine(Admin.ToString());
-                //Console.WriteLine(Admin.AdministratorAddress);
-                //var image = Request.Form.Files[0];
-                //var memoryStream = new MemoryStream();
-                //await image.CopyToAsync(memoryStream);
-                //var imageBody = memoryStream.ToArray();
-                //Admin.ImgBody = imageBody;
-                //BLAdministrator result = await _adminService.CreateAdministrator(Admin);
-                //var id = result.RoleId;
-                //if (result != null)
-                //{
-                //    return Ok(result);
-                //}
-                return Ok();
+
+                var image = Request.Form.Files[0];
+                var memoryStream = new MemoryStream();
+                await image.CopyToAsync(memoryStream);
+                var imageBody = memoryStream.ToArray();
+                var Admin = new BLAdministrator()
+                {
+                    AdministratorName = Request.Form.Where(e => e.Key == "administratorName").First().Value,
+                    AdministratorAddress = Request.Form.Where(e => e.Key == "administratorAddress").First().Value,
+                    Email = Request.Form.Where(e => e.Key == "email").First().Value,
+                    PhoneNumber = Request.Form.Where(e => e.Key == "phoneNumber").First().Value,
+                    CreatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "createdOn").First().Value),
+                    UpdatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "updatedOn").First().Value),
+                    RoleId = byte.Parse(Request.Form.Where(e => e.Key == "roleId").First().Value),
+                    IsAccepted = bool.Parse(Request.Form.Where(e => e.Key == "isAccepted").First().Value),
+                    ImageName = Request.Form.Where(e => e.Key == "imageName").First().Value,
+                    CreatedBy = Guid.Parse(Request.Form.Where(e => e.Key == "createdBy").First().Value),
+                    AcceptedBy = Guid.Parse(Request.Form.Where(e => e.Key == "acceptedBy").First().Value),
+                    OrganisationId = Guid.Parse(Request.Form.Where(e => e.Key == "organisationId").First().Value),
+                    IsActive = bool.Parse(Request.Form.Where(e => e.Key == "isActive").First().Value),
+                    Password = Request.Form.Where(e => e.Key == "password").First().Value,
+                    ImgBody = imageBody
+
+
+                };
+                BLAdministrator result = await _adminService.CreateAdministrator(Admin);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
                 return NotFound();
             }
             catch (Exception ex)

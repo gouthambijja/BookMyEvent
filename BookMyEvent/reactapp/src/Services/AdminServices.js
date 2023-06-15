@@ -31,7 +31,7 @@ const addAdmin = async (formData) => {
     const response = await Axios.post('/api/admin/AddAdmin',
         formData,
         {
-            headers: { 'Content-Type': 'application/json' },
+            'Content-Type': 'multipart/form-data',
             withCredentials: true
         }
 

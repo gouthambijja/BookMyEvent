@@ -30,50 +30,28 @@ const AddSecondaryAdmin = () => {
     const admin = store.getState().admin.profile;
     const [image, setImage] = useState(null);
     const [formData, setFormData] = useState({
-        AdministratorId:"",
-        AdministratorName: "",
-        GoogleId: '',
-        AdministratorAddress: "kjsadfjlkkljsfd",
-        Email: "",
-        PhoneNumber: "",
-        AccountCredentialsId:'',
-        CreatedOn: (new Date()).toLocaleTimeString(),
-        UpdatedOn: (new Date()).toLocaleTimeString(),
+        AdministratorName: 'dad',
+        AdministratorAddress: 'asddf',
+        Email: "kaka@gmail.c",
+        PhoneNumber: "33",
+        CreatedOn: (new Date()).toLocaleString(),
+        UpdatedOn: (new Date()).toLocaleString(),
         RoleId: 1,
         IsAccepted: true,
         ImageName: "profile",
         CreatedBy: admin.administratorId,
         AcceptedBy: admin.administratorId,
-        RejectedBy:'',
-        DeletedBy:'',
         OrganisationId: admin.organisationId,
         IsActive: true,
-        Password: "",
+        Password: "kaka",
     });
-    function imageToByteArray(file) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-      
-          reader.onload = (event) => {
-            const arrayBuffer = event.target.result;
-            const byteArray = new Uint8Array(arrayBuffer);
-            resolve(byteArray);
-          };
-      
-          reader.onerror = (event) => {
-            reject(new Error('Error converting image to byte array.'));
-          };
-      
-          reader.readAsArrayBuffer(file);
-        });
-      }
+    
     const handleImageChange = async(e) => {
         const file = e.target.files[0];
         setImage(file);
-        const ffile = await imageToByteArray(file);
         setFormData((prevState) => ({
             ...prevState,
-            ImgBody: ffile,
+            ImgBody: file,
         }));
     };
     const handleInputChange = (e) => {
@@ -85,7 +63,23 @@ const AddSecondaryAdmin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("before post call "+formData)
-        const data=await addAdmin(formData);
+        const _formData = new FormData();
+        _formData.append("administratorName",formData.AdministratorName);
+        _formData.append("administratorAddress",formData.AdministratorAddress);
+        _formData.append("email",formData.Email);
+        _formData.append("phoneNumber",formData.PhoneNumber);
+        _formData.append("createdOn",formData.CreatedOn);
+        _formData.append("updatedOn",formData.UpdatedOn);
+        _formData.append("roleId",1);
+        _formData.append("isAccepted",true);
+        _formData.append("imageName",formData.profile);
+        _formData.append("createdBy",formData.CreatedBy);
+        _formData.append("acceptedBy",formData.AcceptedBy);
+        _formData.append("organisationId",formData.OrganisationId);
+        _formData.append("isActive",true);
+        _formData.append("password",formData.Password);
+        _formData.append("imgBody",formData.ImgBody);
+        const data=await addAdmin(_formData);
         // Perform registration logic here, e.g., make an API call
         console.log("after call "+ data)
         // Reset form fields
@@ -98,6 +92,7 @@ const AddSecondaryAdmin = () => {
        RoleId: 1,
        IsAccepted: true,
        ImageName: "profile",
+       ImgBody:null,
        CreatedBy: admin.id,
        AcceptedBy: admin.id,
        OrganisationId: admin.OrganisationId,
