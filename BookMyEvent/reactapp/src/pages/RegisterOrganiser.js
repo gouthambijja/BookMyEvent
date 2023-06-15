@@ -7,7 +7,7 @@ import { Box, Modal } from "@mui/material";
 import { addAdmin } from "../Services/AdminServices";
 import { getAllOrganisations } from "../Services/OrganisationService";
 import { width } from '@mui/system';
-import { addPeer } from '../Services/OrganiserServices';
+import { addOwner, addPeer } from '../Services/OrganiserServices';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +33,7 @@ const RegisterOrganiser = () => {
     const admin = store.getState().admin.profile;
     const [image, setImage] = useState(null);
     const [passwordError, setPasswordError] = useState('');
+    const [orgNameError, setOrgNameError] = useState('');
     const [selectedOption, setSelectedOption] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [options, setOptions] = useState(null);
@@ -102,7 +103,21 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
     };
-
+    const handleOrgNameChange = (e) => {
+        const isNameInOrganisation = Object.values(options).some(
+            (org) => org.organisationName === e.target.value
+        );
+        if (isNameInOrganisation) {
+            setOrgNameError("Organisation already exixts")
+        }
+        else {
+            setOrgNameError('')
+        }
+        setOrgFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    }
     const handleRoleChange = (event) => {
         setSelectedRoleValue(event.target.value);
         options.forEach(e => {
@@ -139,26 +154,33 @@ const RegisterOrganiser = () => {
             const data = await addPeer(_formData);
             console.log("after call " + data)
         }
-        else{
-        const _ownerData = new FormData();
-        const _orgData = new FormData();
+        else {
 
-            _ownerData.append("administratorName", formData.AdministratorName);
-            _ownerData.append("administratorAddress", formData.AdministratorAddress);
-            _ownerData.append("email", formData.Email);
-            _ownerData.append("phoneNumber", formData.PhoneNumber);
-            _ownerData.append("createdOn", formData.CreatedOn);
-            _ownerData.append("updatedOn", formData.UpdatedOn);
-            _ownerData.append("roleId", 4);
-            _ownerData.append("isAccepted", false);
-            _ownerData.append("imageName", formData.ImageName);
-            _orgData.append("organisationName",orgFormData.OrganisationName);
-            _orgData.append("organisationDescription",orgFormData.OrganisationDescription);
-            _orgData.append("Location",orgFormData.Location);
-            _orgData.append("createdOn",orgFormData.CreatedOn);
-            _orgData.append("IsActive",orgFormData.IsActive);
-            _orgData.append("UpdatedOn",orgFormData.UpdatedOn);
-            
+
+            _formData.append("administratorName", formData.AdministratorName);
+            _formData.append("administratorAddress", formData.AdministratorAddress);
+            _formData.append("email", formData.Email);
+            _formData.append("phoneNumber", formData.PhoneNumber);
+            _formData.append("createdOn", formData.CreatedOn);
+            _formData.append("updatedOn", formData.UpdatedOn);
+            _formData.append("roleId", 2);
+            _formData.append("isAccepted", false);
+            _formData.append("imageName", formData.ImageName);
+            _formData.append("isActive", true);
+            _formData.append("password", formData.Password);
+            _formData.append("imgBody", formData.ImgBody);
+            _formData.append("organisationName", orgFormData.OrganisationName);
+            _formData.append("organisationDescription", orgFormData.OrganisationDescription);
+            _formData.append("Location", orgFormData.Location);
+            _formData.append("orgcreatedOn", orgFormData.CreatedOn);
+            _formData.append("orgIsActive", orgFormData.IsActive);
+            _formData.append("orgUpdatedOn", orgFormData.UpdatedOn);
+
+            console.log(_formData);
+            const data = await addOwner(_formData);
+            console.log("after call " + data)
+
+
         }
         // Perform registration logic here, e.g., make an API call
         // Reset form fields
@@ -293,9 +315,9 @@ const RegisterOrganiser = () => {
                         {image && <p>Selected image: {image.name}</p>}
 
 
-                        <FormControl required sx={{ width: '300px', margin: '10px' }}>
-                            <InputLabel>Select an option</InputLabel>
-                            <Select value={selectedRoleValue} onChange={handleRoleChange} >
+                        <FormControl required sx={{ width: '300px' }}>
+                            <InputLabel htmlFor="role-select">Select an option</InputLabel>
+                            <Select value={selectedRoleValue} labelId="role-select" id="role-select" onChange={handleRoleChange} >
 
                                 <MenuItem value="dummy">Select an Option</MenuItem>
                                 <MenuItem value="peer">Join an existing Organisation</MenuItem>
@@ -315,8 +337,10 @@ const RegisterOrganiser = () => {
                                     name="OrganisationName"
                                     variant="outlined"
                                     value={orgFormData.OrganisationName}
-                                    onChange={handleOrgInputChange}
+                                    onChange={handleOrgNameChange}
                                     margin="normal"
+                                    error={orgNameError !== ''}
+                                    helperText={orgNameError}
                                     required
                                     fullWidth
                                 />
@@ -355,7 +379,7 @@ const RegisterOrganiser = () => {
                                 options={organisations}
                                 getOptionLabel={(option) => option.label}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Search option" variant="outlined" />
+                                    <TextField {...params} label="Select your Organisation" variant="outlined" />
                                 )}
                                 onChange={handleOptionChange}
                                 value={selectedOption}

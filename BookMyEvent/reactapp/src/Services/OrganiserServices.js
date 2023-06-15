@@ -54,4 +54,17 @@ const addPeer = async (formData) => {
     )
     return response.data;
 }
-export { addPeer };
+
+const addOwner = async (formData) => {
+    console.log(formData);
+    const response = await Axios.post('/api/Organiser/RegisterOwner',
+        formData,
+        {
+            headers:{'Content-Type': 'multipart/form-data'},
+            withCredentials: true
+        }
+
+    )
+    return response.data;
+}
+export { addPeer,addOwner };

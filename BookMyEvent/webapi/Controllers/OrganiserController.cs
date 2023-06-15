@@ -22,12 +22,43 @@ namespace BookMyEvent.WebApi.Controllers
             _authController = authController;
         }
         [HttpPost("RegisterOwner")]
-        public async Task<IActionResult> RegisterOrganiserOwner(OrganiserRegistration registration)
+        public async Task<IActionResult> RegisterOrganiserOwner()
         {
-            //BLAdministrator profile, BLOrganisation organisation
-            //var result = await _organiserServices.RegisterOwner(organiser.profile, organiser.organisation);
+            var image = Request.Form.Files[0];
 
-            var result = await _organiserServices.RegisterOwner(registration.Organiser, registration.Organisation);
+            var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream);
+            var imageBody = memoryStream.ToArray();
+            var owner = new BLAdministrator()
+            {
+                AdministratorName = Request.Form.Where(e => e.Key == "administratorName").First().Value,
+                AdministratorAddress = Request.Form.Where(e => e.Key == "administratorAddress").First().Value,
+                Email = Request.Form.Where(e => e.Key == "email").First().Value,
+                PhoneNumber = Request.Form.Where(e => e.Key == "phoneNumber").First().Value,
+                CreatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "createdOn").First().Value),
+                UpdatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "updatedOn").First().Value),
+                RoleId = byte.Parse(Request.Form.Where(e => e.Key == "roleId").First().Value),
+                IsAccepted = bool.Parse(Request.Form.Where(e => e.Key == "isAccepted").First().Value),
+                ImageName = Request.Form.Where(e => e.Key == "imageName").First().Value,
+      
+                IsActive = bool.Parse(Request.Form.Where(e => e.Key == "isActive").First().Value),
+                Password = Request.Form.Where(e => e.Key == "password").First().Value,
+                ImgBody = imageBody
+
+
+            };
+            var organisation = new BLOrganisation()
+            {
+                OrganisationName = Request.Form.Where(e => e.Key == "organisationName").First().Value,
+               OrganisationDescription = Request.Form.Where(e => e.Key == "organisationDescription").First().Value,
+                Location = Request.Form.Where(e => e.Key == "Location").First().Value,
+                CreatedOn =  DateTime.Parse(Request.Form.Where(e => e.Key == "orgcreatedOn").First().Value),
+                IsActive = bool.Parse(Request.Form.Where(e => e.Key == "orgIsActive").First().Value),
+                UpdatedOn =  DateTime.Parse(Request.Form.Where(e => e.Key == "orgUpdatedOn").First().Value),
+
+            };
+
+            var result = await _organiserServices.RegisterOwner(owner, organisation);
             if (result.IsSuccessfull)
                 return Ok(result.Message);
             else return BadRequest(result.Message);
@@ -36,7 +67,7 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPost("RegisterPeer")]
         public async Task<IActionResult> RegisterOrganiserPeer()
         {
-            Console.WriteLine("hryyy");
+            
             var image = Request.Form.Files[0];
            
             var memoryStream = new MemoryStream();
