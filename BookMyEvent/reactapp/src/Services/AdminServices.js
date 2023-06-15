@@ -1,4 +1,3 @@
-import axios from "axios";
 import Axios from "../Api/Axios";
 
 const getAdminById = async (id) => {
@@ -9,8 +8,6 @@ const getAdminById = async (id) => {
         }
     );
     return response.data;
-
-
 }
 
 const loginAdmin = async (formData) => {

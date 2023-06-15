@@ -1,13 +1,46 @@
-import axios from "axios";
 import Axios from "../Api/Axios";
-
+const apiBase = "/api/Organisation";
 const getAllOrganisations = async () => {
-    const response = await Axios.get(`/api/Organisation`,
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-    );
-    return response.data;
-}
-export { getAllOrganisations };
+  const response = await Axios.get(apiBase, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+const getOrganisationById = async (id) => {
+  const response = await Axios.get(`${apiBase}/${id}`, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+const IsOrgNameTaken = async (organisationName) => {
+  const response = await Axios.get(
+    `${apiBase}/CheckOrganisationName/${organisationName}`,
+    {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+const updateOrganisation = async (updatedOrg) => {
+  const response = await Axios.put(`${apiBase}/${updatedOrg.id}`, updatedOrg, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+const deleteOrganisation = async (id) => {
+  const response = await Axios.delete(`${apiBase}/${id}`, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+export default { getAllOrganisations, getOrganisationById, IsOrgNameTaken, updateOrganisation, deleteOrganisation };

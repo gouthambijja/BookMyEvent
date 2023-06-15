@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import store from '../App/store';
 import { Box, Modal } from "@mui/material";
 import { addAdmin } from "../Services/AdminServices";
-import { getAllOrganisations } from "../Services/OrganisationService";
+import t from "../Services/OrganisationService";
 import { width } from '@mui/system';
 import { addOwner, addPeer } from '../Services/OrganiserServices';
 
@@ -205,7 +205,7 @@ const RegisterOrganiser = () => {
     useEffect(() => {
         const temp = async () => {
             console.log(admin);
-            const options = await getAllOrganisations();
+            const options = await t.getAllOrganisations();
             setOptions(options)
             console.log(options);
         }
