@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  Route,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-  createRoutesFromElements,
+    Route,
+    RouterProvider,
+    Routes,
+    createBrowserRouter,
+    createRoutesFromElements,
 } from "react-router-dom";
 import Admin from "./Components/Admin";
 import Error from "./Components/Error";
@@ -12,6 +12,7 @@ import RequireAuth from "./Components/RequireAuth";
 import AdminHomePage from "./pages/AdminHomePage";
 import Login from "./Components/Login";
 import Layout from "./Components/Layout";
+import Events from "./Components/Events"
 import PersistLogin from "./Components/PersistLogin";
 import AddSecondaryAdmin from "./pages/AddSecondaryAdmin";
 import LandingPage from "./pages/LandingPage";
@@ -19,6 +20,16 @@ import './App.css';
 import Profile from "./pages/Profile";
 
 const App = () => {
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route
+                    path="/"
+                    element={<Layout />}    
+                    //   action={actions}
+                    errorElement={<Error />}
+                >
+                    <Route index element={<Login />}></Route>
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -47,7 +58,7 @@ const App = () => {
     )
   );
 
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 };
 
 export default App;
