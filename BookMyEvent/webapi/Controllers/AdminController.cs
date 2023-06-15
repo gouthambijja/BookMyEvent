@@ -113,7 +113,7 @@ namespace BookMyEvent.WebApi.Controllers
                 {
                     return Ok(result);
                 }
-                return NotFound();
+                return BadRequest();
             }
             catch (Exception ex)
             {

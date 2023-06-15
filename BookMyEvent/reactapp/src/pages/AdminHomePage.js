@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 const AdminHomePage = () => {
 const [fakeString,setFakeString] = useState(['hey']);
 const axiosPrivate = useAxiosPrivate();
-const admin = useSelector(store => store.admin.profile)
+const admin = useSelector(store => store.profile.info)
+console.log(admin);
   useEffect(()=>{
     console.log(admin);
     let isMounted = true;

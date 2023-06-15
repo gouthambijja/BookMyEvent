@@ -21,6 +21,7 @@ namespace BookMyEvent.BLL
             services.AddScoped<IUserInputFormService,UserInputFormService>();
             services.AddScoped<IAdminService,AdminServices>();
             services.AddScoped<IUserService,UserService>();
+            services.AddScoped<ICategoryServices,CategoryServices>();
         }
     }
 }

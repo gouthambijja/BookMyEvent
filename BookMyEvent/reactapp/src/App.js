@@ -3,6 +3,11 @@
 import React from "react";
 
 import {
+  Route,
+  RouterProvider,
+  Routes,
+  createBrowserRouter,
+  createRoutesFromElements,
 
   Route,
 
@@ -27,8 +32,8 @@ import AdminHomePage from "./pages/AdminHomePage";
 import Login from "./Components/Login";
 
 import Layout from "./Components/Layout";
-
 import PersistLogin from "./Components/PersistLogin";
+import AddSecondary from "./pages/AddSecondary";
 
 import AddSecondaryAdmin from "./pages/AddSecondaryAdmin";
 
@@ -41,12 +46,24 @@ import Profile from "./pages/Profile";
 import OrganiserHomePage from "./pages/OrganiserHomePage";
 
 import Organiser from "./Components/Organiser";
+import AddEvent from "./pages/AddEvent";
+import { categoryLoader } from "./Loaders/storeLoader";
 import RegisterOrganiser from "./pages/RegisterOrganiser";
 
 
 
 
 const App = () => {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route
+          path="/"
+          element={<Layout />}
+          //   action={actions}
+          // errorElement={<Error />}
+          loader={categoryLoader}
+        >
 
   const router = createBrowserRouter(
 
@@ -81,10 +98,13 @@ const App = () => {
             <Route path="login" element={<Login />}></Route>
 
             <Route element={<PersistLogin />}>
+              <Route element={<RequireAuth allowedroles={["Owner","Peer"]} />}>
 
               <Route element={<RequireAuth allowedrole={["Owner", "Peer"]} />}>
 
                 <Route index element={<OrganiserHomePage />}></Route>
+                <Route path="AddEvent" element={<AddEvent/>}></Route>
+                <Route path="addSecondaryOwner" element={<AddSecondary/>} />
 
                 <Route path="addOrganiser" element={<AddSecondaryAdmin />} />
 
@@ -110,6 +130,7 @@ const App = () => {
               <Route element={<RequireAuth allowedrole={["Admin"]} />}>
 
                 <Route index element={<AdminHomePage />}></Route>
+                <Route path="addadmin" element={<AddSecondary />} />
 
                 <Route path="addadmin" element={<AddSecondaryAdmin />} />
 
@@ -129,6 +150,7 @@ const App = () => {
 
   );
 
+  return <RouterProvider router={router} />;
 
 
 

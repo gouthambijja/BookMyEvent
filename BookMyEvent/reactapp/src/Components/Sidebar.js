@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Inbox as InboxIcon,ExitToApp, GroupAdd, AccountCircle} from '@material-ui/icons';
-import { useNavigate } from 'react-router-dom';
-import useLogout from '../Hooks/useLogout';
-import { useSelector } from 'react-redux';
-
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import {
+  Menu as MenuIcon,
+  ChevronLeft as ChevronLeftIcon,
+  Inbox as InboxIcon,
+  ExitToApp,
+  GroupAdd,
+  AccountCircle,
+  Event,
+} from "@material-ui/icons";
+import { useNavigate } from "react-router-dom";
+import useLogout from "../Hooks/useLogout";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -22,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -31,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -39,20 +53,20 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    background:'#f5f5f5',
-    backdropFilter:'blur(6px)'
+    background: "#f5f5f5",
+    backdropFilter: "blur(6px)",
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -60,12 +74,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Sidebar({open,setOpen}) {
+function Sidebar({ open, setOpen }) {
   const navigate = useNavigate();
-  const auth = useSelector(store => store.auth);
+  const auth = useSelector((store) => store.auth);
   const logout = useLogout();
   const classes = useStyles();
-//   const [open, setOpen] = useState(false);
+  //   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -74,21 +88,30 @@ function Sidebar({open,setOpen}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleLogout = async() =>{
-      if(await logout()){
-        handleDrawerClose();
-        navigate('admin/login');
-        handleDrawerClose();
-      }
-  }
-  const handleProfile = async() =>{
-    if(auth.role == "Admin"){
-      navigate("/admin/profile");
+  const handleLogout = async () => {
+    if (await logout()) {
+      navigate("/");
       handleDrawerClose();
     }
-  }
-  const handleAddAdmin = async() =>{
-    navigate("/admin/addadmin");
+  };
+  const handleProfile = async () => {
+    if (auth.role == "Admin") {
+      navigate("/admin/profile");
+      handleDrawerClose();
+    } else if (auth.role == "Owner" || auth.role == "profile") {
+      navigate("/organiser/profile");
+      handleDrawerClose();
+    } else {
+      navigate("/profile");
+    }
+  };
+  const handleAdd = async () => {
+    if (auth?.role == "Admin") navigate("/admin/addadmin");
+    navigate("/organiser/addSecondaryOwner");
+    handleDrawerClose();
+  };
+  const handleOrganiseEvent = async() =>{
+    navigate("/organiser/AddEvent");
     handleDrawerClose();
   }
   return (
@@ -108,24 +131,44 @@ function Sidebar({open,setOpen}) {
           </IconButton>
         </div>
         <List>
-        <ListItem button onClick={handleProfile}>
+          <ListItem button onClick={handleProfile}>
             <ListItemIcon>
-              <AccountCircle/>
+              <AccountCircle />
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
-          {auth.role === "Admin"?
-          
-        <ListItem button onClick={handleAddAdmin}>
+          {auth.role === "Admin" ? (
+            <ListItem button onClick={handleAdd}>
+              <ListItemIcon>
+                <GroupAdd />
+              </ListItemIcon>
+              <ListItemText primary="Add Admin" />
+            </ListItem>
+          ) : (
+            <></>
+          )}
+          {auth.role == "Owner" || auth.role == "Peer"?(
+            <ListItem button onClick={handleOrganiseEvent}>
             <ListItemIcon>
-              <GroupAdd/>
+              <Event   />
             </ListItemIcon>
-            <ListItemText primary="Add Admin" />
-          </ListItem>:<></>}
-          
+            <ListItemText primary="Organise Event" />
+          </ListItem>
+          ):<></>}
+          {auth.role === "Owner" ? (
+            <ListItem button onClick={handleAdd}>
+              <ListItemIcon>
+                <GroupAdd />
+              </ListItemIcon>
+              <ListItemText primary="Add Secondary Owner" />
+            </ListItem>
+          ) : (
+            <></>
+          )}
+
           <ListItem button onClick={handleLogout}>
             <ListItemIcon>
-              <ExitToApp/>
+              <ExitToApp />
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItem>

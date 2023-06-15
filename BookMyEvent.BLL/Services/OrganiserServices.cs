@@ -265,11 +265,13 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var result = await _administrationRepository.GetAdministratorByEmail(email);
+                if(result.RoleId == 1)return (Guid.Empty, 0, false, "Email doesn't exists"); 
                 if (result != null)
                 {
                     var res = await _accountCredentialsRepository.CheckPassword(result.AccountCredentialsId, password);
                     if (res)
                     {
+                        
                         return (result.AdministratorId, result.RoleId, true, "Login Successfull");
                     }
                     else

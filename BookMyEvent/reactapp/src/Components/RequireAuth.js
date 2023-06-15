@@ -3,13 +3,14 @@ import { useSelector } from 'react-redux'
 import { Outlet,useNavigate,Navigate, useLocation } from 'react-router-dom'
 
 
-const RequireAuth = ({allowedrole}) => {
+const RequireAuth = ({allowedroles}) => {
     const auth = useSelector(store => store.auth);
     const location = useLocation();
+    console.log(allowedroles,auth.role)
   return (
     <>  {
         
-      allowedrole.includes(auth.role)?
+      allowedroles?.includes(auth.role)?
         <Outlet/>:<Navigate to="login" replace={true} state= {location}> </Navigate>
         }
 

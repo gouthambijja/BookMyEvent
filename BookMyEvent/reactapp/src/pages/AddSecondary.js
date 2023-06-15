@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import store from '../App/store';
 import { Box, Modal } from "@mui/material";
 import { addAdmin } from "../Services/AdminServices";
+import { addOrganiser } from '../Services/OrganiserServices';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,25 +26,26 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-const AddSecondaryAdmin = () => {
+const AddSecondary = () => {
   const classes = useStyles();
-    const admin = store.getState().admin.profile;
+    const profile = store.getState().profile.info;
+    const auth = store.getState().auth;
     const [image, setImage] = useState(null);
     const [formData, setFormData] = useState({
-        AdministratorName: 'dad',
-        AdministratorAddress: 'asddf',
-        Email: "kaka@gmail.c",
-        PhoneNumber: "33",
+        AdministratorName: '',
+        AdministratorAddress: '',
+        Email: "",
+        PhoneNumber: "",
         CreatedOn: (new Date()).toLocaleString(),
         UpdatedOn: (new Date()).toLocaleString(),
-        RoleId: 1,
+        RoleId: profile.roleId,
         IsAccepted: true,
         ImageName: "profile",
-        CreatedBy: admin.administratorId,
-        AcceptedBy: admin.administratorId,
-        OrganisationId: admin.organisationId,
+        CreatedBy: profile.administratorId,
+        AcceptedBy: profile.administratorId,
+        OrganisationId: profile.organisationId,
         IsActive: true,
-        Password: "kaka",
+        Password: "",
     });
     
     const handleImageChange = async(e) => {
@@ -70,16 +72,22 @@ const AddSecondaryAdmin = () => {
         _formData.append("phoneNumber",formData.PhoneNumber);
         _formData.append("createdOn",formData.CreatedOn);
         _formData.append("updatedOn",formData.UpdatedOn);
-        _formData.append("roleId",1);
+        _formData.append("roleId",formData.RoleId);
         _formData.append("isAccepted",true);
-        _formData.append("imageName",formData.ImageName);
+        _formData.append("imageName",formData.profile);
         _formData.append("createdBy",formData.CreatedBy);
         _formData.append("acceptedBy",formData.AcceptedBy);
         _formData.append("organisationId",formData.OrganisationId);
         _formData.append("isActive",true);
         _formData.append("password",formData.Password);
         _formData.append("imgBody",formData.ImgBody);
-        const data=await addAdmin(_formData);
+        
+        let data;
+        if(profile.roleId == 1){
+         data=await addAdmin(_formData);
+        }else{
+        data = await addOrganiser(_formData);
+        }
         // Perform registration logic here, e.g., make an API call
         console.log("after call "+ data)
         // Reset form fields
@@ -89,18 +97,17 @@ const AddSecondaryAdmin = () => {
        PhoneNumber: "",
        CreatedOn: new Date(),
        UpdatedOn: new Date(),
-       RoleId: 1,
+       RoleId:'' ,
        IsAccepted: true,
        ImageName: "profile",
        ImgBody:null,
-       CreatedBy: admin.id,
-       AcceptedBy: admin.id,
-       OrganisationId: admin.OrganisationId,
+       CreatedBy: profile.administratorId,
+       AcceptedBy: profile.administratorId,
+       OrganisationId: profile.OrganisationId,
        IsActive: true,
        Password: "",})
     };
     useEffect(()=>{
-        console.log(admin);
     },[])
     return (
         <>
@@ -109,7 +116,7 @@ const AddSecondaryAdmin = () => {
           sx={{ boxShadow: 3, p: 3, borderRadius: "16px", textAlign: "center" }}
         >
         <Typography variant="h5" component="h1" border={1}>
-            Add New Admin
+            Add New {auth.role}
           </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
@@ -196,4 +203,4 @@ const AddSecondaryAdmin = () => {
     );
 };
 
-export default AddSecondaryAdmin;
+export default AddSecondary;

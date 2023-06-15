@@ -68,8 +68,30 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpPost("CreateOrganiser")]
-        public async Task<IActionResult> CreateSecondaryOrganiser(BLAdministrator secondaryOwner)
+        public async Task<IActionResult> CreateSecondaryOrganiser()
         {
+            var image = Request.Form.Files[0];
+            var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream);
+            var imageBody = memoryStream.ToArray();
+            var secondaryOwner = new BLAdministrator()
+            {
+                AdministratorName = Request.Form.Where(e => e.Key == "administratorName").First().Value,
+                AdministratorAddress = Request.Form.Where(e => e.Key == "administratorAddress").First().Value,
+                Email = Request.Form.Where(e => e.Key == "email").First().Value,
+                PhoneNumber = Request.Form.Where(e => e.Key == "phoneNumber").First().Value,
+                CreatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "createdOn").First().Value),
+                UpdatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "updatedOn").First().Value),
+                RoleId = byte.Parse(Request.Form.Where(e => e.Key == "roleId").First().Value),
+                IsAccepted = bool.Parse(Request.Form.Where(e => e.Key == "isAccepted").First().Value),
+                ImageName = Request.Form.Where(e => e.Key == "imageName").First().Value,
+                CreatedBy = Guid.Parse(Request.Form.Where(e => e.Key == "createdBy").First().Value),
+                AcceptedBy = Guid.Parse(Request.Form.Where(e => e.Key == "acceptedBy").First().Value),
+                OrganisationId = Guid.Parse(Request.Form.Where(e => e.Key == "organisationId").First().Value),
+                IsActive = bool.Parse(Request.Form.Where(e => e.Key == "isActive").First().Value),
+                Password = Request.Form.Where(e => e.Key == "password").First().Value,
+                ImgBody = imageBody
+            };
             var result = await _organiserServices.CreateSecondaryOwner(secondaryOwner);
             Console.WriteLine(result.Message);
             var response = new
@@ -96,8 +118,9 @@ namespace BookMyEvent.WebApi.Controllers
             var result = await _organiserServices.LoginOrganiser(login.Email, login.Password);
             if (result.IsSuccessfull)
             {
-                var accessToken = _authController.GenerateJwtToken(login.Email, result.administratorId, result.roleId.ToString(), TokenType.AccessToken);
-                string refreshToken = _authController.GenerateJwtToken(login.Email, result.administratorId, result.roleId.ToString(), TokenType.RefreshToken);
+                string role = result.roleId == 2 || result.roleId == 3 ? Roles.Owner.ToString() : Roles.Peer.ToString();
+                var accessToken = _authController.GenerateJwtToken(login.Email, result.administratorId, role, TokenType.AccessToken);
+                string refreshToken = _authController.GenerateJwtToken(login.Email, result.administratorId, role, TokenType.RefreshToken);
                 Response.Cookies.Append(
                             "RefreshToken",
                             refreshToken,

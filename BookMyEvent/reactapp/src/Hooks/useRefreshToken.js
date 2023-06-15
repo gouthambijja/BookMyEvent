@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import axios from '../Api/Axios';
 import { loginAdminThunk, setAuth} from '../Features/ReducerSlices/authSlice';
 import store from '../App/store';
-import { getAdminByIdThunk } from '../Features/ReducerSlices/AdminSlice';
+import { getAdminByIdThunk } from '../Features/ReducerSlices/ProfileSlice';
 
 const useRefreshToken = () => {
     const dispatch = useDispatch();

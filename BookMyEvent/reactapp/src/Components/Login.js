@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { loginAdminThunk } from "../Features/ReducerSlices/authSlice";
+import { loginAdminThunk, loginThunk } from "../Features/ReducerSlices/authSlice";
 import {
   Container,
   Typography,
@@ -18,8 +18,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
 import { setPersist, unsetPersist } from "../Hooks/usePersist";
-import { getAdminById } from "../Services/AdminServices";
-import { getAdminByIdThunk } from "../Features/ReducerSlices/AdminSlice";
+import { getAdminByIdThunk, getOrganiserByIdThunk, getUserByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
 import store from "../App/store";
 import useLogout from "../Hooks/useLogout";
 const useStyles = makeStyles((theme) => ({
@@ -94,8 +93,17 @@ const Login = () => {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
-      await dispatch(loginAdminThunk(formData)).unwrap();
-      await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
+      if(role === "Admin"){
+        await dispatch(loginThunk([role,formData])).unwrap();
+        await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
+      }else if(role === "Organiser"){
+        console.log(formData);
+        await dispatch(loginThunk([role,formData])).unwrap();
+        await dispatch(getOrganiserByIdThunk(store.getState().auth.id)).unwrap();
+      }else{
+        await dispatch(loginThunk([role,formData])).unwrap();
+        await dispatch(getUserByIdThunk(store.getState().auth.id)).unwrap();
+      }
       setPersist();
       console.log(from);
       navigate(from);

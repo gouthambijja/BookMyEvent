@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../Features/ReducerSlices/authSlice"
 import isLoading from "../Features/ReducerSlices/loadingSlice"
-import adminReducer from "../Features/ReducerSlices/AdminSlice"
+import profileReducer from "../Features/ReducerSlices/ProfileSlice"
+import categoryReducer from "../Features/ReducerSlices/CategorySlice"
 let store = configureStore({
     reducer:{
         auth:authReducer,
         isLoading:isLoading,
-        admin:adminReducer
+        profile:profileReducer,
+        category:categoryReducer
     },
 })
 
