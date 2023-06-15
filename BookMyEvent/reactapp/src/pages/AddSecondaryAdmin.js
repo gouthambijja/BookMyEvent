@@ -72,7 +72,7 @@ const AddSecondaryAdmin = () => {
         _formData.append("updatedOn",formData.UpdatedOn);
         _formData.append("roleId",1);
         _formData.append("isAccepted",true);
-        _formData.append("imageName",formData.profile);
+        _formData.append("imageName",formData.ImageName);
         _formData.append("createdBy",formData.CreatedBy);
         _formData.append("acceptedBy",formData.AcceptedBy);
         _formData.append("organisationId",formData.OrganisationId);
