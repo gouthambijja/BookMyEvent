@@ -191,3 +191,7 @@ const organisersSlice = createSlice({
         });
     },
 });
+
+
+export const { clearReqOrganisers, clearMyOrganisers, clearError } = organisersSlice.actions;
+export default organisersSlice.reducer;
