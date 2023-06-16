@@ -98,7 +98,7 @@ function Sidebar({ open, setOpen }) {
     if (auth.role == "Admin") {
       navigate("/admin/profile");
       handleDrawerClose();
-    } else if (auth.role == "Owner" || auth.role == "profile") {
+    } else if (auth.role == "Owner" || auth.role == "peer" || auth.role == "Secondary_Owner") {
       navigate("/organiser/profile");
       handleDrawerClose();
     } else {
@@ -107,9 +107,14 @@ function Sidebar({ open, setOpen }) {
   };
   const handleAdd = async () => {
     if (auth?.role == "Admin") navigate("/admin/addadmin");
+    else
     navigate("/organiser/addSecondaryOwner");
     handleDrawerClose();
   };
+  const handlePeerRequests=async () =>{
+    if(auth.role == "Owner" || auth.role == "Secondary_Owner") navigate("organiser/PeerRequests");
+    handleDrawerClose();
+  }
   const handleOrganiseEvent = async() =>{
     navigate("/organiser/AddEvent");
     handleDrawerClose();
@@ -137,6 +142,16 @@ function Sidebar({ open, setOpen }) {
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
+          {auth.role == "Owner" || auth.role == "Secondary_Owner" ? (
+            <ListItem button onClick={handlePeerRequests}>
+              <ListItemIcon>
+                <GroupAdd />
+              </ListItemIcon>
+              <ListItemText primary="Peer Requests" />
+            </ListItem>
+          ) : (
+            <></>
+            )}
           {auth.role === "Admin" ? (
             <ListItem button onClick={handleAdd}>
               <ListItemIcon>

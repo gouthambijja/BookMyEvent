@@ -149,7 +149,7 @@ namespace BookMyEvent.WebApi.Controllers
             var result = await _organiserServices.LoginOrganiser(login.Email, login.Password);
             if (result.IsSuccessfull)
             {
-                string role = result.roleId == 2 || result.roleId == 3 ? Roles.Owner.ToString() : Roles.Peer.ToString();
+                string role = result.roleId == 2 ? Roles.Owner.ToString() : result.roleId == 3 ? Roles.Secondary_Owner.ToString() : Roles.Peer.ToString();
                 var accessToken = _authController.GenerateJwtToken(login.Email, result.administratorId, role, TokenType.AccessToken);
                 string refreshToken = _authController.GenerateJwtToken(login.Email, result.administratorId, role, TokenType.RefreshToken);
                 Response.Cookies.Append(

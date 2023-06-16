@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
 import store from '../App/store';
 import { Box, Modal } from "@mui/material";
-import { addAdmin } from "../Services/AdminServices";
-import t from "../Services/OrganisationService";
+import org from "../Services/OrganisationService";
 import { width } from '@mui/system';
 import organiserServices from '../Services/OrganiserServices';
 
@@ -30,10 +29,11 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterOrganiser = () => {
     const classes = useStyles();
-    const admin = store.getState().admin.profile;
+    // const admin = store.getState().admin.profile;
     const [image, setImage] = useState(null);
     const [passwordError, setPasswordError] = useState('');
     const [orgNameError, setOrgNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [selectedOption, setSelectedOption] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [options, setOptions] = useState(null);
@@ -97,6 +97,22 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
     };
+    const handleEmailChange=async(e)=>{
+        setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+        if(e.target.value.includes('@')){
+
+            const response=await organiserServices.checkEmail(e.target.value);
+            if(response.isEmailTaken){
+                setEmailError("Email already exists");
+            }
+            else{
+                setEmailError("");
+            }
+        }
+    }
     const handleOrgInputChange = (e) => {
         setOrgFormData((prevState) => ({
             ...prevState,
@@ -195,17 +211,16 @@ const RegisterOrganiser = () => {
             IsAccepted: true,
             ImageName: "profile",
             ImgBody: null,
-            CreatedBy: admin.id,
-            AcceptedBy: admin.id,
-            OrganisationId: admin.OrganisationId,
+           
+            
             IsActive: true,
             Password: "",
         })
     };
     useEffect(() => {
         const temp = async () => {
-            console.log(admin);
-            const options = await t.getAllOrganisations();
+            
+            const options = await org.getAllOrganisations();
             setOptions(options)
             console.log(options);
         }
@@ -253,7 +268,9 @@ const RegisterOrganiser = () => {
                             variant="outlined"
                             type="email"
                             value={formData.Email}
-                            onChange={handleInputChange}
+                            onChange={handleEmailChange}
+                            error={emailError !== ''}
+                            helperText={emailError}
                             margin="normal"
                             required
                             fullWidth

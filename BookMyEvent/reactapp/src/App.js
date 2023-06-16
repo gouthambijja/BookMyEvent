@@ -35,6 +35,7 @@ import { categoryLoader } from "./Loaders/storeLoader";
 import RegisterOrganiser from "./pages/RegisterOrganiser";
 import RequestsTable from "./Components/RequestsTable";
 import OrganisationsListPage from "./pages/OrganisationsListPage";
+import PeerRequest from "./pages/PeerRequests";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -58,9 +59,10 @@ const App = () => {
             <Route path="login" element={<Login />}></Route>
 
             <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedroles={["Owner", "Peer"]} />}>
+              <Route element={<RequireAuth allowedroles={["Owner", "Peer","Secondary_Owner"]} />}>
                 <Route index element={<OrganiserHomePage />}></Route>
                 <Route path="AddEvent" element={<AddEvent />}></Route>
+                <Route path="PeerRequests" element={<PeerRequest/>}></Route>
                 <Route path="addSecondaryOwner" element={<AddSecondary />} />
                 <Route path="profile" element={<Profile />} />
               </Route>
@@ -73,7 +75,7 @@ const App = () => {
             <Route path="login" element={<Login />}></Route>
 
             <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedrole={["Admin"]} />}>
+              <Route element={<RequireAuth allowedroles={["Admin"]} />}>
                 <Route index element={<AdminHomePage />}></Route>
                 <Route path="addadmin" element={<AddSecondary />} />
                 <Route path="profile" element={<Profile />} />

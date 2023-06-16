@@ -4,7 +4,7 @@
     {
         Admin,
         Owner,
-        Seconday_Owner,
+        Secondary_Owner,
         Peer, 
         User
     }

@@ -11,7 +11,16 @@ const getOrganiserById = async (id) => {
     return response.data;
 
 }
+const checkEmail = async (email) => {
+    const response = await Axios.get(`${apiBase}/IsEmailTaken?email=${email}`,
+        {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+    );
+    return response.data;
 
+}
 const loginOrganiser = async (formData) => {
 
     const response = await Axios.post(`${apiBase}/loginOrganiser`,
@@ -150,4 +159,5 @@ export default {
     getOrganisationOrganisers,
     isEmailTaken,
     getAllOwners,
+    checkEmail,
 };
