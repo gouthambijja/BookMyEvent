@@ -46,7 +46,7 @@ const addOrganiser = async (formData) => {
     return response.data;
 }
 
-const addPeer = async (formData) => {
+const registerPeer = async (formData) => {
     console.log(formData);
     const response = await Axios.post(`${apiBase}/RegisterPeer`,
         formData,
@@ -90,6 +90,14 @@ const getRequestedPeers = async (orgId) => {
 
 const acceptOrganiser = async (administrator) => {
     const response = await Axios.put(`${apiBase}/${administrator.administratorId}/Accept`, administrator, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
+const rejectOrganiser = async (administrator) => {
+    const response = await Axios.put(`${apiBase}/${administrator.administratorId}/Reject`, administrator, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
     });
@@ -148,11 +156,12 @@ export default {
     getOrganiserById,
     loginOrganiser,
     addOrganiser,
-    addPeer,
+    registerPeer,
     addOwner,
     getRequestedOwners,
     getRequestedPeers,
     acceptOrganiser,
+    rejectOrganiser,
     updateOrganiser,
     deleteOrganiser,
     deleteAllOrganisationOrganisers,

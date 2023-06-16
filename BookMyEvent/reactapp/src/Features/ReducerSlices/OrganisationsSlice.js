@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import orgServices from "../../Services/OrganisationService";
 import { AxiosError } from 'axios';
-//write the slice here that shoudl handle the axios calls
+
 
 
 export const fetchOrganisations = createAsyncThunk(
@@ -72,6 +72,12 @@ const organisationSlice = createSlice({
         clearSuccessMessage: (state) => {
             state.message = null;
         },
+        clearState: (state) => {
+            state.organisations = [];
+            state.loading = false;
+            state.error = null;
+            state.message = null;
+        },
     },
     extraReducers(builder) {
         builder.addCase(fetchOrganisations.pending, (state) => {
@@ -79,33 +85,47 @@ const organisationSlice = createSlice({
         });
         builder.addCase(fetchOrganisations.fulfilled, (state, action) => {
             state.loading = false;
+            state.error = false;
             state.organisations = action.payload;
+            state.message = "Fetched organisations successfully";
         });
         builder.addCase(fetchOrganisations.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = true
+            state.message = action.payload;
         });
         builder.addCase(fetchOrganisationById.pending, (state) => {
             state.loading = true;
+
         });
         builder.addCase(fetchOrganisationById.fulfilled, (state, action) => {
             state.loading = false;
+            state.error = false;
             state.organisations = action.payload;
+            state.message = "Fetched organisation successfully";
         });
         builder.addCase(fetchOrganisationById.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = true;
+            state.message = action.payload;
         });
         builder.addCase(updateOrganisation.pending, (state) => {
             state.loading = true;
         });
         builder.addCase(updateOrganisation.fulfilled, (state, action) => {
             state.loading = false;
-            state.message = action.payload;
+            state.message = "Updated organisation successfully";
+            state.organisations.forEach(organisation => {
+                if (organisation.id === action.payload.id) {
+                    organisation = action.payload;
+                }
+            });
+            state.error = false;
         });
         builder.addCase(updateOrganisation.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = true;
+            state.message = action.payload;
         });
         builder.addCase(deleteOrganisation.pending, (state) => {
             state.loading = true;
@@ -113,14 +133,17 @@ const organisationSlice = createSlice({
         builder.addCase(deleteOrganisation.fulfilled, (state, action) => {
             state.loading = false;
             state.message = action.payload;
+            state.error = false;
+            state.organisations = state.organisations.filter(organisation => organisation.id !== action.payload.id);
         });
         builder.addCase(deleteOrganisation.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = true;
+            state.message = action.payload;
         });
     },
 });
 
 
 export default organisationSlice.reducer;
-export const { clearError, clearSuccessMessage } = organisationSlice.actions;
+export const { clearError, clearSuccessMessage, clearState } = organisationSlice.actions;
