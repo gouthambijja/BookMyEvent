@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrganisationById, fetchOrganisations } from '../Features/ReducerSlices/OrganisationsSlice';
-import t from "../Services/OrganisationService";
 const OrganisationsListPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {

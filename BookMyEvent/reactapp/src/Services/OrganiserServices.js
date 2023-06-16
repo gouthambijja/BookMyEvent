@@ -135,7 +135,7 @@ const getAllOwners = async () => {
     return response.data;
 };
 
-export {
+export default {
     getOrganiserById,
     loginOrganiser,
     addOrganiser,

@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import store from '../App/store';
 import { Box, Modal } from "@mui/material";
 import { addAdmin } from "../Services/AdminServices";
-import { addOrganiser } from '../Services/OrganiserServices';
+import organiserServices from '../Services/OrganiserServices';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -86,7 +86,7 @@ const AddSecondary = () => {
         if(profile.roleId == 1){
          data=await addAdmin(_formData);
         }else{
-        data = await addOrganiser(_formData);
+        data = await organiserServices.addOrganiser(_formData);
         }
         // Perform registration logic here, e.g., make an API call
         console.log("after call "+ data)

@@ -7,7 +7,7 @@ import { Box, Modal } from "@mui/material";
 import { addAdmin } from "../Services/AdminServices";
 import t from "../Services/OrganisationService";
 import { width } from '@mui/system';
-import { addOwner, addPeer } from '../Services/OrganiserServices';
+import organiserServices from '../Services/OrganiserServices';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -151,7 +151,7 @@ const RegisterOrganiser = () => {
             _formData.append("password", formData.Password);
             _formData.append("imgBody", formData.ImgBody);
             console.log(_formData);
-            const data = await addPeer(_formData);
+            const data = await organiserServices.addPeer(_formData);
             console.log("after call " + data)
         }
         else {
@@ -177,7 +177,7 @@ const RegisterOrganiser = () => {
             _formData.append("orgUpdatedOn", orgFormData.UpdatedOn);
 
             console.log(_formData);
-            const data = await addOwner(_formData);
+            const data = await organiserServices.addOwner(_formData);
             console.log("after call " + data)
 
 
