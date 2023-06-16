@@ -11,7 +11,7 @@ let store = configureStore({
         isLoading:isLoading,
         profile:profileReducer,
         category:categoryReducer,
-        organisations:OrganisationReducer
+        organisations:OrganisationReducer,
         formFields:formFieldsReducer
     },
 })

@@ -145,13 +145,18 @@ namespace BookMyEvent.BLL.Services
                 if (role == Roles.Admin.ToString())
                 {
                     Administration? Admin = await _administrationRepository.GetAdministratorByEmail(email);
+                    if (Admin == null) { return null; }
                     if (await _accountCredentialsRepository.IsValidCredential(Admin.AccountCredentialsId, password))
                     {
                         Console.WriteLine(Admin.PhoneNumber);
                         return mapper.Map<BLAdministrator>(Admin);
                     }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                return new BLAdministrator();
+                return null;
             }
             catch
             {

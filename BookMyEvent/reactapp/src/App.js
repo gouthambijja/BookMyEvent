@@ -80,6 +80,7 @@ const App = () => {
               <Route element={<RequireAuth allowedroles={["Admin"]} />}>
                 <Route index element={<AdminHomePage />}></Route>
                 <Route path="addadmin" element={<AddSecondary />} />
+                <Route path="Organisations" element={<OrganisationsListPage />} loader={storeLoader.OrganisationsLoader} />
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>
