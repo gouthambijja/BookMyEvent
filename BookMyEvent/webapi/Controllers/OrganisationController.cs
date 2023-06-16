@@ -18,6 +18,7 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> GetOrganisations()
         {
             var result = await _organisationServices.GetAllOrganisations();
+            Console.WriteLine(result.Count());
             return Ok(result);
         }
 

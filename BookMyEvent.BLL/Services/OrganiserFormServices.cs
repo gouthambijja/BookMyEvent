@@ -104,7 +104,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var fieldTypes = _fieldTypeRepository.GetAllFieldTypes();
+                var fieldTypes = await   _fieldTypeRepository.GetAllFieldTypes();
                 var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<List<BLFieldType>>(fieldTypes);
             }

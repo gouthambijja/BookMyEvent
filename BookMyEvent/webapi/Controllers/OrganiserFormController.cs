@@ -38,7 +38,7 @@ namespace BookMyEvent.WebApi.Controllers
                 List<BLFieldType> fieldtypes = await _organiserFormServices.GetFieldTypes();
                 if (fieldtypes.Count != 0)
                 {
-                    return Ok(fieldtypes);
+                    return Ok(fieldtypes);  
                 }
                 return BadRequest();
             }

@@ -31,7 +31,7 @@ import OrganiserHomePage from "./pages/OrganiserHomePage";
 
 import Organiser from "./Components/Organiser";
 import AddEvent from "./pages/AddEvent";
-import { categoryLoader } from "./Loaders/storeLoader";
+import storeLoader from "./Loaders/storeLoader";
 import RegisterOrganiser from "./pages/RegisterOrganiser";
 import RequestsTable from "./Components/RequestsTable";
 import OrganisationsListPage from "./pages/OrganisationsListPage";
@@ -47,6 +47,8 @@ const App = () => {
           //   action={actions}
 
           errorElement={<Error />}
+
+          loader={storeLoader.categoryLoader}
         >
           <Route index element={<LandingPage />}></Route>
 
