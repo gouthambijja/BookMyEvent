@@ -37,7 +37,18 @@ import RequestsTable from "./Components/RequestsTable";
 import OrganisationsListPage from "./pages/OrganisationsListPage";
 import PeerRequest from "./pages/PeerRequests";
 
+import Events from "./Components/Events"
 const App = () => {
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route
+                    path="/"
+                    element={<Layout />}    
+                    //   action={actions}
+                    errorElement={<Error />}
+                >
+                    <Route index element={<Login />}></Route>
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -45,42 +56,19 @@ const App = () => {
           path="/"
           element={<Layout />}
           //   action={actions}
-
           errorElement={<Error />}
-
-          loader={storeLoader.categoryLoader}
         >
-          <Route index element={<LandingPage />}></Route>
-
-          <Route path="/login" element={<Login />} />
-          <Route path="/registerorganiser" element={<RegisterOrganiser/>} />
-          <Route path="/orglist" element={<OrganisationsListPage/>} />
-          {/* ------------------------------------------------------------------------- */}
-
-          <Route path="organiser" element={<Organiser />}>
-            <Route path="login" element={<Login />}></Route>
-
-            <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedroles={["Owner", "Peer","Secondary_Owner"]} />}>
-                <Route index element={<OrganiserHomePage />}></Route>
-                <Route path="AddEvent" element={<AddEvent />}></Route>
-                <Route path="PeerRequests" element={<PeerRequest/>}></Route>
-                <Route path="addSecondaryOwner" element={<AddSecondary />} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-            </Route>
+          <Route index element={<LandingPage/>}>
+            
           </Route>
-
-          {/* ------------------------------------------------------------------------------- */}
 
           <Route path="/admin" element={<Admin />}>
             <Route path="login" element={<Login />}></Route>
-
             <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedroles={["Admin"]} />}>
+              <Route element={<RequireAuth allowedrole={"Admin"} />} >
                 <Route index element={<AdminHomePage />}></Route>
-                <Route path="addadmin" element={<AddSecondary />} />
-                <Route path="profile" element={<Profile />} />
+                <Route path="addadmin" element={<AddSecondaryAdmin />} />
+                <Route path="profile" element={<Profile/>}/>
               </Route>
             </Route>
           </Route>
@@ -89,7 +77,7 @@ const App = () => {
     )
   );
 
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 };
 
 export default App;
