@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import orgServices from "../../Services/OrganisationService";
-import { AxiosError } from 'axios';
 
 
 
@@ -62,12 +61,12 @@ const organisationSlice = createSlice({
     initialState: {
         organisations: [],
         loading: false,
-        error: null,
+        error: false,
         message: null,
     },
     reducers: {
         clearError: (state) => {
-            state.error = null;
+            state.error = false;
         },
         clearSuccessMessage: (state) => {
             state.message = null;
@@ -75,7 +74,7 @@ const organisationSlice = createSlice({
         clearState: (state) => {
             state.organisations = [];
             state.loading = false;
-            state.error = null;
+            state.error = false;
             state.message = null;
         },
     },

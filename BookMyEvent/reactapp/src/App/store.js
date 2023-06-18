@@ -5,7 +5,8 @@ import profileReducer from "../Features/ReducerSlices/ProfileSlice"
 import categoryReducer from "../Features/ReducerSlices/CategorySlice"
 import formFieldsReducer from "../Features/ReducerSlices/FormFieldsSlice"
 import OrganisationReducer from "../Features/ReducerSlices/OrganisationsSlice";
-import organisersReducer from "../Features/ReducerSlices/OrganisersSlice"
+import organisersReducer from "../Features/ReducerSlices/OrganisersSlice";
+import orgFormsReducer from "../Features/ReducerSlices/OrganiserFormsSlice";
 let store = configureStore({
     reducer:{
         auth:authReducer,
@@ -14,7 +15,8 @@ let store = configureStore({
         category:categoryReducer,
         organisations:OrganisationReducer,
         formFields:formFieldsReducer,
-        organisers:organisersReducer
+        organisers:organisersReducer,
+        orgForms:orgFormsReducer,
     },
 })
 
