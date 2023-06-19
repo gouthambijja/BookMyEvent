@@ -448,5 +448,29 @@ namespace BookMyEvent.DLL.Repositories
                 return new List<Event>();
             }
         }
+
+        public async Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location,  bool isFree, List<int> categoryIds, int pageNumber, int pageSize)
+        {
+            try
+            {
+                // Perform the filtering based on the provided criteria
+                var filteredEvents = await _db.Events
+                    .Where(e => e.StartDate >= startDate && e.EndDate <= endDate)
+                    .Where(e => e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice)
+                    .Where(e => e.Location.Contains(location))
+                    .Where(e => e.IsFree == isFree)
+                    .Where(e => categoryIds.Count == 0 || categoryIds.Contains(e.CategoryId))
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return filteredEvents;
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                throw new Exception("Failed to fetch filtered events from the database.", ex);
+            }
+        }
     }
 }

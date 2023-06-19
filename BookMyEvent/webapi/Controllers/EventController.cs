@@ -421,5 +421,26 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetFilteredEvents")]
+        public async Task<IActionResult> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber = 1, int pageSize = 10)
+        {
+            try
+            {
+                // Set default values if parameters are not provided
+                startDate = startDate == default ? DateTime.MinValue : startDate;
+                endDate = endDate == default ? DateTime.MaxValue : endDate;
+                startPrice = startPrice == default ? 0 : startPrice;
+                endPrice = endPrice == default ? decimal.MaxValue : endPrice;
+                location = location ?? string.Empty;
+                categoryIds = categoryIds ?? new List<int>();
+
+                var result = await _eventServices.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
