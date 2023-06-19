@@ -82,6 +82,14 @@ const getAllCreatedEventsByOrganiser = async (organiserId) => {
     return response.data;
 };
 
+const getAllActivePublishedEventsByFilter = async (pageNumber = 1, pageSize = 10, filter) => {
+    const response = await Axios.get(`${apiBase}/GetAllActivePublishedEventsByFilter?pageNumber=${pageNumber}&pageSize=${pageSize}&filter=${filter}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
 export default {
     addNewEvent,
     updateEvent,

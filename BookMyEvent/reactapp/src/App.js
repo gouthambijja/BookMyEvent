@@ -26,63 +26,59 @@ import OrganisationsListPage from "./pages/OrganisationsListPage";
 import PeerRequest from "./pages/PeerRequests";
 import OrganisationTree from "./pages/OrganisationTree";
 // import EventDynamicForm from "./Components/EventDynamicForm";
+import MediaCard from "./Components/Events";
 
 const App = () => {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <>
-        <Route
-          path="/"
-          element={<Layout />}
-          //   action={actions}
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route
+                    path="/"
+                    element={<Layout />}
+                    //   action={actions}
+                    errorElement={<Error />}
+                    loader={storeLoader.categoryLoader}
+                >
+                    <Route index element={<LandingPage />}></Route>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/orglist" element={<OrganisationsListPage />} />
+                    {/* ------------------------------------------------------------------------- */}
 
-          errorElement={<Error />}
+                    <Route path="organiser" element={<Organiser />}>
+                        <Route path="login" element={<Login />}></Route>
+                        <Route path="register" element={<RegisterOrganiser />} />
+                        <Route element={<PersistLogin />}>
+                            <Route element={<RequireAuth allowedroles={["Owner", "Peer", "Secondary_Owner"]} />}>
+                                <Route index element={<OrganiserHomePage />}></Route>
+                                {/* <Route path="createNewEventRegistrationForm" element={<EventDynamicForm/>} loader={storeLoader.FormFieldsLoader}/> */}
+                                <Route path="AddEvent" element={<AddEvent />} loader={storeLoader.OrganisationFormLoaders} ></Route>
+                                <Route path="OrganisationTree" element={<OrganisationTree />} loader={storeLoader.OrganisationTreeLoader}></Route>
+                                <Route path="PeerRequests" element={<PeerRequest />}></Route>
+                                <Route path="addSecondaryOwner" element={<AddSecondary />} />
+                                <Route path="profile" element={<Profile />} />
+                            </Route>
+                        </Route>
+                    </Route>
 
-          loader={storeLoader.categoryLoader}
-        >
-          <Route index element={<LandingPage />}></Route>
+                    {/* ------------------------------------------------------------------------------- */}
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/orglist" element={<OrganisationsListPage/>} />
-          {/* ------------------------------------------------------------------------- */}
+                    <Route path="/admin" element={<Admin />}>
+                        <Route path="login" element={<Login />}></Route>
+                        <Route element={<PersistLogin />}>
+                            <Route element={<RequireAuth allowedroles={["Admin"]} />}>
+                                <Route index element={<AdminHomePage />}></Route>
+                                <Route path="addadmin" element={<AddSecondary />} />
+                                <Route path="Organisations" element={<OrganisationsListPage />} loader={storeLoader.OrganisationsLoader} />
+                                <Route path="profile" element={<Profile />} />
+                            </Route>
+                        </Route>
+                    </Route>
+                </Route>
+            </>
+        )
+    );
 
-          <Route path="organiser" element={<Organiser />}>
-            <Route path="login" element={<Login />}></Route>
-          <Route path="register" element={<RegisterOrganiser/>} />
-
-            <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedroles={["Owner", "Peer","Secondary_Owner"]} />}>
-                <Route index element={<OrganiserHomePage />}></Route>
-                {/* <Route path="createNewEventRegistrationForm" element={<EventDynamicForm/>} loader={storeLoader.FormFieldsLoader}/> */}
-                <Route path="AddEvent" element={<AddEvent />} loader={storeLoader.OrganisationFormLoaders} ></Route>
-                <Route path="OrganisationTree" element={<OrganisationTree />} loader={storeLoader.OrganisationTreeLoader}></Route>
-                <Route path="PeerRequests" element={<PeerRequest/>}></Route>
-                <Route path="addSecondaryOwner" element={<AddSecondary />} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-            </Route>
-          </Route>
-
-          {/* ------------------------------------------------------------------------------- */}
-
-          <Route path="/admin" element={<Admin />}>
-            <Route path="login" element={<Login />}></Route>
-
-            <Route element={<PersistLogin />}>
-              <Route element={<RequireAuth allowedroles={["Admin"]} />}>
-                <Route index element={<AdminHomePage />}></Route>
-                <Route path="addadmin" element={<AddSecondary />} />
-                <Route path="Organisations" element={<OrganisationsListPage />} loader={storeLoader.OrganisationsLoader} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-            </Route>
-          </Route>
-        </Route>
-      </>
-    )
-  );
-
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 };
 
 export default App;

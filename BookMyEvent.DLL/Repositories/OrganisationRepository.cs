@@ -54,23 +54,25 @@ namespace BookMyEvent.DLL.Repositories
         }
 
 
-        public async Task<List<Organisation>?> GetAllOrganisation()
+        public async Task<(List<Organisation>? organisations, int totalOranisations)> GetAllOrganisation(int pageNumber, int pageSize)
         {
             try
             {
-                List<Organisation> organisations = await _dbcontext.Organisations.Where(o => o.IsActive == true).ToListAsync();
-                if(organisations != null)
-                {
-                    return organisations;
-                }
-                else
-                {
-                    return null;
-                }
+                var organisations = await _dbcontext.Organisations
+                    .Where(o => o.IsActive == true)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var totalCount = await _dbcontext.Organisations
+                    .Where(o => o.IsActive == true)
+                    .CountAsync();
+
+                return new ( organisations,totalCount );
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                throw new Exception("Error in DLL: " + ex.Message);
             }
         }
         public async Task<Organisation?> UpdateOrganisation(Organisation updatedOrganisation)

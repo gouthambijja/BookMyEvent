@@ -31,8 +31,10 @@ namespace BookMyEvent.DLL.Contracts
         /// <summary>
         /// Method to get all Active Organisation Models
         /// </summary>
-        /// <returns> List of All active Organisation Models </returns>
-        public  Task<List<Organisation>?> GetAllOrganisation();
+        /// <returns>
+        /// Returns a tuple of List of Organisation Model Object and total number of Organisations
+        /// </returns>
+        public  Task<(List<Organisation>? organisations, int totalOranisations)> GetAllOrganisation(int pageNumber, int pageSize);
 
         /// <summary>
         /// Method to update an Organisation Model

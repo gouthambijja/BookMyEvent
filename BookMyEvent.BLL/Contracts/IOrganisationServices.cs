@@ -15,7 +15,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>
         /// Returns a list of BLOrganisation objects
         /// </returns>
-        Task<List<BLOrganisation>> GetAllOrganisations();
+        Task<(List<BLOrganisation> bLOrganisations, int totalBLOrganisations)> GetAllOrganisations(int pageNumber, int pageSize);
 
         /// <summary>
         /// An asynchronous method that gets an organisation by id

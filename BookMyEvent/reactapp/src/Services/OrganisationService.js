@@ -1,7 +1,7 @@
 import Axios from "../Api/Axios";
 const apiBase = "/api/Organisation";
-const getAllOrganisations = async () => {
-  const response = await Axios.get(apiBase, {
+const getAllOrganisations = async (pageNumber, pageSize) => {
+    const response = await Axios.get(`${apiBase}/?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
   });

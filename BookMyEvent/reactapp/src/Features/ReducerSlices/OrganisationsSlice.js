@@ -5,9 +5,9 @@ import orgServices from "../../Services/OrganisationService";
 
 export const fetchOrganisations = createAsyncThunk(
     "organisations/fetchOrganisations",
-    async (_, { rejectWithValue  }) => {
+    async (paginationDetails, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getAllOrganisations();
+            const response = await orgServices.getAllOrganisations(paginationDetails.pageNumber, paginationDetails.pageSize);
             return response;
         }
         catch (error) {
@@ -63,6 +63,9 @@ const organisationSlice = createSlice({
         loading: false,
         error: false,
         message: null,
+        pageNumber: 0,
+        pageSize: 0,
+        totalOrganisations: null,
     },
     reducers: {
         clearError: (state) => {
@@ -75,6 +78,8 @@ const organisationSlice = createSlice({
             state.organisations = [];
             state.loading = false;
             state.error = false;
+            state.pageNumber = 0;
+            state.pageSize = 0;
             state.message = null;
         },
     },
@@ -85,7 +90,10 @@ const organisationSlice = createSlice({
         builder.addCase(fetchOrganisations.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
-            state.organisations = action.payload;
+            state.pageNumber++;
+            state.pageSize = 10;
+            state.organisations = action.payload.organisations;
+            state.totalOrganisations = action.payload.total;
             state.message = "Fetched organisations successfully";
         });
         builder.addCase(fetchOrganisations.rejected, (state, action) => {

@@ -15,7 +15,6 @@
     <Folder Include="src\Components\" />
     <Folder Include="src\App\" />
     <Folder Include="src\Css\Images\" />
-    <Folder Include="src\Features\ReducerSlices\" />
     <Folder Include="src\Css\Fonts\" />
   </ItemGroup>
 </Project>

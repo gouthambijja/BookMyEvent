@@ -53,17 +53,19 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<List<BLOrganisation>> GetAllOrganisations()
+        public async Task<(List<BLOrganisation> bLOrganisations, int totalBLOrganisations)> GetAllOrganisations(int pageNumber, int pageSize)
         {
+
             try
             {
                 var mapper = Automapper.InitializeAutomapper();
-                var result = await _organisationRepository.GetAllOrganisation();
-                return mapper.Map<List<BLOrganisation>>(result);
+                var result = await _organisationRepository.GetAllOrganisation(pageNumber, pageSize);
+                var mappedResult = mapper.Map<List<BLOrganisation>>(result.organisations);
+                return new (mappedResult, result.totalOranisations);
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Error in BLL: " + ex.Message);
             }
         }
 

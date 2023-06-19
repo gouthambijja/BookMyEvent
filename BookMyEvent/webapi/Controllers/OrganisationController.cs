@@ -15,11 +15,11 @@ namespace BookMyEvent.WebApi.Controllers
             _organisationServices = organisationServices;
         }
         [HttpGet]
-        public async Task<IActionResult> GetOrganisations()
+        public async Task<IActionResult> GetOrganisations(int pageNumber = 1, int pageSize = 10)
         {
-            var result = await _organisationServices.GetAllOrganisations();
-            Console.WriteLine(result.Count());
-            return Ok(result);
+            var result = await _organisationServices.GetAllOrganisations(pageNumber, pageSize);
+            //Console.WriteLine(result.Count());
+            return Ok(new {organisations = result.bLOrganisations, total = result.totalBLOrganisations});
         }
 
         [HttpGet("{id}")]
