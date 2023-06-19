@@ -26,7 +26,9 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> GetOrganisationById(Guid id)
         {
             var result = await _organisationServices.GetOrganisationById(id);
-            return Ok(result);
+            if(result is not null)
+                return Ok(result);
+            else return NotFound("Organisation not found");
         }
 
         [HttpPut("{id}")]
