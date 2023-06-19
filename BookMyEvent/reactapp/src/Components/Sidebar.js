@@ -123,6 +123,10 @@ function Sidebar({ open, setOpen }) {
     navigate("/organiser/AddEvent");
     handleDrawerClose();
   }
+  const handleOrganisationTree = async() =>{
+    navigate("/organiser/OrganisationTree");
+    handleDrawerClose();
+  }
   return (
     <div className={classes.root}>
       <Drawer
@@ -176,7 +180,7 @@ function Sidebar({ open, setOpen }) {
           ) : (
             <></>
           )}
-          {auth.role == "Owner" || auth.role == "Peer"?(
+          {auth.role == "Owner" || auth.role == "Peer" || auth.role == "Secondary_Owner"?(
             <ListItem button onClick={handleOrganiseEvent}>
             <ListItemIcon>
               <Event   />
@@ -194,7 +198,14 @@ function Sidebar({ open, setOpen }) {
           ) : (
             <></>
           )}
-
+          {auth.role == "Owner" || auth.role == "Peer" || auth.role == "Secondary_Owner"?(
+            <ListItem button onClick={handleOrganisationTree}>
+            <ListItemIcon>
+              <Event   />
+            </ListItemIcon>
+            <ListItemText primary="Organisation Tree" />
+          </ListItem>
+          ):<></>}
           <ListItem button onClick={handleLogout}>
             <ListItemIcon>
               <ExitToApp />

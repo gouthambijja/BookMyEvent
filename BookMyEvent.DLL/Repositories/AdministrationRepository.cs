@@ -528,7 +528,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.IsActive == true).ToListAsync();
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.IsActive == true && a.IsAccepted==true).ToListAsync();
                 if (administrators != null)
                 {
                     return administrators;

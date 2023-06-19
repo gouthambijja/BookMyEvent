@@ -60,6 +60,7 @@ const Login = () => {
   useLayoutEffect(()=>{
     unsetPersist();
     logout(); },[]);
+
   let from;
   if (location.pathname == "/admin/login") {
     from =  "/admin";
@@ -116,7 +117,13 @@ const Login = () => {
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+  const handleRegister=()=>{
+    if(role=="Organiser"){
 
+      navigate("/organiser/register");
+    }
+    
+  }
   return (
     <>
       <Container component="main" maxWidth="xl" className={classes.container}>
@@ -169,6 +176,12 @@ const Login = () => {
             </Button>
             {isloading ? <div>Loading...</div> : <></>}
           </form>
+         {role!="Admin"?<>
+         <span>Don't have an Account</span>
+         <Button variant="contained" className={classes.button} onClick={handleRegister}>
+        Register
+      </Button>
+         </>:<></>}
         </Box>
         <Modal
           open={errMsg.open}

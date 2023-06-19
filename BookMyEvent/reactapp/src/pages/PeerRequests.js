@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import store from "../App/store";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button,Paper } from '@mui/material';
 import organiserServices from "../Services/OrganiserServices";
+import OrganisationService from "../Services/OrganisationService";
 
 
 
@@ -9,9 +10,13 @@ const PeerRequest=()=>{
     const profile = store.getState().profile.info;
     const [requests,setRequests]=useState([]);
     
-      const handleAccept = (id) => {
+      const handleAccept = async(peer) => {
+        peer.acceptedBy=profile.administratorId;
+        peer.updatedOn=(new Date()).toLocaleString();
+        await organiserServices.acceptOrganiser(peer);
+
         // Handle accept logic for the peer request with the given ID
-        console.log(`Accepted peer request with ID: ${id}`);
+        console.log(`Accepted peer request with ID: `);
       };
       const handleReject = (id) => {
         // Handle reject logic for the peer request with the given ID
@@ -52,7 +57,7 @@ const PeerRequest=()=>{
               <TableCell>
               <Button
                   variant="outlined"
-                  onClick={() => handleAccept(peer.administratorId)}
+                  onClick={() => handleAccept(peer)}
                   sx={{ marginRight: '10px', color: 'green' }}
                 >
                   Accept
