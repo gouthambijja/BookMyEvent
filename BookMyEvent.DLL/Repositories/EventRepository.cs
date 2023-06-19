@@ -51,11 +51,18 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetAllActivePublishedEvents()
+        public async Task<List<Event>> GetAllActivePublishedEvents(int pageNumber, int pageSize)
         {
             try
             {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.RegistrationStatusId!=3).ToList();
+                int skipCount = (pageNumber - 1) * pageSize;
+
+                var events = _db.Events
+                    .Where(x => x.IsActive == true && x.IsPublished && x.RegistrationStatusId != 3)
+                    .Skip(skipCount)
+                    .Take(pageSize)
+                    .ToList();
+
                 return events;
             }
             catch (Exception ex)

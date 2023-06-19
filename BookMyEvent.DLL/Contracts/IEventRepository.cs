@@ -60,7 +60,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a list of Event objects
         /// </returns>
-        Task<List<Event>> GetAllActivePublishedEvents();
+        Task<List<Event>> GetAllActivePublishedEvents(int pageNumber, int pageSize);
 
         /// <summary>
         /// An Asynchronous method that gets all the events that are active and published and are of a particular category

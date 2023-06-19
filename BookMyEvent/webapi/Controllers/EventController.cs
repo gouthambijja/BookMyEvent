@@ -102,13 +102,17 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpGet("GetAllActivePublishedEvents")]
-        public async Task<IActionResult> GetAllActivePublishedEvents()
+        public async Task<IActionResult> GetAllActivePublishedEvents(int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                List<BLEvent> AllEvents = await _eventServices.GetAllActivePublishedEvents();
-                if (AllEvents == null) { return BadRequest("error in BL"); }
-                return Ok(AllEvents);
+                int skipCount = (pageNumber - 1) * pageSize;
+                List<BLEvent> paginatedEvents = await _eventServices.GetAllActivePublishedEvents(pageNumber, pageSize);
+                if (paginatedEvents == null)
+                {
+                    return BadRequest("Error in BLL");
+                }
+                return Ok(paginatedEvents);
             }
             catch (Exception ex)
             {

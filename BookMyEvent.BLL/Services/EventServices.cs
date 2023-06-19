@@ -116,15 +116,15 @@ namespace BookMyEvent.BLL.Services
             }
         }
        
-        public async Task<List<BLEvent>> GetAllActivePublishedEvents()
+        public async Task<List<BLEvent>> GetAllActivePublishedEvents(int pageNumber, int pageSize)
         {
             try
             {
-                List<BLEvent> AllEvents= _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEvents());
-
-                return AllEvents;
+                List<Event> events = await eventRepository.GetAllActivePublishedEvents(pageNumber, pageSize);
+                List<BLEvent> mappedEvents = _mapper.Map<List<BLEvent>>(events);
+                return mappedEvents;
             }
-            catch 
+            catch
             {
                 return null;
             }

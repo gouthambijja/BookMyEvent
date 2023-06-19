@@ -21,7 +21,7 @@ namespace BookMyEvent.BLL.Contracts
         Task<BLEvent> GetEventById(Guid EventId);
         Task<(BLEvent, string Message)> UpdateEvent(BLEvent _event);
         Task<(bool, string Message)> DeleteEvent(Guid id);
-        Task<List<BLEvent>> GetAllActivePublishedEvents();
+        Task<List<BLEvent>> GetAllActivePublishedEvents(int pageNumber, int pageSize);
         Task<List<BLEvent>> GetAllActivePublishedEventsByCategoryId(byte categoryId);
         Task<List<BLEvent>> GetAllActivePublishedEventsByOrgId(Guid orgId);
         Task<List<BLEvent>> GetAllActivePublishedEventsByLocation(string location);
