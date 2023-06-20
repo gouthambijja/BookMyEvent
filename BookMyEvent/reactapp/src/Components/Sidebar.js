@@ -130,6 +130,14 @@ function Sidebar({ open, setOpen }) {
     navigate(`/organiser/OrganisationTree/${profile.organisationId}`);
     handleDrawerClose();
   }
+  const handleLogin = async () => {
+    navigate("login");
+    handleDrawerClose();
+  }
+  const handleOrganiseAnEvent = async () =>{
+    navigate("/organiser");
+    handleDrawerClose();
+  }
   return (
     <div className={classes.root}>
       <Drawer
@@ -152,12 +160,31 @@ function Sidebar({ open, setOpen }) {
           </IconButton>
         </div>
         <List>
+        {auth.accessToken == ""?
+          <ListItem button onClick={handleLogin}>
+            <ListItemIcon>
+              <AccountCircle />
+            </ListItemIcon>
+            <ListItemText primary="Login" />
+          </ListItem>:<></>
+          }
+          {
+            (auth.accessToken == "" || auth.role == "User")?
+            <ListItem button onClick={handleOrganiseAnEvent}>
+            <ListItemIcon>
+              <AccountCircle />
+            </ListItemIcon>
+            <ListItemText primary="Organise an Event?" />
+          </ListItem>:<></>
+          }
+          
+          {auth.accessToken?
           <ListItem button onClick={handleProfile}>
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
             <ListItemText primary="Profile" />
-          </ListItem>
+          </ListItem>:<></>}
           {auth.role == "Owner" || auth.role == "Secondary_Owner" ? (
             <ListItem button onClick={handlePeerRequests}>
               <ListItemIcon>
@@ -214,12 +241,13 @@ function Sidebar({ open, setOpen }) {
             <ListItemText primary="Organisation Tree" />
           </ListItem>
           ):<></>}
+          {auth.accessToken?
           <ListItem button onClick={handleLogout}>
             <ListItemIcon>
               <ExitToApp />
             </ListItemIcon>
             <ListItemText primary="Logout" />
-          </ListItem>
+          </ListItem>:<></>}
         </List>
       </Drawer>
       <main className={classes.content}>

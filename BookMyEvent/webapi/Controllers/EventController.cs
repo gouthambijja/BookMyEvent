@@ -447,20 +447,20 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
-        [HttpGet("GetFilteredEvents")]
-        public async Task<IActionResult> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber = 1, int pageSize = 10)
+        [HttpPost("GetFilteredEvents")]
+        public async Task<IActionResult> GetFilteredEvents(FilterEvent filterEvent)
         {
             try
             {
                 // Set default values if parameters are not provided
-                startDate = startDate == default ? DateTime.MinValue : startDate;
-                endDate = endDate == default ? DateTime.MaxValue : endDate;
-                startPrice = startPrice == default ? 0 : startPrice;
-                endPrice = endPrice == default ? decimal.MaxValue : endPrice;
-                location = location ?? string.Empty;
-                categoryIds = categoryIds ?? new List<int>();
-
-                var result = await _eventServices.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber, pageSize);
+                filterEvent.startDate = filterEvent.startDate == default ? DateTime.Now.AddYears(-20) : filterEvent.startDate;
+                filterEvent.endDate =filterEvent.endDate == default ? DateTime.Now.AddYears(20) : filterEvent.endDate;
+                filterEvent.startPrice = filterEvent.startPrice == default ? 0 : filterEvent.startPrice;
+                filterEvent.endPrice = filterEvent.endPrice == default ? 214748367 : filterEvent.endPrice;
+                filterEvent.city = filterEvent.city ?? string.Empty;
+                filterEvent.location= filterEvent.location ?? string.Empty;
+                filterEvent.categoryIds = filterEvent.categoryIds ?? new List<int>();
+                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize,filterEvent.city);
                 return Ok(result);
             }
             catch (Exception ex)

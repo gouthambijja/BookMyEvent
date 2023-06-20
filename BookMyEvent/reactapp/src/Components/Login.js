@@ -177,9 +177,9 @@ const Login = () => {
             {isloading ? <div>Loading...</div> : <></>}
           </form>
          {role!="Admin"?<>
-         <span>Don't have an Account</span>
-         <Button variant="contained" className={classes.button} onClick={handleRegister}>
-        Register
+         <span>Don't have an Account   </span>
+         <Button   onClick={handleRegister}>
+        <span style={{color:'#3f51b5'}}>Register</span>
       </Button>
          </>:<></>}
         </Box>

@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
+import EventCard from '../Components/EventCard';
 
 
 
@@ -36,13 +37,33 @@ const LandingPage = () => {
     navigate("admin/login");
   }
   return (<>
-    <div className={classes.container}>
-      <Button variant="contained" className={classes.button} onClick={handleOrganiserLogin}>
+    <div className={classes.container} style={{display:'flex',justifyContent:"center",flexWrap:'wrap',gap:'20px',padding:'40px'}}>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/><EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/><EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/><EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/><EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/>
+    <EventCard/>
+      {/* <Button variant="contained" className={classes.button} onClick={handleOrganiserLogin}>
         Login as an Organiser
       </Button>
       <Button variant="contained" className={classes.button} onClick={handleAdminLogin}>
         Login as an Admin
-      </Button>
+      </Button> */}
     </div>
     </>
      

@@ -6,9 +6,10 @@ import Sidebar from './Sidebar'
 
 const Layout = () => {
   return (
-    <div>
+    <div >
       <Navbar/>
-      <Outlet/>
+      <div style={{paddingTop:'60px'}}>
+      <Outlet/></div>
     </div>
   )
 }

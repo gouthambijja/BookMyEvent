@@ -325,6 +325,6 @@ namespace BookMyEvent.DLL.Contracts
         /// </returns>
         Task<List<Event>> GetAllCreatedEventsByOrganiser(Guid organiserId);
 
-        Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize);
+        Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize, string city);
     }
 }

@@ -43,6 +43,6 @@ namespace BookMyEvent.BLL.Contracts
         Task<List<BLEvent>> GetAllCreatedEventsByOrganisation(Guid orgId);
         Task<List<BLEvent>> GetAllCreatedEventsByOrganiser(Guid organiserId);
 
-        Task<List<BLEvent>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize);
+        Task<List<BLEvent>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize,string city);
     }
 }

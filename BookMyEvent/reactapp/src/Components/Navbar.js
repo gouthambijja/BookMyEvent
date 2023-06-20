@@ -25,10 +25,10 @@ export default function Navbar() {
   };
   return (
     <>
-      <Box sx={{ flexGrow: 1, position: "relative", zIndex: 100 }}>
+      <Box sx={{ flexGrow: 1, position: "fixed",width:'100%', zIndex: 100 }}>
         <AppBar position="static" style={{ background: "#3f51b5" }}>
           <Toolbar>
-            {auth.accessToken ? (
+            {true ? (
               <IconButton
                 size="large"
                 edge="start"
