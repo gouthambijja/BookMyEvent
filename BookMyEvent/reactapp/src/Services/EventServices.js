@@ -82,44 +82,44 @@ const getAllCreatedEventsByOrganiser = async (organiserId) => {
     return response.data;
 };
 
-const getAllActivePublishedEventsByFilter = async (pageNumber = 1, pageSize = 10, filter) => {
-    const response = await Axios.get(`${apiBase}/GetAllActivePublishedEventsByFilter?pageNumber=${pageNumber}&pageSize=${pageSize}&filter=${filter}`, {
+const getFilteredEvents = async (filters) => {
+    const response = await Axios.post(`${apiBase}/GetFilteredEvents`, filters, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
     return response.data;
 };
 
-const getFilteredEvents = async (startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber = 1, pageSize = 10) => {
-    try {
-        startDate = startDate || new Date().toISOString();
-        endDate = endDate || new Date().toISOString();
-        startPrice = startPrice || 0;
-        endPrice = endPrice || Number.MAX_VALUE;
-        location = location || "";
-        isFree = isFree || false;
-        categoryIds = categoryIds || [];
+//const getFilteredEvents = async (startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber = 1, pageSize = 10) => {
+//    try {
+//        startDate = startDate || new Date().toISOString();
+//        endDate = endDate || new Date().toISOString();
+//        startPrice = startPrice || 0;
+//        endPrice = endPrice || Number.MAX_VALUE;
+//        location = location || "";
+//        isFree = isFree || false;
+//        categoryIds = categoryIds || [];
 
-        const response = await Axios.get(`${apiBase}/GetFilteredEvents`, {
-            params: {
-                startDate: startDate,
-                endDate: endDate,
-                startPrice: startPrice,
-                endPrice: endPrice,
-                location: location,
-                isFree: isFree,
-                categoryIds: categoryIds,
-                pageNumber: pageNumber,
-                pageSize: pageSize
-            },
-            withCredentials: true
-        });
+//        const response = await Axios.get(`${apiBase}/GetFilteredEvents`, {
+//            params: {
+//                startDate: startDate,
+//                endDate: endDate,
+//                startPrice: startPrice,
+//                endPrice: endPrice,
+//                location: location,
+//                isFree: isFree,
+//                categoryIds: categoryIds,
+//                pageNumber: pageNumber,
+//                pageSize: pageSize
+//            },
+//            withCredentials: true
+//        });
 
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
+//        return response.data;
+//    } catch (error) {
+//        throw error;
+//    }
+//}
 
 export default {
     addNewEvent,

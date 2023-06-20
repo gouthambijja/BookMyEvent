@@ -10,19 +10,21 @@ import orgFormsReducer from "../Features/ReducerSlices/OrganiserFormsSlice";
 import eventsReducer from "../Features/ReducerSlices/EventsSlice";
 import EventRegistrationFormReducer from "../Features/ReducerSlices/EventRegistrationFormSlice"
 import EventRegistrationFormFieldsReducer from "../Features/ReducerSlices/EventRegistrationFormFieldsSlice"
+import HomeEventsReducer from "../Features/ReducerSlices/HomeEventsSlice"
 let store = configureStore({
-    reducer:{
-        auth:authReducer,
-        isLoading:isLoading,
-        profile:profileReducer,
-        category:categoryReducer,
-        organisations:OrganisationReducer,
-        formFields:formFieldsReducer,
-        EventRegistrationForm:EventRegistrationFormReducer,
-        organisers:organisersReducer,
+    reducer: {
+        auth: authReducer,
+        isLoading: isLoading,
+        profile: profileReducer,
+        category: categoryReducer,
+        organisations: OrganisationReducer,
+        formFields: formFieldsReducer,
+        EventRegistrationForm: EventRegistrationFormReducer,
+        organisers: organisersReducer,
         events: eventsReducer,
-        orgForms:orgFormsReducer,
-        EventRegistrationFormFields:EventRegistrationFormFieldsReducer,
+        orgForms: orgFormsReducer,
+        EventRegistrationFormFields: EventRegistrationFormFieldsReducer,
+        homeEvents: HomeEventsReducer
     },
 
 })
