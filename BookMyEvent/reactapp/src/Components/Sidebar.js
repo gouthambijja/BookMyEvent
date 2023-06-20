@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import store from "../App/store";
+
 import {
   Drawer,
   IconButton,
@@ -124,7 +126,8 @@ function Sidebar({ open, setOpen }) {
     handleDrawerClose();
   }
   const handleOrganisationTree = async() =>{
-    navigate("/organiser/OrganisationTree");
+    const profile = store.getState().profile.info;
+    navigate(`/organiser/OrganisationTree/${profile.organisationId}`);
     handleDrawerClose();
   }
   return (

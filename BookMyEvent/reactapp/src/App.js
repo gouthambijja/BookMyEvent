@@ -26,9 +26,13 @@ import OrganisationsListPage from "./pages/OrganisationsListPage";
 import PeerRequest from "./pages/PeerRequests";
 import EventDynamicForm from "./Components/EventDynamicForm";
 import OrganisationTree from "./pages/OrganisationTree";
+import store from "./App/store";
+
 // import EventDynamicForm from "./Components/EventDynamicForm";
 import Event from "./Components/Event";
 const App = () => {
+  const profile = store.getState().profile.info;
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -55,10 +59,9 @@ const App = () => {
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth allowedroles={["Owner", "Peer","Secondary_Owner"]} />}>
                 <Route index element={<OrganiserHomePage />}></Route>
-                <Route path="createNewEventRegistrationForm" element={<EventDynamicForm/>} loader={storeLoader.FormFieldsLoader}/>
-                            <Route path="AddEvent" element={<AddEvent />}  ></Route>
-                            <Route path="OrganisationTree" element={<OrganisationTree />} loader={storeLoader.OrganisationTreeLoader}></Route>
-
+                {/* <Route path="createNewEventRegistrationForm" element={<EventDynamicForm/>} loader={storeLoader.FormFieldsLoader}/> */}
+                <Route path="AddEvent" element={<AddEvent />} loader={storeLoader.OrganisationFormLoaders} ></Route>
+                <Route path="OrganisationTree/:id" element={<OrganisationTree />} ></Route>
                 <Route path="PeerRequests" element={<PeerRequest/>}></Route>
                 <Route path="addSecondaryOwner" element={<AddSecondary />} />
                 <Route path="profile" element={<Profile />} />
@@ -74,9 +77,10 @@ const App = () => {
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth allowedroles={["Admin"]} />}>
                 <Route index element={<AdminHomePage />}></Route>
-                            <Route path="addadmin" element={<AddSecondary />} />
-                            <Route path="Organisations" element={<OrganisationsListPage />} loader={storeLoader.OrganisationsLoader} />
-
+                <Route path="addadmin" element={<AddSecondary />} />
+                <Route path="Organisations" element={<OrganisationsListPage />} loader={storeLoader.OrganisationsLoader} >
+                </Route>
+                  <Route path="Organisations/:id" element={<OrganisationTree/>} />
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>

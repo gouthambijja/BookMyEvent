@@ -30,12 +30,12 @@ import { getAdminByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
         return null;
       }
     }
-    const OrganisationTreeLoader=async() =>{
+    const OrganisationTreeLoader=async(orgId) =>{
       if(store.getState().organisers.myOrganisationOrganisers.length>0)return null;
       else{
     const profile = store.getState().profile.info;
 
-        await store.dispatch(fetchOrganisationOrganisers(profile.organisationId)).unwrap();
+        await store.dispatch(fetchOrganisationOrganisers(orgId)).unwrap();
         return null;
       }
     }

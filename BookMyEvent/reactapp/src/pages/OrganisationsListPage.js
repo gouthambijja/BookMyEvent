@@ -5,6 +5,7 @@ import { Card, CardContent, Typography, Grid } from '@mui/material';
 import { fetchOrganisationById, fetchOrganisations } from '../Features/ReducerSlices/OrganisationsSlice';
 import store from '../App/store';
 import { makeStyles } from "@material-ui/core/styles";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -34,8 +35,13 @@ const useStyles = makeStyles((theme) => ({
   
 const OrganizationCard = ({ organization }) => {
     const classes = useStyles();
+    const {organisationId}=organization;
+    const navigate= useNavigate();
+    const handleOrganisation=()=>{
+      navigate(`${organisationId}`);
+    }
     return (
-      <Card className={classes.card}>
+      <Card className={classes.card} onClick={()=>handleOrganisation()}>
         <CardContent className={classes.cardContent}>
             <div>
           <Typography variant="h5" className={classes.organizationName} >
@@ -54,10 +60,7 @@ const OrganizationCard = ({ organization }) => {
   };
 const OrganisationsListPage = () => {
     const dispatch = useDispatch();
-    useEffect(() => {
-        //dispatch(fetchOrganisations());
-        dispatch(fetchOrganisationById("C934E5F9-B6B5-4D28-932C-F96C981AE70F"));
-    }, [dispatch]);
+   
     // var organisations = useSelector(store => store.organisations.organisations);
   
    var organisations=store.getState().organisations.organisations;
@@ -70,7 +73,7 @@ const OrganisationsListPage = () => {
       {organisations.map((organization) => (
         <Grid item xs={12} sm={6} md={4} key={organization.organisationId
         }>
-          <OrganizationCard organization={organization} />
+          <OrganizationCard organization={organization}  />
         </Grid>
       ))}
     </Grid>
