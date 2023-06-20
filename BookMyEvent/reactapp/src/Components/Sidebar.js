@@ -143,6 +143,11 @@ function Sidebar({ open, setOpen }) {
             <ChevronLeftIcon />
           </IconButton>
         </div>
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
         <List>
           <ListItem button onClick={handleProfile}>
             <ListItemIcon>

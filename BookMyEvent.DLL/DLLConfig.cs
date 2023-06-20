@@ -12,7 +12,11 @@ namespace BookMyEvent.DLL
         public static void DLLConfigure(IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddDbContext<EventManagementSystemTeamZealContext>(
-                            options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+                            
+                            options => {
+                                options.EnableSensitiveDataLogging();
+                                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                            }
                             );
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();

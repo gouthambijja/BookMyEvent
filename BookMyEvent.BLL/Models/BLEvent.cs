@@ -22,15 +22,16 @@ namespace BookMyEvent.BLL.Models
         public int Capacity { get; set; }
 
         public int AvailableSeats { get; set; }
-        public byte[]? ImgBody { get; set; }
+
+        public byte[]? ProfileImgBody { get; set; }
 
         public string Description { get; set; } = null!;
 
         public string Location { get; set; } = null!;
-
+        public string Country { get; set; } = null!;
+        public string State { get; set; } = null!;
+        public string City { get; set;} = null!;
         public bool IsPublished { get; set; }
-
-        public bool? IsOffline { get; set; }
 
         public bool IsCancelled { get; set; }
 
@@ -38,7 +39,7 @@ namespace BookMyEvent.BLL.Models
 
         public DateTime CreatedOn { get; set; }
 
-        public Guid RejectedBy { get; set; }
+        public Guid? RejectedBy { get; set; }
 
         public DateTime? RejectedOn { get; set; }
 
@@ -64,7 +65,7 @@ namespace BookMyEvent.BLL.Models
 
         public Guid CreatedBy { get; set; }
 
-        public Guid AcceptedBy { get; set; }
+        public Guid? AcceptedBy { get; set; }
 
       
 

@@ -30,7 +30,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>
         /// Returns a list of tuple of BLForm and a list of BLRegistrationFormFields
         /// </returns>
-        Task<List<(BLForm form, List<BLRegistrationFormFields> formFields)>> GetAllOrganisationForms(Guid id);
+        Task<List<BLForm>> GetAllOrganisationForms(Guid id);
 
         /// <summary>
         /// An asynchronous method that deletes a form
@@ -60,13 +60,10 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="form">
         /// Takes in the form as a BLForm object
         /// </param>
-        /// <param name="registrationFormFields">
-        /// Takes in the registration form fields as a list of BLRegistrationFormFields
-        /// </param>
         /// <returns>
         /// Returns a tuple of Form Id as Guid and a string message
         /// </returns>
-        Task<(Guid FormId, string Message)> AddForm(BLForm form, List<BLRegistrationFormFields> registrationFormFields);
+        Task<(Guid FormId, string Message)> AddForm(BLForm form);
 
         /// <summary>
         /// An asynchronous method that gets all the form fields of a form
@@ -87,5 +84,18 @@ namespace BookMyEvent.BLL.Contracts
         /// Returns a list of BLFieldType objects
         /// </returns>
         Task<List<BLFieldType>> GetFieldTypes();
+        /// <summary>
+        /// checks whether the form name is available or not
+        /// </summary>
+        /// <param name="formName"></param>
+        /// <returns>return true if available ,else false</returns>
+        Task<bool> IsformNameTaken(string formName);
+        /// <summary>
+        /// adds multiples form fields to the repository
+        /// </summary>
+        /// <param name="registrationFormFields"></param>
+        /// <returns>return true if success else false</returns>
+        public Task<bool> AddRegistrationFormFields(List<BLRegistrationFormFields> registrationFormFields);
+
     }
 }

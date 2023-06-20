@@ -57,6 +57,11 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a tuple of bool saying isForm deleted successfully or not and a string message
         /// </returns>
         Task<(bool IsActiveToggled, string Message)> UpdateIsActive(Guid formId);
-
+        /// <summary>
+        /// checks whether the form name is available or not
+        /// </summary>
+        /// <param name="formName"></param>
+        /// <returns>return true if available ,else false</returns>
+        Task<bool> IsformNameTaken(string formName);
     }
 }

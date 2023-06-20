@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { CardMedia } from '@mui/material';
 import './registerbutton.css'
 
-export default function MediaCard() {
+export default function Event() {
     const handleRegister = () => {
 
     }

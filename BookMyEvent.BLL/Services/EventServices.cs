@@ -28,33 +28,24 @@ namespace BookMyEvent.BLL.Services
 
         }
 
-        public async Task<(BLEvent _NewEvent,string message)> Add((BLEvent EventDetails, List<BLRegistrationFormFields> RegistrationFormFields,BLForm EventForm,List<BLEventImages> EventImages) NewEvent)
+        public async Task<(BLEvent _NewEvent,string message)> Add(BLEvent EventDetails,List<BLEventImages> EventImages)
         {
             try
             {
-                if(NewEvent.EventDetails != null)
+                if(EventDetails != null)
                 {
-
-                    (Guid FormId, string Message) AddForms = await organiserFormServices.AddForm(NewEvent.EventForm, NewEvent.RegistrationFormFields);
-                    if(AddForms.FormId==Guid.Empty) { return (null,AddForms.Message); }
-                    NewEvent.EventDetails.FormId = AddForms.FormId;
-                    Event NewEventDL = _mapper.Map<Event>(NewEvent.EventDetails);
-                    
-                    Event EventDL=await eventRepository.AddEvent(NewEventDL);
+                    Event EventDL=await eventRepository.AddEvent(_mapper.Map<Event>(EventDetails));
                     if (EventDL == null)
                     {
                         return (null, "Failed to Add New Event");
                     }
                     BLEvent bLEvent=_mapper.Map<BLEvent>(EventDL);
-
-
-
-
                     List<EventImage> imagesDL = new List<EventImage>();
-                    foreach(var image in NewEvent.EventImages)
+                    foreach(var image in EventImages)
                     {
                         EventImage imageDL = _mapper.Map<EventImage>(image);
                         imageDL.EventId = bLEvent.EventId;
+                        imageDL.ImgId = Guid.NewGuid();
                         imagesDL.Add(imageDL);
                     }
                     bool isImagesAdded= await eventImageRepository.AddMultipleImages(imagesDL);
@@ -245,17 +236,17 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsByMode(bool isOffline)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByMode(isOffline));
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        //public async Task<List<BLEvent>> GetAllActivePublishedEventsByMode(bool isOffline)
+        //{
+        //    try
+        //    {
+        //        return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByMode(isOffline));
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
         public async Task<List<BLEvent>> GetAllActivePublishedIsFreeEvents(bool isFree)
         {
             try

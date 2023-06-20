@@ -16,7 +16,7 @@ namespace BookMyEvent.BLL.Contracts
         /// </summary>
         /// <param name="NewEvent"></param>
         /// <returns> New Event </returns>
-        Task<(BLEvent _NewEvent, string message)> Add((BLEvent EventDetails, List<BLRegistrationFormFields> RegistrationFormFields, BLForm EventForm, List<BLEventImages> EventImages) NewEvent);
+        Task<(BLEvent _NewEvent, string message)> Add(BLEvent EventDetails, List<BLEventImages> EventImages);
 
         Task<BLEvent> GetEventById(Guid EventId);
         Task<(BLEvent, string Message)> UpdateEvent(BLEvent _event);
@@ -32,7 +32,7 @@ namespace BookMyEvent.BLL.Contracts
         Task<List<BLEvent>> GetAllActivePublishedEventsHavingLessThanPrice(decimal endingPrice);
         Task<List<BLEvent>> GetAllActivePublishedEventsHavingPriceRange(decimal startingPrice, decimal endingPrice);
         Task<List<BLEvent>> GetAllActivePublishedEventsHavingName(string name);
-        Task<List<BLEvent>> GetAllActivePublishedEventsByMode(bool isOffline);
+        //Task<List<BLEvent>> GetAllActivePublishedEventsByMode(bool isOffline);
         Task<List<BLEvent>> GetAllActivePublishedIsFreeEvents(bool isFree);
         Task<List<BLEvent>> GetAllActiveEventsByIsPublished(bool isPublished);
         Task<BLEvent> UpdateEventRegistrationStatus(Guid eventId, byte registrationStatusId, Guid updatedBy, DateTime updatedAt);

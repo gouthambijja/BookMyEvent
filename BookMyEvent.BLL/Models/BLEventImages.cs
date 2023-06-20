@@ -16,5 +16,7 @@ namespace BookMyEvent.BLL.Models
 
         public string? ImgName { get; set; }
 
+        public Guid EventId { get; set; }
+
     }
 }

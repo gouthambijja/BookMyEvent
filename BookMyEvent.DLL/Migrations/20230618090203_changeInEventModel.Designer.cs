@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using db.Models;
 
@@ -11,9 +12,11 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    partial class EventManagementSystemTeamZealContextModelSnapshot : ModelSnapshot
+    [Migration("20230618090203_changeInEventModel")]
+    partial class changeInEventModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,7 +163,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
-                    b.Property<Guid?>("AcceptedBy")
+                    b.Property<Guid>("AcceptedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AvailableSeats")
@@ -244,7 +247,7 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<byte>("RegistrationStatusId")
                         .HasColumnType("tinyint");
 
-                    b.Property<Guid?>("RejectedBy")
+                    b.Property<Guid>("RejectedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("RejectedOn")
@@ -807,6 +810,7 @@ namespace BookMyEvent.DLL.Migrations
                     b.HasOne("db.Models.Administration", "AcceptedByNavigation")
                         .WithMany("EventAcceptedByNavigations")
                         .HasForeignKey("AcceptedBy")
+                        .IsRequired()
                         .HasConstraintName("FK_EVENTS_ACCEPTEDBY");
 
                     b.HasOne("db.Models.EventCategory", "Category")
@@ -842,6 +846,7 @@ namespace BookMyEvent.DLL.Migrations
                     b.HasOne("db.Models.Administration", "RejectedByNavigation")
                         .WithMany("EventRejectedByNavigations")
                         .HasForeignKey("RejectedBy")
+                        .IsRequired()
                         .HasConstraintName("FK_EVENTS_REJECTEDBY");
 
                     b.HasOne("db.Models.Administration", "UpdatedByNavigation")

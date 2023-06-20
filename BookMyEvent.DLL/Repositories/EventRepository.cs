@@ -125,18 +125,18 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.IsOffline == isOffline && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
+        //public async Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline)
+        //{
+        //    try
+        //    {
+        //        var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.IsOffline == isOffline && x.RegistrationStatusId != 3).ToList();
+        //        return events;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new List<Event>();
+        //    }
+        //}
 
         public async Task<List<Event>> GetAllActivePublishedEventsByStartDate(DateTime date)
         {
@@ -298,7 +298,7 @@ namespace BookMyEvent.DLL.Repositories
                     eventToUpdate.EventStartingPrice = _event.EventStartingPrice;
                     eventToUpdate.EventEndingPrice = _event.EventEndingPrice;
                     eventToUpdate.IsFree = _event.IsFree;
-                    eventToUpdate.IsOffline = _event.IsOffline;
+                    //eventToUpdate.IsOffline = _event.IsOffline;
                     eventToUpdate.Location = _event.Location;
                     eventToUpdate.IsPublished = _event.IsPublished;
                     eventToUpdate.IsActive = _event.IsActive;

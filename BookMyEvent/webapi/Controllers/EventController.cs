@@ -18,12 +18,11 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpPost("addevent")]
-        public async Task<IActionResult> AddNewEvent([FromBody] AddEvent newEvent)
+        public async Task<IActionResult> AddNewEvent()
         {
             try
             {
 
-                (BLEvent EventDetails, List<BLRegistrationFormFields> RegistrationFormFields, BLForm EventForm, List<BLEventImages> EventImages) new_Event;
                 List<BLEventImages> bLEventImages = new List<BLEventImages>();
                 var images = Request.Form.Files;
                 if (images != null && images.Count > 0)
@@ -44,12 +43,39 @@ namespace BookMyEvent.WebApi.Controllers
                     bLEventImages[0].ImgName = "profile";
 
                 }
-                new_Event.EventDetails = newEvent.EventDetails;
-                new_Event.RegistrationFormFields = newEvent.RegistrationFormFields;
-                new_Event.EventForm = newEvent.EventForm;
-                new_Event.EventImages = bLEventImages;
-                (BLEvent _NewEvent, string message) AddNewEvent = await _eventServices.Add(new_Event);
-                if(AddNewEvent._NewEvent != null) { return Ok(AddNewEvent._NewEvent); }
+                BLEvent bLEvent = new();
+                bLEvent.EventName = Request.Form.First(e => e.Key == "EventName").Value;
+                bLEvent.StartDate = DateTime.Parse(Request.Form.First(e => e.Key == "StartDate").Value);
+                bLEvent.EndDate = DateTime.Parse(Request.Form.First(e => e.Key == "EndDate").Value);
+                bLEvent.CategoryId = byte.Parse(Request.Form.First(e => e.Key == "CategoryId").Value);
+                bLEvent.Capacity = int.Parse(Request.Form.First(e => e.Key == "Capacity").Value);
+                bLEvent.AvailableSeats = int.Parse(Request.Form.First(e => e.Key == "AvailableSeats").Value);
+                bLEvent.ProfileImgBody = bLEventImages[0].ImgBody;
+                bLEvent.Description = Request.Form.First(e => e.Key == "Description").Value;
+                bLEvent.Location = Request.Form.First(e => e.Key == "Location").Value;
+                bLEvent.Country = Request.Form.First(e => e.Key == "Country").Value;
+                bLEvent.State = Request.Form.First(e => e.Key == "State").Value;
+                bLEvent.City = Request.Form.First(e => e.Key == "City").Value;
+                bLEvent.IsPublished = bool.Parse(Request.Form.First(e => e.Key == "IsPublished").Value);
+                bLEvent.IsCancelled = false;
+                bLEvent.MaxNoOfTicketsPerTransaction = byte.Parse(Request.Form.First(e => e.Key == "MaxNoOfTicketsPerTransaction").Value);
+                bLEvent.CreatedOn = DateTime.Parse(Request.Form.First(e => e.Key == "CreatedOn").Value);
+                bLEvent.UpdatedOn = DateTime.Parse(Request.Form.First(e => e.Key == "UpdatedOn").Value);
+                bLEvent.IsFree = bool.Parse(Request.Form.First(e => e.Key == "IsFree").Value);
+                bLEvent.EventStartingPrice = int.Parse(Request.Form.First(e => e.Key == "EventStartingPrice").Value);
+                bLEvent.EventEndingPrice = int.Parse(Request.Form.First(e => e.Key == "EventEndingPrice").Value);
+                bLEvent.IsActive = true;
+                bLEvent.OrganisationId = Guid.Parse(Request.Form.First(e => e.Key == "OrganisationId").Value);
+                bLEvent.FormId = Guid.Parse(Request.Form.First(e => e.Key == "FormId").Value);
+                bLEvent.RegistrationStatusId = byte.Parse(Request.Form.First(e => e.Key == "RegistrationStatusId").Value);
+                bLEvent.CreatedBy = Guid.Parse(Request.Form.First(e => e.Key == "CreatedBy").Value);
+                if(Request.Form.Where(e => e.Key == "AcceptedBy").ToList().Count() > 0)
+                {
+                    bLEvent.AcceptedBy = Guid.Parse(Request.Form.First(e => e.Key == "AcceptedBy").Value);
+                }
+                bLEventImages.RemoveAt(0);
+                (BLEvent Event, string message) AddNewEvent = await _eventServices.Add(bLEvent,bLEventImages);
+                if(AddNewEvent.Event != null) { return Ok(AddNewEvent.Event); }
                 return BadRequest(AddNewEvent.message);
             }
             catch(Exception ex) 
@@ -270,20 +296,20 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
-        [HttpGet("GetAllActivePublishedEventsByMode")]
-        public async Task<IActionResult> GetAllActivePublishedEventsByMode(bool isOffline)
-        {
-            try
-            {
-                List<BLEvent> AllEvents = await _eventServices.GetAllActivePublishedEventsByMode(isOffline);
-                if (AllEvents == null) { return BadRequest("error in BL"); }
-                return Ok(AllEvents);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("GetAllActivePublishedEventsByMode")]
+        //public async Task<IActionResult> GetAllActivePublishedEventsByMode(bool isOffline)
+        //{
+        //    try
+        //    {
+        //        List<BLEvent> AllEvents = await _eventServices.GetAllActivePublishedEventsByMode(isOffline);
+        //        if (AllEvents == null) { return BadRequest("error in BL"); }
+        //        return Ok(AllEvents);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [HttpGet("GetAllActivePublishedIsFreeEvents")]
         public async Task<IActionResult> GetAllActivePublishedIsFreeEvents(bool isFree)

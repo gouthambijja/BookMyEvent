@@ -82,6 +82,26 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
+        public async Task<Administration?> GetAdminByEmail(string email)
+        {
+            try
+            {
+                Administration? administrator = await _dbcontext.Administrations.Where(a => a.Email == email && a.RoleId == 1).FirstOrDefaultAsync();
+                if (administrator != null)
+                {
+                    return administrator;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
 
         public async Task<Administration?> GetAdministratorByGoogleId(string GoogleId)

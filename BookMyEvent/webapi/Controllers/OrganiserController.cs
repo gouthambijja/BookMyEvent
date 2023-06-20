@@ -55,7 +55,7 @@ namespace BookMyEvent.WebApi.Controllers
                 CreatedOn =  DateTime.Parse(Request.Form.Where(e => e.Key == "orgcreatedOn").First().Value),
                 IsActive = bool.Parse(Request.Form.Where(e => e.Key == "orgIsActive").First().Value),
                 UpdatedOn =  DateTime.Parse(Request.Form.Where(e => e.Key == "orgUpdatedOn").First().Value),
-
+                
             };
 
             var result = await _organiserServices.RegisterOwner(owner, organisation);
@@ -63,7 +63,7 @@ namespace BookMyEvent.WebApi.Controllers
                 return Ok(result.Message);
             else return BadRequest(result.Message);
         }
-
+        
         [HttpPost("RegisterPeer")]
         public async Task<IActionResult> RegisterOrganiserPeer()
         {

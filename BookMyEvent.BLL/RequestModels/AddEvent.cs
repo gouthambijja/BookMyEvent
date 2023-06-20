@@ -10,8 +10,7 @@ namespace BookMyEvent.BLL.RequestModels
     public class AddEvent
     {
         public BLEvent EventDetails { get; set; }
-        public List<BLRegistrationFormFields> RegistrationFormFields { get; set; }
-        public BLForm EventForm { get; set; }
+        public BLForm BLForm { get; set; }
 
     }
 }

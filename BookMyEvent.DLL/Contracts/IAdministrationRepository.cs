@@ -34,6 +34,12 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="email">Administration Email</param>
         /// <returns>Administration Object Model</returns>
         public Task<Administration?> GetAdministratorByEmail(string email);
+        /// <summary>
+        /// Method to get Admin Details By Email
+        /// </summary>
+        /// <param name="email">Administration Email</param>
+        /// <returns>Administration Object Model</returns>
+        public Task<Administration?> GetAdminByEmail(string email);
 
         /// <summary>
         /// Method to get Administrator Details By GoogleId

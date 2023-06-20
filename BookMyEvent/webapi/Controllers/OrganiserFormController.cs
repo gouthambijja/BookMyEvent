@@ -1,5 +1,7 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.BLL.RequestModels;
+using BookMyEvent.BLL.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +15,36 @@ namespace BookMyEvent.WebApi.Controllers
         public OrganiserFormController(IOrganiserFormServices organiserFormServices)
         {
             _organiserFormServices = organiserFormServices;
+        }
+        [HttpPost("AddForm")]
+        public async Task<IActionResult> AddNewForm(BLForm form)
+        {
+            try
+            {
+                (Guid FormId, string Message) result = await _organiserFormServices.AddForm(form);
+                return Ok(result.FormId);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPost("AddFormFields")]
+        public async Task<IActionResult> AddRegistrationFormFields(List<BLRegistrationFormFields> RegistrationFormFields)
+        {
+            try
+            {
+                return Ok(await _organiserFormServices.AddRegistrationFormFields(RegistrationFormFields));
+            }
+            catch
+            {
+                return BadRequest(false);
+            }
+        }
+        [HttpGet("isFormNameTaken/{formname}")]
+        public async Task<IActionResult> IsFormNameTaken(string formname)
+        {
+            return Ok(await _organiserFormServices.IsformNameTaken(formname));
         }
         [HttpGet("FormId")]
         public async Task<IActionResult> GetFormById(Guid FormId)

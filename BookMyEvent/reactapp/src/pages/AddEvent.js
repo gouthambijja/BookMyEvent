@@ -10,7 +10,7 @@ const styles = {
 }
   return (
     <div style={styles.container}>
-        {/* <AddEventForm/> */}
+        <AddEventForm/>
     </div>
   )
 }

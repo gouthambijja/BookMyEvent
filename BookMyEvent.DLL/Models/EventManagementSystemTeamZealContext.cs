@@ -150,9 +150,6 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.IsActive)
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
-            entity.Property(e => e.IsOffline)
-                .IsRequired()
-                .HasDefaultValueSql("((1))");
             entity.Property(e => e.Location)
                 .HasMaxLength(1024)
                 .IsUnicode(false);

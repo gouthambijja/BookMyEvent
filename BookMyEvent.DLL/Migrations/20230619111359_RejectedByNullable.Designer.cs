@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using db.Models;
 
@@ -11,9 +12,11 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    partial class EventManagementSystemTeamZealContextModelSnapshot : ModelSnapshot
+    [Migration("20230619111359_RejectedByNullable")]
+    partial class RejectedByNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,7 +163,7 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
-                    b.Property<Guid?>("AcceptedBy")
+                    b.Property<Guid>("AcceptedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AvailableSeats")
@@ -807,6 +810,7 @@ namespace BookMyEvent.DLL.Migrations
                     b.HasOne("db.Models.Administration", "AcceptedByNavigation")
                         .WithMany("EventAcceptedByNavigations")
                         .HasForeignKey("AcceptedBy")
+                        .IsRequired()
                         .HasConstraintName("FK_EVENTS_ACCEPTEDBY");
 
                     b.HasOne("db.Models.EventCategory", "Category")

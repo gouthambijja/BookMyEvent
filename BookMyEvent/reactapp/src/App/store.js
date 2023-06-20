@@ -8,6 +8,8 @@ import OrganisationReducer from "../Features/ReducerSlices/OrganisationsSlice";
 import organisersReducer from "../Features/ReducerSlices/OrganisersSlice";
 import orgFormsReducer from "../Features/ReducerSlices/OrganiserFormsSlice";
 import eventsReducer from "../Features/ReducerSlices/EventsSlice";
+import EventRegistrationFormReducer from "../Features/ReducerSlices/EventRegistrationFormSlice"
+import EventRegistrationFormFieldsReducer from "../Features/ReducerSlices/EventRegistrationFormFieldsSlice"
 let store = configureStore({
     reducer:{
         auth:authReducer,
@@ -16,10 +18,13 @@ let store = configureStore({
         category:categoryReducer,
         organisations:OrganisationReducer,
         formFields:formFieldsReducer,
+        EventRegistrationForm:EventRegistrationFormReducer,
         organisers:organisersReducer,
-        orgForms: orgFormsReducer,
         events: eventsReducer,
+        orgForms:orgFormsReducer,
+        EventRegistrationFormFields:EventRegistrationFormFieldsReducer,
     },
+
 })
 
 export default store;

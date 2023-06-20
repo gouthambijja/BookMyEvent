@@ -24,7 +24,7 @@ namespace BookMyEvent.BLL.Services
         }
 
 
-        public async Task<(Guid FormId, string Message)> AddForm(BLForm form, List<BLRegistrationFormFields> registrationFormFields)
+        public async Task<(Guid FormId, string Message)> AddForm(BLForm form)
         {
             try
             {
@@ -32,12 +32,12 @@ namespace BookMyEvent.BLL.Services
                 {
                     var mapper = Automapper.InitializeAutomapper();
                     var newForm = await _organiserFormRepository.Add(mapper.Map<Form>(form));
-                    foreach (var item in registrationFormFields)
-                    {
-                        item.FormId = newForm.FormId;
-                    }
-                    var newRegistrationFormFields = mapper.Map<List<RegistrationFormField>>(registrationFormFields);
-                    var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
+                    //foreach (var item in registrationFormFields)
+                    //{
+                    //    item.FormId = newForm.FormId;
+                    //}
+                    //var newRegistrationFormFields = mapper.Map<List<RegistrationFormField>>(registrationFormFields);
+                    //var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
                     return (newForm.FormId, "Added Successfully");
                 }
                 return (form.FormId, "Form already exists, so nothing to add");
@@ -45,6 +45,33 @@ namespace BookMyEvent.BLL.Services
             catch (Exception ex)
             {
                 return (Guid.Empty, ex.Message);
+            }
+        }
+        public async Task<bool> AddRegistrationFormFields(List<BLRegistrationFormFields> registrationFormFields)
+        {
+            try
+            {
+                var mapper = Automapper.InitializeAutomapper();
+                //var newRegistrationFormFields = mapper.Map<List<RegistrationFormField>>(registrationFormFields);
+                List<RegistrationFormField> newRegistrationFormFields = new List<RegistrationFormField>();
+                foreach(var formField in registrationFormFields)
+                {
+                    newRegistrationFormFields.Add(new RegistrationFormField()
+                    {
+                        IsRequired = formField.IsRequired,
+                        Validations = formField.Validations,
+                        Options = formField.Options,
+                        FormId = formField.FormId,
+                        Lable = formField.Lable,
+                        FieldTypeId = formField.FieldTypeId
+                    });
+                }
+                var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
+                return result;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -80,23 +107,17 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<List<(BLForm form, List<BLRegistrationFormFields> formFields)>> GetAllOrganisationForms(Guid id)
+        public async Task<List<BLForm>> GetAllOrganisationForms(Guid id)
         {
             try
             {
                 var forms = await _organiserFormRepository.GetByOrganisationId(id);
                 var mapper = Automapper.InitializeAutomapper();
-                var result = new List<(BLForm form, List<BLRegistrationFormFields> formFields)>();
-                foreach (var item in forms)
-                {
-                    var formFields = await _organiserFormFieldsRepository.GetAllFields(item.FormId);
-                    result.Add((mapper.Map<BLForm>(item), mapper.Map<List<BLRegistrationFormFields>>(formFields)));
-                }
-                return result;
+                return mapper.Map<List<BLForm>>(forms);
             }
             catch (Exception ex)
             {
-                return new List<(BLForm form, List<BLRegistrationFormFields> formFields)>();
+                return null ;
             }
         }
 
@@ -104,7 +125,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var fieldTypes = await   _fieldTypeRepository.GetAllFieldTypes();
+                var fieldTypes = await _fieldTypeRepository.GetAllFieldTypes();
                 var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<List<BLFieldType>>(fieldTypes);
             }
@@ -139,6 +160,18 @@ namespace BookMyEvent.BLL.Services
             catch (Exception ex)
             {
                 return new List<BLRegistrationFormFields>();
+            }
+        }
+
+        public async Task<bool> IsformNameTaken(string formName)
+        {
+            try
+            {
+                return await _organiserFormRepository.IsformNameTaken(formName);
+            }
+            catch
+            {
+                return true;
             }
         }
     }

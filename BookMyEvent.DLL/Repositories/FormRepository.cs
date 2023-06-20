@@ -20,9 +20,9 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                _DBContext.Forms.Add(form);
+                Console.WriteLine(form.FormName + " " + form.OrganisationId);
+                _DBContext.Forms.AddAsync(form);
                 await _DBContext.SaveChangesAsync();
-                await _DBContext.Entry(form).GetDatabaseValuesAsync();
                 return form;
             }
             catch
@@ -103,19 +103,39 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public Task<(bool IsActiveToggled, string Message)> UpdateIsActive(Guid formId)
+        public async Task<(bool IsActiveToggled, string Message)> UpdateIsActive(Guid formId)
         {
             try
             {
-                var form = _DBContext.Forms.Where(e => e.FormId == formId).FirstOrDefault();
-                if (form == null) return Task.FromResult((false, "Form not found"));
+                var form = await  _DBContext.Forms.Where(e => e.FormId == formId).FirstOrDefaultAsync();
+                if (form == null) return await Task.FromResult((false, "Form not found"));
                 form.IsActive = !form.IsActive;
-                _DBContext.SaveChanges();
-                return Task.FromResult((true, "Form updated"));
+                _DBContext.SaveChangesAsync();
+                return await Task.FromResult((true, "Form updated"));
             }
             catch (Exception ex)
             {
-                return Task.FromResult((false, ex.Message));
+                return await Task.FromResult((false, ex.Message));
+            }
+        }
+
+        public async Task<bool> IsformNameTaken(string formName)
+        {
+            try
+            {
+               var form = await _DBContext.Forms.Where(e => e.FormName == formName).FirstOrDefaultAsync();
+                if( form != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return true;
             }
         }
     }

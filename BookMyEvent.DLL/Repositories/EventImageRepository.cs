@@ -39,12 +39,15 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
+                
+                _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
                 await _context.EventImages.AddRangeAsync(eventImages);
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex);
                 return false;
             }
         }

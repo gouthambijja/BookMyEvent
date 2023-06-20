@@ -187,7 +187,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a list of Event objects
         /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline);
+        //Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline);
 
         /// <summary>
         /// An Asynchronous method that gets all the events that are active and published and based on is free or not

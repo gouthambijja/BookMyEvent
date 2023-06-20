@@ -6,6 +6,8 @@ import { fetchOrganisations } from "../Features/ReducerSlices/OrganisationsSlice
 import { fetchOrganisationOrganisers } from "../Features/ReducerSlices/OrganisersSlice";
 
 
+import {fetchOrganiserForms } from "../Features/ReducerSlices/OrganiserFormsSlice"
+import { getAdminByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
     const categoryLoader = async () => {
       if (store.getState().category.categories.length > 0) return null;
       else{
@@ -15,7 +17,6 @@ import { fetchOrganisationOrganisers } from "../Features/ReducerSlices/Organiser
       }
     };
     const FormFieldsLoader = async() =>{
-      
         if(store.getState().formFields.formFields.length > 0)return null;
         else{
             await store.dispatch(getFormFieldsThunk()).unwrap();

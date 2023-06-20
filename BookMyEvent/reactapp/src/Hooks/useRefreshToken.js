@@ -13,6 +13,7 @@ const useRefreshToken = () => {
         });
         dispatch(setAuth(response?.data));
         await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
+        console.log(store.getState());
         return response.data;
     }
     return refresh;

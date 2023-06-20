@@ -62,8 +62,7 @@ const AddSecondary = () => {
             ...prevState,
             [e.target.name]: e.target.value,
         }));
-        if (e.target.value.includes('@')) {
-
+        if (e.target.type == 'email' && e.target.value != '') {
             const response = await organiserServices.checkEmail(e.target.value);
             if (response.isEmailTaken) {
                 setEmailError("Email already exists");
