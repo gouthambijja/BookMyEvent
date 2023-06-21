@@ -22,6 +22,15 @@ const registerUser = async (formData) => {
     )
     return response.data;
 }
+const isEmailTaken= async (email) => {
+    const response = await Axios.get(`api/User/isEmailExists/${email}`,
+        {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+    );
+    return response.data;
+}
 const loginUser = async (formData) => {
     
     const response = await Axios.post('api/User/login',
@@ -35,4 +44,4 @@ const loginUser = async (formData) => {
     return response.data;
 }
 export  {loginUser,getUserById}
-export default { registerUser };
+export default { registerUser,isEmailTaken };

@@ -3,6 +3,7 @@ using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.DLL.Contracts;
+using BookMyEvent.DLL.Repositories;
 using db.Models;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
@@ -144,6 +145,25 @@ namespace BookMyEvent.BLL.Services
                 return (user, "Updated");
             }
             return (new BLUser(), "Not Updated");
+        }
+
+        public async Task<(bool IsUserEmailExists, string Message)> IsUserAvailableWithEmail(string email)
+        {
+            try
+            {
+                if (await UserRepositoryDal.IsEmailExists(email))
+                {
+                    return (true, "Email already exists");
+                }
+                else
+                {
+                    return (false, "Email doesn't exists");
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
         }
     }
 }

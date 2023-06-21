@@ -77,6 +77,26 @@ namespace BookMyEvent.DLL.Repositories
             }
 
         }
+        public async Task<bool> IsEmailExists(string Email)
+        {
+            try
+            {
+                var user = await _db.Users.Where(a => a.Email == Email).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    
 
         public async Task<User> GetUserById(Guid Id)
         {

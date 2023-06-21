@@ -49,7 +49,7 @@ const App = () => {
           <Route index element={<LandingPage />}></Route>
 
           <Route path="/login" element={<Login />} />
-          <Route path="/user/register" element={<RegisterUser/>} />
+          <Route path="/register" element={<RegisterUser/>} />
           <Route path="/orglist" element={<OrganisationsListPage/>} />
           {/* ------------------------------------------------------------------------- */}
 

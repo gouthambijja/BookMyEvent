@@ -184,5 +184,23 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("isEmailExists/{email}")]
+        public async Task<IActionResult> IsEmailExists(string email)
+        {
+            try
+            {
+                var result = await _userService.IsUserAvailableWithEmail(email);
+                return Ok(new
+                {
+                    IsEmailTaken = result.IsUserEmailExists,
+                    Message = result.Message
+                });
+            }
+            catch
+            {
+                return BadRequest("error");
+            }
+        }
     }
 }

@@ -102,5 +102,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="UserId"></param>
         /// <returns>return the UserID with the Message</returns>
         Task<(Guid UserId, string Message)> BlockUser(Guid UserId);
+
+        Task<bool> IsEmailExists(string Email);
     }
 }

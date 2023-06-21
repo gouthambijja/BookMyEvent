@@ -72,5 +72,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="Id"></param>
         /// <returns>returns User Object</returns>
         Task<BLUser> ToggleIsActiveById(Guid Id);
+
+        Task<(bool IsUserEmailExists, string Message)> IsUserAvailableWithEmail(string email);
     }
 }

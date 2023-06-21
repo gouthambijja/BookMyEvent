@@ -80,16 +80,16 @@ const RegisterUser = () => {
             ...prevState,
             [e.target.name]: e.target.value,
         }));
-        // if (e.target.value.includes('@')) {
+        if (e.target.value.includes('@')) {
 
-        //     const response = await organiserServices.checkEmail(e.target.value);
-        //     if (response.isEmailTaken) {
-        //         setEmailError("Email already exists");
-        //     }
-        //     else {
-        //         setEmailError("");
-        //     }
-        // }
+            const response = await userServices.isEmailTaken(e.target.value);
+            if (response.isEmailTaken) {
+                setEmailError("Email already exists");
+            }
+            else {
+                setEmailError("");
+            }
+        }
     }
 
 
@@ -156,8 +156,8 @@ const RegisterUser = () => {
                             type="email"
                             value={formData.Email}
                             onChange={handleEmailChange}
-                            // error={emailError !== ''}
-                            // helperText={emailError}
+                            error={emailError !== ''}
+                            helperText={emailError}
                             margin="normal"
                             required
                             fullWidth
