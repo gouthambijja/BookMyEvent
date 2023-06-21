@@ -122,6 +122,9 @@ const Login = () => {
 
       navigate("/organiser/register");
     }
+    else{
+      navigate("/register");
+    }
     
   }
   return (

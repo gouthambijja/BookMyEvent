@@ -66,9 +66,6 @@ public partial class EventManagementSystemTeamZealContext : DbContext
 
             entity.ToTable("Administration");
 
-            entity.HasIndex(e => e.GoogleId, "Unique_Administration_Google_Id")
-                .IsUnique()
-                .HasFilter("([GoogleId] IS NOT NULL)");
 
             entity.Property(e => e.AdministratorId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.AdministratorAddress)
@@ -386,13 +383,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C7FDE0DA1");
 
-            entity.HasIndex(e => e.GoogleId, "UQ__Users__A6FBF2FBFCCB1DBA").IsUnique();
-
             entity.HasIndex(e => e.Email, "UQ__Users__A9D10534B14A2F5D").IsUnique();
 
-            entity.HasIndex(e => e.GoogleId, "Unique_Users_Google_Id")
-                .IsUnique()
-                .HasFilter("([GoogleId] IS NOT NULL)");
 
             entity.Property(e => e.UserId).HasDefaultValueSql("(newid())");
             entity.Property(e => e.CreatedOn)
@@ -448,7 +440,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserID_Users");
         });
-     
+
         modelBuilder.Entity<UserInputFormField>(entity =>
         {
             entity.HasKey(e => e.UserInputFormFieldid).HasName("PK__UserInpu__AC5D3622FE397643");

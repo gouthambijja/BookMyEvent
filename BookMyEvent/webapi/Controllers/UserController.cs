@@ -70,10 +70,30 @@ namespace BookMyEvent.WebApi.Controllers
 
         // POST api/<UserController>
         [HttpPost("AddUser")]
-        public async Task<IActionResult> Post([FromBody] BLUser User)
+        public async Task<IActionResult> Post()
         {
             try
             {
+                var image = Request.Form.Files[0];
+
+                var memoryStream = new MemoryStream();
+                await image.CopyToAsync(memoryStream);
+                var imageBody = memoryStream.ToArray();
+                var User = new BLUser()
+                {
+                    Name = Request.Form.Where(e => e.Key == "Name").First().Value,
+                    Email = Request.Form.Where(e => e.Key == "email").First().Value,
+                    PhoneNumber = Request.Form.Where(e => e.Key == "phoneNumber").First().Value,
+                    UserAddress = Request.Form.Where(e => e.Key == "userAddress").First().Value,
+                    CreatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "createdOn").First().Value),
+                    UpdatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "updatedOn").First().Value),
+                    ImageName = Request.Form.Where(e => e.Key == "imageName").First().Value,
+                    IsActive = bool.Parse(Request.Form.Where(e => e.Key == "isActive").First().Value),
+                    Password = Request.Form.Where(e => e.Key == "password").First().Value,
+                    ImgBody = imageBody
+
+                };
+
                 return Ok(await _userService.AddUser(User));
             }
             catch (Exception ex)

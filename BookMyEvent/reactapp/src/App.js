@@ -30,6 +30,7 @@ import store from "./App/store";
 
 // import EventDynamicForm from "./Components/EventDynamicForm";
 import Event from "./Components/Event";
+import RegisterUser from "./pages/RegisterUser";
 const App = () => {
   const profile = store.getState().profile.info;
 
@@ -48,7 +49,7 @@ const App = () => {
           <Route index element={<LandingPage />}></Route>
 
           <Route path="/login" element={<Login />} />
-          <Route path="/registerorganiser" element={<RegisterOrganiser/>} />
+          <Route path="/user/register" element={<RegisterUser/>} />
           <Route path="/orglist" element={<OrganisationsListPage/>} />
           {/* ------------------------------------------------------------------------- */}
 

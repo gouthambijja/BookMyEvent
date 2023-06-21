@@ -9,10 +9,19 @@ const getUserById = async (id) => {
         }
     );
     return response.data;
-
-
 }
+const registerUser = async (formData) => {
+    console.log(formData);
+    const response = await Axios.post('/api/User/AddUser',
+        formData,
+        {
+            'Content-Type': 'multipart/form-data',
+            withCredentials: true
+        }
 
+    )
+    return response.data;
+}
 const loginUser = async (formData) => {
     
     const response = await Axios.post('api/User/login',
@@ -25,5 +34,5 @@ const loginUser = async (formData) => {
     )
     return response.data;
 }
-
-export { loginUser, getUserById };
+export  {loginUser,getUserById}
+export default { registerUser };

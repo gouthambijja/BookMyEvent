@@ -16,9 +16,11 @@ namespace BookMyEvent.BLL.Services
     public class UserService : IUserService
     {
         public IUserRepository UserRepositoryDal { get; set; }
-        public UserService(IUserRepository userRepositoryDal)
+        private readonly IAccountCredentialsRepository _accountCredentialsRepository;
+        public UserService(IUserRepository userRepositoryDal, IAccountCredentialsRepository accountCredentialsRepository)
         {
             this.UserRepositoryDal = userRepositoryDal;
+            _accountCredentialsRepository = accountCredentialsRepository;
         }
         public async Task<(bool IsUserAdded, string Message)> AddUser(BLUser user)
         {
@@ -26,6 +28,8 @@ namespace BookMyEvent.BLL.Services
             {
                 if (user != null)
                 {
+                    var accountCred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = user.Password, UpdatedOn =DateTime.Now });
+                    user.AccountCredentialsId = accountCred.AccountCredentialsId;
                     var mapper = Automapper.InitializeAutomapper();
                     var User = mapper.Map<BLUser, User>(user);
                     return await UserRepositoryDal.AddUser(User);
