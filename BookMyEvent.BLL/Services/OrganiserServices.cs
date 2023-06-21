@@ -372,11 +372,11 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<bool> RejectOrganiser(Guid administratorId, Guid rejectedBy, string reason)
+        public async Task<bool> RejectOrganiser(Guid administratorId, Guid? rejectedBy)
         {
             try
             {
-                var result = await _administrationRepository.UpdateRejectedByAndIsActive(administratorId, rejectedBy, reason);
+                var result = await _administrationRepository.UpdateRejectedByAndIsActive(administratorId, rejectedBy);
                 if (result)
                 {
                     return true;

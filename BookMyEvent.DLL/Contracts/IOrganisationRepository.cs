@@ -64,6 +64,16 @@ namespace BookMyEvent.DLL.Contracts
         public Task<bool> IsOrgNameAvailable(string orgName);
 
         /// <summary>
+        /// Method to check if organisation by its name and get the organisation Id
+        /// </summary>
+        /// <param name="orgName"></param>
+        /// <returns>
+        /// (orgId):if Organisation Name is available
+        /// (null):if Organisation Name is NOT available
+        /// </returns>
+        public Task<Guid?> GetOrgIdByName(string orgName);
+
+        /// <summary>
         /// Method to toggle IsActive property of Organisation Model
         /// </summary>
         /// <param name="orgId"></param>

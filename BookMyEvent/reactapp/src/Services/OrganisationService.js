@@ -15,7 +15,13 @@ const getOrganisationById = async (id) => {
   });
   return response.data;
 };
-
+const getOrganisationByName = async (orgName) => {
+  const response = await Axios.get(`${apiBase}/getOrgIdByName/${orgName}`, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+  return response.data;
+};
 const IsOrgNameTaken = async (organisationName) => {
   const response = await Axios.get(
     `${apiBase}/CheckOrganisationName/${organisationName}`,
@@ -43,4 +49,4 @@ const deleteOrganisation = async (id) => {
   return response.data;
 };
 
-export default { getAllOrganisations, getOrganisationById, IsOrgNameTaken, updateOrganisation, deleteOrganisation };
+export default { getAllOrganisations, getOrganisationById,getOrganisationByName, IsOrgNameTaken, updateOrganisation, deleteOrganisation };

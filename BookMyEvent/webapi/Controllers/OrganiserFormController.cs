@@ -102,11 +102,7 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var result = await _organiserFormServices.GetAllOrganisationForms(OrgId);
-                if (result.Count != 0)
-                {
-                    return Ok(result);
-                }
-                return NotFound();
+                return Ok(result);
             }
             catch (Exception ex)
             {

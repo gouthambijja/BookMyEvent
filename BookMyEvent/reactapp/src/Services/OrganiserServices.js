@@ -97,7 +97,7 @@ const acceptOrganiser = async (administrator) => {
 };
 
 const rejectOrganiser = async (administrator) => {
-    const response = await Axios.put(`${apiBase}/${administrator.administratorId}/Reject`, administrator, {
+    const response = await Axios.put(`${apiBase}/${administrator.administratorId}/reject`, administrator, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
     });

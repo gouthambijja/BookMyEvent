@@ -19,7 +19,7 @@ export const fetchRequestedPeers = createAsyncThunk(
     "organisers/fetchRequestedPeers",
     async(organisationId, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getAllRequestedPeers(organisationId);
+            const response = await orgServices.getRequestedPeers(organisationId);
             return response;
         }
         catch (error) {
@@ -47,7 +47,10 @@ export const acceptOrganiser = createAsyncThunk(
     async (organiser, { rejectWithValue }) => {
         try {
             const response = await orgServices.acceptOrganiser(organiser);
-            return response;
+           if(response) {
+               return organiser;
+           }
+          
         }
         catch (error) {
             return rejectWithValue(error.response.data);
@@ -61,7 +64,7 @@ export const rejectOrganiser = createAsyncThunk(
     async (organiser, { rejectWithValue }) => {
         try {
             const response = await orgServices.rejectOrganiser(organiser);
-            return response;
+            return organiser;
         }
         catch (error) {
             return rejectWithValue(error.response.data);
@@ -150,9 +153,14 @@ const organisersSlice = createSlice({
         builder.addCase(acceptOrganiser.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(acceptOrganiser.fulfilled, (state, { payload }) => {
+        builder.addCase(acceptOrganiser.fulfilled, (state, action ) => {
             state.loading = false;
             state.error = false;
+            const index=state.requestedOrganisers.findIndex((e)=>e.administratorId===action.payload.administratorId);
+            if(index !== -1){
+                state.requestedOrganisers.splice(index,1);
+                state.myOrganisationOrganisers.push(action.payload);
+            }
             //need to write the code to remove the organiser from the requested table and move it to organisation list
             state.message = "Organiser accepted successfully";
         });
@@ -164,10 +172,13 @@ const organisersSlice = createSlice({
         builder.addCase(rejectOrganiser.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(rejectOrganiser.fulfilled, (state, { payload }) => {
+        builder.addCase(rejectOrganiser.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
-            //need to write the code to remove the organiser from the requested
+            const index=state.requestedOrganisers.findIndex((e)=>e.administratorId===action.payload.administratorId);
+            if(index !== -1){
+                state.requestedOrganisers.splice(index,1);
+            }
             state.message = "Organiser rejected successfully";
         });
         builder.addCase(rejectOrganiser.rejected, (state, { payload }) => {

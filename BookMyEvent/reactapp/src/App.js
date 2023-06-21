@@ -41,7 +41,7 @@ const App = () => {
           element={<Layout />}
           //   action={actions}
 
-          errorElement={<Error />}
+          // errorElement={<Error />}
 
           loader={storeLoader.categoryLoader}
         >
@@ -59,8 +59,8 @@ const App = () => {
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth allowedroles={["Owner", "Peer","Secondary_Owner"]} />}>
                 <Route index element={<OrganiserHomePage />}></Route>
-                {/* <Route path="createNewEventRegistrationForm" element={<EventDynamicForm/>} loader={storeLoader.FormFieldsLoader}/> */}
-                <Route path="AddEvent" element={<AddEvent />} loader={storeLoader.OrganisationFormLoaders} ></Route>
+                <Route path="createNewEventRegistrationForm" element={<EventDynamicForm/>} loader={storeLoader.FormFieldsLoader}/>
+                <Route path="AddEvent" element={<AddEvent />} ></Route>
                 <Route path="OrganisationTree/:id" element={<OrganisationTree />} ></Route>
                 <Route path="PeerRequests" element={<PeerRequest/>}></Route>
                 <Route path="addSecondaryOwner" element={<AddSecondary />} />

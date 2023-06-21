@@ -80,7 +80,7 @@ const getAllOrganizationForms = async (orgId) => {
     const response = await Axios.get(
       `${apiBase}/OrganizationForms?OrgId=${orgId}`
     );
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw new Error(error.response.data);
   }

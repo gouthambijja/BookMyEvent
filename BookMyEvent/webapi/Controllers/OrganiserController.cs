@@ -210,14 +210,14 @@ namespace BookMyEvent.WebApi.Controllers
             else return BadRequest("Accept failed");
         }
 
-        //[HttpPut("{id}/Reject")]
-        //public async Task<IActionResult> RejectOrganiser(BLAdministrator administrator)
-        //{
-        //    var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy, administrator.Reason);
-        //    if (result)
-        //        return Ok("Rejected Successfully");
-        //    else return BadRequest("Reject failed");
-        //}
+        [HttpPut("{id}/reject")]
+        public async Task<IActionResult> rejectorganiser(BLAdministrator? administrator)
+        {
+            var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy);
+            if (result)
+                return Ok("rejected successfully");
+            else return BadRequest("reject failed");
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrganiser(BLAdministrator administrator)

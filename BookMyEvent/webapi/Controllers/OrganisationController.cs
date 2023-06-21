@@ -1,6 +1,7 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyEvent.WebApi.Controllers
@@ -44,7 +45,38 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> CheckOrganisationName(string orgName)
         {
             var result = await _organisationServices.IsOrganisationNameTaken(orgName);
-            return Ok(new {IsTaken = result});
+            return Ok(result);
+        }
+
+        [HttpGet("getOrgIdByName/{orgName}")]
+        public async Task<IActionResult> GetOrgIdByName(string orgName)
+        {
+            try
+            {
+                var orgId = await _organisationServices.GetOrgIdByName(orgName);
+                if(orgId is not null)
+                {
+                    return Ok(new
+                    {
+                        orgId=orgId,
+                        isExists=true
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        orgId = "",
+                        isExists = false
+
+                    });
+                }
+               
+            }
+            catch
+            {
+                return BadRequest("error");
+            }
         }
 
         [HttpDelete("{id}")]

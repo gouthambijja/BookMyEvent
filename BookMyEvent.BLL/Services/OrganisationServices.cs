@@ -83,6 +83,18 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
+        public async Task<Guid?> GetOrgIdByName(string name)
+        {
+            try
+            {
+                Guid? orgId = await _organisationRepository.GetOrgIdByName(name);
+                return orgId;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<bool> IsOrganisationNameTaken(string orgName)
         {
             try

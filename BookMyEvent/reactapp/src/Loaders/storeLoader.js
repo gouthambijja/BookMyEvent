@@ -23,10 +23,11 @@ import { getAdminByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
             return null;
         }
     }
+    let pageNumber = 1;
     const OrganisationsLoader=async() =>{
       if(store.getState().organisations.organisations.length>0)return null;
       else{
-        await store.dispatch(fetchOrganisations()).unwrap();
+        await store.dispatch(fetchOrganisations({pageNumber:pageNumber,pageSize:10})).unwrap();
         return null;
       }
     }

@@ -26,6 +26,16 @@ namespace BookMyEvent.BLL.Contracts
         /// </returns>
         Task<BLOrganisation> GetOrganisationById(Guid organisationId);
 
+
+        /// <summary>
+        /// Method to get Organisation Id by its name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>
+        /// (orgId):if Organisation Name is available
+        /// (null):if Organisation Name is NOT available
+        /// </returns>
+        Task<Guid?> GetOrgIdByName(string name);
         /// <summary>
         /// An asynchronous method that creates an organisation
         /// </summary>

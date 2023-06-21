@@ -7,6 +7,8 @@ import { Box, Modal } from "@mui/material";
 import org from "../Services/OrganisationService";
 import { width } from '@mui/system';
 import organiserServices from '../Services/OrganiserServices';
+import organisationServices from '../Services/OrganisationService';
+import { useNavigate } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,11 +35,12 @@ const RegisterOrganiser = () => {
     const [image, setImage] = useState(null);
     const [passwordError, setPasswordError] = useState('');
     const [orgNameError, setOrgNameError] = useState('');
+    const [peerOrgNameError, setPeerOrgNameError] = useState('');
     const [emailError, setEmailError] = useState('');
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [options, setOptions] = useState(null);
-    const [organisations, setOrganisations] = useState([]);
+    const navigate = useNavigate();
+     
     const [selectedRoleValue, setSelectedRoleValue] = useState('dummy');
     const [formData, setFormData] = useState({
         AdministratorName: '',
@@ -87,9 +90,22 @@ const RegisterOrganiser = () => {
 
 
 
-    const handleOptionChange = (event, value) => {
-        setSelectedOption(value);
-        console.log(value.value);
+    const handleOptionChange = async (event, value) => {
+        if (event.target?.value != "") {
+            const result = await organisationServices.getOrganisationByName(event.target.value);
+            if (result.isExists) {
+                console.log(result.orgId)
+                setPeerOrgNameError("");
+                setSelectedOption(result.orgId);
+            }
+            else {
+                setPeerOrgNameError("Organisation does not exists")
+            }
+        }
+        else {
+            setPeerOrgNameError("");
+        }
+        console.log(selectedOption);
     };
     const handleInputChange = (e) => {
         setFormData((prevState) => ({
@@ -97,18 +113,18 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
     };
-    const handleEmailChange=async(e)=>{
+    const handleEmailChange = async (e) => {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }));
-        if(e.target.value.includes('@')){
+        if (e.target.value.includes('@')) {
 
-            const response=await organiserServices.checkEmail(e.target.value);
-            if(response.isEmailTaken){
+            const response = await organiserServices.checkEmail(e.target.value);
+            if (response.isEmailTaken) {
                 setEmailError("Email already exists");
             }
-            else{
+            else {
                 setEmailError("");
             }
         }
@@ -119,31 +135,25 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
     };
-    const handleOrgNameChange = (e) => {
-        const isNameInOrganisation = Object.values(options).some(
-            (org) => org.organisationName === e.target.value
-        );
-        if (isNameInOrganisation) {
-            setOrgNameError("Organisation already exixts")
-        }
-        else {
-            setOrgNameError('')
-        }
+    const handleOrgNameChange = async (e) => {
         setOrgFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }));
+        if (e.target.value != "") {
+            const isNameInOrganisation = await organisationServices.IsOrgNameTaken(e.target.value);
+            if (isNameInOrganisation) {
+                setOrgNameError("Organisation already exixts")
+            }
+            else {
+
+                setOrgNameError('')
+            }
+        }
     }
     const handleRoleChange = (event) => {
         setSelectedRoleValue(event.target.value);
-        options.forEach(e => {
-            const newItem = { label: e.organisationName, value: e.organisationId, id: e.OrganisationId };
-            setOrganisations((prevState) => [
-                ...prevState,
-                newItem
-            ]);
 
-        });
     };
 
 
@@ -153,6 +163,7 @@ const RegisterOrganiser = () => {
         console.log("before post call " + formData)
         const _formData = new FormData();
         if (selectedRoleValue == "peer") {
+            
             _formData.append("administratorName", formData.AdministratorName);
             _formData.append("administratorAddress", formData.AdministratorAddress);
             _formData.append("email", formData.Email);
@@ -162,12 +173,12 @@ const RegisterOrganiser = () => {
             _formData.append("roleId", 4);
             _formData.append("isAccepted", false);
             _formData.append("imageName", formData.ImageName);
-            _formData.append("organisationId", selectedOption.value);
+            _formData.append("organisationId", selectedOption);
             _formData.append("isActive", true);
             _formData.append("password", formData.Password);
             _formData.append("imgBody", formData.ImgBody);
             console.log(_formData);
-            const data = await organiserServices.addPeer(_formData);
+            const data = await organiserServices.registerPeer(_formData);
             console.log("after call " + data)
         }
         else {
@@ -211,21 +222,22 @@ const RegisterOrganiser = () => {
             IsAccepted: true,
             ImageName: "profile",
             ImgBody: null,
-           
-            
+
+
             IsActive: true,
             Password: "",
         })
+        navigate("/organiser/login");
     };
-    useEffect(() => {
-        const temp = async () => {
-            
-            const options = await org.getAllOrganisations();
-            setOptions(options)
-            console.log(options);
-        }
-        temp();
-    }, [])
+    // useEffect(() => {
+    //     const temp = async () => {
+
+    //         const options = await org.getAllOrganisations();
+    //         setOptions(options)
+    //         console.log(options);
+    //     }
+    //     temp();
+    // }, [])
     return (
         <>
             <Container component="main" maxWidth="xl" className={classes.container}>
@@ -391,8 +403,8 @@ const RegisterOrganiser = () => {
                                     fullWidth
                                 />
                             </FormControl>
-                        </>) : (selectedRoleValue == "peer" ? (
-                            <Autocomplete
+                        </>) : (selectedRoleValue == "peer" ? (<>
+                            {/* <Autocomplete
                                 options={organisations}
                                 getOptionLabel={(option) => option.label}
                                 renderInput={(params) => (
@@ -405,7 +417,25 @@ const RegisterOrganiser = () => {
                                 disableClearable
                                 noOptionsText="No options found"
                                 style={{ width: '300px' }}
-                            />
+                            /> */}
+                            <FormControl variant="outlined" margin="normal" fullWidth>
+
+                                <TextField
+                                    label="Enter your Organisation name"
+                                    id="Name"
+                                    name="Organisation"
+                                    variant="outlined"
+
+                                    onChange={handleOptionChange}
+                                    error={peerOrgNameError !== ''}
+                                    helperText={peerOrgNameError}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                />
+                            </FormControl>
+
+                        </>
 
                         ) : <></>
                         )}

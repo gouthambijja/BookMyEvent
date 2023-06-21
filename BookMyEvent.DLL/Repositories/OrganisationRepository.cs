@@ -145,6 +145,25 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
+        public async Task<Guid?> GetOrgIdByName(string orgName)
+        {
+            try
+            {
+                Organisation? organisation = await _dbcontext.Organisations.Where(o => o.OrganisationName == orgName).FirstOrDefaultAsync();
+                if (organisation is null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return organisation.OrganisationId;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<bool> ToggleIsActive(Guid orgId)
         {
             try

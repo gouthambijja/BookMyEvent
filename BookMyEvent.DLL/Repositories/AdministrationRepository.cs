@@ -395,6 +395,7 @@ namespace BookMyEvent.DLL.Repositories
                 {
                     administrator.AcceptedBy = acceptedByUserId;
                     administrator.IsAccepted = true;
+                    administrator.UpdatedOn=DateTime.Now;
                     await _dbcontext.SaveChangesAsync();
                     return true;
                 }
@@ -410,7 +411,7 @@ namespace BookMyEvent.DLL.Repositories
         }
 
 
-        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid rejectedByUserId, string reason)
+        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId)
         {
             try
             {
@@ -418,7 +419,7 @@ namespace BookMyEvent.DLL.Repositories
                 if (administrator != null)
                 {
 
-                    administrator.AcceptedBy = rejectedByUserId;
+                    administrator.RejectedBy = rejectedByUserId;
                     //administrator.RejectedReason = reason;
                     administrator.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
