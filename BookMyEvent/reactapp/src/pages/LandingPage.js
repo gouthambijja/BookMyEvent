@@ -18,16 +18,20 @@ import store from "../App/store";
 import InfiniteScrollUserEventsLandingPage from "../Components/InfiniteScrollUserEventLandingPage";
 
 const useStyles = makeStyles({
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   button: {
-    margin: "5rem",
-    padding: "0.75rem 1.5rem",
-    borderRadius: "4px",
-    fontWeight: "bold",
-    fontSize: "1rem",
-    backgroundColor: "#2196f3",
-    color: "#ffffff",
-    "&:hover": {
-      backgroundColor: "#1976d2",
+    margin: '5rem',
+    padding: '0.75rem 1.5rem',
+    borderRadius: '4px',
+    fontWeight: 'bold',
+    fontSize: '1rem',
+    backgroundColor: '#2196f3',
+    color: '#ffffff',
+    '&:hover': {
+      backgroundColor: '#1976d2',
     },
   },
 });

@@ -11,10 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { deleteEvent } from '../Features/ReducerSlices/EventsSlice';
 import ReusableAlert from './ReusableAlert';
-import { Link ,useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import store from '../App/store';
 const OrganiserEventCard = ({ event }) => {
-        const state = store.getState();
+    const state = store.getState();
     const [openDialog, setOpenDialog] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
