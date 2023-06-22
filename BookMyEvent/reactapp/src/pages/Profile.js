@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 const ProfilePage = () => {
   // Sample data
   const profile = useSelector((store) => store.profile.info);
+  const auth= useSelector(store => store.auth);
     console.log(profile);
   return (
     <div>
@@ -30,12 +31,12 @@ const ProfilePage = () => {
           style={{ display: "flex", flexDirection: "column", padding: "20px" ,flexBasis:'70%'}}
         >
           <div style={{ minWidth:'350px',fontSize: "2rem", fontWeight: "bold",boxShadow:'0px 0px 10px 	#D0D0D0',padding:'15px' }}>
-            {profile.administratorName}
+            {auth.role=="User"?profile.name:profile.administratorName}
           </div>
           <div style={{ marginTop: "10px", display: "flex" ,flexWrap:'wrap',justifyContent:'space-between',boxShadow:'0px 0px 10px 	#D0D0D0',padding:'15px'}}>
             <div >
               <LocationCity />
-              <span >{profile.administratorAddress}</span>
+              <span >{auth.role=="User"?profile.userAddress:profile.administratorAddress}</span>
             </div>
             <div>
                 <Mail/>

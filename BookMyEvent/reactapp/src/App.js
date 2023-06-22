@@ -33,6 +33,7 @@ import RegisterUser from "./pages/RegisterUser";
 import OwnerRequests from "./pages/OwnerRequests";
 import RegisterEvent from "./Components/RegisterEvent";
 import store from "./App/store";
+import ProfilePage from "./pages/Profile";
 
 const App = () => {
     const profile = store.getState().profile.info;
@@ -50,6 +51,7 @@ const App = () => {
                     <Route element={<PersistLogin />}>
                         <Route element={<RequireAuth allowedroles={["User"]} />}>
                             <Route path="/registerEvent/:id" element={<RegisterEvent />}></Route>
+                            <Route path="profile" element={<Profile />}/>
                         </Route>
                     </Route>
                     {/* ------------------------------------------------------------------------- */}
