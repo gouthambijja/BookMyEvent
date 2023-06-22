@@ -5,38 +5,45 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const EventCard = ({event}) =>  {
+    const categories = useSelector(store => store.category);
     useEffect(()=>{
-
-    })
+    },[])
   return (
-    <Card sx={{width:'300px',boxShadow:"0px 0px 9px #d0d0d0"} }>
+    <Card className="card" sx={{width:'300px',boxShadow:"0px 0px 9px #d0d0d0"} }>
       <CardActionArea>
         <CardMedia
           component="img"
           sx={{width:'100%',aspectRatio:1/1}}
-          image="https://images.pexels.com/photos/15193545/pexels-photo-15193545/free-photo-of-ballons-in-cappadocia.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          image={`data:image/jpeg;base64,${event.profileImgBody}`}
           alt="green iguana"
         />
-        <CardContent>
-          <Typography variant="h5" component="div">
-          Shairngan
+        <CardContent >
+          <Typography variant="h4" component="div">
+          {event.eventName}
+        </Typography>
+          <Typography variant="h6" component="div">
+          {categories.categories[Number(event.categoryId)]?.categoryName}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
-          Date: [DATE] | Time: [TIME]
+          {event.startDate?.split("T")[0]} to {event.endDate.split("T")[0]}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
-          Location: [LOCATION]
+          {event.location}
+        </Typography>
+        <Typography variant="subtitle1" color="text.secondary">
+         {event.city},{event.state}, {event.country}
         </Typography>
         <Typography variant="body1" color="text.primary">
-          [EVENT DESCRIPTION TEXT]
+          {event.eventStartingPrice == 0? "Free":`Tickets starts from ${event.eventStartingPrice}` }
         </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions sx={{display:'flex',justifyContent:'right'}}>
         <Button size="small" color="primary">
-          Share
+          Register
         </Button>
       </CardActions>
     </Card>

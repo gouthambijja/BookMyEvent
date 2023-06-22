@@ -55,7 +55,7 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("{Email}")]
+        [HttpGet("user/{Email}")]
         public async Task<IActionResult> GetUserByEmail(string Email)
         {
             try

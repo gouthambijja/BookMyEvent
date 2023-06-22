@@ -1,4 +1,4 @@
-﻿using BookMyEvent.DLL.Contracts;
+﻿    using BookMyEvent.DLL.Contracts;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -102,7 +102,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                return await _db.Users.FindAsync(Id);
+                return await _db.Users.Where(e => e.UserId == Id).FirstAsync();
             }
             catch (Exception ex)
             {
@@ -182,10 +182,10 @@ namespace BookMyEvent.DLL.Repositories
         }
         public async Task<Guid> IsUserExists(string Email, string Password)
         {
-            var user = await _db.Users.FindAsync(Email);
+            var user = await _db.Users.Where(e =>e.Email == Email).FirstAsync();
             if (user is not null)
             {
-                var password = await _db.AccountCredentials.FindAsync(Password);
+                var password = await _db.AccountCredentials.Where(e => e.Password == Password).FirstAsync();
                 if (password != null)
                 {
                     return user.UserId;

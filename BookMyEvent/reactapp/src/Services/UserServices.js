@@ -2,7 +2,7 @@ import axios from "axios";
 import Axios from "../Api/Axios";
 
 const getUserById = async (id) => {
-    const response = await Axios.get(`api/User/?id=${id}`,
+    const response = await Axios.get(`api/User/${id}`,
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true

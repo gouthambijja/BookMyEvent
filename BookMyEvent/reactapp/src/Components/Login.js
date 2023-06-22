@@ -119,8 +119,9 @@ const Login = () => {
   };
   const handleRegister=()=>{
     if(role=="Organiser"){
-
       navigate("/organiser/register");
+    }else if(role == "User"){
+      navigate("/Register");
     }
     else{
       navigate("/register");

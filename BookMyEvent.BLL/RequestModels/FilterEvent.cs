@@ -11,7 +11,6 @@ namespace BookMyEvent.BLL.RequestModels
         public string? location { get; set; }
         public bool isFree { get; set; }
         public List<int>? categoryIds { get; set; }
-        public string? city { get; set; }
         public int pageNumber  {get;set;}
         public int pageSize { get; set; }
     }

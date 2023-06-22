@@ -1,27 +1,33 @@
-import Button from '@mui/material/Button';
-import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from "@mui/material/Button";
+import React from "react";
+import { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
-import EventCard from '../Components/EventCard';
-
-
-
+import EventCard from "../Components/EventCard";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  IncrementHomePageNumber,
+  SetPageNumber,
+  clearHomeEvents,
+  fetchEvents,
+  setLoading,
+} from "../Features/ReducerSlices/HomeEventsSlice";
+import EventsFilter from "../Components/EventsFilter";
+import store from "../App/store";
+import InfiniteScrollUserEventsLandingPage from "../Components/InfiniteScrollUserEventLandingPage";
 
 const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   button: {
-    margin: '5rem',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '4px',
-    fontWeight: 'bold',
-    fontSize: '1rem',
-    backgroundColor: '#2196f3',
-    color: '#ffffff',
-    '&:hover': {
-      backgroundColor: '#1976d2',
+    margin: "5rem",
+    padding: "0.75rem 1.5rem",
+    borderRadius: "4px",
+    fontWeight: "bold",
+    fontSize: "1rem",
+    backgroundColor: "#2196f3",
+    color: "#ffffff",
+    "&:hover": {
+      backgroundColor: "#1976d2",
     },
   },
 });
@@ -30,44 +36,30 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const classes = useStyles();
-  const handleOrganiserLogin=()=>{
-    navigate("organiser/login");
-  }
-  const handleAdminLogin=()=>{
-    navigate("admin/login");
-  }
-  return (<>
-    <div className={classes.container} style={{display:'flex',justifyContent:"center",flexWrap:'wrap',gap:'20px',padding:'40px'}}>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/><EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/><EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/><EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/><EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/>
-    <EventCard/>
-      {/* <Button variant="contained" className={classes.button} onClick={handleOrganiserLogin}>
-        Login as an Organiser
-      </Button>
-      <Button variant="contained" className={classes.button} onClick={handleAdminLogin}>
-        Login as an Admin
-      </Button> */}
-    </div>
-    </>
-     
-  )
-}
+  const dispatch = useDispatch();
 
-export default LandingPage
+  const HomeEventPageNumber = useSelector((store) => store.homeEvents.page);
+  const end = useSelector(store => store.homeEvents.end)
+  const handleFilter = async (filters) => {
+    filters = {
+      ...filters,
+      pageNumber: 1,
+    };
+    dispatch(clearHomeEvents());
+    dispatch(SetPageNumber(2));
+    await dispatch(fetchEvents(filters)).unwrap();
+  };
+
+  return (
+    <>
+      <div className={classes.container}>
+        <EventsFilter onFilter={handleFilter} />
+        <InfiniteScrollUserEventsLandingPage />
+        {!end?<div style={{padding:'40px',textAlign:'center',fontStyle:'italic'}}><span>Loading...</span></div>
+        :<div style={{fontStyle:'italic',padding:'40px',textAlign:'center'}}>New Events Coming soon!!</div>}
+      </div>
+    </>
+  );
+};
+
+export default LandingPage;

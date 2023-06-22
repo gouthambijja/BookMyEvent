@@ -351,11 +351,11 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<List<BLEvent>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize, string city)
+        public async Task<List<BLEvent>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize)
         {
             try
             {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber,pageSize,city));
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber,pageSize));
             }
             catch(Exception ex)
             {

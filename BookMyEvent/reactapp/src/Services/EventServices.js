@@ -82,11 +82,12 @@ const getAllCreatedEventsByOrganiser = async (organiserId) => {
     return response.data;
 };
 
-const getFilteredEvents = async (filters) => {
-    const response = await Axios.post(`${apiBase}/GetFilteredEvents`, filters, {
+const getFilteredEvents = async (filterEvent) => {
+    const response = await Axios.post(`${apiBase}/GetFilteredEvents`, {...filterEvent}, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
+    console.log(response.data);
     return response.data;
 };
 

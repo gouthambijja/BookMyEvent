@@ -6,9 +6,9 @@ export const fetchEvents = createAsyncThunk(
     async (filters, { rejectWithValue }) => {
         try {
             const response = await eventsServices.getFilteredEvents(filters);
-            return response.data;
+            return response;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(error.response);
         }
     }
 );
@@ -20,19 +20,27 @@ const homeEventsSlice = createSlice({
         page: 1,
         loading: false,
         error: false,
-        message: ""
+        message: "",
+        end:false
     },
     reducers: {
         clearHomeEvents: (state) => {
             state.events = [];
             state.loading = false;
-            state.page = 1;
             state.error = false;
             state.message = "";
+            state.end =false;
         },
         clearErrorMsg: (state) => {
             state.error = false;
             state.message = "";
+        },
+        IncrementHomePageNumber:(state,action) =>{
+            state.page = state.page + 1;
+            console.log(state.page);
+        },
+        SetPageNumber:(state,action) =>{
+            state.page = action.payload;
         }
 
     },
@@ -41,10 +49,10 @@ const homeEventsSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchEvents.fulfilled, (state, action) => {
+            if(action.payload.length == 0) state.end = true;
             state.loading = false;
-            state.events = action.payload;
+            state.events = [...state.events,...action.payload];
             state.error = false;
-            state.page = state.page++;
             state.message = "fetched successfully";
         });
         builder.addCase(fetchEvents.rejected, (state, action) => {
@@ -56,4 +64,4 @@ const homeEventsSlice = createSlice({
 });
 
 export default homeEventsSlice.reducer;
-export const { clearHomeEvents, clearErrorMsg } = homeEventsSlice.actions;
+export const {SetPageNumber, clearHomeEvents,IncrementHomePageNumber, clearErrorMsg } = homeEventsSlice.actions;

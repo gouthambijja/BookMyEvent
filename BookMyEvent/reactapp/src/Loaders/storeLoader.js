@@ -8,6 +8,7 @@ import { fetchOrganisationOrganisers } from "../Features/ReducerSlices/Organiser
 
 import {fetchOrganiserForms } from "../Features/ReducerSlices/OrganiserFormsSlice"
 import { getAdminByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
+import { IncrementHomePageNumber, fetchEvents } from "../Features/ReducerSlices/HomeEventsSlice";
     const categoryLoader = async () => {
       if (store.getState().category.categories.length > 0) return null;
       else{
@@ -40,5 +41,13 @@ import { getAdminByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
         return null;
       }
     }
+    const LandingPageEventsLoader = async() =>{
+      if(!store.getState().homeEvents.end && store.getState().homeEvents.events.length ==0 && store.getState().homeEvents.page == 1){
+        store.dispatch(IncrementHomePageNumber());
+        console.log("hey");
+        await store.dispatch(fetchEvents({pageNumber:1,})).unwrap();
+      }
+      return null;
+    }
 
-export default {categoryLoader,FormFieldsLoader,OrganisationsLoader,OrganisationTreeLoader};
+export default {LandingPageEventsLoader,categoryLoader,FormFieldsLoader,OrganisationsLoader,OrganisationTreeLoader};
