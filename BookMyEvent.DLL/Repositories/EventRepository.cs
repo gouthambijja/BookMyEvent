@@ -468,5 +468,30 @@ namespace BookMyEvent.DLL.Repositories
                 throw new Exception("Failed to fetch filtered events from the database.", ex);
             }
         }
+
+        public async Task<(bool isActiveUpdated, string message)> UpdateIsActive(Guid eventId, Guid updatedBy, DateTime updatedOn)
+        {
+            try
+            {
+                var eventToUpdate = await _db.Events.FindAsync(eventId);
+                if (eventToUpdate != null)
+                {
+                    eventToUpdate.IsActive = false;
+                    eventToUpdate.UpdatedBy = updatedBy;
+                    eventToUpdate.UpdatedOn = updatedOn;
+                    await _db.SaveChangesAsync();
+                    await _db.Entry(eventToUpdate).ReloadAsync();
+                    return (true, "Event Deleted Successfully");
+                }
+                else
+                {
+                    return (false, "Event Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, "Event Not Updated");
+            }
+        }
     }
 }

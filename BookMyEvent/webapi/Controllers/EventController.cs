@@ -1,4 +1,4 @@
-﻿    using BookMyEvent.BLL.Contracts;
+﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using Microsoft.AspNetCore.Http;
@@ -69,16 +69,16 @@ namespace BookMyEvent.WebApi.Controllers
                 bLEvent.FormId = Guid.Parse(Request.Form.First(e => e.Key == "FormId").Value);
                 bLEvent.RegistrationStatusId = byte.Parse(Request.Form.First(e => e.Key == "RegistrationStatusId").Value);
                 bLEvent.CreatedBy = Guid.Parse(Request.Form.First(e => e.Key == "CreatedBy").Value);
-                if(Request.Form.Where(e => e.Key == "AcceptedBy").ToList().Count() > 0)
+                if (Request.Form.Where(e => e.Key == "AcceptedBy").ToList().Count() > 0)
                 {
                     bLEvent.AcceptedBy = Guid.Parse(Request.Form.First(e => e.Key == "AcceptedBy").Value);
                 }
                 bLEventImages.RemoveAt(0);
-                (BLEvent Event, string message) AddNewEvent = await _eventServices.Add(bLEvent,bLEventImages);
-                if(AddNewEvent.Event != null) { return Ok(AddNewEvent.Event); }
+                (BLEvent Event, string message) AddNewEvent = await _eventServices.Add(bLEvent, bLEventImages);
+                if (AddNewEvent.Event != null) { return Ok(AddNewEvent.Event); }
                 return BadRequest(AddNewEvent.message);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -89,10 +89,10 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 BLEvent _event = await _eventServices.GetEventById(eventId);
-                if( _event == null ) { return BadRequest("error in BL"); }
+                if (_event == null) { return BadRequest("error in BL"); }
                 return Ok(_event);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -104,10 +104,10 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 (BLEvent _event, string message) updatedEvent = await _eventServices.UpdateEvent(newEvent);
-                if(updatedEvent._event==null ) { return BadRequest(updatedEvent.message); }
+                if (updatedEvent._event == null) { return BadRequest(updatedEvent.message); }
                 return Ok(updatedEvent._event);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -222,11 +222,11 @@ namespace BookMyEvent.WebApi.Controllers
         }
 
         [HttpGet("GetAllActivePublishedEventsByStartDateAndEndDate")]
-        public async Task<IActionResult> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate,DateTime endDate)
+        public async Task<IActionResult> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
         {
             try
             {
-                List<BLEvent> AllEvents = await _eventServices.GetAllActivePublishedEventsByStartDateAndEndDate(startDate,endDate);
+                List<BLEvent> AllEvents = await _eventServices.GetAllActivePublishedEventsByStartDateAndEndDate(startDate, endDate);
                 if (AllEvents == null) { return BadRequest("error in BL"); }
                 return Ok(AllEvents);
             }
@@ -347,7 +347,7 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(eventId,registrationStatusId,updatedBy,updatedAt);
+                BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(eventId, registrationStatusId, updatedBy, updatedAt);
                 if (Events == null) { return BadRequest("error in BL"); }
                 return Ok(Events);
             }
@@ -362,7 +362,7 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                BLEvent Events = await _eventServices.UpdateIsCancelledEvent(eventId,  updatedBy, updatedAt);
+                BLEvent Events = await _eventServices.UpdateIsCancelledEvent(eventId, updatedBy, updatedAt);
                 if (Events == null) { return BadRequest("error in BL"); }
                 return Ok(Events);
             }
@@ -407,7 +407,7 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                BLEvent Events = await _eventServices.UpdateRejectedBy(eventId,rejectedBy, updatedBy, updatedAt);
+                BLEvent Events = await _eventServices.UpdateRejectedBy(eventId, rejectedBy, updatedBy, updatedAt);
                 if (Events == null) { return BadRequest("error in BL"); }
                 return Ok(Events);
             }
@@ -454,14 +454,36 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 // Set default values if parameters are not provided
                 filterEvent.startDate = filterEvent.startDate == default ? DateTime.Now.AddYears(-20) : filterEvent.startDate;
-                filterEvent.endDate =filterEvent.endDate == default ? DateTime.Now.AddYears(20) : filterEvent.endDate;
+                filterEvent.endDate = filterEvent.endDate == default ? DateTime.Now.AddYears(20) : filterEvent.endDate;
                 filterEvent.startPrice = filterEvent.startPrice == default ? 0 : filterEvent.startPrice;
                 filterEvent.endPrice = filterEvent.endPrice == default ? 214748367 : filterEvent.endPrice;
                 filterEvent.city = filterEvent.city ?? string.Empty;
-                filterEvent.location= filterEvent.location ?? string.Empty;
+                filterEvent.location = filterEvent.location ?? string.Empty;
                 filterEvent.categoryIds = filterEvent.categoryIds ?? new List<int>();
-                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize,filterEvent.city);
+                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize, filterEvent.city);
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //write the http request to soft delete an event that needs event id and updated by and updated at
+        [HttpDelete("{eventId}/deletedBy/{orgnaniserId}")]
+        public async Task<IActionResult> DeleteEvent(Guid eventId, Guid orgnaniserId)
+        {
+            try
+            {
+                var result = await _eventServices.SoftDelete(eventId, orgnaniserId, DateTime.Now);
+                if (result.isActiveUpdated)
+                {
+                    return Ok(result.message);
+                }
+                else
+                {
+                    return BadRequest(result.message);
+                }
             }
             catch (Exception ex)
             {

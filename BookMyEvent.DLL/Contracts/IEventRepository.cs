@@ -325,6 +325,34 @@ namespace BookMyEvent.DLL.Contracts
         /// </returns>
         Task<List<Event>> GetAllCreatedEventsByOrganiser(Guid organiserId);
 
+        /// <summary>
+        /// An asynchronous mthod to get list of all the events according to the filters
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="startPrice"></param>
+        /// <param name="endPrice"></param>
+        /// <param name="location"></param>
+        /// <param name="isFree"></param>
+        /// <param name="categoryIds"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="city"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
         Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize, string city);
+
+        /// <summary>
+        /// An asynchronous method to update the IsActive status of an event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="updatedBy"></param>
+        /// <param name="updatedOn"></param>
+        /// <returns>
+        /// Returns a tuple of bool to say if event is active is updated succeefully or not and string
+        /// </returns>
+        Task<(bool isActiveUpdated, string message)> UpdateIsActive(Guid eventId, Guid updatedBy, DateTime updatedOn);
+
     }
 }

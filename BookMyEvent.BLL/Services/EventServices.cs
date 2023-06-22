@@ -362,5 +362,17 @@ namespace BookMyEvent.BLL.Services
                 throw new Exception("Failed to fetch filtered events.", ex);
             }
         }
+
+        public async Task<(bool isActiveUpdated, string message)> SoftDelete(Guid eventId, Guid updatedBy, DateTime updatedOn)
+        {
+            try
+            {
+                return await eventRepository.UpdateIsActive(eventId, updatedBy, updatedOn);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to delete event.", ex);
+            }
+        }
     }
 }

@@ -118,9 +118,23 @@ export const cancelEvent = createAsyncThunk(
     }
 );
 
+export const deleteEvent = createAsyncThunk(
+    "events/deleteEvent",
+    async (details, { rejectWithValue }) => {
+        try {
+            const response = await eventServices.deleteEvent(details.eventId, details.updatedBy);
+            return response;
+        }
+        catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 
-const eventsSlice = createSlice({
+
+
+let eventsSlice = createSlice({
     name: "events",
     initialState: {
         myEvents: [],
@@ -200,7 +214,7 @@ const eventsSlice = createSlice({
             state.message = "";
         });
         builder.addCase(updateEventRegistrationStatus.fulfilled, (state, action) => {
-            const index = state.myEvents.findIndex((event) => event._id === action.payload._id);
+            let index = state.myEvents.findIndex((event) => event._id === action.payload._id);
             if (index !== -1) {
                 state.myEvents[index] = action.payload;
             };
@@ -222,7 +236,7 @@ const eventsSlice = createSlice({
             state.message = "";
         });
         builder.addCase(updateEvent.fulfilled, (state, action) => {
-            const index = state.myEvents.findIndex((event) => event._id === action.payload._id);
+            let index = state.myEvents.findIndex((event) => event._id === action.payload._id);
             if (index !== -1) {
                 state.myEvents[index] = action.payload;
             };
@@ -244,7 +258,7 @@ const eventsSlice = createSlice({
             state.message = "";
         });
         builder.addCase(acceptEvent.fulfilled, (state, action) => {
-            const index = state.eventRequests.findIndex((event) => event._id === action.payload._id);
+            let index = state.eventRequests.findIndex((event) => event._id === action.payload._id);
             if (index !== -1) {
                 state.eventRequests[index] = action.payload;
             };
@@ -266,7 +280,7 @@ const eventsSlice = createSlice({
             state.message = "";
         });
         builder.addCase(rejectEvent.fulfilled, (state, action) => {
-            const index = state.eventRequests.findIndex((event) => event._id === action.payload._id);
+            let index = state.eventRequests.findIndex((event) => event._id === action.payload._id);
             if (index !== -1) {
                 state.eventRequests.splice(index, 1);
             };
@@ -277,6 +291,28 @@ const eventsSlice = createSlice({
             state.message = "Successfully rejected event";
         });
         builder.addCase(rejectEvent.rejected, (state, action) => {
+            state.loading = false;
+            state.error = true;
+            state.message = action.payload;
+        });
+
+        builder.addCase(deleteEvent.pending, (state) => {
+            state.loading = true;
+            state.error = false;
+            state.message = "";
+        });
+        builder.addCase(deleteEvent.fulfilled, (state, action) => {
+            let index = state.myEvents.findIndex((event) => event._id === action.payload._id);
+            if (index !== -1) {
+                state.myEvents.splice(index, 1);
+            };
+            index = state.organisationEvents.findIndex((event) => event._id === action.payload._id);
+            if (index !== -1) {
+                state.organisationEvents.splice(index, 1);
+            };
+            state.message = "Successfully deleted event";
+        });
+        builder.addCase(deleteEvent.rejected, (state, action) => {
             state.loading = false;
             state.error = true;
             state.message = action.payload;

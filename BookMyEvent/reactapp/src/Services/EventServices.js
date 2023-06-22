@@ -90,6 +90,22 @@ const getFilteredEvents = async (filters) => {
     return response.data;
 };
 
+const deleteEvent = async (eventId, deletedBy) => {
+    const response = await Axios.delete(`${apiBase}/${eventId}/deletedBy/${deletedBy}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
+const getEventById = async (eventId) => {
+    const response = await Axios.get(`${apiBase}/geteventbyid?eventId=${eventId}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
 //const getFilteredEvents = async (startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber = 1, pageSize = 10) => {
 //    try {
 //        startDate = startDate || new Date().toISOString();
@@ -132,7 +148,9 @@ export default {
     updateRejectedBy,
     getAllCreatedEventsByOrganisation,
     getAllCreatedEventsByOrganiser,
-    getFilteredEvents
+    getFilteredEvents,
+    deleteEvent,
+    getEventById
 };
 
 
