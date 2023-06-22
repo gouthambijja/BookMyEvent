@@ -456,7 +456,7 @@ namespace BookMyEvent.DLL.Repositories
                 // Perform the filtering based on the provided criteria
                 var events = await _db.Events.ToListAsync();
                 var filteredEvents = await _db.Events
-                    .Where(e => e.StartDate >= startDate && e.EndDate <= endDate && e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice &&( location!="" && location!=null)?e.Location.Contains(location):true && (isFree == true?e.IsFree == true:true) && (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) )
+                    .Where(e => e.StartDate >= startDate && e.EndDate <= endDate && e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice &&( location!="" && location!=null)?e.Location.Contains(location):true && (isFree == true?e.IsFree == true:true) && (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) && e.IsActive == true && e.IsPublished == true && e.RegistrationStatusId != 3)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
