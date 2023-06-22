@@ -93,7 +93,7 @@ const EventForm = () => {
     _formData.append("State", eventData.State);
     _formData.append("City", eventData.City);
     if (auth.role == "Owner" || auth.role == "Secondary_Owner")
-      _formData.append("IsPublished", true);
+      _formData.append("IsPublished", false);
     else _formData.append("IsPublished", false);
     _formData.append("IsCancelled", false);
     _formData.append(

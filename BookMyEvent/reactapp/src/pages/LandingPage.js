@@ -18,10 +18,6 @@ import store from "../App/store";
 import InfiniteScrollUserEventsLandingPage from "../Components/InfiniteScrollUserEventLandingPage";
 
 const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   button: {
     margin: '5rem',
     padding: '0.75rem 1.5rem',
