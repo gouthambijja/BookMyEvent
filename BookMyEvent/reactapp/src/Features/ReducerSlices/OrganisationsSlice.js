@@ -74,7 +74,7 @@ const organisationSlice = createSlice({
         clearSuccessMessage: (state) => {
             state.message = null;
         },
-        clearState: (state) => {
+        clearOrganisationsState: (state) => {
             state.organisations = [];
             state.loading = false;
             state.error = false;

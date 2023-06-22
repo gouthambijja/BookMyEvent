@@ -21,10 +21,18 @@ namespace BookMyEvent.BLL.Services
             _organisationServices = organisationServices;
             _accountCredentialsRepository = accountCredentialsRepository;
         }
-        public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy)
+        public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy,byte RoleId,Guid orgId)
         {
             try
             {
+                Console.WriteLine(RoleId);
+                if (RoleId == 2)
+                {
+                    var isOrganisationStatusChanged = await _organisationServices.AcceptOrganisation(orgId);
+                    if (!isOrganisationStatusChanged) {
+                        return false;
+                    }
+                }
                 return await _administrationRepository.UpdateIsAcceptedAndAcceptedBy(acceptedBy, administratorId);
             }
             catch (Exception ex)

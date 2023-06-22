@@ -29,8 +29,10 @@ import OrganisationTree from "./pages/OrganisationTree";
 import OrganiserEventPage from "./pages/OrganiserEventPage";
 // import EventDynamicForm from "./Components/EventDynamicForm";
 import Event from "./Components/Event";
+import RegisterUser from "./pages/RegisterUser";
+import OwnerRequests from "./pages/OwnerRequests";
 import RegisterEvent from "./Components/RegisterEvent";
-import store from "./App/store";
+
 const App = () => {
   const profile = store.getState().profile.info;
 
@@ -51,8 +53,7 @@ const App = () => {
             loader={storeLoader.LandingPageEventsLoader}
           ></Route>
           <Route path="/login" element={<Login />} />
-          <Route path="/registerorganiser" element={<RegisterOrganiser />} />
-          <Route path="/orglist" element={<OrganisationsListPage />} />
+          
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedroles={["User"]} />}>
               <Route path="/registerEvent/:id" element={<RegisterEvent />}></Route>
@@ -99,15 +100,10 @@ const App = () => {
               <Route element={<RequireAuth allowedroles={["Admin"]} />}>
                 <Route index element={<AdminHomePage />}></Route>
                 <Route path="addadmin" element={<AddSecondary />} />
-                <Route
-                  path="Organisations"
-                  element={<OrganisationsListPage />}
-                  loader={storeLoader.OrganisationsLoader}
-                ></Route>
-                <Route
-                  path="Organisations/:id"
-                  element={<OrganisationTree />}
-                />
+                <Route path="Requests" element={<OwnerRequests/>} />
+                <Route path="Organisations" element={<OrganisationsListPage />} loader={storeLoader.OrganisationsLoader} >
+                </Route>
+                  <Route path="Organisations/:id" element={<OrganisationTree/>} />
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>

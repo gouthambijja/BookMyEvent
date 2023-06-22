@@ -6,7 +6,7 @@ export const fetchRequestedOwners = createAsyncThunk(
     "organisers/fetchRequestedOwners",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getAllRequestedOrganisers();
+            const response = await orgServices.getRequestedOwners();
             return response;
         }
         catch (error) {

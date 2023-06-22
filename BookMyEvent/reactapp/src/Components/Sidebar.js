@@ -113,6 +113,11 @@ function Sidebar({ open, setOpen }) {
     navigate("/organiser/addSecondaryOwner");
     handleDrawerClose();
   };
+  const handleRequests = async () => {
+    if (auth?.role == "Admin") navigate("/admin/Requests");
+    
+    handleDrawerClose();
+  };
   const handleOrganisations = async () => {
     if (auth?.role == "Admin") navigate("/admin/Organisations");
     handleDrawerClose();
@@ -201,6 +206,16 @@ function Sidebar({ open, setOpen }) {
                 <GroupAdd />
               </ListItemIcon>
               <ListItemText primary="Add Admin" />
+            </ListItem>
+          ) : (
+            <></>
+          )}
+           {auth.role === "Admin" ? (
+            <ListItem button onClick={handleRequests}>
+              <ListItemIcon>
+                <GroupAdd />
+              </ListItemIcon>
+              <ListItemText primary="Requests" />
             </ListItem>
           ) : (
             <></>

@@ -103,7 +103,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>
         /// Returns a bool value saying is organiser accepted successfully or not
         /// </returns>
-        Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy);
+        Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy, byte RoleId, Guid orgId);
 
         /// <summary>
         /// An asynchronous method that rejects the organiser

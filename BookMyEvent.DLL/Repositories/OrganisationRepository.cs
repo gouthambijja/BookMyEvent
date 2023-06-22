@@ -164,14 +164,35 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
-        public async Task<bool> ToggleIsActive(Guid orgId)
+        public async Task<bool> ChangeIsActiveToTrue(Guid orgId)
         {
             try
             {
                 Organisation? organisation = await _dbcontext.Organisations.FindAsync(orgId);
                 if (organisation != null)
                 {
-                    organisation.IsActive = !organisation.IsActive;
+                    organisation.IsActive = true;
+                    await _dbcontext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> ChangeIsActiveToFalse(Guid orgId)
+        {
+            try
+            {
+                Organisation? organisation = await _dbcontext.Organisations.FindAsync(orgId);
+                if (organisation != null)
+                {
+                    organisation.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
                     return true;
                 }

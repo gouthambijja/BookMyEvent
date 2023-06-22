@@ -80,7 +80,8 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns bool is operation successful or not 
         /// </returns>
-        public Task<bool> ToggleIsActive(Guid orgId);
+        public Task<bool> ChangeIsActiveToTrue(Guid orgId);
+        Task<bool> ChangeIsActiveToFalse(Guid orgId);
 
 
     }

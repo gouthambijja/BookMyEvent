@@ -42,7 +42,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var result = await _organisationRepository.ToggleIsActive(organisationId);
+                var result = await _organisationRepository.ChangeIsActiveToFalse(organisationId);
                 if(result)
                     return (true, "Organisation blocked/unblock operation successfull");
                 return (false, "Organisation blocked/unblock unsuccessfull");
@@ -121,7 +121,17 @@ namespace BookMyEvent.BLL.Services
                 return new BLOrganisation();
             }
         }
-
+       public async Task<bool> AcceptOrganisation(Guid orgId)
+        {
+            try
+            {
+                return await _organisationRepository.ChangeIsActiveToTrue(orgId);
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
     }
 }

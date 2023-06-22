@@ -204,7 +204,9 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPut("{id}/Accept")]
         public async Task<IActionResult> AcceptOrganiser(BLAdministrator administrator)
         {
-            var result = await _organiserServices.AcceptOrganiser(administrator.AdministratorId, administrator.AcceptedBy);
+                Console.WriteLine(administrator.RoleId);
+
+            var result = await _organiserServices.AcceptOrganiser(administrator.AdministratorId, administrator.AcceptedBy,administrator.RoleId,administrator.OrganisationId);
             if (result)
                 return Ok("Accepted Successfully");
             else return BadRequest("Accept failed");

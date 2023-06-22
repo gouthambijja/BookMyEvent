@@ -71,5 +71,6 @@ namespace BookMyEvent.BLL.Contracts
         /// Returns a bool saying is organisation name taken or not
         /// </returns>
         Task<bool> IsOrganisationNameTaken(string orgName);
+        Task<bool> AcceptOrganisation(Guid orgId);
     }
 }
