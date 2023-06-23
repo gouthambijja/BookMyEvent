@@ -363,8 +363,6 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
         [HttpPut("{eventId}/RegistrationStatus")]
         public async Task<IActionResult> UpdateEventRegistrationStatus(BLEvent _event)
         {
@@ -439,6 +437,376 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("{eventId}/RegistrationStatus")]
+        //public async Task<IActionResult> UpdateEventRegistrationStatus(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(_event.EventId, _event.RegistrationStatusId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/CancelEvent")]
+        //public async Task<IActionResult> UpdateIsCancelledEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsCancelledEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Publish")]
+        //public async Task<IActionResult> UpdateIsPublishedEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsPublishedEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Accept")]
+        //public async Task<IActionResult> UpdateAcceptedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateAcceptedBy(_event.EventId, _event.AcceptedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Reject")]
+        //public async Task<IActionResult> UpdateRejectedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //[HttpPut("{eventId}/RegistrationStatus")]
+        //public async Task<IActionResult> UpdateEventRegistrationStatus(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(_event.EventId, _event.RegistrationStatusId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/CancelEvent")]
+        //public async Task<IActionResult> UpdateIsCancelledEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsCancelledEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Publish")]
+        //public async Task<IActionResult> UpdateIsPublishedEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsPublishedEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Accept")]
+        //public async Task<IActionResult> UpdateAcceptedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateAcceptedBy(_event.EventId, _event.AcceptedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Reject")]
+        //public async Task<IActionResult> UpdateRejectedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //[HttpPut("{eventId}/RegistrationStatus")]
+        //public async Task<IActionResult> UpdateEventRegistrationStatus(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(_event.EventId, _event.RegistrationStatusId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/CancelEvent")]
+        //public async Task<IActionResult> UpdateIsCancelledEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsCancelledEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Publish")]
+        //public async Task<IActionResult> UpdateIsPublishedEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsPublishedEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Accept")]
+        //public async Task<IActionResult> UpdateAcceptedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateAcceptedBy(_event.EventId, _event.AcceptedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Reject")]
+        //public async Task<IActionResult> UpdateRejectedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}        [HttpPut("{eventId}/RegistrationStatus")]
+        //public async Task<IActionResult> UpdateEventRegistrationStatus(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(_event.EventId, _event.RegistrationStatusId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/CancelEvent")]
+        //public async Task<IActionResult> UpdateIsCancelledEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsCancelledEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Publish")]
+        //public async Task<IActionResult> UpdateIsPublishedEvent(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateIsPublishedEvent(_event.EventId, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Accept")]
+        //public async Task<IActionResult> UpdateAcceptedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateAcceptedBy(_event.EventId, _event.AcceptedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        //[HttpPut("{eventId}/Reject")]
+        //public async Task<IActionResult> UpdateRejectedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        [HttpGet(" UpdateEventRegistrationStatus")]
+        public async Task<IActionResult> UpdateEventRegistrationStatus(Guid eventId, byte registrationStatusId, Guid updatedBy, DateTime updatedAt)
+        {
+            try
+            {
+                BLEvent Events = await _eventServices.UpdateEventRegistrationStatus(eventId, registrationStatusId, updatedBy, updatedAt);
+                if (Events == null) { return BadRequest("error in BL"); }
+                return Ok(Events);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(" UpdateIsCancelledEvent")]
+        public async Task<IActionResult> UpdateIsCancelledEvent(Guid eventId, Guid updatedBy, DateTime updatedAt)
+        {
+            try
+            {
+                BLEvent Events = await _eventServices.UpdateIsCancelledEvent(eventId, updatedBy, updatedAt);
+                if (Events == null) { return BadRequest("error in BL"); }
+                return Ok(Events);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(" UpdateIsPublishedEvent")]
+        public async Task<IActionResult> UpdateIsPublishedEvent(Guid eventId, Guid updatedBy, DateTime updatedAt)
+        {
+            try
+            {
+                BLEvent Events = await _eventServices.UpdateIsPublishedEvent(eventId, updatedBy, updatedAt);
+                if (Events == null) { return BadRequest("error in BL"); }
+                return Ok(Events);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(" UpdateAcceptedBy")]
+        public async Task<IActionResult> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt)
+        {
+            try
+            {
+                BLEvent Events = await _eventServices.UpdateAcceptedBy(eventId, acceptBy, updatedBy, updatedAt);
+                if (Events == null) { return BadRequest("error in BL"); }
+                return Ok(Events);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //[HttpPut("{eventId}/Reject")]
+        //public async Task<IActionResult> UpdateRejectedBy(BLEvent _event)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [HttpGet("GetAllCreatedEventsByOrganisation")]
         public async Task<IActionResult> GetAllCreatedEventsByOrganisation(Guid orgId)
@@ -582,6 +950,20 @@ namespace BookMyEvent.WebApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("geteventimages/{eventId}")]
+        public async Task<IActionResult> GetEventImages(Guid eventId)
+        {
+            try
+            {
+                var images = await _eventServices.GetEventImages(eventId);
+                return Ok(images);
+            }
+            catch
+            {
+                return BadRequest("error");
             }
         }
     }

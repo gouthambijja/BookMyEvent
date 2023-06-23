@@ -422,5 +422,17 @@ namespace BookMyEvent.BLL.Services
                 throw new Exception("Failed to fetch organisation requested events.", ex);
             }
         }
+        public async Task<List<BLEventImages>> GetEventImages(Guid eventId)
+        {
+            try
+            {
+                List<EventImage> eventImagesDL = await eventImageRepository.GetImagesByEventId(eventId);
+                return _mapper.Map<List<BLEventImages>>(eventImagesDL);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

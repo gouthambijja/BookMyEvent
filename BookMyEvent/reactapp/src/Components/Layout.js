@@ -9,7 +9,7 @@ const Layout = () => {
   return (
     <div >
       <Navbar/>
-      <div style={{paddingTop:'65px'}}>
+      <div style={{paddingTop:'64px'}}>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

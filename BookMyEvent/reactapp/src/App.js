@@ -41,6 +41,7 @@ import OrganisationEventsPage from "./pages/OrganisationEventsPage";
 
 import 'react-toastify/dist/ReactToastify.css';
 import UserTicketList from "./pages/UserTickets";
+import SingleEventPage from "./Components/SingleEventPage";
 
 const App = () => {
     const profile = store.getState().profile.info;
@@ -54,6 +55,7 @@ const App = () => {
                     loader={storeLoader.categoryLoader}
                 > 
                     <Route index element={<LandingPage />} loader={storeLoader.LandingPageEventsLoader} ></Route>
+                    <Route path="/event/:id" element={<SingleEventPage/>}/>
                     <Route path="/login" element={<Login />} />
                     <Route path="/tickets" element={<UserTicketList/>}/>
                     <Route path="/Register" element={<RegisterUser />} />

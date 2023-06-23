@@ -154,6 +154,13 @@ const getOrganisationEventRequests = async (organisationId) => {
     return response.data;
 }
 
+const getEventImages = async (eventId) => {
+    const response = await Axios.get(`${apiBase}/geteventimages/${eventId}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+};
 
 export default {
     addNewEvent,
@@ -169,12 +176,12 @@ export default {
     getFilteredEvents,
     deleteEvent,
     getEventById,
+    getEventImages,
     getOrganisationPastEvents,
     getOrganiserPastEvents,
     getOrganiserEventRequests,
     getOrganisationEventRequests
 };
-
 //const getFilteredEvents = async (startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber = 1, pageSize = 10) => {
 //    try {
 //        startDate = startDate || new Date().toISOString();
@@ -206,6 +213,21 @@ export default {
 //    }
 //}
 
+// export default {
+//     addNewEvent,
+//     updateEvent,
+//     getAllActivePublishedEvents,
+//     updateEventRegistrationStatus,
+//     updateIsCancelledEvent,
+//     updateIsPublishedEvent,
+//     updateAcceptedBy,
+//     updateRejectedBy,
+//     getAllCreatedEventsByOrganisation,
+//     getAllCreatedEventsByOrganiser,
+//     getFilteredEvents,
+//     deleteEvent,
+//     getEventById,
+// };
 
 
 // import Axios from "../Api/Axios";

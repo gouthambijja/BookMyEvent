@@ -8,6 +8,7 @@ import {
 } from "../Features/ReducerSlices/HomeEventsSlice";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
 import store from "../App/store";
+import { useNavigate } from "react-router-dom";
 
 let cnt = 0;
 const InfiniteScrollUserEventsLandingPage = () => {
@@ -15,6 +16,7 @@ const InfiniteScrollUserEventsLandingPage = () => {
 
 
     const dispatch = useDispatch();
+    const navigate=useNavigate();
   const events = useSelector((store) => store.homeEvents.events);
   
 
@@ -44,7 +46,10 @@ const InfiniteScrollUserEventsLandingPage = () => {
     };
   }, []);
 
-
+ const handleEvent=(eventId)=>{
+    navigate(`event/${eventId}`);
+    console.log("inside")
+ }
 
 
   return (
@@ -58,7 +63,7 @@ const InfiniteScrollUserEventsLandingPage = () => {
       }}
     >
       {events.map((event) => (
-        <div key={cnt++}>
+        <div onClick={()=>handleEvent(event.eventId)} key={cnt++}>
           <EventCard event={event} />
         </div>
       ))}
