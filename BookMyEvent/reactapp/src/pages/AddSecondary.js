@@ -6,6 +6,8 @@ import store from '../App/store';
 import { Box, Modal } from "@mui/material";
 import { addAdmin } from "../Services/AdminServices";
 import organiserServices from '../Services/OrganiserServices';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +34,9 @@ const AddSecondary = () => {
     const auth = store.getState().auth;
     const [image, setImage] = useState(null);
     const [emailError, setEmailError] = useState('');
+    const [passwordValidation,setPasswordValidation]=useState('');
+    const [imageError, setImageError] = useState('');
+    const navigate= useNavigate();
     const [formData, setFormData] = useState({
         AdministratorName: '',
         AdministratorAddress: '',
@@ -48,6 +53,7 @@ const AddSecondary = () => {
         IsActive: true,
         Password: "",
     });
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
@@ -56,6 +62,19 @@ const AddSecondary = () => {
             ...prevState,
             ImgBody: file,
         }));
+        if (file) {
+            // Perform image validations here
+            const allowedTypes = ['image/jpeg', 'image/png','image/jpg'];
+         
+      
+            if (!allowedTypes.includes(file.type)) {
+              setImageError('Invalid file type. Please select a JPEG, PNG or JPG image.');
+            } 
+             else {
+            
+              setImageError('');
+            }
+          }
     };
     const handleEmailChange = async (e) => {
         setFormData((prevState) => ({
@@ -71,6 +90,21 @@ const AddSecondary = () => {
                 setEmailError("");
             }
         }
+    }
+    const handlePasswordChange=(e)=>{
+        setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+        if (!passwordRegex.test(e.target.value)) {
+            setPasswordValidation('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.');
+          } else {
+            setPasswordValidation('');
+          }
+          if(e.target.value==''){
+            setPasswordValidation('');
+
+          }
     }
     const handleInputChange = (e) => {
         setFormData((prevState) => ({
@@ -104,9 +138,6 @@ const AddSecondary = () => {
         } else {
             data = await organiserServices.addOrganiser(_formData);
         }
-        // Perform registration logic here, e.g., make an API call
-        console.log("after call " + data)
-        // Reset form fields
         setFormData({
             AdministratorName: "",
             AdministratorAddress: "",
@@ -124,6 +155,14 @@ const AddSecondary = () => {
             IsActive: true,
             Password: "",
         })
+        if (profile.roleId == 1){
+            toast.success("Added New Admin Successfully!");
+            navigate("/admin")         
+        }
+        else{
+            toast.success("Added New Owner Successfully!");
+            navigate("/Organiser") 
+        }
     };
     useEffect(() => {
     }, [])
@@ -197,8 +236,10 @@ const AddSecondary = () => {
                                 variant="outlined"
                                 type="password"
                                 value={formData.Password}
-                                onChange={handleInputChange}
+                                onChange={handlePasswordChange}
                                 margin="normal"
+                                error={passwordValidation !== ''}
+                                helperText={passwordValidation}
                                 required
                                 fullWidth
                             />
@@ -216,6 +257,7 @@ const AddSecondary = () => {
                                 </Button>
                             </label>
                             {image && <p>Selected image: {image.name}</p>}
+                            {imageError && <p>{imageError}</p>}
                             <Button type="submit" variant="contained" sx={{ marginTop:'10px' }} className={classes.submitButton} color="primary" fullWidth>
                                 Register
                             </Button>

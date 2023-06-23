@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import store from "../App/store";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button,Paper, Container,Avatar } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Paper, Container, Avatar } from '@mui/material';
 import organiserServices from "../Services/OrganiserServices";
 import OrganisationService from "../Services/OrganisationService";
 import { acceptOrganiser, fetchRequestedPeers, rejectOrganiser } from "../Features/ReducerSlices/OrganisersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { Typography, makeStyles } from '@material-ui/core';
+import { toast } from 'react-toastify';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,13 +25,18 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(2),
   },
+  norequests:{
+    color:theme.palette.error.main,
+    margin:'auto',
+    textAlign: 'center',
+  },
   tableContainer: {
     marginTop: theme.spacing(2),
   },
   tableCellHeader: {
     fontWeight: 'bold',
-    fontSize:'2rem',
-    backgroundColor: theme.palette.primary.main, 
+    fontSize: '2rem',
+    backgroundColor: theme.palette.primary.main,
   },
   tableRow: {
     '&:hover': {
@@ -58,119 +65,134 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const PeerRequest=()=>{
+const PeerRequest = () => {
   const [open, setOpen] = useState(false);
-    const profile = store.getState().profile.info;
-    const requestedPeers=useSelector(store=>store.organisers.requestedOrganisers);
-    const dispatch=useDispatch();
-    const handleDelete = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
-      setOpen(false);
-    };
-      const handleAccept = async(peer) => {
-        console.log(peer);
-        const updatedPeer={
-          administratorId:peer.administratorId,
-          administratorName:peer.administratorName,
-          administratorAddress:peer.administratorAddress,
-          Email:peer.email,
-          PhoneNumber:peer.phoneNumber,
-          AccountCredentialsId:peer.AccountCredentialsId,
-          RoleId:peer.RoleId,
-          isAccepted:true,
-          imgBody:peer.imgBody,
-          ImageName:peer.ImageName,
-          AcceptedBy:profile.administratorId,
-          organisationId:peer.organisationId,
-          IsActive:true,
-        }      
-         dispatch(acceptOrganiser(updatedPeer))        
-      };
-      const handleReject = (peer) => {
-      
-        const rejectedPeer={
-          administratorId:peer.administratorId,
-          administratorName:peer.administratorName,
-          administratorAddress:peer.administratorAddress,
-          Email:peer.email,
-          PhoneNumber:peer.phoneNumber,
-          AccountCredentialsId:peer.AccountCredentialsId,
-          RoleId:peer.RoleId,
-          isAccepted:false,
-          imgBody:peer.imgBody,
-          ImageName:peer.ImageName,
-          RejectedBy:profile.administratorId,
-          organisationId:peer.organisationId,
-          IsActive:false,
-        }
-        dispatch(rejectOrganiser(rejectedPeer));
-        setOpen(false);
-      
-      };
-    useEffect(()=>{
-        const temp=async()=>{
-          if(requestedPeers.length===0){
-            dispatch(fetchRequestedPeers(profile.organisationId))           
-          }
-        }
-        temp();
-    },[])
-    const classes = useStyles();
-    return(<>
+  const profile = store.getState().profile.info;
+  const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+ 
+
+  const handleAccept = async (peer) => {
+    console.log(peer);
+    const updatedPeer = {
+      administratorId: peer.administratorId,
+      administratorName: peer.administratorName,
+      administratorAddress: peer.administratorAddress,
+      Email: peer.email,
+      PhoneNumber: peer.phoneNumber,
+      AccountCredentialsId: peer.AccountCredentialsId,
+      RoleId: peer.RoleId,
+      isAccepted: true,
+      imgBody: peer.imgBody,
+      ImageName: peer.ImageName,
+      AcceptedBy: profile.administratorId,
+      organisationId: peer.organisationId,
+      IsActive: true,
+    }
+    dispatch(acceptOrganiser(updatedPeer))
+    toast.success('Accepted!', {
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
+  };
+  const handleReject = (peer) => {
+
+    const rejectedPeer = {
+      administratorId: peer.administratorId,
+      administratorName: peer.administratorName,
+      administratorAddress: peer.administratorAddress,
+      Email: peer.email,
+      PhoneNumber: peer.phoneNumber,
+      AccountCredentialsId: peer.AccountCredentialsId,
+      RoleId: peer.RoleId,
+      isAccepted: false,
+      imgBody: peer.imgBody,
+      ImageName: peer.ImageName,
+      RejectedBy: profile.administratorId,
+      organisationId: peer.organisationId,
+      IsActive: false,
+    }
+    dispatch(rejectOrganiser(rejectedPeer));
+    toast.error('Rejected!');
+    setOpen(false);
+
+  };
+  const handleToast=()=>{
+    toast.success("success toast!")
+  }
+  useEffect(() => {
+    const temp = async () => {
+      if (requestedPeers.length === 0) {
+        dispatch(fetchRequestedPeers(profile.organisationId))
+      }
+    }
+    temp();
+  }, [])
+  const classes = useStyles();
+  return (<>
     <Container className={classes.container}>
       <Typography variant="h2" className={classes.heading} >
         Peer Requests
       </Typography>
-    {requestedPeers.length!==0?<>
-    <TableContainer component={Paper} className={classes.tableContainer} >
-      <Table >
-        <TableHead sx={{ fontSize:2}}>
-          <TableRow >
-            <TableCell sx={{ fontSize:25,color:'#fff'}} className={classes.tableCellHeader}>Image</TableCell>
-            <TableCell sx={{ fontSize:25,color:'#fff'}} className={classes.tableCellHeader}>Name</TableCell>
-            <TableCell sx={{ fontSize:25,color:'#fff'}} className={classes.tableCellHeader}>Address</TableCell>
-            <TableCell sx={{ fontSize:25,color:'#fff'}} className={classes.tableCellHeader}>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {requestedPeers.map((peer) => (
-            <TableRow key={peer.administratorId} className={classes.tableRow}>
-              <TableCell> <img
-            src={`data:image/jpeg;base64,${peer.imgBody}`}
-            className={classes.avatar}
-            
-          ></img></TableCell>
-              <TableCell sx={{ fontSize:20}}>{peer.administratorName}</TableCell>
-              <TableCell sx={{ fontSize:20}}>{peer.administratorAddress}</TableCell>
-              <TableCell>
-                <div className={classes.actionButtons}>
-              <Button
-                  variant="outlined"
-                  onClick={() => handleAccept(peer)}
-                  className="accept"
-                >
-                  Accept
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={handleDelete}
-                  className="reject"
-                >
-                  Reject
-                </Button>
-                <DeleteConfirmationDialog  open={open} onClose={handleClose} onConfirm={()=>handleReject(peer)} />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </>:<>No new Peer Requests</>}
+      {requestedPeers.length !== 0 ? <>
+        <TableContainer component={Paper} className={classes.tableContainer} >
+          <Table >
+            <TableHead sx={{ fontSize: 2 }}>
+              <TableRow >
+                <TableCell sx={{ fontSize: 25, color: '#fff' }} className={classes.tableCellHeader}>Image</TableCell>
+                <TableCell sx={{ fontSize: 25, color: '#fff' }} className={classes.tableCellHeader}>Name</TableCell>
+                <TableCell sx={{ fontSize: 25, color: '#fff' }} className={classes.tableCellHeader}>Address</TableCell>
+                <TableCell sx={{ fontSize: 25, color: '#fff' }} className={classes.tableCellHeader}>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {requestedPeers.map((peer) => (
+                <TableRow key={peer.administratorId} className={classes.tableRow}>
+                  <TableCell> <img
+                    src={`data:image/jpeg;base64,${peer.imgBody}`}
+                    className={classes.avatar}
+
+                  ></img></TableCell>
+                  <TableCell sx={{ fontSize: 20 }}>{peer.administratorName}</TableCell>
+                  <TableCell sx={{ fontSize: 20 }}>{peer.administratorAddress}</TableCell>
+                  <TableCell>
+                    <div className={classes.actionButtons}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleAccept(peer)}
+                        className="accept"
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={handleDelete}
+                        className="reject"
+                      >
+                        Reject
+                      </Button>
+                      <DeleteConfirmationDialog open={open} onClose={handleClose} onConfirm={() => handleReject(peer)} />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </> : <><Typography variant="h3" className={classes.norequests} >
+       No New Peer Requests
+      </Typography>
+      </>}
+     <Button onClick={handleToast}>Toast Bro</Button>
+     
     </Container>
-    </>)
+  </>)
 
 }
 
@@ -188,7 +210,7 @@ function DeleteConfirmationDialog({ open, onClose, onConfirm }) {
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle>Confirm Delete</DialogTitle>
       <DialogContent>
-        <DialogContentText>Are you sure you want to delete?</DialogContentText>
+        <DialogContentText>Are you sure you want to reject?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">

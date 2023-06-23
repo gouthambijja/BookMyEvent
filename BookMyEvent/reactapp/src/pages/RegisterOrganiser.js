@@ -9,6 +9,7 @@ import { width } from '@mui/system';
 import organiserServices from '../Services/OrganiserServices';
 import organisationServices from '../Services/OrganisationService';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,9 +40,13 @@ const RegisterOrganiser = () => {
     const [emailError, setEmailError] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordValidation,setPasswordValidation]=useState('');
+    const [imageError, setImageError] = useState('');
+    const [isValid,setIsValid]=useState(false);
     const navigate = useNavigate();
 
     const [selectedRoleValue, setSelectedRoleValue] = useState('dummy');
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const [formData, setFormData] = useState({
         AdministratorName: '',
         AdministratorAddress: '',
@@ -75,6 +80,19 @@ const RegisterOrganiser = () => {
             ...prevState,
             ImgBody: file,
         }));
+        if (file) {
+            // Perform image validations here
+            const allowedTypes = ['image/jpeg', 'image/png','image/jpg'];
+         
+      
+            if (!allowedTypes.includes(file.type)) {
+              setImageError('Invalid file type. Please select a JPEG, PNG or JPG image.');
+            } 
+             else {
+            
+              setImageError('');
+            }
+          }
     };
     const handleConfirmPassword = (e) => {
         setConfirmPassword(e.target.value)
@@ -82,12 +100,11 @@ const RegisterOrganiser = () => {
             setPasswordError('Passwords do not match');
         }
         else {
-            // Passwords match, perform form submission or further processing
+         
             setPasswordError('');
-            // ...
+         
         }
     }
-
 
 
     const handleOptionChange = async (event, value) => {
@@ -113,6 +130,21 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
     };
+    const handlePasswordChange=(e)=>{
+        setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+        if (!passwordRegex.test(e.target.value)) {
+            setPasswordValidation('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.');
+          } else {
+            setPasswordValidation('');
+          }
+          if(e.target.value==''){
+            setPasswordValidation('');
+
+          }
+    }
     const handleEmailChange = async (e) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -160,6 +192,10 @@ const RegisterOrganiser = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        
+
+      
         console.log("before post call " + formData)
         const _formData = new FormData();
         if (selectedRoleValue == "peer") {
@@ -227,17 +263,12 @@ const RegisterOrganiser = () => {
             IsActive: true,
             Password: "",
         })
-        navigate("/organiser/login");
-    };
-    // useEffect(() => {
-    //     const temp = async () => {
+    toast.success('Registered Succussfully!');
 
-    //         const options = await org.getAllOrganisations();
-    //         setOptions(options)
-    //         console.log(options);
-    //     }
-    //     temp();
-    // }, [])
+        navigate("/organiser/login");
+    
+    };
+
     return (
         <>
             <Container component="main" maxWidth="xl" className={classes.container}>
@@ -311,8 +342,10 @@ const RegisterOrganiser = () => {
                                 variant="outlined"
                                 type="password"
                                 value={formData.Password}
-                                onChange={handleInputChange}
+                                onChange={handlePasswordChange}
                                 margin="normal"
+                                error={passwordValidation !== ''}
+                                helperText={passwordValidation}
                                 required
                                 fullWidth
                             />
@@ -338,6 +371,8 @@ const RegisterOrganiser = () => {
                                 type="file"
                                 onChange={handleImageChange}
                                 style={{ display: 'none' }}
+                                required
+                               
                             />
                             <label htmlFor="image-upload">
                                 <Button component="span" variant="contained" color="primary" fullWidth>
@@ -346,6 +381,7 @@ const RegisterOrganiser = () => {
                             </label>
                             <div style={{ marginTop: "10px", }}>
                                 {image && <p>Selected image: {image.name}</p>}
+                                {imageError && <p>{imageError}</p>}
                             </div>
 
 
@@ -409,20 +445,7 @@ const RegisterOrganiser = () => {
                                     />
                                 </FormControl>
                             </>) : (selectedRoleValue == "peer" ? (<>
-                                {/* <Autocomplete
-                                options={organisations}
-                                getOptionLabel={(option) => option.label}
-                                renderInput={(params) => (
-                                    <TextField {...params} label="Select your Organisation" variant="outlined" />
-                                )}
-                                onChange={handleOptionChange}
-                                value={selectedOption}
-                                autoHighlight
-                                autoSelect
-                                disableClearable
-                                noOptionsText="No options found"
-                                style={{ width: '300px' }}
-                            /> */}
+                               
                                 <FormControl variant="outlined" margin="normal" fullWidth>
 
                                     <TextField
@@ -451,6 +474,7 @@ const RegisterOrganiser = () => {
                         </form>
                     </div>
                 </Box>
+              
             </Container>
         </>
     );

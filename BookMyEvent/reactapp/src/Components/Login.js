@@ -21,6 +21,8 @@ import { setPersist, unsetPersist } from "../Hooks/usePersist";
 import { getAdminByIdThunk, getOrganiserByIdThunk, getUserByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
 import store from "../App/store";
 import useLogout from "../Hooks/useLogout";
+import { toast } from 'react-toastify';
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -107,6 +109,7 @@ const Login = () => {
       }
       setPersist();
       console.log(from);
+      toast.success("Login Successful!")
       navigate(from);
     } catch {
       setErrMsg({ open: true, msg: "Login Failed, please try again." });
@@ -201,6 +204,7 @@ const Login = () => {
             </Typography>
           </Box>
         </Modal>
+      
       </Container>
     </>
   );

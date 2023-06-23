@@ -33,10 +33,13 @@ import RegisterUser from "./pages/RegisterUser";
 import OwnerRequests from "./pages/OwnerRequests";
 import RegisterEvent from "./Components/RegisterEvent";
 import store from "./App/store";
-import ProfilePage from "./pages/Profile";
+
+import 'react-toastify/dist/ReactToastify.css';
+import UserTicketList from "./pages/UserTickets";
 
 const App = () => {
     const profile = store.getState().profile.info;
+  
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
@@ -44,9 +47,10 @@ const App = () => {
                     //action={actions}
                     errorElement={<Error />}
                     loader={storeLoader.categoryLoader}
-                >
+                > 
                     <Route index element={<LandingPage />} loader={storeLoader.LandingPageEventsLoader} ></Route>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/tickets" element={<UserTicketList/>}/>
                     <Route path="/Register" element={<RegisterUser />} />
                     <Route element={<PersistLogin />}>
                         <Route element={<RequireAuth allowedroles={["User"]} />}>
@@ -89,11 +93,14 @@ const App = () => {
                         </Route>
                     </Route>
                 </Route>
+                
             </>
         )
     );
 
-    return <RouterProvider router={router} />;
+    return <RouterProvider router={router} >
+       
+    </RouterProvider>;
 };
 
 export default App;

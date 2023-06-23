@@ -26,11 +26,13 @@ import { IncrementHomePageNumber, fetchEvents } from "../Features/ReducerSlices/
     }
     let pageNumber = 1;
     const OrganisationsLoader=async() =>{
-      if(store.getState().organisations.organisations.length>0)return null;
-      else{
-        await store.dispatch(fetchOrganisations({pageNumber:pageNumber,pageSize:10})).unwrap();
-        return null;
+      if(store.getState().organisations.organisations.length==0 && !store.getState().organisations.organisationsEnd && store.getState().organisations.pageNumber==1){
+
+        await store.dispatch(fetchOrganisations({pageNumber:pageNumber,pageSize:30})).unwrap();
       }
+ 
+        return null;
+     
     }
     const OrganisationTreeLoader=async(orgId) =>{
       if(store.getState().organisers.myOrganisationOrganisers.length>0)return null;

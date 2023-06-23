@@ -100,7 +100,7 @@ function Sidebar({ open, setOpen }) {
     if (auth.role == "Admin") {
       navigate("/admin/profile");
       handleDrawerClose();
-    } else if (auth.role == "Owner" || auth.role == "peer" || auth.role == "Secondary_Owner") {
+    } else if (auth.role == "Owner" || auth.role == "Peer" || auth.role == "Secondary_Owner") {
       navigate("/organiser/profile");
       handleDrawerClose();
     } else {

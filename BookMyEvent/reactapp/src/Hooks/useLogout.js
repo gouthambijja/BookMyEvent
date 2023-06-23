@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { axiosPrivate } from "../Api/Axios";
 import { clearAuth} from "../Features/ReducerSlices/authSlice";
 
+
 const useLogout = () => {
     const dispatch = useDispatch();
   const Logout = async () => {
@@ -9,6 +10,7 @@ const useLogout = () => {
     if (logout.data) {
         dispatch(clearAuth());
       localStorage.clear();
+     
       return true;
     } else return false;
   };

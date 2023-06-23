@@ -63,9 +63,10 @@ const organisationSlice = createSlice({
         loading: false,
         error: false,
         message: null,
-        pageNumber: 0,
-        pageSize: 0,
+        pageNumber: 1,
+        pageSize: 10,
         totalOrganisations: null,
+        organisationsEnd:false,
     },
     reducers: {
         clearError: (state) => {
@@ -81,6 +82,7 @@ const organisationSlice = createSlice({
             state.pageNumber = 0;
             state.pageSize = 0;
             state.message = null;
+            state.organisationsEnd=false;
         },
     },
     extraReducers(builder) {
@@ -88,11 +90,12 @@ const organisationSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchOrganisations.fulfilled, (state, action) => {
+            if(action.payload.length == 0) state.organisationsEnd = true;
             state.loading = false;
             state.error = false;
             state.pageNumber++;
-            state.pageSize = 10;
-            state.organisations = action.payload.organisations;
+            state.pageSize = 10; 
+            state.organisations =action.payload.organisations;
             state.totalOrganisations = action.payload.total;
             state.message = "Fetched organisations successfully";
         });
