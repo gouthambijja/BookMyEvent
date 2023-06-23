@@ -449,7 +449,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location,  bool isFree, List<int> categoryIds, int pageNumber, int pageSize)
+        public async Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize)
         {
             try
             {

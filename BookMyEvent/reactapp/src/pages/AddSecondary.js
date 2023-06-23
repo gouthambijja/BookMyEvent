@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
     },
     form: {
-        width: "100%",
+        width: "50%",
         marginTop: theme.spacing(1),
     },
     submitButton: {
@@ -99,10 +99,10 @@ const AddSecondary = () => {
         _formData.append("imgBody", formData.ImgBody);
 
         let data;
-        if(profile.roleId == 1){
-         data=await addAdmin(_formData);
-        }else{
-        data = await organiserServices.addOrganiser(_formData);
+        if (profile.roleId == 1) {
+            data = await addAdmin(_formData);
+        } else {
+            data = await organiserServices.addOrganiser(_formData);
         }
         // Perform registration logic here, e.g., make an API call
         console.log("after call " + data)
@@ -133,90 +133,94 @@ const AddSecondary = () => {
                 <Box
                     sx={{ boxShadow: 3, p: 3, borderRadius: "16px", textAlign: "center" }}
                 >
-                    <Typography variant="h5" component="h1" border={1}>
-                        Add New {auth.role}
-                    </Typography>
-                    <form className={classes.form} onSubmit={handleSubmit}>
-                        <TextField
-                            label="Name"
-                            id="Name"
-                            name="AdministratorName"
-                            variant="outlined"
-                            value={formData.AdministratorName}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
-                        <TextField
-                            label="Address"
-                            name='AdministratorAddress'
-                            id='Address'
-                            variant="outlined"
-                            value={formData.AdministratorAddress}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
-                        <TextField
-                            label="Email"
-                            id='Email'
-                            name="Email"
-                            variant="outlined"
-                            type="email"
-                            value={formData.Email}
-                            onChange={handleEmailChange}
-                            margin="normal"
-                            error={emailError !== ''}
-                            helperText={emailError}
-                            required
-                            fullWidth
-                        />
-                        <TextField
-                            label="Phone Number:"
-                            id='Phone Number'
-                            name='PhoneNumber'
-                            variant="outlined"
-                            type="number"
-                            value={formData.PhoneNumber}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Typography variant="h5" component="h1" >
+                            Add New {auth.role}
+                        </Typography>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <form className={classes.form} onSubmit={handleSubmit}>
+                            <TextField
+                                label="Name"
+                                id="Name"
+                                name="AdministratorName"
+                                variant="outlined"
+                                value={formData.AdministratorName}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Address"
+                                name='AdministratorAddress'
+                                id='Address'
+                                variant="outlined"
+                                value={formData.AdministratorAddress}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Email"
+                                id='Email'
+                                name="Email"
+                                variant="outlined"
+                                type="email"
+                                value={formData.Email}
+                                onChange={handleEmailChange}
+                                margin="normal"
+                                error={emailError !== ''}
+                                helperText={emailError}
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Phone Number:"
+                                id='Phone Number'
+                                name='PhoneNumber'
+                                variant="outlined"
+                                type="number"
+                                value={formData.PhoneNumber}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
 
 
-                        <TextField
-                            label="Password"
-                            id='Password'
-                            name='Password'
-                            variant="outlined"
-                            type="password"
-                            value={formData.Password}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
+                            <TextField
+                                label="Password"
+                                id='Password'
+                                name='Password'
+                                variant="outlined"
+                                type="password"
+                                value={formData.Password}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
 
-                        <input
-                            accept="image/jpeg"
-                            id="image-upload"
-                            type="file"
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }}
-                        />
-                        <label htmlFor="image-upload">
-                            <Button component="span" variant="contained" color="primary" fullWidth>
-                                Upload Image
+                            <input
+                                accept="image/jpeg"
+                                id="image-upload"
+                                type="file"
+                                onChange={handleImageChange}
+                                style={{ display: 'none' }}
+                            />
+                            <label htmlFor="image-upload">
+                                <Button component="span" variant="contained" color="primary" fullWidth>
+                                    Upload Image
+                                </Button>
+                            </label>
+                            {image && <p>Selected image: {image.name}</p>}
+                            <Button type="submit" variant="contained" sx={{ marginTop:'10px' }} className={classes.submitButton} color="primary" fullWidth>
+                                Register
                             </Button>
-                        </label>
-                        {image && <p>Selected image: {image.name}</p>}
-                        <Button type="submit" variant="contained" className={classes.submitButton} color="primary" fullWidth>
-                            Register
-                        </Button>
-                    </form>
+                        </form>
+                    </div>
                 </Box>
             </Container>
         </>

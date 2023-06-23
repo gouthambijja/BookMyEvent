@@ -35,6 +35,9 @@ const OrganiserEventCard = ({ event }) => {
     const handleCancel = () => {
         setOpenDialog(false);
     };
+    const handleEdit = () => {
+
+    };
     const handleOperation = () => {
         setShowAlert(true);
     };
@@ -88,7 +91,7 @@ const OrganiserEventCard = ({ event }) => {
                     </CardContent>
                 </CardActionArea>
                 <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
-                    <Button size="small" startIcon={<EditOutlined />} color="secondary" variant="outlined">
+                    <Button size="small" startIcon={<EditOutlined />} color="secondary" variant="outlined" onClick={handleEdit } >
                         Edit
                     </Button>
                     <Button size="small" startIcon={<DeleteOutline />} color="error" variant="outlined" onClick={() => setOpenDialog(true)}>

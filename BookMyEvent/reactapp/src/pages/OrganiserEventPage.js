@@ -16,7 +16,9 @@ import {
     Chip,
     ButtonBase,
 } from "@mui/material";
+import {  makeStyles } from '@material-ui/core';
 import eventServices from '../Services/EventServices';
+
 
 const OrganiserEventPage = () => {
     const { eventId } = useParams();
@@ -34,6 +36,18 @@ const OrganiserEventPage = () => {
     //        setEventData(result || {});
     //    }
     //}, [eventId, event, dispatch]);
+    const UseStyles = makeStyles((theme) => ({
+        container: {
+            display : "flex",
+            justifyContent :"space - between",
+            flex: "wrap",
+        },
+        Child: {
+            flex: '1 1 20 %',
+            margin: '5px',
+            height: '50px'
+        },
+    }));
 
     useEffect(() => {
         if (!event) {
@@ -64,6 +78,7 @@ const OrganiserEventPage = () => {
     if (!event) {
         return <Typography variant="h6">Loading...</Typography>;
     }
+    const classes = UseStyles();
 
     return (
         <div>
@@ -106,49 +121,51 @@ const OrganiserEventPage = () => {
                 {/*registrationStatusId: 0,*/}
                 {/*createdBy: '00000000-0000-0000-0000-000000000000',*/}
                 {/*acceptedBy: null*/}
-
-                <TextField id="outlined-basic" label="Event Name" variant="outlined" defaultValue={event.eventName} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Description" variant="outlined" defaultValue={event.description} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Location" variant="outlined" defaultValue={event.location} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Country" variant="outlined" defaultValue={event.country} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event State" variant="outlined" defaultValue={event.state} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event City" variant="outlined" defaultValue={event.city} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Start Date" variant="outlined" defaultValue={event.startDate} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event End Date" variant="outlined" defaultValue={event.endDate} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Capacity" variant="outlined" defaultValue={event.capacity} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Available Seats" variant="outlined" defaultValue={event.availableSeats} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Starting Price" variant="outlined" defaultValue={event.eventStartingPrice} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Ending Price" variant="outlined" defaultValue={event.eventEndingPrice} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Max No Of Tickets Per Transaction" variant="outlined" defaultValue={event.maxNoOfTicketsPerTransaction} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Category Id" variant="outlined" defaultValue={event.categoryId} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Form Id" variant="outlined" defaultValue={event.formId} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Registration Status Id" variant="outlined" defaultValue={event.registrationStatusId} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Created By" variant="outlined" defaultValue={event.createdBy} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Accepted By" variant="outlined" defaultValue={event.acceptedBy} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Rejected By" variant="outlined" defaultValue={event.rejectedBy} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Rejected On" variant="outlined" defaultValue={event.rejectedOn} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Updated By" variant="outlined" defaultValue={event.updatedBy} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Updated On" variant="outlined" defaultValue={event.updatedOn} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Rejected Reason" variant="outlined" defaultValue={event.rejectedReason} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Is Published" variant="outlined" defaultValue={event.isPublished} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Is Cancelled" variant="outlined" defaultValue={event.isCancelled} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Is Free" variant="outlined" defaultValue={event.isFree} disabled={!isEditMode} required />
-                <TextField id="outlined-basic" label="Event Is Active" variant="outlined" defaultValue={event.isActive} disabled={!isEditMode} required />
-
+                <div class={classes.container}>
+                    <TextField id="outlined-basic" label="Event Name" variant="outlined" defaultValue={event.eventName} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Description" variant="outlined" defaultValue={event.description} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Location" variant="outlined" defaultValue={event.location} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Country" variant="outlined" defaultValue={event.country} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event State" variant="outlined" defaultValue={event.state} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event City" variant="outlined" defaultValue={event.city} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Start Date" variant="outlined" defaultValue={event.startDate} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event End Date" variant="outlined" defaultValue={event.endDate} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Capacity" variant="outlined" defaultValue={event.capacity} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Available Seats" variant="outlined" defaultValue={event.availableSeats} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Starting Price" variant="outlined" defaultValue={event.eventStartingPrice} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Ending Price" variant="outlined" defaultValue={event.eventEndingPrice} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Max No Of Tickets Per Transaction" variant="outlined" defaultValue={event.maxNoOfTicketsPerTransaction} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Category Id" variant="outlined" defaultValue={event.categoryId} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Form Id" variant="outlined" defaultValue={event.formId} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Registration Status Id" variant="outlined" defaultValue={event.registrationStatusId} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Created By" variant="outlined" defaultValue={event.createdBy} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Accepted By" variant="outlined" defaultValue={event.acceptedBy} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Rejected By" variant="outlined" defaultValue={event.rejectedBy} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Rejected On" variant="outlined" defaultValue={event.rejectedOn} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Updated By" variant="outlined" defaultValue={event.updatedBy} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Updated On" variant="outlined" defaultValue={event.updatedOn} disabled={!isEditMode} required />
+                    <TextField id="outlined-basic" label="Event Rejected Reason" variant="outlined" defaultValue={event.rejectedReason} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Is Published" variant="outlined" defaultValue={event.isPublished} disabled={false} required />
+                    <TextField id="outlined-basic" label="Event Is Cancelled" variant="outlined" defaultValue={event.isCancelled} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Is Free" variant="outlined" defaultValue={event.isFree} disabled={true} required />
+                    <TextField id="outlined-basic" label="Event Is Active" variant="outlined" defaultValue={event.isActive} disabled={true} required />
+                </div>
             </Box>
-            {isEditMode ? (
-                <>
-                    <Button variant="contained" onClick={handleSave}>
-                        Save
-                    </Button>
-                </>
-            ) : (
-                <>
-                    <Button variant="contained" onClick={handleEdit}>
-                        Edit
-                    </Button>
-                </>
-            )}
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                {isEditMode ? (
+                    <>
+                        <Button variant="contained" onClick={handleSave}>
+                            Save
+                        </Button>
+                    </>
+                ) : (
+                        <>
+                            <Button variant="contained" onClick={handleEdit}>
+                            Edit
+                        </Button>
+                    </>
+                )}
+            </div>
         </div>
     );
 };

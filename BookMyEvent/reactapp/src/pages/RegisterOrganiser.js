@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
     },
     form: {
-        width: "100%",
+        width: "50%",
         marginTop: theme.spacing(1),
     },
     submitButton: {
@@ -40,7 +40,7 @@ const RegisterOrganiser = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
-     
+
     const [selectedRoleValue, setSelectedRoleValue] = useState('dummy');
     const [formData, setFormData] = useState({
         AdministratorName: '',
@@ -163,7 +163,7 @@ const RegisterOrganiser = () => {
         console.log("before post call " + formData)
         const _formData = new FormData();
         if (selectedRoleValue == "peer") {
-            
+
             _formData.append("administratorName", formData.AdministratorName);
             _formData.append("administratorAddress", formData.AdministratorAddress);
             _formData.append("email", formData.Email);
@@ -244,167 +244,172 @@ const RegisterOrganiser = () => {
                 <Box
                     sx={{ boxShadow: 3, p: 3, borderRadius: "16px", textAlign: "center" }}
                 >
-                    <Typography variant="h5" component="h1" border={1}>
-                        Register
-                    </Typography>
-                    <form className={classes.form} onSubmit={handleSubmit}>
-                        <FormControl variant="outlined" margin="normal" fullWidth>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Typography variant="h5" component="h1" sx={{ width: "50%" }} border={1}>
+                            Register
+                        </Typography>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <form className={classes.form} onSubmit={handleSubmit}>
+                            <FormControl variant="outlined" margin="normal" fullWidth>
 
+                                <TextField
+                                    label="Name"
+                                    id="Name"
+                                    name="AdministratorName"
+                                    variant="outlined"
+                                    value={formData.AdministratorName}
+                                    onChange={handleInputChange}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                />
+                            </FormControl>
                             <TextField
-                                label="Name"
-                                id="Name"
-                                name="AdministratorName"
+                                label="Address"
+                                name='AdministratorAddress'
+                                id='Address'
                                 variant="outlined"
-                                value={formData.AdministratorName}
+                                value={formData.AdministratorAddress}
                                 onChange={handleInputChange}
                                 margin="normal"
                                 required
                                 fullWidth
                             />
-                        </FormControl>
-                        <TextField
-                            label="Address"
-                            name='AdministratorAddress'
-                            id='Address'
-                            variant="outlined"
-                            value={formData.AdministratorAddress}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
-                        <TextField
-                            label="Email"
-                            id='Email'
-                            name="Email"
-                            variant="outlined"
-                            type="email"
-                            value={formData.Email}
-                            onChange={handleEmailChange}
-                            error={emailError !== ''}
-                            helperText={emailError}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
-                        <TextField
-                            label="Phone Number:"
-                            id='Phone Number'
-                            name='PhoneNumber'
-                            variant="outlined"
-                            type="number"
-                            value={formData.PhoneNumber}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
+                            <TextField
+                                label="Email"
+                                id='Email'
+                                name="Email"
+                                variant="outlined"
+                                type="email"
+                                value={formData.Email}
+                                onChange={handleEmailChange}
+                                error={emailError !== ''}
+                                helperText={emailError}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
+                            <TextField
+                                label="Phone Number:"
+                                id='Phone Number'
+                                name='PhoneNumber'
+                                variant="outlined"
+                                type="number"
+                                value={formData.PhoneNumber}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
 
 
-                        <TextField
-                            label="Password"
-                            id='Password'
-                            name='Password'
-                            variant="outlined"
-                            type="password"
-                            value={formData.Password}
-                            onChange={handleInputChange}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
+                            <TextField
+                                label="Password"
+                                id='Password'
+                                name='Password'
+                                variant="outlined"
+                                type="password"
+                                value={formData.Password}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
 
-                        <TextField
-                            label="ConfirmPassword"
-                            id='ConfirmPassword'
-                            name='Password'
-                            variant="outlined"
-                            type="password"
-                            error={passwordError !== ''}
-                            helperText={passwordError}
-                            value={confirmPassword}
-                            onChange={handleConfirmPassword}
-                            margin="normal"
-                            required
-                            fullWidth
-                        />
+                            <TextField
+                                label="ConfirmPassword"
+                                id='ConfirmPassword'
+                                name='Password'
+                                variant="outlined"
+                                type="password"
+                                error={passwordError !== ''}
+                                helperText={passwordError}
+                                value={confirmPassword}
+                                onChange={handleConfirmPassword}
+                                margin="normal"
+                                required
+                                fullWidth
+                            />
 
-                        <input
-                            accept="image/jpeg"
-                            id="image-upload"
-                            type="file"
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }}
-                        />
-                        <label htmlFor="image-upload">
-                            <Button component="span" variant="contained" color="primary" fullWidth>
-                                Upload Image
-                            </Button>
-                        </label>
-                        {image && <p>Selected image: {image.name}</p>}
+                            <input
+                                accept="image/jpeg"
+                                id="image-upload"
+                                type="file"
+                                onChange={handleImageChange}
+                                style={{ display: 'none' }}
+                            />
+                            <label htmlFor="image-upload">
+                                <Button component="span" variant="contained" color="primary" fullWidth>
+                                    Upload Image
+                                </Button>
+                            </label>
+                            <div style={{ marginTop: "10px", }}>
+                                {image && <p>Selected image: {image.name}</p>}
+                            </div>
 
 
-                        <FormControl required sx={{ width: '300px' }}>
-                            <InputLabel htmlFor="role-select">Select an option</InputLabel>
-                            <Select value={selectedRoleValue} labelId="role-select" id="role-select" onChange={handleRoleChange} >
+                            <FormControl required sx={{ width: '300px' }}>
+                                <InputLabel htmlFor="role-select">Select an option</InputLabel>
+                                <Select value={selectedRoleValue} labelId="role-select" id="role-select" onChange={handleRoleChange} >
 
-                                <MenuItem value="dummy">Select an Option</MenuItem>
-                                <MenuItem value="peer">Join an existing Organisation</MenuItem>
-                                <MenuItem value="owner">Create a new Organisation</MenuItem>
+                                    <MenuItem value="dummy">Select an Option</MenuItem>
+                                    <MenuItem value="peer">Join an existing Organisation</MenuItem>
+                                    <MenuItem value="owner">Create a new Organisation</MenuItem>
 
-                            </Select>
-                        </FormControl>
-                        {selectedRoleValue == "owner" ? (<>
-                            <Typography variant="h5" gutterBottom>
-                                Please fill in your organization details
-                            </Typography>
-                            <FormControl variant="outlined" margin="normal" fullWidth>
-
-                                <TextField
-                                    label="Name of the Organisation"
-                                    id="Name"
-                                    name="OrganisationName"
-                                    variant="outlined"
-                                    value={orgFormData.OrganisationName}
-                                    onChange={handleOrgNameChange}
-                                    margin="normal"
-                                    error={orgNameError !== ''}
-                                    helperText={orgNameError}
-                                    required
-                                    fullWidth
-                                />
+                                </Select>
                             </FormControl>
-                            <FormControl variant="outlined" margin="normal" fullWidth>
-                                <TextField
-                                    label="Description"
-                                    id="Description"
-                                    name="OrganisationDescription"
-                                    variant="outlined"
-                                    value={orgFormData.OrganisationDescription}
-                                    onChange={handleOrgInputChange}
-                                    margin="normal"
-                                    required
-                                    multiline
-                                    rows={4}
-                                    fullWidth
-                                />
-                            </FormControl>
-                            <FormControl variant="outlined" margin="normal" fullWidth>
+                            {selectedRoleValue == "owner" ? (<>
+                                <Typography variant="h5" gutterBottom>
+                                    Please fill in your organization details
+                                </Typography>
+                                <FormControl variant="outlined" margin="normal" fullWidth>
 
-                                <TextField
-                                    label="Location of the Organisation"
-                                    id="Name"
-                                    name="Location"
-                                    variant="outlined"
-                                    value={orgFormData.Location}
-                                    onChange={handleOrgInputChange}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                />
-                            </FormControl>
-                        </>) : (selectedRoleValue == "peer" ? (<>
-                            {/* <Autocomplete
+                                    <TextField
+                                        label="Name of the Organisation"
+                                        id="Name"
+                                        name="OrganisationName"
+                                        variant="outlined"
+                                        value={orgFormData.OrganisationName}
+                                        onChange={handleOrgNameChange}
+                                        margin="normal"
+                                        error={orgNameError !== ''}
+                                        helperText={orgNameError}
+                                        required
+                                        fullWidth
+                                    />
+                                </FormControl>
+                                <FormControl variant="outlined" margin="normal" fullWidth>
+                                    <TextField
+                                        label="Description"
+                                        id="Description"
+                                        name="OrganisationDescription"
+                                        variant="outlined"
+                                        value={orgFormData.OrganisationDescription}
+                                        onChange={handleOrgInputChange}
+                                        margin="normal"
+                                        required
+                                        multiline
+                                        rows={4}
+                                        fullWidth
+                                    />
+                                </FormControl>
+                                <FormControl variant="outlined" margin="normal" fullWidth>
+
+                                    <TextField
+                                        label="Location of the Organisation"
+                                        id="Name"
+                                        name="Location"
+                                        variant="outlined"
+                                        value={orgFormData.Location}
+                                        onChange={handleOrgInputChange}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                    />
+                                </FormControl>
+                            </>) : (selectedRoleValue == "peer" ? (<>
+                                {/* <Autocomplete
                                 options={organisations}
                                 getOptionLabel={(option) => option.label}
                                 renderInput={(params) => (
@@ -418,32 +423,33 @@ const RegisterOrganiser = () => {
                                 noOptionsText="No options found"
                                 style={{ width: '300px' }}
                             /> */}
-                            <FormControl variant="outlined" margin="normal" fullWidth>
+                                <FormControl variant="outlined" margin="normal" fullWidth>
 
-                                <TextField
-                                    label="Enter your Organisation name"
-                                    id="Name"
-                                    name="Organisation"
-                                    variant="outlined"
+                                    <TextField
+                                        label="Enter your Organisation name"
+                                        id="Name"
+                                        name="Organisation"
+                                        variant="outlined"
 
-                                    onChange={handleOptionChange}
-                                    error={peerOrgNameError !== ''}
-                                    helperText={peerOrgNameError}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                />
-                            </FormControl>
+                                        onChange={handleOptionChange}
+                                        error={peerOrgNameError !== ''}
+                                        helperText={peerOrgNameError}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                    />
+                                </FormControl>
 
-                        </>
+                            </>
 
-                        ) : <></>
-                        )}
+                            ) : <></>
+                            )}
 
-                        <Button type="submit" variant="contained" className={classes.submitButton} color="primary" fullWidth>
-                            Register
-                        </Button>
-                    </form>
+                            <Button type="submit" variant="contained" sx={{ marginTop:"10px" }} className={classes.submitButton} color="primary" fullWidth>
+                                Register
+                            </Button>
+                        </form>
+                    </div>
                 </Box>
             </Container>
         </>
