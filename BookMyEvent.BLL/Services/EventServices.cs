@@ -374,5 +374,53 @@ namespace BookMyEvent.BLL.Services
                 throw new Exception("Failed to delete event.", ex);
             }
         }
+
+        public async Task<List<BLEvent>> GetAllPastEventsByOrganisationId(Guid organisationId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetPastEventsByOrganisation(organisationId, pageNumber, pageSize));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch past events.", ex);
+            }
+        }
+
+        public async Task<List<BLEvent>> GetAllPastEventsByOrganiserId(Guid organisationId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetPastEventsByOrganiser(organisationId, pageNumber, pageSize));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch past events.", ex);
+            }
+        }
+
+        public async Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId)
+        {
+            try
+            {
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetOrganiserRequestedEvents(organiserId));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch organiser requested events.", ex);
+            }   
+        }
+
+        public async Task<List<BLEvent>> GetOrganisationRequestedEvents(Guid organisationId)
+        {
+            try
+            {
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetOrganisationRequestedEvents(organisationId));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch organisation requested events.", ex);
+            }
+        }
     }
 }

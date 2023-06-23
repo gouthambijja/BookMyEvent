@@ -353,5 +353,44 @@ namespace BookMyEvent.DLL.Contracts
         /// </returns>
         Task<(bool isActiveUpdated, string message)> UpdateIsActive(Guid eventId, Guid updatedBy, DateTime updatedOn);
 
+
+
+        /// <summary>
+        /// An asynchronous method to get the list of past event by an organiser
+        /// </summary>
+        /// <param name="organiserId"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
+        Task<List<Event>> GetPastEventsByOrganiser(Guid organiserId, int pageNumber, int pageSize);
+
+        /// <summary>
+        /// An asynchronous method to get the list of past events by an organisation
+        /// </summary>
+        /// <param name="organisationId"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
+        Task<List<Event>> GetPastEventsByOrganisation(Guid organisationId, int pageNumber, int pageSize);
+
+        /// <summary>
+        /// An asynchronous method to get the list of requested events by an organiser
+        /// </summary>
+        /// <param name="organiserId"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
+        Task<List<Event>> GetOrganiserRequestedEvents(Guid organiserId);
+
+        /// <summary>
+        /// An asynchronous method to get the list of requested events by an organisation
+        /// </summary>
+        /// <param name="organisationId"></param>
+        /// <returns>
+        /// Returns a list of Event objects
+        /// </returns>
+        Task<List<Event>> GetOrganisationRequestedEvents(Guid organisationId);
     }
 }

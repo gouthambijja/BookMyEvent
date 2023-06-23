@@ -33,6 +33,11 @@ import RegisterUser from "./pages/RegisterUser";
 import OwnerRequests from "./pages/OwnerRequests";
 import RegisterEvent from "./Components/RegisterEvent";
 import store from "./App/store";
+import ProfilePage from "./pages/Profile";
+import InfiniteMyPastEvents from "./Components/InfiniteMyPastEvents";
+import InfiniteOrganisationPastEvents from "./Components/InfiniteOrganisationPastEvents";
+import EventRequestsPage from "./pages/EventRequestsPage";
+import OrganisationEventsPage from "./pages/OrganisationEventsPage";
 
 import 'react-toastify/dist/ReactToastify.css';
 import UserTicketList from "./pages/UserTickets";
@@ -71,6 +76,10 @@ const App = () => {
                                 <Route path="PeerRequests" element={<PeerRequest />}></Route>
                                 <Route path="addSecondaryOwner" element={<AddSecondary />} />
                                 <Route path="profile" element={<Profile />} />
+                                <Route path="eventReq" element={<EventRequestsPage/>} />
+                                <Route path="myPastEvents" element={<InfiniteMyPastEvents />} />
+                                <Route path="organisationEvents" element={<OrganisationEventsPage/> }/>
+                                <Route path="organisationPastEvents" element={<InfiniteOrganisationPastEvents />} />
                                 <Route path="event/:eventId" element={<OrganiserEventPage />} />
                             </Route>
                         </Route>

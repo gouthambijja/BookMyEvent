@@ -427,7 +427,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                var events = await _db.Events.Where(x => x.IsActive == true && x.OrganisationId == orgId).ToListAsync();
+                var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.OrganisationId == orgId && x.AcceptedBy != null).ToListAsync();
                 return events;
             }
             catch (Exception ex)
@@ -440,7 +440,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                var events = await _db.Events.Where(x => x.IsActive == true && x.CreatedBy == organiserId).ToListAsync();
+                var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.CreatedBy == organiserId && x.AcceptedBy != null ).ToListAsync();
                 return events;
             }
             catch (Exception ex)
@@ -456,7 +456,7 @@ namespace BookMyEvent.DLL.Repositories
                 // Perform the filtering based on the provided criteria
                 var events = await _db.Events.ToListAsync();
                 var filteredEvents = await _db.Events
-                    .Where(e => e.StartDate >= startDate && e.EndDate <= endDate && e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice && (location != "" && location != null) ? e.Location.Contains(location) : true && (isFree == true ? e.IsFree == true : true) && (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) && e.IsActive == true && e.IsPublished == true && e.RegistrationStatusId != 3)
+                    .Where(e => e.StartDate >= startDate && (e.EndDate <= endDate && e.EndDate >= DateTime.Now) && e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice && (location != "" && location != null) ? e.Location.Contains(location) : true && (isFree == true ? e.IsFree == true : true) && (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) && e.IsActive == true && e.IsPublished == true && e.RegistrationStatusId != 3)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
@@ -492,6 +492,72 @@ namespace BookMyEvent.DLL.Repositories
             catch (Exception ex)
             {
                 return (false, "Event Not Updated");
+            }
+        }
+
+        public async Task<List<Event>> GetPastEventsByOrganiser(Guid organiserId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var events = await _db.Events
+                    .Where(x => x.CreatedBy == organiserId &&
+                    (x.EndDate < DateTime.Now || x.IsCancelled) &&
+                    (x.AcceptedBy != null || x.RejectedBy != null))
+                    .OrderByDescending(x => x.EndDate) // Sort by latest end date
+                    .Skip((pageNumber - 1) * pageSize) // Skip events on previous pages
+                    .Take(pageSize) // Take events for the current page
+                    .ToListAsync();
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch past events from the database.", ex);
+            }
+        }
+
+        public async Task<List<Event>> GetPastEventsByOrganisation(Guid organisationId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var events = await _db.Events
+                    .Where(x => x.OrganisationId == organisationId &&
+                                       (x.EndDate < DateTime.Now || x.IsCancelled) &&
+                                                          (x.AcceptedBy != null || x.RejectedBy != null))
+                    .OrderByDescending(x => x.EndDate) // Sort by latest end date
+                    .Skip((pageNumber - 1) * pageSize) // Skip events on previous pages
+                    .Take(pageSize) // Take events for the current page
+                    .ToListAsync();
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch past events from the database.", ex);
+            }
+        }
+
+        public async Task<List<Event>> GetOrganiserRequestedEvents(Guid organiserId)
+        {
+            try
+            {
+                var events = await _db.Events.Where(x => x.CreatedBy == organiserId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true ).ToListAsync();
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch requested events from the database.", ex);
+            }
+        }
+
+        public Task<List<Event>> GetOrganisationRequestedEvents(Guid organisationId)
+        {
+            try
+            {
+                var events = _db.Events.Where(x => x.OrganisationId == organisationId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true).ToListAsync();
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch requested events from the database.", ex);
             }
         }
     }

@@ -25,45 +25,59 @@ const getAllActivePublishedEvents = async (pageNumber = 1, pageSize = 10) => {
     });
     return response.data;
 };
-
-const updateEventRegistrationStatus = async (eventId, registrationStatusId, updatedBy, updatedAt) => {
-    const response = await Axios.get(`${apiBase}/UpdateEventRegistrationStatus?eventId=${eventId}&registrationStatusId=${registrationStatusId}&updatedBy=${updatedBy}&updatedAt=${updatedAt}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
+const updateEventRegistrationStatus = async (_event) => {
+    try {
+        const response = await Axios.put(`/api/events/${_event.eventId}/RegistrationStatus`, _event);
+        return response.data;
+    } catch (error) {
+        // Handle error
+        console.error('Error updating event registration status:', error);
+        throw error;
+    }
 };
 
-const updateIsCancelledEvent = async (eventId, updatedBy, updatedAt) => {
-    const response = await Axios.get(`${apiBase}/UpdateIsCancelledEvent?eventId=${eventId}&updatedBy=${updatedBy}&updatedAt=${updatedAt}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
+const updateIsCancelledEvent = async (_event) => {
+    try {
+        const response = await Axios.put(`/api/events/${_event.eventId}/CancelEvent`, _event);
+        return response.data;
+    } catch (error) {
+        // Handle error
+        console.error('Error updating event cancellation status:', error);
+        throw error;
+    }
 };
 
-const updateIsPublishedEvent = async (eventId, updatedBy, updatedAt) => {
-    const response = await Axios.get(`${apiBase}/UpdateIsPublishedEvent?eventId=${eventId}&updatedBy=${updatedBy}&updatedAt=${updatedAt}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
+const updateIsPublishedEvent = async (_event) => {
+    try {
+        const response = await Axios.put(`/api/events/${_event.eventId}/Publish`, _event);
+        return response.data;
+    } catch (error) {
+        // Handle error
+        console.error('Error updating event publication status:', error);
+        throw error;
+    }
 };
 
-const updateAcceptedBy = async (eventId, acceptBy, updatedBy, updatedAt) => {
-    const response = await Axios.get(`${apiBase}/UpdateAcceptedBy?eventId=${eventId}&acceptBy=${acceptBy}&updatedBy=${updatedBy}&updatedAt=${updatedAt}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
+const updateAcceptedBy = async (_event) => {
+    try {
+        const response = await Axios.put(`/api/events/${_event.eventId}/Accept`, _event);
+        return response.data;
+    } catch (error) {
+        // Handle error
+        console.error('Error updating acceptedBy:', error);
+        throw error;
+    }
 };
 
-const updateRejectedBy = async (eventId, rejectedBy, updatedBy, updatedAt) => {
-    const response = await Axios.get(`${apiBase}/UpdateRejectedBy?eventId=${eventId}&rejectedBy=${rejectedBy}&updatedBy=${updatedBy}&updatedAt=${updatedAt}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
+const updateRejectedBy = async (_event) => {
+    try {
+        const response = await Axios.put(`/api/events/${_event.eventId}/Reject`, _event);
+        return response.data;
+    } catch (error) {
+        // Handle error
+        console.error('Error updating rejectedBy:', error);
+        throw error;
+    }
 };
 
 const getAllCreatedEventsByOrganisation = async (orgId) => {
@@ -83,7 +97,7 @@ const getAllCreatedEventsByOrganiser = async (organiserId) => {
 };
 
 const getFilteredEvents = async (filterEvent) => {
-    const response = await Axios.post(`${apiBase}/GetFilteredEvents`, {...filterEvent}, {
+    const response = await Axios.post(`${apiBase}/GetFilteredEvents`, { ...filterEvent }, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
@@ -105,6 +119,60 @@ const getEventById = async (eventId) => {
         withCredentials: true,
     });
     return response.data;
+};
+
+const getOrganisationPastEvents = async (organisationId, pageNumber, pageSize) => {
+    const response = await Axios.get(`${apiBase}/OrganisationPastEvents/${organisationId}?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
+const getOrganiserPastEvents = async (organiserId, pageNumber, pageSize) => {
+
+    const response = await Axios.get(`${apiBase}/OrganiserPastEvents/${organiserId}?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
+const getOrganiserEventRequests = async (organiserId) => {
+    const response = await Axios.get(`${apiBase}/OrganiserRequests/${organiserId}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
+
+const getOrganisationEventRequests = async (organisationId) => {
+    const response = await Axios.get(`${apiBase}/OrganisationRequests/${organisationId}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
+
+
+export default {
+    addNewEvent,
+    updateEvent,
+    getAllActivePublishedEvents,
+    updateEventRegistrationStatus,
+    updateIsCancelledEvent,
+    updateIsPublishedEvent,
+    updateAcceptedBy,
+    updateRejectedBy,
+    getAllCreatedEventsByOrganisation,
+    getAllCreatedEventsByOrganiser,
+    getFilteredEvents,
+    deleteEvent,
+    getEventById,
+    getOrganisationPastEvents,
+    getOrganiserPastEvents,
+    getOrganiserEventRequests,
+    getOrganisationEventRequests
 };
 
 //const getFilteredEvents = async (startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber = 1, pageSize = 10) => {
@@ -138,21 +206,6 @@ const getEventById = async (eventId) => {
 //    }
 //}
 
-export default {
-    addNewEvent,
-    updateEvent,
-    getAllActivePublishedEvents,
-    updateEventRegistrationStatus,
-    updateIsCancelledEvent,
-    updateIsPublishedEvent,
-    updateAcceptedBy,
-    updateRejectedBy,
-    getAllCreatedEventsByOrganisation,
-    getAllCreatedEventsByOrganiser,
-    getFilteredEvents,
-    deleteEvent,
-    getEventById
-};
 
 
 // import Axios from "../Api/Axios";

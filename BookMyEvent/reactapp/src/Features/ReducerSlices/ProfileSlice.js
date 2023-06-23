@@ -44,4 +44,5 @@ const profileSlice = createSlice({
   },
 });
 const { actions, reducer } = profileSlice;
+export const getProfileUserId = (state) => state.profile.info.administratorId;
 export default reducer;

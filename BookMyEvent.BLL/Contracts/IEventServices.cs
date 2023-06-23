@@ -55,5 +55,12 @@ namespace BookMyEvent.BLL.Contracts
         /// </returns>
         Task<(bool isActiveUpdated, string message)> SoftDelete(Guid eventId, Guid updatedBy, DateTime updatedOn);
         Task<List<BLEvent>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize);
+
+        Task<List<BLEvent>> GetAllPastEventsByOrganisationId(Guid organisationId, int pageNumber, int pageSize);
+        Task<List<BLEvent>> GetAllPastEventsByOrganiserId(Guid organisationId, int pageNumber, int pageSize);
+
+        Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId);
+        Task<List<BLEvent>> GetOrganisationRequestedEvents(Guid organisationId);
+
     }
 }

@@ -1,70 +1,68 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { DeleteOutline, EditOutlined, PublishOutlined } from '@material-ui/icons'
-import { Button, CardActionArea, CardActions } from '@mui/material';
-import ConfirmationDialog from './ConfirmationDialog';
-import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { deleteEvent } from '../Features/ReducerSlices/EventsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteEvent, updateEvent } from '../Features/ReducerSlices/EventsSlice';
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { DeleteOutline, EditOutlined, PublishOutlined } from '@material-ui/icons';
+import ConfirmationDialog from './ConfirmationDialog';
 import ReusableAlert from './ReusableAlert';
 import { Link, useNavigate } from 'react-router-dom';
 import store from '../App/store';
+
 const OrganiserEventCard = ({ event }) => {
     const state = store.getState();
     const [openDialog, setOpenDialog] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState("");
-    const [alertSeverity, setAlertSeverity] = useState("success");
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.profile.info);
+    const navigate = useNavigate();
+
     const handleConfirm = async () => {
         setOpenDialog(false);
-        var tempEvent = { ...event };
+        const tempEvent = { ...event };
         tempEvent.updatedBy = profile.administratorId;
-        console.log(tempEvent);
         await dispatch(deleteEvent(tempEvent)).unwrap();
         setAlertMessage(state.events.message);
-        setAlertSeverity(state.events.error ? "error" : "success");
+        setAlertSeverity(state.events.error ? 'error' : 'success');
         setShowAlert(true);
+    };
+
+    const handleDeleteOperation = () => {
+        setOpenDialog(true);
     };
 
     const handleCancel = () => {
         setOpenDialog(false);
     };
-    const handleEdit = () => {
 
-    };
-    const handleOperation = () => {
-        setShowAlert(true);
+    const handlePublish = () => {
+        setOpenDialog(true);
     };
 
-    const handleCloseAlert = () => {
-        setShowAlert(false);
+    const handlePublishConfirm = () => {
+        setOpenDialog(false);
+        const tempEvent = { ...event };
+        tempEvent.isPublished = true;
+        dispatch(updateEvent(tempEvent));
     };
-    const navigate = useNavigate();
 
-    //useEffect(() => {
-    //    setAlertMessage(state.events.message);
-    //    setAlertSeverity(state.events.error ? "error" : "success");
-    //    setShowAlert(true);
-    //}, []);
-    const handleClick = (id) => {
-        navigate(`event/${id}`)
-    }
+    const handleRegistrationStatusChange = (e) => {
+        const tempEvent = { ...event };
+        tempEvent.registrationStatus = parseInt(e.target.value);
+        dispatch(updateEvent(tempEvent));
+    };
+
+    const handleClick = () => {
+        navigate(`event/${event.eventId}`);
+    };
+
     return (
         <>
-            <Card sx={{ width: '400px', boxShadow: "0px 0px 9px #d0d0d0" }}>
-                <CardActionArea onClick={() => handleClick(event.eventId)}>
-                    <CardMedia
-                        component="img"
-                        sx={{ width: '100%', aspectRatio: 1 / 0.7 }}
-                        image={`data:image/jpeg;base64,${event.profileImgBody}`}
-                        alt="green iguana"
-                    />
+            <Card sx={{ width: '400px', boxShadow: '0px 0px 9px #d0d0d0' }}>
+                <CardActionArea onClick={handleClick}>
+                    <CardMedia component="img" sx={{ width: '100%', aspectRatio: 1 / 0.7 }} image={`data:image/jpeg;base64,${event.profileImgBody}`} alt="green iguana" />
                     <CardContent>
                         <Typography variant="h5" component="div">
                             {event.eventName}
@@ -73,7 +71,7 @@ const OrganiserEventCard = ({ event }) => {
                             Starts on: {new Date(event.startDate).toLocaleDateString('en-GB')} | Ends on: {new Date(event.endDate).toLocaleDateString('en-GB')}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary">
-                            Location: {event.city},{event.state},{event.country}
+                            Location: {event.city}, {event.state}, {event.country}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary">
                             Prices starting from: {event.eventStartingPrice}
@@ -85,41 +83,67 @@ const OrganiserEventCard = ({ event }) => {
                             Created On: {new Date(event.createdOn).toLocaleDateString('en-GB')}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary">
-                            Status: {event.acceptedBy ? "Accepted" : event.rejectedBy ? "Rejected" : "Pending"}
+                            Status: {event.acceptedBy ? 'Accepted' : event.rejectedBy ? 'Rejected' : 'Pending'}
                         </Typography>
-
                     </CardContent>
                 </CardActionArea>
                 <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
-                    <Button size="small" startIcon={<EditOutlined />} color="secondary" variant="outlined" onClick={handleEdit } >
-                        Edit
-                    </Button>
-                    <Button size="small" startIcon={<DeleteOutline />} color="error" variant="outlined" onClick={() => setOpenDialog(true)}>
-                        Delete
-                    </Button>
-                    <Button size="small" startIcon={<PublishOutlined />} color="primary" variant="outlined">
-                        Publish
-                    </Button>
+                    {((event.acceptedBy === null && event.rejectedBy === null) || (event.acceptedBy === null && event.createdBy === profile.administratorId)) && event.isActive && (
+                        <>
+                            <Button size="small" startIcon={<EditOutlined />} color="primary" variant="outlined">
+                                Accept
+                            </Button>
+                            <Button size="small" startIcon={<DeleteOutline />} color="error" variant="outlined">
+                                Reject
+                            </Button>
+                        </>
+                    )}
+                    {event.createdBy === profile.administratorId && event.isActive && event.isPublished === false && (
+                        <>
+                            <Button size="small" startIcon={<PublishOutlined />} color="primary" variant="outlined">
+                                Publish
+                            </Button>
+                            <Button size="small" startIcon={<DeleteOutline />} color="error" variant="outlined">
+                                Cancel
+                            </Button>
+                        </>
+                    )}
+                    {(event.isPublished && !event.isCancelled) && (
+                        <>
+                            {event.createdBy === profile.administratorId && (
+                                <>
+                                    <select value={event.registrationStatus} onChange={handleRegistrationStatusChange}>
+                                        <option value={1}>Yet to Open</option>
+                                        <option value={2}>Open</option>
+                                        <option value={3}>Closed</option>
+                                    </select>
+                                    <Button size="small" startIcon={<DeleteOutline />} color="error" variant="outlined">
+                                        Cancel
+                                    </Button>
+                                </>
+                            )}
+                            {event.createdBy !== profile.administratorId &&  (
+                                <Button size="small" startIcon={<DeleteOutline />} color="error" variant="outlined">
+                                    Cancel
+                                </Button>
+                            )}
+                        </>
+                    )}
                 </CardActions>
+        
             </Card>
 
             <ConfirmationDialog
                 open={openDialog}
                 title="Confirmation"
                 content="Are you sure you want to proceed?"
-                onConfirm={handleConfirm}
+                onConfirm={event.isPublished ? handlePublishConfirm : handleConfirm}
                 onCancel={handleCancel}
             />
 
-            {showAlert && (
-                <ReusableAlert
-                    message={alertMessage}
-                    severity={alertSeverity}
-                    duration={3000}
-                    onClose={handleCloseAlert}
-                />
-            )}
+            {showAlert && <ReusableAlert message={alertMessage} severity={alertSeverity} duration={3000} onClose={() => setShowAlert(false)} />}
         </>
     );
-}
+};
+
 export default OrganiserEventCard;

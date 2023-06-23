@@ -332,5 +332,7 @@ namespace BookMyEvent.WebApi.Controllers
             var result = await _organiserServices.GetAllOwners();
             return Ok(result);
         }
+
+        
     }
 }
