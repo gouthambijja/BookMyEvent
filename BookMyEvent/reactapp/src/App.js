@@ -61,7 +61,7 @@ const App = () => {
                     <Route path="/Register" element={<RegisterUser />} />
                     <Route element={<PersistLogin />}>
                         <Route element={<RequireAuth allowedroles={["User"]} />}>
-                            <Route path="/registerEvent/:id" element={<RegisterEvent />}></Route>
+                            <Route path="/registerEvent/:eventId/:formId" element={<RegisterEvent />} loader={storeLoader.FormFieldsLoader}></Route>
                             <Route path="profile" element={<Profile />}/>
                         </Route>
                     </Route>

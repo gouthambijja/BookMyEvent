@@ -6,17 +6,21 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const EventCard = ({event}) =>  {
     const categories = useSelector(store => store.category);
-    useEffect(()=>{
-    },[])
+    const navigate = useNavigate();
+
+const handleEventRegister = () =>{
+      navigate(`/registerEvent/${event.eventId}/${event.formId}`);
+}
   return (
-    <Card className="card" sx={{width:'300px',boxShadow:"0px 0px 9px #d0d0d0"} }>
+    <Card className="card" sx={{width:'450px',boxShadow:"0px 0px 9px #d0d0d0"} }>
       <CardActionArea>
         <CardMedia
           component="img"
-          sx={{width:'100%',aspectRatio:1/1}}
+          sx={{width:'100%',aspectRatio:1/0.7}}
           image={`data:image/jpeg;base64,${event.profileImgBody}`}
           alt="green iguana"
         />
@@ -42,7 +46,7 @@ const EventCard = ({event}) =>  {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{display:'flex',justifyContent:'right'}}>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleEventRegister}>
           Register
         </Button>
       </CardActions>

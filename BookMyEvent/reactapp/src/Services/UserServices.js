@@ -43,5 +43,6 @@ const loginUser = async (formData) => {
     )
     return response.data;
 }
+
 export  {loginUser,getUserById}
 export default { registerUser,isEmailTaken };

@@ -49,13 +49,13 @@ const LandingPage = () => {
     dispatch(SetPageNumber(2));
     await dispatch(fetchEvents(filters)).unwrap();
   };
-
+  const scrollPosition = document.documentElement.scrollTop;
   return (
     <>
       <div className={classes.container}>
         <EventsFilter onFilter={handleFilter} />
         <InfiniteScrollUserEventsLandingPage />
-        {!end?<div style={{padding:'40px',textAlign:'center',fontStyle:'italic'}}><span>Loading...</span></div>
+        {!end && scrollPosition ?<div style={{padding:'40px',textAlign:'center',fontStyle:'italic'}}><span>Loading...</span></div>
         :<div style={{fontStyle:'italic',padding:'40px',textAlign:'center'}}>New Events Coming soon!!</div>}
       </div>
     </>
