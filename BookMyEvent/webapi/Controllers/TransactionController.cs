@@ -15,7 +15,11 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _transactionServices = transactionServices;
         }
-
+        /// <summary>
+        /// Service To Add a transaction
+        /// </summary>
+        /// <param name="bLTransaction"></param>
+        /// <returns>Transaction Details</returns>
         [HttpPost("addtransaction")]
         public async Task<IActionResult> Add([FromBody] AddTransaction bLTransaction)
         {
@@ -28,7 +32,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Get Transaction By transactionId
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>Transaction Details</returns>
         [HttpGet("GetAllTransactionsByEventId")]
         public async Task<IActionResult> GetTransactionsByEventId(Guid eventId)
         {
@@ -41,7 +49,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Get transactionsby a User
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>List Of Transactions By A user</returns>
         [HttpGet("GetAllTransactionsByUserId")]
         public async Task<IActionResult> GetTransactionsByUserId(Guid userId)
         {

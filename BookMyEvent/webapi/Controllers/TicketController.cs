@@ -13,6 +13,11 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _ticketServices = ticketServices;
         }
+        /// <summary>
+        /// Service to Get tickets by transaction Id
+        /// </summary>
+        /// <param name="transactionId"></param>
+        /// <returns>List of Tickets</returns>
         [HttpGet("getallticketsbytransactionid")]
         public async Task<IActionResult> Get(Guid transactionId)
         //public async Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>> Get(Guid transactionId)
@@ -31,7 +36,12 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest("error in controller");
             }
         }
-
+        /// <summary>
+        /// Service to Get All UserEvent Tickets
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="eventId"></param>
+        /// <returns>list of Tickets User Registered Event</returns>
         [HttpGet("getusereventtickets")]
         public async Task<IActionResult> GetAllUserEventTickets(Guid userId, Guid eventId)
         //public async Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>?> GetAllUserEventTickets(Guid userId, Guid eventId)
@@ -50,7 +60,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest("error in controller");
             }
         }
-
+        /// <summary>
+        /// Service to Cancel Ticket
+        /// </summary>
+        /// <param name="ticketId"></param>
+        /// <returns>true if Successful else false</returns>
         [HttpPut("cancelticket")]
         public async Task<IActionResult> CancelTicket(Guid ticketId)
         {

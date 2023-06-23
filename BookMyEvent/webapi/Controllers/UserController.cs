@@ -29,6 +29,10 @@ namespace BookMyEvent.WebApi.Controllers
             return Ok("faekString");
         }
         // GET: api/<UserController>
+        /// <summary>
+        /// Service to Get All The Users
+        /// </summary>
+        /// <returns>List of Users</returns>
         [HttpGet("Users")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -41,7 +45,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Get a User By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET api/<UserController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
@@ -55,6 +63,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Get A User By Email
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <returns>User Details </returns>
         [HttpGet("user/{Email}")]
         public async Task<IActionResult> GetUserByEmail(string Email)
         {
@@ -67,7 +80,10 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Post A user
+        /// </summary>
+        /// <returns>true if added succesfully else false along with the confirmatin Message</returns>
         // POST api/<UserController>
         [HttpPost("AddUser")]
         public async Task<IActionResult> Post()
@@ -101,6 +117,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Service to LoginUSer
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns>Token if User Exists else error Message</returns>
         [HttpPost("Login")]
         public async Task<IActionResult> LoginUser([FromBody] BLLoginModel login)
         {
@@ -132,6 +153,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Update User
+        /// </summary>
+        /// <param name="User"></param>
+        /// <returns>Updated User Details</returns>
         // PUT api/<UserController>/5
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> Put([FromBody] BLUser User)
@@ -145,6 +171,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Change User Password
+        /// </summary>
+        /// <param name="changePassword"></param>
+        /// <returns>true if Successful else false</returns>
         [HttpPut("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] BLChangePassword changePassword)
         {
@@ -157,7 +188,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Block the User
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns>true if successful else false</returns>
         // DELETE api/<UserController>/5
         [HttpDelete("BlockUser")]
         public async Task<IActionResult> BlockUser(Guid UserId)
@@ -171,7 +206,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Delete User
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns>true if successful else false</returns>
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> DeleteUser(Guid UserId)
         {
@@ -184,7 +223,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to verify Email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>true if Valid else false</returns>
         [HttpGet("isEmailExists/{email}")]
         public async Task<IActionResult> IsEmailExists(string email)
         {

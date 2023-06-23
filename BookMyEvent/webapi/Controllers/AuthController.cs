@@ -22,6 +22,14 @@ namespace BookMyEvent.WebApi.Controllers
         //    _adminService = adminService;
         //}
         //jwt methods//---------------------------------
+        /// <summary>
+        /// Service to Generate JWT Token
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="Id"></param>
+        /// <param name="role"></param>
+        /// <param name="tokenType"></param>
+        /// <returns>returns Token</returns>
         internal string GenerateJwtToken(string email,Guid Id, string role,TokenType tokenType)
         {
             DateTime expiresIn;
@@ -90,7 +98,10 @@ namespace BookMyEvent.WebApi.Controllers
         //    var token = tokenHandler.CreateToken(tokenDescriptor);
         //    return tokenHandler.WriteToken(token);
         //}
-
+        /// <summary>
+        /// Method to Authenticate Token
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("authenticatejwt")]
         public async Task<string> Authenticatejwt()
         {
@@ -101,7 +112,10 @@ namespace BookMyEvent.WebApi.Controllers
             return  token;
         }
         //public async Task<ActionResult<LoginCredintials>> GetUserByJwt([FromBody] string jwtToken)
-
+        /// <summary>
+        /// Service to LogOut
+        /// </summary>
+        /// <returns>returns true if logout Successful else false</returns>
         [HttpPost("logout")]
         public async Task<IActionResult> logout()
         {
@@ -115,6 +129,10 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(false);
             }
         }
+        /// <summary>
+        /// Service to GEnerate new Accesstoken using refresh token
+        /// </summary>
+        /// <returns>new access token</returns>
         [HttpGet("getNewAccessTokenUsingRefreshToken")]
         public async Task<IActionResult> FetNewAccessTokenUsingRefreshToken()
         {

@@ -16,7 +16,10 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _eventServices = eventServices;
         }
-
+        /// <summary>
+        /// Service to Add an Event
+        /// </summary>
+        /// <returns>Retuns Added event Details</returns>
         [HttpPost("addevent")]
         public async Task<IActionResult> AddNewEvent()
         {
@@ -83,6 +86,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Get Event By Id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns> event Details</returns>
         [HttpGet("geteventbyid")]
         public async Task<IActionResult> GetEventById(Guid eventId)
         {
@@ -97,7 +105,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Update Event
+        /// </summary>
+        /// <param name="newEvent"></param>
+        /// <returns>Updated Event Details</returns>
         [HttpPut("updateevent")]
         public async Task<IActionResult> UpdateEvent([FromBody] BLEvent newEvent)
         {
@@ -112,6 +124,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Delete an event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>true if deleted else false along with confirmation message</returns>
         [HttpDelete("deleteeventpermanently")]
         public async Task<IActionResult> DeleteEventPermanently(Guid eventId)
         {
@@ -126,7 +143,12 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Service to Get all active published events
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>list of published events</returns>
         [HttpGet("GetAllActivePublishedEvents")]
         public async Task<IActionResult> GetAllActivePublishedEvents(int pageNumber = 1, int pageSize = 10)
         {

@@ -23,6 +23,11 @@ namespace BookMyEvent.WebApi.Controllers
             _adminService = adminService;
             _authController = auth;
         }
+        /// <summary>
+        /// Used for AdminLogin
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns>returns token if user exists else message as "user Not found"</returns>
         [HttpPost("loginAdmin")]
         public async Task<string> LoginAdmin([FromBody] BLLoginModel login)
         {
@@ -54,6 +59,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return $"{ex.Message}";
             }
         }
+        /// <summary>
+        /// It is for Getting full details of Admin by AdminId
+        /// </summary>
+        /// <param name="AdminId"></param>
+        /// <returns>returns Admin Object</returns>
         [HttpGet("AdminById")]
         public async Task<IActionResult> GetAdminById(Guid AdminId)
         {
@@ -66,6 +76,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Returns all the admins created by specific Admin
+        /// </summary>
+        /// <param name="AdminId"></param>
+        /// <returns>list of Admins Created by specific Admin</returns>
         [HttpGet("AdminsCreatedByAdmin")]
         public async Task<IActionResult> AdminsCreatedByAdminId(Guid AdminId)
         {
@@ -78,7 +93,12 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Used to Add Admin
+        /// </summary>
+        /// <returns>Retuns Added Admin Details</returns>
         [HttpPost("AddAdmin")]
+        
         public async Task<IActionResult> AddAdmin()
         {
             try
@@ -120,6 +140,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Update Admin
+        /// </summary>
+        /// <param name="Admin"></param>
+        /// <returns>returns Updated Admin details</returns>
         [HttpPut("UpdateAdmin")]
         public async Task<IActionResult> UpdateAdmin(BLAdministrator Admin)
         {
@@ -132,6 +157,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Change Admin Password
+        /// </summary>
+        /// <param name="ChangePassword"></param>
+        /// <returns>true If changes Successfully else false</returns>
         [HttpPut("ChangeAdminPassword")]
         public async Task<IActionResult> ChangePassword(BLChangePassword ChangePassword)
         {

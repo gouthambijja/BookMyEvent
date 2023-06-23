@@ -13,6 +13,10 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _categoryServices = categoryServices;
         }
+        /// <summary>
+        /// Service to Get All the EventCategories
+        /// </summary>
+        /// <returns>List Of Event Categories</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {

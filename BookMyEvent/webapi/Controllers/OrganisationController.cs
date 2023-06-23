@@ -15,6 +15,12 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _organisationServices = organisationServices;
         }
+        /// <summary>
+        /// service to Get All the Organizations
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>List of Organizations</returns>
         [HttpGet]
         public async Task<IActionResult> GetOrganisations(int pageNumber = 1, int pageSize = 10)
         {
@@ -22,7 +28,11 @@ namespace BookMyEvent.WebApi.Controllers
             //Console.WriteLine(result.Count());
             return Ok(new {organisations = result.bLOrganisations, total = result.totalBLOrganisations});
         }
-
+        /// <summary>
+        /// Service to GEt a single Organization
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Organization Details</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrganisationById(Guid id)
         {
@@ -31,7 +41,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return Ok(result);
             else return NotFound("Organisation not found");
         }
-
+        /// <summary>
+        /// Service to Update Organization
+        /// </summary>
+        /// <param name="organisation"></param>
+        /// <returns>Updated Organization Details</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrganisation(BLOrganisation organisation)
         {
@@ -40,14 +54,22 @@ namespace BookMyEvent.WebApi.Controllers
                 return Ok(result);
             else return BadRequest("Organisation not updated");
         }
-
+        /// <summary>
+        /// Service to Check OrganizationName is Valid Or Not
+        /// </summary>
+        /// <param name="orgName"></param>
+        /// <returns>returns true if valid else false</returns>
         [HttpGet("CheckOrganisationName/{orgName}")]
         public async Task<IActionResult> CheckOrganisationName(string orgName)
         {
             var result = await _organisationServices.IsOrganisationNameTaken(orgName);
             return Ok(result);
         }
-
+        /// <summary>
+        /// Service to Get Organization by Name
+        /// </summary>
+        /// <param name="orgName"></param>
+        /// <returns>A tuple conatins of bool type and Id of Organization</returns>
         [HttpGet("getOrgIdByName/{orgName}")]
         public async Task<IActionResult> GetOrgIdByName(string orgName)
         {
@@ -78,7 +100,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest("error");
             }
         }
-
+        /// <summary>
+        /// Service to Delete Organization
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Deleted Organization Details</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrganisation(Guid id)
         {

@@ -15,7 +15,11 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _userInputFormService = userInputFormService;
         }
-
+        /// <summary>
+        /// Service To Add user input Form
+        /// </summary>
+        /// <param name="InputUserForms"></param>
+        /// <returns>List of User form fields and those values</returns>
         [HttpPost("submitform")]
         public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm> InputUserForms)
         //public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm([FromBody] List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
@@ -48,7 +52,12 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest("Error occured in controller");
             }
         }
-
+        /// <summary>
+        /// Service to get user forms of User By Event id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="EventId"></param>
+        /// <returns>List of User Forms of User</returns>
         [HttpGet("GetUserFormsOfUserIdByEventId")]
 
         public async Task<IActionResult> GetUserFormsOfUserIdByEventId(Guid userId, Guid EventId)
@@ -65,7 +74,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest("Error in controller");
             }
         }
-
+        /// <summary>
+        /// Service to get All the User forms by event Id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>list of user forms </returns>
         [HttpGet("GetAllUserFormsByEventId")]
         public async Task<IActionResult> GetAllUserFormsByEventId(Guid eventId)
         //public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> GetAllUserFormsByEventId(Guid eventId)

@@ -16,6 +16,11 @@ namespace BookMyEvent.WebApi.Controllers
         {
             _organiserFormServices = organiserFormServices;
         }
+        /// <summary>
+        /// Service to Add New Form
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns>retuns FormId and also ConfirmationMessage</returns>
         [HttpPost("AddForm")]
         public async Task<IActionResult> AddNewForm(BLForm form)
         {
@@ -29,6 +34,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Service to Add Reggistration Form Fields
+        /// </summary>
+        /// <param name="RegistrationFormFields"></param>
+        /// <returns>true if Added else false</returns>
         [HttpPost("AddFormFields")]
         public async Task<IActionResult> AddRegistrationFormFields(List<BLRegistrationFormFields> RegistrationFormFields)
         {
@@ -41,11 +51,21 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(false);
             }
         }
+        /// <summary>
+        /// Service to verify FormName
+        /// </summary>
+        /// <param name="formname"></param>
+        /// <returns>true if Valid else False</returns>
         [HttpGet("isFormNameTaken/{formname}")]
         public async Task<IActionResult> IsFormNameTaken(string formname)
         {
             return Ok(await _organiserFormServices.IsformNameTaken(formname));
         }
+        /// <summary>
+        /// Service to Get FormById 
+        /// </summary>
+        /// <param name="FormId"></param>
+        /// <returns>Returns All the Form Details</returns>
         [HttpGet("FormId")]
         public async Task<IActionResult> GetFormById(Guid FormId)
         {
@@ -62,6 +82,10 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        ///Service to GetAllFieldTypes
+        /// </summary>
+        /// <returns>List of fieldTypes</returns>
         [HttpGet("FieldTypes")]
         public async Task<IActionResult> GetAllFieldTypes()
         {
@@ -79,6 +103,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Get fieldtypes by form Id 
+        /// </summary>
+        /// <param name="FormId"></param>
+        /// <returns>List of FormField</returns>
         [HttpGet("FieldTypesByFormId")]
         public async Task<IActionResult> GetFieldTypesByFormId(Guid FormId)
         {
@@ -96,6 +125,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to getAll Organization Forms
+        /// </summary>
+        /// <param name="OrgId"></param>
+        /// <returns>List of Forms associated with the Organization</returns>
         [HttpGet("OrganizationForms")]
         public async Task<IActionResult> GetAllOrganizationForms(Guid OrgId)
         {
@@ -109,6 +143,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// Service to Get All Forms By an Organizer
+        /// </summary>
+        /// <param name="OrganizerId"></param>
+        /// <returns>List of Forms </returns>
         [HttpGet("OrganizerForms")]
         public async Task<IActionResult> GetAllFormsCreatedByOrganizer(Guid OrganizerId)
         {
@@ -126,6 +165,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+        /// <summary>
+        /// Service to Delete Form 
+        /// </summary>
+        /// <param name="FormId"></param>
+        /// <returns>true if successful else false along with a message</returns>
         [HttpDelete("DeleteForm")]
         public async Task<IActionResult> DeleteForm(Guid FormId)
         {
