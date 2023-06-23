@@ -437,7 +437,7 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{eventId}/RegistrationStatus")]
+        //[HttpPut("{eventId}/RegistrationStatus")]
         //public async Task<IActionResult> UpdateEventRegistrationStatus(BLEvent _event)
         //{
         //    try
@@ -733,7 +733,7 @@ namespace BookMyEvent.WebApi.Controllers
         //    }
         //}
 
-        [HttpGet(" UpdateEventRegistrationStatus")]
+        [HttpGet("UpdateEventRegistrationStatus")]
         public async Task<IActionResult> UpdateEventRegistrationStatus(Guid eventId, byte registrationStatusId, Guid updatedBy, DateTime updatedAt)
         {
             try
@@ -748,7 +748,7 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
-        [HttpGet(" UpdateIsCancelledEvent")]
+        [HttpGet("UpdateIsCancelledEvent")]
         public async Task<IActionResult> UpdateIsCancelledEvent(Guid eventId, Guid updatedBy, DateTime updatedAt)
         {
             try
@@ -778,7 +778,7 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
-        [HttpGet(" UpdateAcceptedBy")]
+        [HttpGet("UpdateAcceptedBy")]
         public async Task<IActionResult> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt)
         {
             try
