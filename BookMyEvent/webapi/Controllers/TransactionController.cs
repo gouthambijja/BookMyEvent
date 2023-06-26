@@ -32,6 +32,18 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getAllRegisteredEvents")]
+        public async Task<IActionResult> GetAllRegisteredEvents(Guid UserId)
+        {
+            try
+            {
+                return Ok(await _transactionServices.GetAllRegisteredEventsByUserId(UserId));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         /// <summary>
         /// Service to Get Transaction By transactionId
         /// </summary>

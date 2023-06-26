@@ -440,7 +440,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.CreatedBy == organiserId && x.AcceptedBy != null ).ToListAsync();
+                var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.CreatedBy == organiserId && x.AcceptedBy != null).ToListAsync();
                 return events;
             }
             catch (Exception ex)
@@ -539,7 +539,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                var events = await _db.Events.Where(x => x.CreatedBy == organiserId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true ).ToListAsync();
+                var events = await _db.Events.Where(x => x.CreatedBy == organiserId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true).ToListAsync();
                 return events;
             }
             catch (Exception ex)
@@ -560,5 +560,18 @@ namespace BookMyEvent.DLL.Repositories
                 throw new Exception("Failed to fetch requested events from the database.", ex);
             }
         }
+
+        public async Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds)
+        {
+            try
+            {
+                var Events = await _db.Events.Where(e => eventIds.Contains(e.EventId)).ToListAsync();
+                return Events;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        }
     }
-}

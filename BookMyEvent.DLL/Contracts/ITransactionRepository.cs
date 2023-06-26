@@ -42,5 +42,11 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="TransactionId"></param>
         /// <returns>Deleted Transaction</returns>
         public Task<Transaction> DeleteTransaction(Guid TransactionId);
+        /// <summary>
+        /// gets all the distinct event ids from the transaction table of a particular userId
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns>List<guid></returns>
+        public Task<List<Guid>> GetAllDistinctEventIds(Guid UserId);
     }
 }

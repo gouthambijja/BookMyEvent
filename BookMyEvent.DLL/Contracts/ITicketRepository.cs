@@ -41,7 +41,14 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <param name="TicketId"></param>
         /// <returns>Ticket with ticketId</returns>
+       
         public Task<Ticket> GetTicketByTicketId(Guid TicketId);
+        /// <summary>
+        /// to get all the tickets of particular form IDs
+        /// </summary>
+        /// <param name="FormIds"></param>
+        /// <returns></returns>
+        public Task<List<Ticket>> GetTicketsByFormids(List<Guid> FormIds);
 
         /// <summary>
         /// This method is to get all the tickets of an Event

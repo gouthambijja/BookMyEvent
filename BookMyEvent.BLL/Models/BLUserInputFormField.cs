@@ -8,13 +8,13 @@ namespace BookMyEvent.BLL.Models
 {
     public class BLUserInputFormField
     {
-        public Guid UserInputFormFieldid { get; set; }
+        public Guid? UserInputFormFieldid { get; set; }
 
-        public Guid RegistrationFormFieldId { get; set; }
+        public Guid? RegistrationFormFieldId { get; set; }
 
-        public Guid UserInputFormId { get; set; }
+        public Guid? UserInputFormId { get; set; }
 
-        public string Label { get; set; } = null!;
+        public string? Label { get; set; } = null!;
 
         public string? StringResponse { get; set; }
 

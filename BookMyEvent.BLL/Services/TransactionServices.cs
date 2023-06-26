@@ -15,21 +15,24 @@ namespace BookMyEvent.BLL.Services
     public class TransactionServices:ITransactionServices
     {
         private readonly ITransactionRepository transactionRepository;
+        private readonly IEventRepository eventRepository;
         private readonly ITicketServices ticketServices;   
         private Mapper _mapper;
 
-        public TransactionServices(ITransactionRepository transactionRepository,ITicketServices ticketServices)
+        public TransactionServices(ITransactionRepository transactionRepository,ITicketServices ticketServices, IEventRepository eventRepository)
         {
             this.transactionRepository = transactionRepository;
             this.ticketServices = ticketServices;
             _mapper = Automapper.InitializeAutomapper();
+            this.eventRepository = eventRepository;
         }
 
         public async Task<BLTransaction> Add((BLTransaction transaction,List<BLUserInputForm> forms) bLTransaction)
         {
             try
             {
-                var CurrentTransaction = _mapper.Map<BLTransaction>(await transactionRepository.AddTransaction(_mapper.Map<Transaction>(bLTransaction)));
+                var transactionDL = _mapper.Map<Transaction>(bLTransaction.transaction);
+                var CurrentTransaction = _mapper.Map<BLTransaction>(await transactionRepository.AddTransaction(transactionDL));
                 List<BLTicket> tickets = new List<BLTicket>(bLTransaction.forms.Count());
                 foreach(var form in bLTransaction.forms)
                 {
@@ -57,7 +60,19 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-      
+        public async Task<List<Event>> GetAllRegisteredEventsByUserId(Guid userId)
+        {
+            try
+            {
+                var eventIds = await transactionRepository.GetAllDistinctEventIds(userId);
+                var events = await eventRepository.GetEventsByEventIds(eventIds);
+                return events;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public async Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId)
         {

@@ -392,5 +392,11 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a list of Event objects
         /// </returns>
         Task<List<Event>> GetOrganisationRequestedEvents(Guid organisationId);
+        /// <summary>
+        /// return all the events whose ids present in the eventIds list
+        /// </summary>
+        /// <param name="eventIds"></param>
+        /// <returns>returns a list of events</returns>
+        Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds);
     }
 }

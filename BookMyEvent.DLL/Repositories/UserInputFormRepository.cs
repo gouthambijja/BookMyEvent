@@ -22,6 +22,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
+                inputForm.UserInputFormId = Guid.NewGuid();
                 _DBContext.UserInputForms.Add(inputForm);
                 await _DBContext.SaveChangesAsync();
                 await _DBContext.Entry(inputForm).GetDatabaseValuesAsync();

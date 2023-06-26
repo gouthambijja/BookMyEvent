@@ -1,4 +1,5 @@
 ﻿using BookMyEvent.BLL.Models;
+using BookMyEvent.BLL.RequestModels;
 using db.Models;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="userId"></param>
         /// <param name="eventId"></param>
         /// <returns> List of Tickets of an Event By UserId </returns>
-        public Task<List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>> GetUserEventTickets(Guid userId, Guid eventId);
+        public Task<List<UserTicketsWithDetails>> GetUserEventTickets(Guid userId, Guid eventId);
         
         /// <summary>
         /// This method is to cancel a Ticket

@@ -26,9 +26,17 @@ const apiBase = "/Transaction";
     return response.data;
 };
 
-
+const getAllRegisteredEventsByUserid = async (userId) => {
+    const response = await Axios.get(`${apiBase}/getAllRegisteredEvents?UserId=${userId}`,
+    {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
 export default {
     addTransaction,
     getAllTransactionsByEventId,
     getAllTransactionsByUserId,
+    getAllRegisteredEventsByUserid,
 };

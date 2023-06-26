@@ -33,7 +33,9 @@ namespace BookMyEvent.BLL.Services
                 for (int i = 0; i < totalForms; i++)
                 {
                     var SingleForm = userForms[i];
+
                     UserInputForm DLInputForm = mapper.Map<UserInputForm>(SingleForm.userInputForm);
+                   
 
                     UserInputForm newInputForm = await _userInputForm.Add(DLInputForm);
                     if(newInputForm == null) { return null; }
@@ -43,6 +45,7 @@ namespace BookMyEvent.BLL.Services
                     {
                         userInputFormField.UserInputFormId = newUserInputFormBL.UserInputFormId;
                         UserInputFormField DLUserInputFormField = mapper.Map<UserInputFormField>(userInputFormField);
+                        DLUserInputFormField.UserInputFormFieldid = Guid.NewGuid();
                         DLUserInputFormFields.Add(DLUserInputFormField);
                     }
                     List<UserInputFormField>? DLNewUserInputFormFields = await _userInputFormField.AddMany(DLUserInputFormFields);

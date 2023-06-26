@@ -1,28 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Card, CardContent } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import TicketServices from '../Services/TicketServices'
+import { useSelector } from 'react-redux';
 
-const UserTicketList = () => {
-  const [tickets, setTickets] = useState([
-    { id: 1, title: 'Ticket 1', description: 'Description for Ticket 1' },
-    { id: 2, title: 'Ticket 2', description: 'Description for Ticket 2' },
-    { id: 3, title: 'Ticket 3', description: 'Description for Ticket 3' },
-  ]);
-
+const UserTickets= () => {
+  const {eventId} = useParams();
+  const [tickets,setTickets] = useState([]);
+  const auth = useSelector(store => store.auth);
+  useEffect(()=>{
+   const loadTickets = async() =>{
+        const _tickets = await TicketServices.getAllUserEventTickets(auth.id,eventId);
+        console.log(_tickets);
+        setTickets(_tickets);
+    }
+    loadTickets();
+    
+  },[]);
+let cnt  = 0 ;
   return (
-    <div>
-      <Typography variant="h4">User Tickets</Typography>
+    <div style={{padding:'30px'}}>
       {tickets.length === 0 ? (
         <Typography variant="body1">No tickets available.</Typography>
       ) : (
-        <div>
-          {tickets.map((ticket) => (
-            <Card key={ticket.id} variant="outlined">
+        <div style={{maxWidth:'800px',margin:'0 auto'}}>
+          {tickets.map((ticket,index) => (
+            <Card key={cnt++} variant="outlined" style={{marginBottom:'10px'}}>
               <CardContent>
                 <Typography variant="h5" component="h2">
-                  {ticket.title}
+                  {index + 1}
                 </Typography>
                 <Typography variant="body2" component="p">
-                  {ticket.description}
+                  {ticket.userDetails.map(user =>
+                    <div key = {cnt++}>
+                        {user.Label}:<i>{user.StringResponse?user.StringResponse:user.NumberResponse?user.NumberResponse:user.DateResponse}</i>
+                    </div>
+                    )}
                 </Typography>
               </CardContent>
             </Card>
@@ -33,4 +46,4 @@ const UserTicketList = () => {
   );
 };
 
-export default UserTicketList;
+export default UserTickets;

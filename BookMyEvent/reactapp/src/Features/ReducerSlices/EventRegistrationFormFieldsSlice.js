@@ -4,10 +4,10 @@ const EventRegistrationFormSlice = createSlice({
   name: "EventRegistrationFormFields",
   initialState: {
     inputFields: [{
-      FieldType: "",
-      Label: "",
+      FieldType: "Select",
+      Label: "Ticket Prices",
       Validations: {min:"",max:""},
-      Options: [],
+      Options: [0],
       IsRequired: false,
     }],
   },

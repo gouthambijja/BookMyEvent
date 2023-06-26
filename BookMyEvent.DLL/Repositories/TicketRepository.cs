@@ -105,5 +105,17 @@ namespace BookMyEvent.DLL.Repositories
                 return false;
             }
         }
+
+        public async Task<List<Ticket>> GetTicketsByFormids(List<Guid> FormIds)
+        {
+            try
+            {
+                return await context.Tickets.Where(e => FormIds.Contains(e.UserInputFormId)).ToListAsync();
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

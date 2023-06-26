@@ -16,14 +16,19 @@ import { useSelector } from "react-redux";
 import store from "../App/store";
 import EventServices from "../Services/EventServices";
 import UserInputFormServices from "../Services/UserInputFormServices";
+import Transactions from "./Transactions";
 
 const RegisterEvent = () => {
   const [eventRegistrationFormFields, setEventRegistrationFormFields] =
     useState([]);
   const [event, setEvent] = useState();
+  const [toggleRegistrationTransaction, setToggleRegistrationTransaction] =
+    useState(true);
+  const [RegisteredData, setRegisteredData] = useState();
   const navigate = useNavigate();
   let fetchedFormFields = [];
   const { eventId, formId } = useParams();
+  const [TotalPrice, setTotalPrice] = useState(0);
   const FormFieldTypes = useSelector((store) => store.formFields.formFields);
   const [fieldRegistrationId, setFieldRegistrationId] = useState();
   useEffect(() => {
@@ -74,36 +79,28 @@ const RegisterEvent = () => {
           return u.lable == i;
         }).fieldTypeId;
 
-        if (type == 1 || type == 3 || type == Radio || type == 5) {
-          //text
+        if (type == 1 || type == 3 || type == 6 || type == 5) {
           formFieldResponse.push({
             label: i,
-            numberResponse: null,
-            dateResponse: null,
-            stringResponse: e[i],
+            stringResponse: `${e[i]}`,
             registrationFormFieldId: fieldRegistrationId[i],
-            userInputFormFieldid: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            userInputFormId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           });
+          if (i == "Ticket Prices") {
+            setTotalPrice((prev) => prev + Number(e[i]));
+            console.log(TotalPrice);
+          }
         } else if (type == 2) {
           formFieldResponse.push({
             label: i,
             numberResponse: e[i],
-            dateResponse: null,
-            stringResponse: null,
             registrationFormFieldId: fieldRegistrationId[i],
-            userInputFormFieldid: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            userInputFormId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           });
-        } else {
+        } else if (type == 4) {
+          const date = new Date(e[i]);
           formFieldResponse.push({
             label: i,
-            numberResponse: null,
-            dateResponse: e[i],
-            stringResponse: null,
+            dateResponse: date,
             registrationFormFieldId: fieldRegistrationId[i],
-            userInputFormFieldid: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            userInputFormId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           });
         }
       }
@@ -115,15 +112,18 @@ const RegisterEvent = () => {
     for (let i = 0; i < eventRegistrationFormFields.length; i++) {
       formResultPost.push({
         ["userInputFormBL"]: {
-          ["userInputFormId"]: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          // ["userInputFormId"]: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           ["userId"]: store.getState().auth.id,
           ["eventId"]: event.eventId,
         },
-        ["userInputFormFields"]:formResult[i]
+        ["userInputFormFields"]: formResult[i],
       });
     }
     console.log(formResultPost);
-    await UserInputFormServices.submitUserInputForm(formResultPost);
+    setRegisteredData(
+      await UserInputFormServices.submitUserInputForm(formResultPost)
+    );
+    setToggleRegistrationTransaction(false);
   };
   const handleAddPerson = () => {
     if (
@@ -180,177 +180,190 @@ const RegisterEvent = () => {
     },
   };
   return (
-    <form style={formContainerStyle} onSubmit={handleSubmit}>
-      {eventRegistrationFormFields.map((person, index) => (
-        <div
-          key={cnt++}
-          style={{
-            padding: "30px",
-            width: "100%",
-            maxWidth: "800px",
-            border: "1px solid #d0d0d0",
-            borderRadius: "4px",
-            marginBottom: "20px",
-          }}
-        >
-          {person.map((formField) => (
-            <div key={cnt++}>
-              {FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-              "Text" ? (
-                <TextField
-                  style={{
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "800px",
-                  }}
-                  type="text"
-                  name={formField.lable}
-                  label={formField.lable}
-                  value={formData[formField.lable]}
-                  onChange={(e) => {
-                    handlechange(e, index, formField.lable);
-                  }}
-                  required
-                />
-              ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-                "Number" ? (
-                <TextField
-                  style={{
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "800px",
-                  }}
-                  type="number"
-                  name={formField.lable}
-                  label={formField.lable}
-                  value={formData[formField.lable]}
-                  onChange={(e) => {
-                    handlechange(e, index);
-                  }}
-                  inputProps={{
-                    min: Number(JSON.parse(formField.validations).min),
-                    max: Number(JSON.parse(formField.validations).max),
-                  }}
-                  required
-                />
-              ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-                "Email" ? (
-                <TextField
-                  style={{
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "800px ",
-                  }}
-                  type="email"
-                  name={formField.lable}
-                  label={formField.lable}
-                  value={formData[formField.lable]}
-                  onChange={(e) => {
-                    handlechange(e, index);
-                  }}
-                  required
-                />
-              ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-                "Date" ? (
-                <TextField
-                  style={{
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "800px ",
-                  }}
-                  type="date"
-                  name={formField.lable}
-                  label={formField.lable}
-                  value={formData[formField.lable]}
-                  onChange={(e) => {
-                    handlechange(e, index);
-                  }}
-                  required
-                />
-              ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-                "Radio" ? (
-                <FormControl
-                  style={{
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "800px ",
-                  }}
-                >
-                  <FormLabel>{formField.lable}</FormLabel>
-                  <RadioGroup
-                    name={formField.lable}
-                    value={formData[formField.lable]}
-                    onChange={(e) => {
-                      handlechange(e, index);
-                    }}
-                    required
-                  >
-                    {JSON.parse(formField.options).map((option) => (
-                      <FormControlLabel
-                        value={option}
-                        control={<Radio />}
-                        label={option}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-                "Select" ? (
-                <FormControl
-                  style={{
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "800px ",
-                  }}
-                >
-                  <FormLabel>{formField.lable}</FormLabel>
-                  <Select
-                    name={formField.lable}
-                    value={formData[formField.lable]}
-                    onChange={(e) => {
-                      handlechange(e, index);
-                    }}
-                    required
-                  >
-                    {JSON.parse(formField.options).map((option) => (
-                      <MenuItem key={cnt++} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              ) : (
-                <></>
-              )}
+    <>
+      {toggleRegistrationTransaction ? (
+        <form style={formContainerStyle} onSubmit={handleSubmit}>
+          {eventRegistrationFormFields.map((person, index) => (
+            <div
+              key={cnt++}
+              style={{
+                padding: "30px",
+                width: "100%",
+                maxWidth: "800px",
+                border: "1px solid #d0d0d0",
+                borderRadius: "4px",
+                marginBottom: "20px",
+              }}
+            >
+              {person.map((formField) => (
+                <div key={cnt++}>
+                  {FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                  "Text" ? (
+                    <TextField
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px",
+                      }}
+                      type="text"
+                      name={formField.lable}
+                      label={formField.lable}
+                      value={formData[formField.lable]}
+                      onChange={(e) => {
+                        handlechange(e, index, formField.lable);
+                      }}
+                      required
+                    />
+                  ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                    "Number" ? (
+                    <TextField
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px",
+                      }}
+                      type="number"
+                      name={formField.lable}
+                      label={formField.lable}
+                      value={formData[formField.lable]}
+                      onChange={(e) => {
+                        handlechange(e, index);
+                      }}
+                      inputProps={{
+                        min: Number(JSON.parse(formField.validations).min),
+                        max: Number(JSON.parse(formField.validations).max),
+                      }}
+                      required
+                    />
+                  ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                    "Email" ? (
+                    <TextField
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px ",
+                      }}
+                      type="email"
+                      name={formField.lable}
+                      label={formField.lable}
+                      value={formData[formField.lable]}
+                      onChange={(e) => {
+                        handlechange(e, index);
+                      }}
+                      required
+                    />
+                  ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                    "Date" ? (
+                    <TextField
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px ",
+                      }}
+                      type="date"
+                      name={formField.lable}
+                      label={formField.lable}
+                      value={formData[formField.lable]}
+                      onChange={(e) => {
+                        handlechange(e, index);
+                      }}
+                      required
+                    />
+                  ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                    "Radio" ? (
+                    <FormControl
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px ",
+                      }}
+                    >
+                      <FormLabel>{formField.lable}</FormLabel>
+                      <RadioGroup
+                        name={formField.lable}
+                        value={formData[formField.lable]}
+                        onChange={(e) => {
+                          handlechange(e, index);
+                        }}
+                        required
+                      >
+                        {JSON.parse(formField.options).map((option) => (
+                          <FormControlLabel
+                            value={option}
+                            control={<Radio />}
+                            label={option}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                    "Select" ? (
+                    <FormControl
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px ",
+                      }}
+                    >
+                      <FormLabel>{formField.lable}</FormLabel>
+                      <Select
+                        name={formField.lable}
+                        value={formData[formField.lable]}
+                        onChange={(e) => {
+                          handlechange(e, index);
+                        }}
+                        required
+                      >
+                        {JSON.parse(formField.options).map((option) => (
+                          <MenuItem key={cnt++} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              ))}
+              <Button
+                type="button"
+                onClick={() => {
+                  handleRemove(index);
+                }}
+              >
+                remove
+              </Button>
             </div>
           ))}
-          <Button
-            type="button"
-            onClick={() => {
-              handleRemove(index);
-            }}
-          >
-            remove
+          <Button type="button" onClick={handleAddPerson}>
+            Add Person
           </Button>
-        </div>
-      ))}
-      <Button type="button" onClick={handleAddPerson}>
-        Add Person
-      </Button>
 
-      <Button
-        style={{
-          marginBottom: "20px",
-          width: "100%",
-          maxWidth: "800px",
-        }}
-        type="submit"
-        variant="contained"
-        color="primary"
-      >
-        Register
-      </Button>
-    </form>
+          <Button
+            style={{
+              marginBottom: "20px",
+              width: "100%",
+              maxWidth: "800px",
+            }}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Register
+          </Button>
+        </form>
+      ) : (
+        <Transactions
+          transactionData={{
+            event: event,
+            TotalPrice: TotalPrice,
+            NoOfTickets: eventRegistrationFormFields.length,
+            RegisteredData,
+          }}
+        />
+      )}
+    </>
   );
 };
 

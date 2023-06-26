@@ -33,5 +33,11 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="userId"> User Id </param>
         /// <returns> List of All Transactions made by an User </returns>
         Task<List<BLTransaction>> GetAllTransactionsByUserId(Guid userId);
+        /// <summary>
+        /// It is used to get all the registered events of a particular user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<List<Event>> GetAllRegisteredEventsByUserId(Guid userId);
     }
 }

@@ -46,7 +46,7 @@ const RegisterOrganiser = () => {
     const navigate = useNavigate();
 
     const [selectedRoleValue, setSelectedRoleValue] = useState('dummy');
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const [formData, setFormData] = useState({
         AdministratorName: '',
         AdministratorAddress: '',
@@ -136,6 +136,7 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
         if (!passwordRegex.test(e.target.value)) {
+            console.log(passwordRegex.test("Kakarot1#"));
             setPasswordValidation('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.');
           } else {
             setPasswordValidation('');

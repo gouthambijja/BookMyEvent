@@ -8,11 +8,11 @@ namespace BookMyEvent.BLL.Models
 {
     public class BLTransaction
     {
-        public Guid TransactionId { get; set; }
+        public Guid? TransactionId { get; set; }
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
-        public Guid EventId { get; set; }
+        public Guid? EventId { get; set; }
 
         public decimal Amount { get; set; }
 

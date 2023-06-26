@@ -37,7 +37,6 @@ namespace BookMyEvent.DLL.Repositories
             {
                 await _DBContext.UserInputFormFields.AddRangeAsync(formFields);
                 await _DBContext.SaveChangesAsync();
-                await _DBContext.Entry(formFields).GetDatabaseValuesAsync();
                 return formFields;
             }
             catch

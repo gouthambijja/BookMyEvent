@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BookMyEvent.BLL.RequestModels
 {
-    public class AddTransaction
+    public class UserTicketsWithDetails
     {
-        public BLTransaction? transaction { get; set; }
-        public List<BLUserInputForm?>? ListOfUserInputForm { get; set; }
+        public BLTicket ticket;
+        public List<BLUserInputFormField> userDetails;
     }
 }

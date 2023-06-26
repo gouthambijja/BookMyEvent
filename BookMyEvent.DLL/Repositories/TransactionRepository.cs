@@ -43,8 +43,8 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
 
-            List<Transaction> transactions= await context.Transactions.Where(e => e.EventId.Equals(EventId) && e.IsSuccessful.Equals(true)).ToListAsync();
-            return transactions;
+                List<Transaction> transactions = await context.Transactions.Where(e => e.EventId.Equals(EventId) && e.IsSuccessful.Equals(true)).ToListAsync();
+                return transactions;
             }
             catch
             {
@@ -88,6 +88,19 @@ namespace BookMyEvent.DLL.Repositories
             catch (Exception e)
             {
                 return new Transaction();
+            }
+        }
+
+        public async Task<List<Guid>> GetAllDistinctEventIds(Guid UserId)
+        {
+            try
+            {
+                var eventIds = await context.Transactions.Where(t => t.UserId == UserId).Select(t => t.EventId).Distinct().ToListAsync();
+                return eventIds;
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
     }

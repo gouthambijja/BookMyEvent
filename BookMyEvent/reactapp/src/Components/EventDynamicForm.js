@@ -14,9 +14,12 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
-import { clearFormFieldsForm, setInputFields } from "../Features/ReducerSlices/EventRegistrationFormFieldsSlice";
+import {
+  clearFormFieldsForm,
+  setInputFields,
+} from "../Features/ReducerSlices/EventRegistrationFormFieldsSlice";
 import { useNavigate } from "react-router-dom";
-import organisationFormServies from '../Services/OrganiserFormServices'
+import organisationFormServies from "../Services/OrganiserFormServices";
 const EventDynamicForm = () => {
   const navigate = useNavigate();
   const [formNameErrorMsg, setFormNameErrorMsg] = useState("");
@@ -39,18 +42,22 @@ const EventDynamicForm = () => {
   };
 
   const dispatch = useDispatch();
-  const handleFormNameChange = async(event) => {
+  const handleFormNameChange = async (event) => {
     const name = event.target.value;
     setFormName(name);
-    if(name!=""){
-    const res = await organisationFormServies.IsFormNameTaken(name);
-    if(res){
-      setFormNameErrorMsg("form name already available choose different name!");
-    }else{
-      setFormNameErrorMsg("");
-    }}
+    if (name != "") {
+      const res = await organisationFormServies.IsFormNameTaken(name);
+      if (res) {
+        setFormNameErrorMsg(
+          "form name already available choose different name!"
+        );
+      } else {
+        setFormNameErrorMsg("");
+      }
+    }
   };
   const handleInputChange = (event, index) => {
+    if(index == 0 )return;
     const { name, value, checked } = event.target;
     const values = [...inputFields];
     if (name == "FieldType") {
@@ -106,19 +113,22 @@ const EventDynamicForm = () => {
     dispatch(setInputFields(values));
   };
   const handleRemoveFields = (index) => {
-    const values = [...inputFields];
-    values.splice(index, 1);
-    dispatch(setInputFields(values));
+    if (inputFields.length != 0 && index != 0) {
+      const values = [...inputFields];
+      values.splice(index, 1);
+      dispatch(setInputFields(values));
+    }
   };
-  const handleSubmit = async(e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if(formNameErrorMsg == ""){
-    const response = await organisationFormServies.AddForm(FormName);
-    if(response){
-      dispatch(clearFormFieldsForm());
-      navigate('/organiser/addevent');
-    }}
-  }
+    if (formNameErrorMsg == "") {
+      const response = await organisationFormServies.AddForm(FormName);
+      if (response) {
+        dispatch(clearFormFieldsForm());
+        navigate("/organiser/addevent");
+      }
+    }
+  };
   const FormStyle = {
     display: "flex",
     flexDirection: "column",
@@ -130,10 +140,16 @@ const EventDynamicForm = () => {
     borderRadius: "8px",
   };
   return (
-    <form style = {FormStyle} onSubmit={handleSubmit}>
-      <Box sx={{border:'1px solid #d0d0d0',padding:'16px',borderRadius:'4px'}}>
+    <form style={FormStyle} onSubmit={handleSubmit}>
+      <Box
+        sx={{
+          border: "1px solid #d0d0d0",
+          padding: "16px",
+          borderRadius: "4px",
+        }}
+      >
         <TextField
-        sx={{marginBottom:'10px'}}
+          sx={{ marginBottom: "10px" }}
           label="Form Name"
           name="FormName"
           variant="outlined"
@@ -165,6 +181,7 @@ const EventDynamicForm = () => {
                 label="Select Field Type"
                 onChange={(e) => handleInputChange(e, index)}
                 required
+                disabled = {index == 0}
               >
                 {FormFields.map((option) => (
                   <MenuItem key={++count} value={option.type}>
@@ -180,6 +197,7 @@ const EventDynamicForm = () => {
               value={inputField.Label}
               onChange={(event) => handleInputChange(event, index)}
               style={FormFieldInput}
+              disabled = {index == 0}
             />
             <FormControlLabel
               control={
@@ -187,6 +205,7 @@ const EventDynamicForm = () => {
                   name="IsRequired"
                   checked={inputField.IsRequired}
                   onChange={(e) => handleInputChange(e, index)}
+                  disabled = {index == 0}
                 />
               }
               label="Is Required"
@@ -209,9 +228,7 @@ const EventDynamicForm = () => {
                 <TextField
                   type={inputField.FieldType}
                   name="maxValue"
-                  label={`Max/End ${
-                    inputField.Label ? inputField.Label : ""
-                  }`}
+                  label={`Max/End ${inputField.Label ? inputField.Label : ""}`}
                   value={inputField.Validations?.max}
                   onChange={(event) => handleInputChange(event, index)}
                   style={FormFieldInput}
@@ -246,9 +263,9 @@ const EventDynamicForm = () => {
                   />
                 ))}
                 <TextField
-                  type="text"
+                  type={index == 0?"number":"text"}
                   style={FormFieldInput}
-                  label="Enter Option"
+                  label={index==0?"Add ticket price":"Enter Option"}
                   value={FieldOption}
                   onChange={(e) => {
                     SetFieldOption(e.target.value);
@@ -280,20 +297,16 @@ const EventDynamicForm = () => {
         <ColorfulButton
           type="button"
           variant="contained"
-          style={{marginBottom:'10px'}}
+          style={{ marginBottom: "10px" }}
           fullWidth
           onClick={handleAddFields}
         >
           Add Form Field
         </ColorfulButton>
       </Box>
-      <ColorfulButton
-          type="submit"
-          variant="contained"
-          fullWidth
-        >
-          Submit Form
-        </ColorfulButton>
+      <ColorfulButton type="submit" variant="contained" fullWidth>
+        Submit Form
+      </ColorfulButton>
     </form>
   );
 };

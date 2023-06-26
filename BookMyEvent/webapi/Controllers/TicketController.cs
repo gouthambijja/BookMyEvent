@@ -1,6 +1,10 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.BLL.RequestModels;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Reflection;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookMyEvent.WebApi.Controllers
 {
@@ -48,12 +52,14 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                List<(BLTicket ticket, List<BLUserInputFormField> userDetails)> allTickets= await _ticketServices.GetUserEventTickets(userId, eventId);
+                List<UserTicketsWithDetails> allTickets= await _ticketServices.GetUserEventTickets(userId, eventId);
                 if (allTickets == null)
                 {
                     return BadRequest("error in BL");
                 }
-                return Ok(allTickets);
+
+                var json = JsonConvert.SerializeObject(allTickets);
+                return Ok(json);
             }
             catch
             {
