@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using BookMyEvent.WebApi.Utilities;
-
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Owner,Peer,Secondary_Owner")]
     public class OrganiserController : ControllerBase
     {
         private readonly IOrganiserServices _organiserServices;
@@ -26,6 +26,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <returns>OrganizationOwner Details</returns>
         [HttpPost("RegisterOwner")]
+        [Authorize(Roles=("Owner,SecondaryOwner"))]
         public async Task<IActionResult> RegisterOrganiserOwner()
         {
             var image = Request.Form.Files[0];
@@ -72,6 +73,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <returns>Peer Details</returns>
         [HttpPost("RegisterPeer")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterOrganiserPeer()
         {
             
@@ -109,6 +111,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <returns>Secondary Organization Details</returns>
         [HttpPost("CreateOrganiser")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateSecondaryOrganiser()
         {
             var image = Request.Form.Files[0];
@@ -158,6 +161,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="login"></param>
         /// <returns>Returns The Token if User Exists</returns>
         [HttpPost("LoginOrganiser")]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginOrganiser(BLLoginModel login)
         {
             var result = await _organiserServices.LoginOrganiser(login.Email, login.Password);
@@ -313,6 +317,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="email"></param>
         /// <returns>true if valid else false</returns>
         [HttpGet("IsEmailTaken")]
+        [AllowAnonymous]
         public async Task<IActionResult> IsEmailTaken(string email)
         {
             var result = await _organiserServices.IsOrganiserAvailableWithEmail(email);

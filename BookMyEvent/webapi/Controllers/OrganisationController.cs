@@ -1,5 +1,6 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Owner,Peer,Secondary_Owner,Admin")]
     public class OrganisationController : ControllerBase
     {
         private readonly IOrganisationServices _organisationServices;

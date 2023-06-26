@@ -12,6 +12,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -85,6 +86,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <returns>true if added succesfully else false along with the confirmatin Message</returns>
         // POST api/<UserController>
+        [AllowAnonymous]
         [HttpPost("AddUser")]
         public async Task<IActionResult> Post()
         {
@@ -122,6 +124,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <returns>Token if User Exists else error Message</returns>
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> LoginUser([FromBody] BLLoginModel login)
         {
@@ -228,6 +231,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="email"></param>
         /// <returns>true if Valid else false</returns>
+        [AllowAnonymous]
         [HttpGet("isEmailExists/{email}")]
         public async Task<IActionResult> IsEmailExists(string email)
         {

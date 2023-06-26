@@ -46,7 +46,7 @@ const EventDynamicForm = () => {
     const name = event.target.value;
     setFormName(name);
     if (name != "") {
-      const res = await organisationFormServies.IsFormNameTaken(name);
+      const res = await organisationFormServies().IsFormNameTaken(name);
       if (res) {
         setFormNameErrorMsg(
           "form name already available choose different name!"
@@ -122,7 +122,7 @@ const EventDynamicForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formNameErrorMsg == "") {
-      const response = await organisationFormServies.AddForm(FormName);
+      const response = await organisationFormServies().AddForm(FormName);
       if (response) {
         dispatch(clearFormFieldsForm());
         navigate("/organiser/addevent");

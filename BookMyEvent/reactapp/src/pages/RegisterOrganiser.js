@@ -109,7 +109,7 @@ const RegisterOrganiser = () => {
 
     const handleOptionChange = async (event, value) => {
         if (event.target?.value != "") {
-            const result = await organisationServices.getOrganisationByName(event.target.value);
+            const result = await organisationServices().getOrganisationByName(event.target.value);
             if (result.isExists) {
                 console.log(result.orgId)
                 setPeerOrgNameError("");
@@ -153,7 +153,7 @@ const RegisterOrganiser = () => {
         }));
         if (e.target.value.includes('@')) {
 
-            const response = await organiserServices.checkEmail(e.target.value);
+            const response = await organiserServices().checkEmail(e.target.value);
             if (response.isEmailTaken) {
                 setEmailError("Email already exists");
             }
@@ -174,7 +174,7 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
         if (e.target.value != "") {
-            const isNameInOrganisation = await organisationServices.IsOrgNameTaken(e.target.value);
+            const isNameInOrganisation = await organisationServices().IsOrgNameTaken(e.target.value);
             if (isNameInOrganisation) {
                 setOrgNameError("Organisation already exixts")
             }
@@ -215,7 +215,7 @@ const RegisterOrganiser = () => {
             _formData.append("password", formData.Password);
             _formData.append("imgBody", formData.ImgBody);
             console.log(_formData);
-            const data = await organiserServices.registerPeer(_formData);
+            const data = await organiserServices().registerPeer(_formData);
             console.log("after call " + data)
         }
         else {
@@ -241,7 +241,7 @@ const RegisterOrganiser = () => {
             _formData.append("orgUpdatedOn", orgFormData.UpdatedOn);
 
             console.log(_formData);
-            const data = await organiserServices.addOwner(_formData);
+            const data = await organiserServices().addOwner(_formData);
             console.log("after call " + data)
 
 

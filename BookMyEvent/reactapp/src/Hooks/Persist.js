@@ -1,5 +1,5 @@
 
-const usePersist = () => {
+const Persist = () => {
     return localStorage.getItem("persist");
 };
 const setPersist = () =>{
@@ -9,4 +9,4 @@ const unsetPersist = () =>{
     localStorage.setItem("persist",false);
 }
 export {setPersist,unsetPersist};
-export default usePersist;
+export default Persist;

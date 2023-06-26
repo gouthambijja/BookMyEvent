@@ -6,7 +6,7 @@ export const fetchOrganisationEvents = createAsyncThunk(
     "events/fetchOrganisationEvents",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await eventServices.getAllCreatedEventsByOrganisation(id);
+            const response = await eventServices().getAllCreatedEventsByOrganisation(id);
             return response;
         }
         catch (error) {
@@ -19,7 +19,7 @@ export const fetchEventsCreatedBy = createAsyncThunk(
     "events/fetchEventsCreatedBy",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await eventServices.getAllCreatedEventsByOrganiser(id);
+            const response = await eventServices().getAllCreatedEventsByOrganiser(id);
             return response;
         }
         catch (error) {
@@ -32,7 +32,7 @@ export const createEvent = createAsyncThunk(
     "events/createEvent",
     async (newEvent, { rejectWithValue }) => {
         try {
-            const response = await eventServices.addNewEvent(newEvent);
+            const response = await eventServices().addNewEvent(newEvent);
             return response;
         }
         catch (error) {
@@ -45,7 +45,7 @@ export const updateEventRegistrationStatus = createAsyncThunk(
     "events/updateEventRegistrationStatus",
     async (updatedEvent, { rejectWithValue }) => {
         try {
-            const response = await eventServices.updateEventRegistrationStatus(updatedEvent);
+            const response = await eventServices().updateEventRegistrationStatus(updatedEvent);
             return response;
         }
         catch (error) {
@@ -58,7 +58,7 @@ export const updateEvent = createAsyncThunk(
     "events/updateEvent",
     async (updatedEvent, { rejectWithValue }) => {
         try {
-            const response = await eventServices.updateEvent(updatedEvent);
+            const response = await eventServices().updateEvent(updatedEvent);
             return response;
         }
         catch (error) {
@@ -71,7 +71,7 @@ export const acceptEvent = createAsyncThunk(
     "events/acceptEvent",
     async (event, { rejectWithValue }) => {
         try {
-            const response = await eventServices.updateAcceptedBy(event);
+            const response = await eventServices().updateAcceptedBy(event);
             return response;
         }
         catch (error) {
@@ -84,7 +84,7 @@ export const rejectEvent = createAsyncThunk(
     "events/rejectEvent",
     async (event, { rejectWithValue }) => {
         try {
-            const response = await eventServices.updateRejectedBy(event);
+            const response = await eventServices().updateRejectedBy(event);
             return response;
         }
         catch (error) {
@@ -97,7 +97,7 @@ export const publishEvent = createAsyncThunk(
     "events/publishEvent",
     async (event, { rejectWithValue }) => {
         try {
-            const response = await eventServices.updateIsPublishedEvent(event);
+            const response = await eventServices().updateIsPublishedEvent(event);
             return response;
         }
         catch (error) {
@@ -110,7 +110,7 @@ export const cancelEvent = createAsyncThunk(
     "events/cancelEvent",
     async (event, { rejectWithValue }) => {
         try {
-            const response = await eventServices.updateIsCancelledEvent(event);
+            const response = await eventServices().updateIsCancelledEvent(event);
             return response;
         }
         catch (error) {
@@ -123,7 +123,7 @@ export const deleteEvent = createAsyncThunk(
     "events/deleteEvent",
     async (details, { rejectWithValue }) => {
         try {
-            const response = await eventServices.deleteEvent(details.eventId, details.updatedBy);
+            const response = await eventServices().deleteEvent(details.eventId, details.updatedBy);
             return response;
         }
         catch (error) {
@@ -136,7 +136,7 @@ export const fetchOrganisationPastEvents = createAsyncThunk(
     "events/fetchOrganisationPastEvents",
     async (data, { rejectWithValue }) => {
         try {
-            const response = await eventServices.getOrganisationPastEvents(data.organisationId, data.pageNumber, data.pageSize);
+            const response = await eventServices().getOrganisationPastEvents(data.organisationId, data.pageNumber, data.pageSize);
             return response;
         }
         catch (error) {
@@ -151,7 +151,7 @@ export const fetchOrganiserPastEvents = createAsyncThunk(
         try {
             console.log("i am in fetchOrganiserPastEvents ");
             console.log(data);
-            const response = await eventServices.getOrganiserPastEvents(data.organiserId, data.pageNumber, data.pageSize);
+            const response = await eventServices().getOrganiserPastEvents(data.organiserId, data.pageNumber, data.pageSize);
             return response;
         }
         catch (error) {
@@ -164,7 +164,7 @@ export const fetchOrganisationEventsRequests = createAsyncThunk(
     "events/fetchOrganisationEventsRequests",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await eventServices.getOrganisationEventRequests(id);
+            const response = await eventServices().getOrganisationEventRequests(id);
             return response;
         }
         catch (error) {
@@ -178,7 +178,7 @@ export const fetchMyEventsRequests = createAsyncThunk(
     "events/fetchMyEventsRequests",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await eventServices.getOrganiserEventRequests(id);
+            const response = await eventServices().getOrganiserEventRequests(id);
             return response;
         }
         catch (error) {

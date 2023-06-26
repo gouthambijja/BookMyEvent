@@ -33,10 +33,10 @@ const RegisterEvent = () => {
   const [fieldRegistrationId, setFieldRegistrationId] = useState();
   useEffect(() => {
     const loadUserEventRegistrationFormFields = async () => {
-      const event = await EventServices.getEventById(eventId);
+      const event = await EventServices().getEventById(eventId);
       setEvent(event);
       console.log(event);
-      const formFields = await OrganiserFormServices.getFieldTypesByFormId(
+      const formFields = await OrganiserFormServices().getFieldTypesByFormId(
         formId
       );
       formFields.forEach((e) => {
@@ -121,7 +121,7 @@ const RegisterEvent = () => {
     }
     console.log(formResultPost);
     setRegisteredData(
-      await UserInputFormServices.submitUserInputForm(formResultPost)
+      await UserInputFormServices().submitUserInputForm(formResultPost)
     );
     setToggleRegistrationTransaction(false);
   };

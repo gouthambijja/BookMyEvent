@@ -111,7 +111,7 @@ const SingleEventPage = () => {
     useEffect(() => {
         const temp = async () => {
 
-            const images = await eventsServices.getEventImages(id);
+            const images = await eventsServices().getEventImages(id);
             setImages(images);
             console.log(images);
         }

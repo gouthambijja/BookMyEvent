@@ -31,7 +31,7 @@ const OrganiserEventPage = () => {
 
     useEffect(() => {
         if (!event) {
-            eventServices.getEventById(eventId).then(result => {
+            eventServices().getEventById(eventId).then(result => {
                 setEventData(result || {});
             });
         }

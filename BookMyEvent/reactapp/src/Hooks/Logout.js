@@ -1,20 +1,19 @@
-import { useDispatch } from "react-redux";
 import { axiosPrivate } from "../Api/Axios";
 import { clearAuth} from "../Features/ReducerSlices/authSlice";
+import store from "../App/store";
 
 
-const useLogout = () => {
-    const dispatch = useDispatch();
-  const Logout = async () => {
+const Logout = () => {
+  const _Logout = async () => {
     const logout = await axiosPrivate.post("/auth/logout");
     if (logout.data) {
-        dispatch(clearAuth());
+        store.dispatch(clearAuth());
       localStorage.clear();
      
       return true;
     } else return false;
   };
-  return Logout;
+  return _Logout;
 };
 
-export default useLogout;
+export default Logout;

@@ -117,7 +117,7 @@ const RegisterUser = () => {
         }));
         if (e.target.value.includes('@')) {
 
-            const response = await userServices.isEmailTaken(e.target.value);
+            const response = await userServices().isEmailTaken(e.target.value);
             if (response.isEmailTaken) {
                 setEmailError("Email already exists");
             }
@@ -144,7 +144,7 @@ const RegisterUser = () => {
         _formData.append("password", formData.Password);
         _formData.append("imgBody", formData.ImgBody);
         console.log(_formData);
-        const data = await userServices.registerUser(_formData);
+        const data = await userServices().registerUser(_formData);
         console.log("after call " + data)
         setFormData({
             Name: "",

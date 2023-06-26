@@ -17,11 +17,11 @@ import { Box, Modal } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
-import { setPersist, unsetPersist } from "../Hooks/usePersist";
+import { setPersist, unsetPersist } from "../Hooks/Persist";
 import { getAdminByIdThunk, getOrganiserByIdThunk, getUserByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
 import store from "../App/store";
-import useLogout from "../Hooks/useLogout";
 import { toast } from 'react-toastify';
+import Logout from "../Hooks/Logout";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -52,7 +52,6 @@ const style = {
 };
 
 const Login = () => {
-  const logout = useLogout();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -61,14 +60,14 @@ const Login = () => {
 
   useLayoutEffect(()=>{
     unsetPersist();
-    logout(); },[]);
+    Logout(); },[]);
 
   let from;
-  if (location.pathname == "/admin/login") {
+  if (location.pathname.toLowerCase() == "/admin/login") {
     from =  "/admin";
     role = "Admin";
   } 
-  else if(location.pathname == "/organiser/login"){
+  else if(location.pathname.toLowerCase() == "/organiser/login"){
     from = "/organiser";
     role = "Organiser";
   }
@@ -93,6 +92,7 @@ const Login = () => {
   };
  
   const HandleSubmit = async (e) => {
+    console.log(role);
     e.preventDefault();
     dispatch(setLoading(true));
     try {

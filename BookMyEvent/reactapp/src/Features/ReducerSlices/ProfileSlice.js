@@ -1,26 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAdminById } from "../../Services/AdminServices";
-import { getUserById } from "../../Services/UserServices";
+import AdminServices from "../../Services/AdminServices";
+import UserServices from "../../Services/UserServices";
 import organiserServices from "../../Services/OrganiserServices";
+import useAxiosPrivate from "../../Hooks/AxiosPrivate";
 
 export const getAdminByIdThunk = createAsyncThunk(
   "admin/setAdminProfile",
   async (id) => {
-    const profile = await getAdminById(id);
+    const profile = await AdminServices().getAdminById(id);
     return profile;
   }
 );
 export const getUserByIdThunk = createAsyncThunk(
   "User/setUserProfile",
   async (id) => {
-    const profile = await getUserById(id);
+    const profile = await UserServices().getUserById(id);
     return profile;
   }
 );
 export const getOrganiserByIdThunk = createAsyncThunk(
   "Organiser/setOrganiserProfile",
   async (id) => {
-    const profile = await organiserServices.getOrganiserById(id);
+    const profile = await organiserServices().getOrganiserById(id);
     return profile;
   }
 );

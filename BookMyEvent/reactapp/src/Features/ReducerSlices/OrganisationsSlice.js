@@ -7,7 +7,7 @@ export const fetchOrganisations = createAsyncThunk(
     "organisations/fetchOrganisations",
     async (paginationDetails, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getAllOrganisations(paginationDetails.pageNumber, paginationDetails.pageSize);
+            const response = await orgServices().getAllOrganisations(paginationDetails.pageNumber, paginationDetails.pageSize);
             return response;
         }
         catch (error) {
@@ -20,7 +20,7 @@ export const fetchOrganisationById = createAsyncThunk(
     "organisations/fetchOrganisationById",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getOrganisationById(id);
+            const response = await orgServices().getOrganisationById(id);
             return response;
         }
         catch (error) {
@@ -33,7 +33,7 @@ export const updateOrganisation = createAsyncThunk(
     "organisations/updateOrganisation",
     async (updatedOrg, { rejectWithValue }) => {
         try {
-            const response = await orgServices.updateOrganisation(updatedOrg);
+            const response = await orgServices().updateOrganisation(updatedOrg);
             return response;
         }
         catch (error) {
@@ -46,7 +46,7 @@ export const deleteOrganisation = createAsyncThunk(
     "organisations/deleteOrganisation",
     async (id, { rejectWithValue }) => {
         try {
-            const response = await orgServices.deleteOrganisation(id);
+            const response = await orgServices().deleteOrganisation(id);
             return response;
         }
         catch (error) {

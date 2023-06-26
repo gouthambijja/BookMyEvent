@@ -31,7 +31,7 @@ const handlePay = async () =>{
         userInputFormData.push(RegisteredData[i].userInputFormBL);
     }
     const formData = {transaction:transactionInfo,ListOfUserInputForm:userInputFormData};
-    TransationServices.addTransaction(formData);
+    await TransationServices().addTransaction(formData);
     navigate(`/tickets/${transactionData.event.eventId}`);
 }
   return (

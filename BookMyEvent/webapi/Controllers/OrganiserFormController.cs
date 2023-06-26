@@ -2,6 +2,7 @@
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Owner,Secondary_Owner,Peer")]
     public class OrganiserFormController : ControllerBase
     {
         private readonly IOrganiserFormServices _organiserFormServices;
@@ -86,6 +88,7 @@ namespace BookMyEvent.WebApi.Controllers
         ///Service to GetAllFieldTypes
         /// </summary>
         /// <returns>List of fieldTypes</returns>
+        [AllowAnonymous]
         [HttpGet("FieldTypes")]
         public async Task<IActionResult> GetAllFieldTypes()
         {
@@ -108,6 +111,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="FormId"></param>
         /// <returns>List of FormField</returns>
+        [AllowAnonymous]
         [HttpGet("FieldTypesByFormId")]
         public async Task<IActionResult> GetFieldTypesByFormId(Guid FormId)
         {

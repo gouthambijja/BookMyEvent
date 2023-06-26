@@ -1,12 +1,14 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "User")]
     [Route("[controller]")]
     public class TransactionController : ControllerBase
     {

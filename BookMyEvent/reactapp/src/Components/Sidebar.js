@@ -20,7 +20,7 @@ import {
   Event,
 } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
-import useLogout from "../Hooks/useLogout";
+import useLogout from "../Hooks/Logout";
 import { useSelector } from "react-redux";
 
 const drawerWidth = 240;

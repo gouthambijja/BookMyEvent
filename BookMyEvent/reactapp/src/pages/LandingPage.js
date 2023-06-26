@@ -77,6 +77,7 @@ const LandingPage = () => {
   useEffect(() => {
     LoadEventOnPageEnd();
   }, [_filters]);
+  
   useEffect(() => {
     window.addEventListener("scroll", LoadEventOnPageEnd);
     return () => {

@@ -18,7 +18,7 @@ const RegisteredEvents = () => {
   useEffect(() => {
     const loadRegisteredEvents = async () => {
       const registeredEvents =
-        await TransationServices.getAllRegisteredEventsByUserid(auth.id);
+        await TransationServices().getAllRegisteredEventsByUserid(auth.id);
       setEvents(registeredEvents);
     };
     loadRegisteredEvents();

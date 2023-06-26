@@ -1,14 +1,10 @@
 import { axiosPrivate } from "../Api/Axios";
-import { useEffect } from "react";
-import useRefreshToken from "./useRefreshToken";
-import { useSelector } from "react-redux";
+import RefreshToken from "./RefreshToken";
+import store from "../App/store";
 
-const useAxiosPrivate = () => {
-    const refresh = useRefreshToken();
-    const auth = useSelector((store => store.auth))
-
-    useEffect(() => {
-        console.log(auth);
+const AxiosPrivate = () => {
+    const refresh = RefreshToken();
+    const auth = store.getState().auth;
         const requestIntercept = axiosPrivate.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
@@ -31,14 +27,7 @@ const useAxiosPrivate = () => {
                 return Promise.reject(error);
             }
         );
-
-        return () => {
-            axiosPrivate.interceptors.request.eject(requestIntercept);
-            axiosPrivate.interceptors.response.eject(responseIntercept);
-        }
-    }, [auth, refresh])
-
     return axiosPrivate;
 }
 
-export default useAxiosPrivate;
+export default AxiosPrivate;

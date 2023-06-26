@@ -10,7 +10,7 @@ const UserTickets= () => {
   const auth = useSelector(store => store.auth);
   useEffect(()=>{
    const loadTickets = async() =>{
-        const _tickets = await TicketServices.getAllUserEventTickets(auth.id,eventId);
+        const _tickets = await TicketServices().getAllUserEventTickets(auth.id,eventId);
         console.log(_tickets);
         setTickets(_tickets);
     }

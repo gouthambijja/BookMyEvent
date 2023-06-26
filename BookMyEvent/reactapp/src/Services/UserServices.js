@@ -1,8 +1,12 @@
 import axios from "axios";
 import Axios from "../Api/Axios";
+import AxiosPrivate from "../Hooks/AxiosPrivate";
 
+const UserServices =  () =>{
+console.log("hey");
+const axiosPrivate = AxiosPrivate();
 const getUserById = async (id) => {
-    const response = await Axios.get(`api/User/${id}`,
+    const response = await axiosPrivate.get(`api/User/${id}`,
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
@@ -32,7 +36,7 @@ const isEmailTaken= async (email) => {
     return response.data;
 }
 const loginUser = async (formData) => {
-    
+    console.log("hey");
     const response = await Axios.post('api/User/login',
         JSON.stringify(formData),
         {
@@ -44,5 +48,7 @@ const loginUser = async (formData) => {
     return response.data;
 }
 
-export  {loginUser,getUserById}
-export default { registerUser,isEmailTaken };
+return { loginUser,isEmailTaken,registerUser,getUserById}
+
+}
+export default UserServices

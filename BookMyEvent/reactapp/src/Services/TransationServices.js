@@ -1,7 +1,9 @@
-import Axios from "../Api/Axios";
+import AxiosPrivate from "../Hooks/AxiosPrivate";
 
 const apiBase = "/Transaction";
 
+const TransationServices = () =>{
+const Axios = AxiosPrivate();
  const addTransaction = async (transaction) => {
     const response = await Axios.post(`${apiBase}/addtransaction`, transaction, {
         headers: { "Content-Type": "application/json" },
@@ -34,9 +36,11 @@ const getAllRegisteredEventsByUserid = async (userId) => {
     });
     return response.data;
 }
-export default {
+return  {
     addTransaction,
     getAllTransactionsByEventId,
     getAllTransactionsByUserId,
     getAllRegisteredEventsByUserid,
 };
+}
+export default TransationServices;

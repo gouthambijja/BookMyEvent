@@ -6,7 +6,7 @@ export const fetchRequestedOwners = createAsyncThunk(
     "organisers/fetchRequestedOwners",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getRequestedOwners();
+            const response = await orgServices().getRequestedOwners();
             return response;
         }
         catch (error) {
@@ -19,7 +19,7 @@ export const fetchRequestedPeers = createAsyncThunk(
     "organisers/fetchRequestedPeers",
     async(organisationId, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getRequestedPeers(organisationId);
+            const response = await orgServices().getRequestedPeers(organisationId);
             return response;
         }
         catch (error) {
@@ -32,7 +32,7 @@ export const fetchOrganisationOrganisers = createAsyncThunk(
     "organisers/fetchOrganisationOrganisers",
     async (organisationId, { rejectWithValue }) => {
         try {
-            const response = await orgServices.getOrganisationOrganisers(organisationId);
+            const response = await orgServices().getOrganisationOrganisers(organisationId);
             return response;
         }
         catch (error) {
@@ -46,7 +46,7 @@ export const acceptOrganiser = createAsyncThunk(
     "organisers/acceptOrganiser",
     async (organiser, { rejectWithValue }) => {
         try {
-            const response = await orgServices.acceptOrganiser(organiser);
+            const response = await orgServices().acceptOrganiser(organiser);
            if(response) {
                return organiser;
            }
@@ -63,7 +63,7 @@ export const rejectOrganiser = createAsyncThunk(
     "organisers/rejectOrganiser",
     async (organiser, { rejectWithValue }) => {
         try {
-            const response = await orgServices.rejectOrganiser(organiser);
+            const response = await orgServices().rejectOrganiser(organiser);
             return organiser;
         }
         catch (error) {
@@ -78,7 +78,7 @@ export const createOrganiser = createAsyncThunk(
     "organisers/createOrganiser",
     async (organiser, { rejectWithValue }) => {
         try {
-            const response = await orgServices.createOrganiser(organiser);
+            const response = await orgServices().createOrganiser(organiser);
             return response;
         }
         catch (error) {

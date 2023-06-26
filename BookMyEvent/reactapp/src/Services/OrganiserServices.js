@@ -1,6 +1,10 @@
-import Axios from "../Api/Axios";
+import AxiosPrivate from "../Hooks/AxiosPrivate";
 
 const apiBase = "/api/Organiser";
+
+const OrganiserServices = () =>{
+    const Axios = AxiosPrivate();
+
 const getOrganiserById = async (id) => {
     const response = await Axios.get(`${apiBase}/${id}`,
         {
@@ -152,7 +156,7 @@ const getAllOwners = async () => {
     return response.data;
 };
 
-export default {
+return {
     getOrganiserById,
     loginOrganiser,
     addOrganiser,
@@ -170,3 +174,5 @@ export default {
     getAllOwners,
     checkEmail,
 };
+}
+export default OrganiserServices;

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import jwtDecode from "jwt-decode";
-import { loginAdmin } from "../../Services/AdminServices";
+import AdminServices from "../../Services/AdminServices";
 import organiserServices from "../../Services/OrganiserServices";
-import { loginUser } from "../../Services/UserServices";
+import UserServices from "../../Services/UserServices";
 
 const authInitialState = {
   accessToken: "",
@@ -13,12 +13,12 @@ export const loginThunk = createAsyncThunk(
   "auth/loginAction",
   async (formData) => {
     if (formData[0] == "Admin") {
-      return await loginAdmin(formData[1]);
+      return await AdminServices().loginAdmin(formData[1]);
     } else if (formData[0] == "Organiser") {
-        return await organiserServices.loginOrganiser(formData[1]);
+        return await organiserServices().loginOrganiser(formData[1]);
     }
     else{
-        return await loginUser(formData[1]);
+        return await UserServices().loginUser(formData[1]);
     }
   }
 );

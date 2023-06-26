@@ -5,7 +5,7 @@ export const fetchEvents = createAsyncThunk(
     "homeEvents/fetchEvents",
     async (filters, { rejectWithValue }) => {
         try {
-            const response = await eventsServices.getFilteredEvents(filters);
+            const response = await eventsServices().getFilteredEvents(filters);
             return response;
         } catch (error) {
             return rejectWithValue(error.response);

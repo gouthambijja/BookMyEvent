@@ -8,7 +8,7 @@ import { addAdmin } from "../Services/AdminServices";
 import organiserServices from '../Services/OrganiserServices';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import AdminServices from '../Services/AdminServices';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -82,7 +82,7 @@ const AddSecondary = () => {
             [e.target.name]: e.target.value,
         }));
         if (e.target.type == 'email' && e.target.value != '') {
-            const response = await organiserServices.checkEmail(e.target.value);
+            const response = await organiserServices().checkEmail(e.target.value);
             if (response.isEmailTaken) {
                 setEmailError("Email already exists");
             }
@@ -134,7 +134,7 @@ const AddSecondary = () => {
 
         let data;
         if (profile.roleId == 1) {
-            data = await addAdmin(_formData);
+            data = await AdminServices().addAdmin(_formData);
         } else {
             data = await organiserServices.addOrganiser(_formData);
         }

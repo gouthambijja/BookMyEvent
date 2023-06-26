@@ -1,8 +1,10 @@
-import Axios from "../Api/Axios";
+import AxiosPrivate from "../Hooks/AxiosPrivate";
 
 const apiBase = "/UserInputForm";
 
-const submitUserInputForm = async (inputUserForms) => {
+const UserInputForm = () =>{
+    const Axios = AxiosPrivate();
+    const submitUserInputForm = async (inputUserForms) => {
     const response = await Axios.post(`${apiBase}/submitform`, inputUserForms, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
@@ -26,8 +28,10 @@ const getAllUserFormsByEventId = async (eventId) => {
     return response.data;
 };
 
-export default {
+return {
     submitUserInputForm,
     getUserFormsOfUserIdByEventId,
     getAllUserFormsByEventId,
 };
+}
+export default UserInputForm;

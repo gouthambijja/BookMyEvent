@@ -5,10 +5,10 @@ export const fetchOrganiserForms = createAsyncThunk(
     "organiserForms/fetchOrganiserForms",
     async (organisationId, {rejectWithValue}) => {
         try {
-            const response = await orgFormServices.getAllOrganizationForms(organisationId);
+            const response = await orgFormServices().getAllOrganizationForms(organisationId);
             return response;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(error.response);
         }
     }
 );
@@ -17,10 +17,10 @@ export const deleteForm = createAsyncThunk(
     "organiserForms/deleteForm",
     async (formId, {rejectWithValue}) => {
         try {
-            const response = await orgFormServices.deleteForm(formId);
+            const response = await orgFormServices().deleteForm(formId);
             return response;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(error.response);
         }
     }
 );  

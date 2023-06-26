@@ -3,6 +3,7 @@ using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.WebApi.Utilities;
 using db.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -28,6 +30,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <returns>returns token if user exists else message as "user Not found"</returns>
+        [AllowAnonymous]
         [HttpPost("loginAdmin")]
         public async Task<string> LoginAdmin([FromBody] BLLoginModel login)
         {
