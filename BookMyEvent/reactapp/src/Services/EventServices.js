@@ -15,6 +15,7 @@ const updateEvent = async (newEvent) => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
+    console.log(response.data);
     return response.data;
 };
 
@@ -60,7 +61,7 @@ const updateIsPublishedEvent = async (_event) => {
 
 const updateAcceptedBy = async (_event) => {
     try {
-        const response = await Axios.put(`/api/events/${_event.eventId}/Accept`, _event);
+        const response = await Axios.put(`/api/Event/${_event.eventId}/Accept`, _event);
         return response.data;
     } catch (error) {
         // Handle error
@@ -71,7 +72,7 @@ const updateAcceptedBy = async (_event) => {
 
 const updateRejectedBy = async (_event) => {
     try {
-        const response = await Axios.put(`/api/events/${_event.eventId}/Reject`, _event);
+        const response = await Axios.put(`/api/Event/${_event.eventId}/Reject`, _event);
         return response.data;
     } catch (error) {
         // Handle error

@@ -778,20 +778,20 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
-        [HttpGet("UpdateAcceptedBy")]
-        public async Task<IActionResult> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt)
-        {
-            try
-            {
-                BLEvent Events = await _eventServices.UpdateAcceptedBy(eventId, acceptBy, updatedBy, updatedAt);
-                if (Events == null) { return BadRequest("error in BL"); }
-                return Ok(Events);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("UpdateAcceptedBy")]
+        //public async Task<IActionResult> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt)
+        //{
+        //    try
+        //    {
+        //        BLEvent Events = await _eventServices.UpdateAcceptedBy(eventId, acceptBy, updatedBy, updatedAt);
+        //        if (Events == null) { return BadRequest("error in BL"); }
+        //        return Ok(Events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         //[HttpPut("{eventId}/Reject")]
         //public async Task<IActionResult> UpdateRejectedBy(BLEvent _event)

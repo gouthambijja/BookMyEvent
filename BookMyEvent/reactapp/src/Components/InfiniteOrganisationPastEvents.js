@@ -14,7 +14,7 @@ const InfiniteOrganisationPastEvents = () => {
     const dispatch = useDispatch();
     var profInfo = useSelector((store) => store.profile.info);
     var paginationDetails = {
-        administratorId: profInfo.organisationId,
+        organisationId: profInfo.organisationId,
         pageNumber : { pageNumber },
         pageSize : { pageSize }
     }
@@ -34,6 +34,13 @@ const InfiniteOrganisationPastEvents = () => {
     };
 
     useEffect(() => {
+        if (events.length==0){
+            dispatch(fetchOrganisationPastEvents( {
+                organisationId: profInfo.organisationId,
+                pageNumber : 1,
+                pageSize :10
+            }))
+        }
         window.addEventListener("scroll", LoadEventOnPageEnd);
         return () => {
             window.addEventListener("scroll", LoadEventOnPageEnd);

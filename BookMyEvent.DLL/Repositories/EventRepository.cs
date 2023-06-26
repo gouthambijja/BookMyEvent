@@ -308,6 +308,7 @@ namespace BookMyEvent.DLL.Repositories
                     eventToUpdate.CreatedBy = _event.CreatedBy;
                     eventToUpdate.UpdatedBy = _event.UpdatedBy;
                     eventToUpdate.UpdatedOn = _event.UpdatedOn;
+                    eventToUpdate.RegistrationStatusId = _event.RegistrationStatusId;
                     await _db.SaveChangesAsync();
                     await _db.Entry(eventToUpdate).ReloadAsync();
                     return (eventToUpdate, "Event Updated Successfully");
@@ -405,9 +406,9 @@ namespace BookMyEvent.DLL.Repositories
                 var _event = await _db.Events.FindAsync(eventId);
                 if (_event != null)
                 {
-                    //_event.RejectedBy = rejectedBy;
-                    //_event.UpdatedBy = updatedBy;
-                    //_event.updatedAt = updatedAt;
+                    _event.RejectedBy = rejectedBy;
+                    _event.UpdatedBy = updatedBy;
+                    _event.UpdatedOn = updatedAt;
                     await _db.SaveChangesAsync();
                     await _db.Entry(_event).ReloadAsync();
                     return _event;

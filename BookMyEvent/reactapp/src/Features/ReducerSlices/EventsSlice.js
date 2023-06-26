@@ -335,12 +335,20 @@ let eventsSlice = createSlice({
         });
         builder.addCase(createEvent.fulfilled, (state, action) => {
             state.loading = false;
+            console.log(action.payload);
             if (action.payload.acceptedBy === null) {
-                state.eventRequests = state.eventRequests.push(action.payload);
+                if(state.eventRequests.length != 0)
+                state.eventRequests = [...state.eventRequests,action.payload];
             }
             else {
-                state.myEvents.push(action.payload);
-                state.organisationEvents.push(action.payload);
+                
+
+                    state.myEvents = [...state.myEvents,action.payload];
+              
+                if(state.organisationEvents.length != 0){
+
+                    state.organisationEvents = [...state.organisationEvents,action.payload];
+                }
             }
             state.message = "Successfully created event";
         }
@@ -380,12 +388,18 @@ let eventsSlice = createSlice({
         });
         builder.addCase(updateEvent.fulfilled, (state, action) => {
             let index = state.myEvents.findIndex((event) => event.eventId === action.payload.eventId);
+            console.log(action.payload);
+            console.log(index);
+
             if (index !== -1) {
-                state.myEvents[index] = action.payload;
+                state.myEvents[index]=action.payload;
+                
+                console.log("inside reducer")
             };
             index = state.organisationEvents.findIndex((event) => event.eventId === action.payload.eventId);
             if (index !== -1) {
-                state.organisationEvents[index] = action.payload;
+                state.organisationEvents[index]=action.payload;
+    
             };
             state.message = "Successfully updated event";
         });
@@ -402,13 +416,16 @@ let eventsSlice = createSlice({
         });
         builder.addCase(acceptEvent.fulfilled, (state, action) => {
             let index = state.eventRequests.findIndex((event) => event.eventId === action.payload.eventId);
+            console.log(action.payload)
+            console.log(index)
             if (index !== -1) {
-                state.eventRequests[index] = action.payload;
+                state.eventRequests.splice(index,1);
+                if(state.organisationEvents.length != 0){
+
+                    state.organisationEvents.push(action.payload);
+                }
             };
-            index = state.organisationEvents.findIndex((event) => event.eventId === action.payload.eventId);
-            if (index !== -1) {
-                state.organisationEvents[index] = action.payload;
-            };
+                  
             state.message = "Successfully accepted event";
         });
         builder.addCase(acceptEvent.rejected, (state, action) => {

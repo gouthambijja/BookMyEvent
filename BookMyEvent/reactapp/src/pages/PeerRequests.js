@@ -123,9 +123,7 @@ const PeerRequest = () => {
     setOpen(false);
 
   };
-  const handleToast=()=>{
-    toast.success("success toast!")
-  }
+  
   useEffect(() => {
     const temp = async () => {
       if (requestedPeers.length === 0) {
@@ -189,7 +187,7 @@ const PeerRequest = () => {
        No New Peer Requests
       </Typography>
       </>}
-     <Button onClick={handleToast}>Toast Bro</Button>
+     
      
     </Container>
   </>)

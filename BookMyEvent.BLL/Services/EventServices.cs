@@ -87,11 +87,18 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                Event Event = _mapper.Map<Event>(_event);
-                return (_mapper.Map<BLEvent>(await eventRepository.UpdateEvent(Event)), "Event Updated");
+               // Event event = _mapper.Map<Event>(_event);
+               //Event updatedEvent= await eventRepository.UpdateEvent(event);
+               // BLEvent eventBL=_mapper.Map<BLEvent>(updatedEvent);
+               // return (eventBL, "Event Updated");
+               Event eventDL =_mapper.Map<Event>(_event);
+                var result=await eventRepository.UpdateEvent(eventDL);
+                BLEvent eventBL = _mapper.Map<BLEvent>(result.Item1);
+                return (eventBL, "Event Updated");
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return (new BLEvent(), "Error in the Event Services ");
             }
         }

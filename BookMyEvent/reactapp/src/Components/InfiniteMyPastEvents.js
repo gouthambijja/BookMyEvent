@@ -34,6 +34,13 @@ const InfiniteMyPastEvents = () => {
     };
 
     useEffect(() => {
+        if(events.length==0){
+            dispatch(fetchOrganiserPastEvents( {
+                organiserId : profInfo.administratorId,
+                pageNumber : 1,
+                pageSize : 10
+            }))
+        }
         console.log("I am in my past events");
         window.addEventListener("scroll", LoadEventOnPageEnd);
         return () => {
