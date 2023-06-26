@@ -9,57 +9,73 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const EventCard = ({ event }) => {
-  const categories = useSelector((store) => store.category);
-  const navigate = useNavigate();
-  const handleEvent = (eventId) => {
-    navigate(`event/${eventId}`);
-    console.log("inside");
-  };
+    const categories = useSelector((store) => store.category);
+    const navigate = useNavigate();
+    const handleEvent = (eventId) => {
+        navigate(`event/${eventId}`);
+        console.log("inside");
+    };
 
-  const handleEventRegister = () => {
-    navigate(`/registerEvent/${event.eventId}/${event.formId}`);
-  };
-  return (
-    <Card
-      className="card"
-      sx={{ width: "450px", boxShadow: "0px 0px 9px #d0d0d0" }}
-    >
-      <CardActionArea onClick={()=>handleEvent(event.eventId)}>
-        <CardMedia
-          component="img"
-          sx={{ width: "100%", aspectRatio: 1 / 0.7 }}
-          image={`data:image/jpeg;base64,${event.profileImgBody}`}
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography variant="h4" component="div">
-            {event.eventName}
-          </Typography>
-          <Typography variant="h6" component="div">
-            {categories.categories[Number(event.categoryId)]?.categoryName}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {event.startDate?.split("T")[0]} to {event.endDate.split("T")[0]}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {event.location}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {event.city},{event.state}, {event.country}
-          </Typography>
-          <Typography variant="body1" color="text.primary">
-            {event.eventStartingPrice == 0
-              ? "Free"
-              : `Tickets starts from ${event.eventStartingPrice}`}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions sx={{ display: "flex", justifyContent: "right" }}>
-        <Button size="small" color="primary" onClick={handleEventRegister}>
-          Register
-        </Button>
-      </CardActions>
-    </Card>
-  );
+    const handleEventRegister = () => {
+        navigate(`/registerEvent/${event.eventId}/${event.formId}`);
+    };
+    return (
+        <Card
+            className="card"
+            sx={{ width: "400px", boxShadow: "0px 0px 9px #d0d0d0" }}
+        >
+            <CardActionArea onClick={() => handleEvent(event.eventId)}>
+                <div style={{ position: 'relative' }}>
+                    <div>
+                        <CardMedia
+                            component="img"
+                            sx={{ width: "100%", aspectRatio: 1 / 0.7 }}
+                            image={`data:image/jpeg;base64,${event.profileImgBody}`}
+                            alt="green iguana"
+                        />
+                    </div>
+                    <div style={{ position: 'absolute', top: '40%', left: '2', width: '70%' }}>
+                        <Typography variant="h4" component="div">
+                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontFamily: 'serif' }}>
+                                {event.eventName}
+                            </div>
+                        </Typography>
+                        <Typography variant="h6" component="div">
+                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {categories.categories[Number(event.categoryId)]?.categoryName}
+                            </div>
+                        </Typography>
+                    </div>
+                    <CardContent>
+                        <Typography variant="subtitle1" color="text.secondary">
+                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {event.startDate?.split("T")[0]} - {event.endDate.split("T")[0]}
+                            </div>
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary">
+                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {event.location},
+                            </div>
+                        </Typography>
+                        <Typography variant="subtitle1" color="text.secondary">
+                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {event.city},{event.state}, {event.country}
+                            </div>
+                        </Typography>
+                        <Typography variant="body1" color="text.primary">
+                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {event.eventStartingPrice == 0
+                                    ? "Free"
+                                    : `Tickets starts from ${event.eventStartingPrice}`}
+                            </div>
+                        </Typography>
+                    </CardContent>
+                </div>
+            </CardActionArea>
+            <Button size="small" color="primary" onClick={handleEventRegister}>
+                Register
+            </Button>
+        </Card >
+    );
 };
 export default EventCard;
