@@ -43,8 +43,8 @@ const LandingPage = () => {
     pageNumber: 1,
   });
   useEffect(()=>{
-    LoadEventOnPageEnd(true);
-  },[_filters]);
+    LoadEventOnPageEnd();
+  },[_filters])
   const handleFilter = async (filters) => {
     dispatch(clearHomeEvents());
     dispatch(SetPageNumber(1));
@@ -52,14 +52,14 @@ const LandingPage = () => {
     console.log("HEY");
     // await dispatch(fetchEvents(filters)).unwrap();
   };
-  const LoadEventOnPageEnd = async (flag = false) => {
+  const LoadEventOnPageEnd = async () => {
     const scrollPosition = document.documentElement.scrollTop;
     const contentHeight = document.documentElement.scrollHeight;
     const viewportHeight = window.innerHeight;
     if (
-      (scrollPosition + viewportHeight >= contentHeight - 100 &&
+      scrollPosition + viewportHeight >= contentHeight - 100 &&
       !store.getState().homeEvents.loading &&
-      !store.getState().homeEvents.end)||flag
+      !store.getState().homeEvents.end
     ) {
       console.log(
         _filters
