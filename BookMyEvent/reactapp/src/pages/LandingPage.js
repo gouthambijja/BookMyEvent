@@ -15,7 +15,6 @@ import {
 } from "../Features/ReducerSlices/HomeEventsSlice";
 import EventsFilter from "../Components/EventsFilter";
 import store from "../App/store";
-import InfiniteScrollUserEventsLandingPage from "../Components/InfiniteScrollUserEventLandingPage";
 
 const useStyles = makeStyles({
   button: {
@@ -43,23 +42,24 @@ const LandingPage = () => {
   const [_filters, setfilters] = useState({
     pageNumber: 1,
   });
+  useEffect(()=>{
+    LoadEventOnPageEnd(true);
+  },[_filters]);
   const handleFilter = async (filters) => {
     dispatch(clearHomeEvents());
     dispatch(SetPageNumber(1));
-    setfilters(filters,()=>{
-      LoadEventOnPageEnd();
-    });
+    setfilters(filters);
     console.log("HEY");
     // await dispatch(fetchEvents(filters)).unwrap();
   };
-  const LoadEventOnPageEnd = async () => {
+  const LoadEventOnPageEnd = async (flag = false) => {
     const scrollPosition = document.documentElement.scrollTop;
     const contentHeight = document.documentElement.scrollHeight;
     const viewportHeight = window.innerHeight;
     if (
-      scrollPosition + viewportHeight >= contentHeight - 100 &&
+      (scrollPosition + viewportHeight >= contentHeight - 100 &&
       !store.getState().homeEvents.loading &&
-      !store.getState().homeEvents.end
+      !store.getState().homeEvents.end)||flag
     ) {
       console.log(
         _filters
@@ -77,7 +77,6 @@ const LandingPage = () => {
   useEffect(() => {
     LoadEventOnPageEnd();
   }, [_filters]);
-  
   useEffect(() => {
     window.addEventListener("scroll", LoadEventOnPageEnd);
     return () => {
