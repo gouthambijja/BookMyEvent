@@ -1,6 +1,7 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
+using db.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,7 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "User")]
+    [Authorize]
     [Route("[controller]")]
     public class TicketController:ControllerBase
     {
@@ -66,6 +67,25 @@ namespace BookMyEvent.WebApi.Controllers
             catch
             {
                 return BadRequest("error in controller");
+            }
+        }
+        [HttpGet("getEventTickets")]
+        public async Task<IActionResult> GetAllEventTickets(Guid eventId)
+        {
+            try
+            {
+                List<UserTicketsWithDetails> allTickets = await _ticketServices.GetEventTickets( eventId);
+                if (allTickets == null)
+                {
+                    return BadRequest("error in BL");
+                }
+
+                var json = JsonConvert.SerializeObject(allTickets);
+                return Ok(json);
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
         /// <summary>

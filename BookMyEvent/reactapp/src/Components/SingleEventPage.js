@@ -71,16 +71,12 @@ const useStyles = makeStyles((theme) => ({
   category: {
     marginBottom: "10px",
     flexBasis: "100%",
-    background: `linear-gradient(40deg,
-        #fffc00 0%,
-        #fc00ff 45%,
-        #00fffc 100%) right;`,
+    background: `#fff`,
     border: "2px solid #757ce8",
     backdropFilter: "blur(6px)",
     padding: theme.spacing(2),
     borderRadius: "4px",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
-    color: "white",
     borderRadius: "30px",
   },
   hoverEffect: {

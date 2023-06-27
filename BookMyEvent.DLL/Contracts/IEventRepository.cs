@@ -340,7 +340,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a list of Event objects
         /// </returns>
-        Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize);
+        Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
 
         /// <summary>
         /// An asynchronous method to update the IsActive status of an event

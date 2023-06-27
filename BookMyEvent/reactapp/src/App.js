@@ -43,6 +43,8 @@ import "react-toastify/dist/ReactToastify.css";
 import UserTicketList from "./pages/UserTickets";
 import SingleEventPage from "./Components/SingleEventPage";
 import RegisteredEvents from "./pages/RegisteredEvents";
+import EventTickets from "./pages/EventTickets";
+
 
 const App = () => {
   const profile = store.getState().profile.info;
@@ -117,7 +119,7 @@ const App = () => {
                   path="organisationPastEvents"
                   element={<InfiniteOrganisationPastEvents />}
                 />
-                <Route path="event/:eventId" element={<OrganiserEventPage />} />
+                <Route path="event/:eventId" element={<EventTickets/>}/>
               </Route>
             </Route>
           </Route>

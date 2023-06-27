@@ -3,16 +3,18 @@ import { Typography, Card, CardContent } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import TicketServices from '../Services/TicketServices'
 import { useSelector } from 'react-redux';
-import {Box } from '@mui/material'
+import {  Box } from "@mui/material";
 
-const UserTickets= () => {
-  const {eventId} = useParams();
-  const [tickets,setTickets] = useState([]);
-  const auth = useSelector(store => store.auth);
+
+const EventTickets= () => {
+    const [tickets,setTickets] = useState([]);
+    const auth = useSelector(store => store.auth);
+    const {eventId} = useParams();
+    console.log(eventId);
   useEffect(()=>{
    const loadTickets = async() =>{
-        const _tickets = await TicketServices().getAllUserEventTickets(auth.id,eventId);
-        console.log(_tickets);
+    console.log(eventId);
+        const _tickets = await TicketServices().getEventTickets(eventId);
         setTickets(_tickets);
     }
     loadTickets();
@@ -31,7 +33,7 @@ let cnt  = 0 ;
                 <Typography variant="h5" component="h2">
                   {index + 1}
                 </Typography>
-                <Box>
+                <Box >
                   {ticket.userDetails.map(user =>
                     <div key = {cnt++}>
                         {user.Label}:<i>{user.StringResponse?user.StringResponse:user.NumberResponse?user.NumberResponse:user.DateResponse}</i>
@@ -47,4 +49,4 @@ let cnt  = 0 ;
   );
 };
 
-export default UserTickets;
+export default EventTickets;

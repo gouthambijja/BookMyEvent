@@ -450,16 +450,16 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetFilteredEvents(DateTime startDate, DateTime endDate, decimal startPrice, decimal endPrice, string location, bool isFree, List<int> categoryIds, int pageNumber, int pageSize)
+        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
         {
             try
             {
                 // Perform the filtering based on the provided criteria
                 var events = await _db.Events.ToListAsync();
                 var filteredEvents = await _db.Events
-                    .Where(e => e.StartDate >= startDate && (e.EndDate <= endDate && e.EndDate >= DateTime.Now) && e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice && (location != "" && location != null) ? e.Location.Contains(location) : true && (isFree == true ? e.IsFree == true : true) && (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) && e.IsActive == true && e.IsPublished == true && e.RegistrationStatusId != 3)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
+                    .Where(e => e.StartDate >= startDate && (e.EndDate <= endDate && e.EndDate >= DateTime.Now) && e.EventStartingPrice >= startPrice && e.EventEndingPrice <= endPrice && (location != "" && location != null) ? ( e.Location.Contains(location) || e.State.Contains(location) || e.Country.Contains(location) || e.City.Contains(location) ) : true && (isFree == true ? e.IsFree == true : true) && (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) && e.IsActive == true && e.IsPublished == true && e.RegistrationStatusId != 3)
+                    .Skip((pageNumber - 1) * (int)pageSize)
+                    .Take((int)pageSize)
                     .ToListAsync();
                 return filteredEvents;
             }

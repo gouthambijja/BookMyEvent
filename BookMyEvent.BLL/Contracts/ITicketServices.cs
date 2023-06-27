@@ -54,6 +54,13 @@ namespace BookMyEvent.BLL.Contracts
         /// False: if any exception occurred
         /// </returns>
         public Task<bool> CancelTicket(Guid ticketId);
+        /// <summary>
+        /// to return all the tickets of a particular event
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public Task<List<UserTicketsWithDetails>> GetEventTickets(Guid eventId);
+
 
     }
 }

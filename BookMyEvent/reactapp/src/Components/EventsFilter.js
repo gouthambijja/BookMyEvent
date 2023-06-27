@@ -31,21 +31,12 @@ const filtersStyle = {
 
 const EventsFilter = ({ onFilter }) => {
   const categories = useSelector((store) => store.category.categories);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [priceRange, setPriceRange] = useState([0, 99999999]);
-  const [startPrice, setStartPrice] = useState();
-  const [endPrice, setEndPrice] = useState();
   const [location, setLocation] = useState();
   const [isFree, setIsFree] = useState(false);
   const [categoryIds, setcategoryIds] = useState();
   const [Visibility, SetVisibility] = useState(false);
   const handleFilter = () => {
     const filter = {
-      startDate: startDate ? startDate : new Date(1),
-      endDate: endDate ? startDate : new Date(4000000000001),
-      startPrice: startPrice ? startPrice : 0,
-      endPrice: endPrice ? endPrice : 99999999,
       location: location ? location : "",
       isFree: isFree ? isFree : false,
       categoryIds: categoryIds ? categoryIds : [],
@@ -56,15 +47,15 @@ const EventsFilter = ({ onFilter }) => {
     SetVisibility((prev) => !prev);
   };
 
-  const handlePriceChange = (event, newValue) => {
-    setPriceRange(newValue);
-    setStartPrice(newValue[0]);
-    setEndPrice(newValue[1]);
-  };
+  // const handlePriceChange = (event, newValue) => {
+  //   setPriceRange(newValue);
+  //   setStartPrice(newValue[0]);
+  //   setEndPrice(newValue[1]);
+  // };
 
-  const handleChange = (event) => {
-    setcategoryIds(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setcategoryIds(event.target.value);
+  // };
 
   return (
     <div>
@@ -78,69 +69,12 @@ const EventsFilter = ({ onFilter }) => {
               transform: "translateX(-50%)",
             }}
           >
-            {/* <FormControl sx={{ m: 1, width: '100%' }}>
-        <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={categoryIds}
-          onChange={handleChange}
-          input={<OutlinedInput label="Categories" />}
-          renderValue={(selected) =>
-            selected
-              .map((categoryId) => {
-                const category = categories.find((c) => c.id === categoryId);
-                return category ? category.name : "";
-              })
-              .join(", ")
-          }
-        >
-          {categories.map((category) => (
-            <MenuItem key={category.id} value={category.id}>
-              <Checkbox checked={categoryIds.includes(category.id)} />
-              <ListItemText primary={category.name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
-            <TextField
-              label="Start Date"
-              fullWidth
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              label="End Date"
-              fullWidth
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <Box sx={{ width: 300 }}>
-              Price Range
-              <Slider
-                getAriaLabel={() => "Price Range"}
-                value={priceRange}
-                onChange={handlePriceChange}
-                valueLabelDisplay="auto"
-                min={0}
-                max={10000}
-                sx={{ width: 300 }}
-              />
-            </Box>
+            
             <TextField
               label="Location"
               fullWidth
               type="text"
-              value={endDate}
+              value={location}
               onChange={(e) => setLocation(e.target.value)}
               InputLabelProps={{
                 shrink: true,

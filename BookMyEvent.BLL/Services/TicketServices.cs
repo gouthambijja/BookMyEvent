@@ -104,6 +104,37 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
+        public async Task<List<UserTicketsWithDetails>> GetEventTickets( Guid eventId)
+        {
+            try
+            {
+                var mapper = Automapper.InitializeAutomapper();
+                var AllTickets = new List<UserTicketsWithDetails>();
+                var forms = await _userInputFormRepository.GetUserInputFormsByEventId( eventId);
+                foreach (var form in forms)
+                {
+                    Ticket DLticket = await _ticketRepository.GetTicketByFormId(form.UserInputFormId);
+                    List<UserInputFormField> userInputFormFields = await _userInputFormFieldsRepository.GetAllFieldsByFormId(form.UserInputFormId);
+                    List<BLUserInputFormField> userInputFormFieldsBL = new List<BLUserInputFormField>();
+                    foreach (var field in userInputFormFields)
+                    {
+                        BLUserInputFormField BLField = mapper.Map<BLUserInputFormField>(field);
+                        userInputFormFieldsBL.Add(BLField);
+                    }
+                    BLTicket ticketBL = mapper.Map<BLTicket>(DLticket);
+                    UserTicketsWithDetails ticketWithDetails = new UserTicketsWithDetails();
+                    ticketWithDetails.ticket = ticketBL;
+                    ticketWithDetails.userDetails = userInputFormFieldsBL;
+                    AllTickets.Add(ticketWithDetails);
+                }
+                return AllTickets;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task<bool> CancelTicket(Guid ticketId)
         {
             try

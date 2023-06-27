@@ -15,7 +15,7 @@ const Layout = () => {
   return (
     <div >
       <Navbar/>
-      <div style={{paddingTop:'64px'}}>
+      <div style={{paddingTop:'64px',minHeight:'calc( 100vh - 52px) '}}>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -28,15 +28,16 @@ const Layout = () => {
         pauseOnHover
         closeButton={false}
       />
-      <div style={{minHeight:'calc( 100vh - 64px)'}}><Outlet/></div>
+      <Outlet/>
       
+      </div>
       <footer style={footerStyle}>
       <Container maxWidth="md">
         <Typography variant="body2" align="center">
           © {new Date().getFullYear()} BookMyEvent. All rights reserved.
         </Typography>
       </Container>
-    </footer></div>
+    </footer>
     </div>
   )
 }

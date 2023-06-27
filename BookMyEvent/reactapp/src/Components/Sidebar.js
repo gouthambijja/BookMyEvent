@@ -174,7 +174,7 @@ function Sidebar({ open, setOpen }) {
     if (auth.role == "User") {
       navigate("/");
     } else if (["Owner", "Secondary_Owner", "Peer"].includes(auth.role)) {
-      navigate("/oragniser");
+      navigate("/organiser");
     } else {
       navigate("/Admin");
     }

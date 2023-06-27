@@ -38,9 +38,19 @@ const TicketServices = () => {
     return response.data;
   };
 
+  const getEventTickets = async (eventId) => {
+    console.log(eventId);
+    const response = await Axios.get(`${apiBase}/getEventTickets?eventId=${eventId}`,
+    {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+  }
   return {
     getAllTicketsByTransactionId,
     getAllUserEventTickets,
+    getEventTickets,
     cancelTicket,
   };
 };
