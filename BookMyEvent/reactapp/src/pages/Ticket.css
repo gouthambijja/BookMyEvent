@@ -1,0 +1,156 @@
+#ticketComponent .fl-left {
+    float: left
+}
+
+#ticketComponent .fl-right {
+    float: right
+}
+
+#ticketComponent .row {
+    overflow: hidden;
+    width: 50vw;
+}
+
+#ticketComponent .card {
+    display: table-row;
+    width: 100%;
+    color: #fff;
+    background-color: #3f50b5;
+    margin-bottom: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 4px;
+    position: relative;
+}
+
+#ticketComponent .card+.card {
+    margin-left: 2%
+}
+
+#ticketComponent .date {
+    display: table-cell;
+    width: 25%;
+    position: relative;
+    text-align: center;
+    border-right: 2px dashed #dadde6
+}
+
+#ticketComponent .date:before,
+#ticketComponent .date:after {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    z-index: 1;
+    border-radius: 50%
+}
+
+#ticketComponent .date:after {
+    top: auto;
+    bottom: -15px
+}
+
+#ticketComponent .date time {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)
+}
+
+#ticketComponent .date time span {
+    display: block
+}
+
+#ticketComponent .date time span:first-child {
+    font-weight: 600;
+    font-size: 250%
+}
+
+#ticketComponent .date time span:last-child {
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: -10px
+}
+
+#ticketComponent .card-cont {
+    display: table-cell;
+    width: 75%;
+    font-size: 85%;
+    padding: 10px 10px 30px 50px
+}
+
+#ticketComponent .card-cont h3 {
+    font-size: 130%
+}
+
+
+
+#ticketComponent .card-cont>div {
+    display: table-row
+}
+
+#ticketComponent .card-cont .even-date i,
+#ticketComponent .card-cont .even-info i,
+#ticketComponent .card-cont .even-date time,
+#ticketComponent .card-cont .even-info p {
+    display: table-cell
+}
+
+#ticketComponent .card-cont .even-date i,
+#ticketComponent .card-cont .even-info i {
+    padding: 5% 5% 0 0
+}
+
+#ticketComponent .card-cont .even-info p {
+    padding: 30px 50px 0 0
+}
+
+#ticketComponent .card-cont .even-date time span {
+    display: block
+}
+
+#ticketComponent .card-cont a {
+    display: block;
+    width: 80px;
+    height: 30px;
+    background-color: #D8DDE0;
+    color: #000;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 2px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px
+}
+
+#ticketComponent .row:last-child .card:first-child .card-cont a {
+    background-color: #037FDD
+}
+
+#ticketComponent .row:last-child .card:last-child .card-cont a {
+    background-color: #4f4cf8
+}
+
+@media screen and (max-width: 860px) {
+    #ticketComponent  .card {
+        display: block;
+        float: none;
+        width: 100%;
+        margin-bottom: 10px
+    }
+
+    #ticketComponent  .card+.card {
+        margin-left: 0
+    }
+
+    #ticketComponent  .card-cont .even-date,
+    #ticketComponent  .card-cont .even-info {
+        font-size: 75%
+    }
+}
