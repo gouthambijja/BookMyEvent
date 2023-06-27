@@ -462,11 +462,11 @@ let eventsSlice = createSlice({
             state.message = "";
         });
         builder.addCase(deleteEvent.fulfilled, (state, action) => {
-            let index = state.myEvents.findIndex((event) => event.eventId === action.payload.eventId);
+            let index = state.myEvents.findIndex((event) => event.eventId === action.payload);
             if (index !== -1) {
                 state.myEvents.splice(index, 1);
             };
-            index = state.organisationEvents.findIndex((event) => event.eventId === action.payload.eventId);
+            index = state.organisationEvents.findIndex((event) => event.eventId === action.payload);
             if (index !== -1) {
                 state.organisationEvents.splice(index, 1);
             };

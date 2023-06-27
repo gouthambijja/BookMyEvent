@@ -31,9 +31,10 @@ const OrganiserEventCard = ({ event }) => {
         tempEvent.updatedBy = profile.administratorId;
 
         await dispatch(deleteEvent(tempEvent)).unwrap();
-        setAlertMessage(state.events.message);
-        setAlertSeverity(state.events.error ? 'error' : 'success');
-        setShowAlert(true);
+        toast.error("Event Deleted!")
+        // setAlertMessage(state.events.message);
+        // setAlertSeverity(state.events.error ? 'error' : 'success');
+        // setShowAlert(true);
         setOpenDialog(false);
 
     };
@@ -45,6 +46,8 @@ const OrganiserEventCard = ({ event }) => {
 
     const handleCancel = () => {
         setOpenDialogtoAccept(false);
+        setOpenDialog(false);
+
     };
 
     const handlePublish = () => {
@@ -84,10 +87,12 @@ const OrganiserEventCard = ({ event }) => {
       setOpenDialogtoAccept(true);
 
     }
-    const handleRejectConfirm=(event)=>{
+    const handleRejectConfirm=()=>{
         const tempEvent = { ...event };
         tempEvent.rejectedBy=profile.administratorId;
         tempEvent.updatedBy=profile.administratorId;
+        console.log(event);
+        console.log(tempEvent);
         dispatch(rejectEvent(tempEvent));
       setOpenDialogtoAccept(false);
         toast.error("Event Rejected!")
@@ -97,6 +102,7 @@ const OrganiserEventCard = ({ event }) => {
         const tempEvent = { ...event };
         tempEvent.registrationStatusId = parseInt(e.target.value);
         dispatch(updateEvent(tempEvent));
+        toast.success("Status changed!")
     };
 
     const handleClick = () => {
@@ -195,7 +201,7 @@ const OrganiserEventCard = ({ event }) => {
                 onCancel={handleCancel}
             />
 
-            {showAlert && <ReusableAlert message={alertMessage} severity={alertSeverity} duration={3000} onClose={() => setShowAlert(false)} />}
+  
         </>
     );
 };

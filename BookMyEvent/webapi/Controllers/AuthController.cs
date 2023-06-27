@@ -37,7 +37,7 @@ namespace BookMyEvent.WebApi.Controllers
             if (tokenType == TokenType.AccessToken)
             {
                 secretKey = _config["Authentication:JWTSettings:AccessTokenSecretKey"];
-                expiresIn = DateTime.Now.AddMinutes(5);
+                expiresIn = DateTime.Now.AddMinutes(30);
             }
             else
             {

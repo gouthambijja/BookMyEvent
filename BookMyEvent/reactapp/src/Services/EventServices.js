@@ -110,11 +110,19 @@ const getFilteredEvents = async (filterEvent) => {
 };
 
 const deleteEvent = async (eventId, deletedBy) => {
+    try{  
     const response = await Axios.delete(`${apiBase}/${eventId}/deletedBy/${deletedBy}`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
-    return response.data;
+    if(response.status===200){
+        return eventId;
+    }
+}
+catch(error){
+    console.log(error);
+    throw error;
+}
 };
 
 const getEventById = async (eventId) => {
