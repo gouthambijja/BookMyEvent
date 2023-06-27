@@ -106,7 +106,7 @@ const OrganiserEventCard = ({ event }) => {
     };
 
     const handleClick = () => {
-        navigate(`event/${event.eventId}`);
+        navigate(`/organiser/event/${event.eventId}`);
     };
    React.useEffect(()=>{
     console.log("events changed")

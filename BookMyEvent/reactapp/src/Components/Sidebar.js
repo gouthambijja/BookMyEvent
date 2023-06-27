@@ -17,8 +17,25 @@ import {
   ExitToApp,
   GroupAdd,
   AccountCircle,
+  Home,
   Event,
+  EventAvailable,
+  EventBusy,
+  EventNote,
+  GroupWork,
+  PostAdd,
+  PersonAdd,
+  SpeakerGroup,
+  AccountTree,
+  People,
+  EmojiPeople,
+  NaturePeople,
+  PeopleAlt,
+  VerifiedUser,
+  SupervisedUserCircle,
+  SupervisorAccount,
 } from "@material-ui/icons";
+
 import { useNavigate } from "react-router-dom";
 import useLogout from "../Hooks/Logout";
 import { useSelector } from "react-redux";
@@ -35,6 +52,15 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  activeBar:{
+    '&:hover': {
+      backgroundColor:theme.palette.primary.main,
+    color:"white",
+    }, 
+    backgroundColor:theme.palette.primary.main,
+    color:"white",
+  },
+
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
@@ -81,12 +107,15 @@ function Sidebar({ open, setOpen }) {
   const auth = useSelector((store) => store.auth);
   const logout = useLogout();
   const classes = useStyles();
+  const [activeItem, setActiveItem] = useState('');
   //   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
+  const handleItemClick = (item) => {
+    setActiveItem(item);
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -109,11 +138,14 @@ function Sidebar({ open, setOpen }) {
       handleDrawerClose();
     } else {
       navigate("/profile");
+      handleDrawerClose();
     }
+    setActiveItem("profile");
   };
   const handleAdd = async () => {
     if (auth?.role == "Admin") navigate("/admin/addadmin");
     else navigate("/organiser/addSecondaryOwner");
+    setActiveItem("addanother");
     handleDrawerClose();
   };
   const handleRequests = async () => {
@@ -123,51 +155,69 @@ function Sidebar({ open, setOpen }) {
   };
   const handleOrganisations = async () => {
     if (auth?.role == "Admin") navigate("/admin/Organisations");
+    setActiveItem("organisations")
     handleDrawerClose();
   };
   const handlePeerRequests = async () => {
     if (auth.role == "Owner" || auth.role == "Secondary_Owner")
       navigate("organiser/PeerRequests");
+
+    setActiveItem("peerrequests");
     handleDrawerClose();
   };
   const handleOrganiseEvent = async () => {
     navigate("/organiser/AddEvent");
+    setActiveItem("createevent");
     handleDrawerClose();
   };
   const handleOrganisationTree = async () => {
     const profile = store.getState().profile.info;
     navigate(`/organiser/OrganisationTree/${profile.organisationId}`);
+    setActiveItem("orgTree");
     handleDrawerClose();
   };
   const handleLogin = async () => {
     navigate("login");
+    setActiveItem("login");
+    handleDrawerClose();
+  };
+  const handleGlobalHome= () => {
+    navigate("/");
+    setActiveItem("globalhome"); 
     handleDrawerClose();
   };
   const handleOrganiseAnEvent = async () => {
     navigate("/organiser");
+    setActiveItem("organiseanevent");
+
     handleDrawerClose();
   };
 
   const handleMyPastEvents = async () => {
     navigate("/organiser/myPastEvents");
+    setActiveItem("mypastevents")
     handleDrawerClose();
   };
   const handleOrgPastEvents = async () => {
     navigate("/organiser/organisationPastEvents");
+    setActiveItem("orgpastevents");
     handleDrawerClose();
   };
 
   const handleEventRequests = async () => {
     navigate("/organiser/eventReq");
+    setActiveItem("eventreq");
     handleDrawerClose();
   };
 
   const handleOrganisationEvents = async () => {
     navigate("/organiser/organisationEvents");
+    setActiveItem("orgevents");
     handleDrawerClose();
   };
   const handleRegisteredEvents = async () => {
     navigate("/registeredEvents");
+    setActiveItem("registeredevents");
     handleDrawerClose();
   };
   const handleHome = async () => {
@@ -178,6 +228,7 @@ function Sidebar({ open, setOpen }) {
     } else {
       navigate("/Admin");
     }
+    setActiveItem("home");
     handleDrawerClose();
   };
   return (
@@ -204,15 +255,16 @@ function Sidebar({ open, setOpen }) {
         <List>
           {auth.accessToken ? (
             <>
-              <ListItem button onClick={handleHome}>
+              <ListItem button className={activeItem == 'home'?classes.activeBar:""} onClick={handleHome}>
                 <ListItemIcon>
-                  <AccountCircle />
+                
+                <Home className={activeItem == 'home'?classes.activeBar:""} />
                 </ListItemIcon>
                 <ListItemText primary="Home" />
               </ListItem>
-              <ListItem button onClick={handleProfile}>
-                <ListItemIcon>
-                  <AccountCircle />
+              <ListItem button className={activeItem == 'profile'?classes.activeBar:""} onClick={handleProfile}>
+                <ListItemIcon >
+                  <AccountCircle className={activeItem == 'profile'?classes.activeBar:""} />
                 </ListItemIcon>
                 <ListItemText primary="Profile" />
               </ListItem>
@@ -221,19 +273,29 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.accessToken == "" ? (
-            <ListItem button onClick={handleLogin}>
+            <ListItem button className={activeItem == 'globalhome'?classes.activeBar:""} onClick={handleGlobalHome}>
               <ListItemIcon>
-                <AccountCircle />
-              </ListItemIcon>
-              <ListItemText primary="Login" />
+                <Home className={activeItem == 'globalhome'?classes.activeBar:""}  />
+              </ListItemIcon>   
+              <ListItemText primary="Home" />
             </ListItem>
           ) : (
             <></>
-          )}
-          {auth.accessToken == "" || auth.role == "User" ? (
-            <ListItem button onClick={handleOrganiseAnEvent}>
+            )}
+            {auth.accessToken == "" ? (
+              <ListItem button className={activeItem == 'login'?classes.activeBar:""} onClick={handleLogin}>
+                <ListItemIcon>
+                  <AccountCircle className={activeItem == 'login'?classes.activeBar:""} />
+                </ListItemIcon>
+                <ListItemText primary="Login" />
+              </ListItem>
+            ) : (
+              <></>
+            )}
+          {auth.accessToken == ""  ? (
+            <ListItem button className={activeItem == 'organiseanevent'?classes.activeBar:""} onClick={handleOrganiseAnEvent}>
               <ListItemIcon>
-                <AccountCircle />
+              <PostAdd className={activeItem == 'organiseanevent'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Organise an Event?" />
             </ListItem>
@@ -242,9 +304,9 @@ function Sidebar({ open, setOpen }) {
           )}
 
           {auth.role == "User" ? (
-            <ListItem button onClick={handleRegisteredEvents}>
+            <ListItem button className={activeItem == 'registeredevents'?classes.activeBar:""} onClick={handleRegisteredEvents}>
               <ListItemIcon>
-                <AccountCircle />
+              <EventNote className={activeItem == 'registeredevents'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Registered Events" />
             </ListItem>
@@ -252,9 +314,9 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.role == "Owner" || auth.role == "Secondary_Owner" ? (
-            <ListItem button onClick={handlePeerRequests}>
+            <ListItem button className={activeItem == 'peerrequests'?classes.activeBar:""} onClick={handlePeerRequests}>
               <ListItemIcon>
-                <GroupAdd />
+                <GroupAdd className={activeItem == 'peerrequests'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Peer Requests" />
             </ListItem>
@@ -262,9 +324,9 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.role === "Admin" ? (
-            <ListItem button onClick={handleAdd}>
+            <ListItem button className={activeItem == 'addanother'?classes.activeBar:""} onClick={handleAdd}>
               <ListItemIcon>
-                <GroupAdd />
+                <GroupAdd className={activeItem == 'addanother'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Add Admin" />
             </ListItem>
@@ -272,9 +334,9 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.role === "Admin" ? (
-            <ListItem button onClick={handleOrganisations}>
+            <ListItem button className={activeItem == 'organisations'?classes.activeBar:""} onClick={handleOrganisations}>
               <ListItemIcon>
-                <GroupAdd />
+              <AccountTree className={activeItem == 'organisations'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Organisations" />
             </ListItem>
@@ -284,9 +346,9 @@ function Sidebar({ open, setOpen }) {
           {auth.role == "Owner" ||
           auth.role == "Peer" ||
           auth.role == "Secondary_Owner" ? (
-            <ListItem button onClick={handleOrganiseEvent}>
+            <ListItem button className={activeItem == 'createevent'?classes.activeBar:""} onClick={handleOrganiseEvent}>
               <ListItemIcon>
-                <Event />
+                <PostAdd className={activeItem == 'createevent'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Organise Event" />
             </ListItem>
@@ -294,9 +356,9 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.role === "Owner" ? (
-            <ListItem button onClick={handleAdd}>
+            <ListItem button className={activeItem == 'addanother'?classes.activeBar:""} onClick={handleAdd}>
               <ListItemIcon>
-                <GroupAdd />
+                <PersonAdd className={activeItem == 'addanother'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Add Secondary Owner" />
             </ListItem>
@@ -307,37 +369,39 @@ function Sidebar({ open, setOpen }) {
           auth.role == "Peer" ||
           auth.role == "Secondary_Owner" ? (
             <>
-              <ListItem button onClick={handleOrganisationTree}>
+              <ListItem button className={activeItem == 'orgTree'?classes.activeBar:""} onClick={handleOrganisationTree}>
                 <ListItemIcon>
-                  <Event />
+                  
+                <AccountTree className={activeItem == 'orgTree'?classes.activeBar:""} />
                 </ListItemIcon>
                 <ListItemText primary="Organisation Tree" />
               </ListItem>
 
-              <ListItem button onClick={handleMyPastEvents}>
+              <ListItem button className={activeItem == 'mypastevents'?classes.activeBar:""} onClick={handleMyPastEvents}>
                 <ListItemIcon>
-                  <Event />
+                  <Event className={activeItem == 'mypastevents'?classes.activeBar:""}/>
                 </ListItemIcon>
                 <ListItemText primary="My Past Events" />
               </ListItem>
 
-              <ListItem button onClick={handleOrgPastEvents}>
+              <ListItem button className={activeItem == 'orgpastevents'?classes.activeBar:""} onClick={handleOrgPastEvents}>
                 <ListItemIcon>
-                  <Event />
+                  
+                  <EventBusy className={activeItem == 'orgpastevents'?classes.activeBar:""} />
                 </ListItemIcon>
                 <ListItemText primary="Organisation Past Events" />
               </ListItem>
 
-              <ListItem button onClick={handleEventRequests}>
+              <ListItem button className={activeItem == 'eventreq'?classes.activeBar:""} onClick={handleEventRequests}>
                 <ListItemIcon>
-                  <Event />
+                  <EventNote className={activeItem == 'eventreq'?classes.activeBar:""} />
                 </ListItemIcon>
                 <ListItemText primary="Event Requests" />
               </ListItem>
 
-              <ListItem button onClick={handleOrganisationEvents}>
+              <ListItem button className={activeItem == 'orgevents'?classes.activeBar:""} onClick={handleOrganisationEvents}>
                 <ListItemIcon>
-                  <Event />
+                <EventAvailable className={activeItem == 'orgevents'?classes.activeBar:""} />
                 </ListItemIcon>
                 <ListItemText primary=" Active Organisation Events" />
               </ListItem>
