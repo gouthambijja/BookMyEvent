@@ -272,16 +272,6 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.role === "Admin" ? (
-            <ListItem button onClick={handleRequests}>
-              <ListItemIcon>
-                <GroupAdd />
-              </ListItemIcon>
-              <ListItemText primary="Requests" />
-            </ListItem>
-          ) : (
-            <></>
-          )}
-          {auth.role === "Admin" ? (
             <ListItem button onClick={handleOrganisations}>
               <ListItemIcon>
                 <GroupAdd />

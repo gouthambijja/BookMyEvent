@@ -131,7 +131,6 @@ const App = () => {
               <Route element={<RequireAuth allowedroles={["Admin"]} />}>
                 <Route index element={<AdminHomePage />}></Route>
                 <Route path="addadmin" element={<AddSecondary />} />
-                <Route path="Requests" element={<OwnerRequests />} />
                 <Route
                   path="Organisations"
                   element={<OrganisationsListPage />}

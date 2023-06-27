@@ -50,19 +50,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#333",
   },
   eventBox: {
-    backgroundColor: "black",
+    backgroundColor: "#fff",
   },
   description: {
     textAlign: "center",
     fontSize: "20px",
     flexBasis: "100%",
-    background: `#000`,
+    background: `#fff`,
     fontStyle:'italic',
     border: "2px solid #757ce8",
     padding: theme.spacing(2),
     borderRadius: "4px",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
-    color: "white",
+    color: "#757ce8",
     borderRadius: "30px",
   },
   heading: {
@@ -141,7 +141,7 @@ const SingleEventPage = () => {
     navigate(`/registerEvent/${event.eventId}/${event.formId}`);
   }
   return (
-    <Box sx={{ background: "black" }}>
+    <Box >
       <Carousel {...carouselSettings}>
         {images.map((image, index) => (
           <Paper

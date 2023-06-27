@@ -68,7 +68,8 @@ const OrganisationsListPage = () => {
 
 
 
-    return ( <>
+    return ( <div style={{padding:'30px'}}>
+      <h1 >Organisations</h1>
      <Grid container spacing={2}>
       {organisations.map((organization) => (
         <Grid item xs={12} sm={6} md={4} key={organization.organisationId
@@ -77,7 +78,7 @@ const OrganisationsListPage = () => {
         </Grid>
       ))}
     </Grid>
-    </>
+    </div>
         
     );
 }

@@ -61,6 +61,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="orgName"></param>
         /// <returns>returns true if valid else false</returns>
+        [AllowAnonymous]
         [HttpGet("CheckOrganisationName/{orgName}")]
         public async Task<IActionResult> CheckOrganisationName(string orgName)
         {

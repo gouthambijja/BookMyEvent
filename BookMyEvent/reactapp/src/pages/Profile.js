@@ -10,7 +10,7 @@ const ProfilePage = () => {
   return (
     <div>
       <div
-        style={{ margin: "20px", boxShadow:'0px 0px 10px #3f50b5',padding:'15px', display: "flex",flexWrap:'wrap !important' }}
+        style={{ margin: "20px", boxShadow:'0px 0px 10px #d0d0d0  ',padding:'15px', display: "flex",flexWrap:'wrap !important' }}
       >
         <div
         className="profileImage"

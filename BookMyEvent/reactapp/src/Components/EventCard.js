@@ -71,7 +71,6 @@ const EventCard = ({ event }) => {
             </Typography>
           </div>
           <CardContent>
-            <Typography variant="subtitle1" color="text.secondary">
               <div
                 style={{
                   whiteSpace: "nowrap",
@@ -79,44 +78,24 @@ const EventCard = ({ event }) => {
                   textOverflow: "ellipsis",
                 }}
               >
+            <Typography variant="subtitle1" color="text.secondary">
                 {event.startDate?.split("T")[0]} - {event.endDate.split("T")[0]}
-              </div>
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              <div
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
+              
                 {event.location},
-              </div>
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              <div
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
+           
                 {event.city},{event.state}, {event.country}
-              </div>
             </Typography>
             <Typography variant="body1" color="text.primary">
-              <div
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
+           
                 {event.eventStartingPrice == 0
                   ? "Free"
                   : `Tickets starts from ${event.eventStartingPrice}`}
-              </div>
             </Typography>
+            </div>
           </CardContent>
         </div>
       </CardActionArea>

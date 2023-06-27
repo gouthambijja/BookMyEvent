@@ -11,7 +11,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Owner,Peer,Secondary_Owner")]
+    [Authorize(Roles = "Owner,Peer,Secondary_Owner,Admin")]
     public class OrganiserController : ControllerBase
     {
         private readonly IOrganiserServices _organiserServices;
@@ -25,8 +25,8 @@ namespace BookMyEvent.WebApi.Controllers
         /// Service to Register OrganizationOwner
         /// </summary>
         /// <returns>OrganizationOwner Details</returns>
+        [AllowAnonymous]
         [HttpPost("RegisterOwner")]
-        [Authorize(Roles=("Owner,SecondaryOwner"))]
         public async Task<IActionResult> RegisterOrganiserOwner()
         {
             var image = Request.Form.Files[0];
@@ -72,8 +72,8 @@ namespace BookMyEvent.WebApi.Controllers
         /// Service to Register Organization Peer
         /// </summary>
         /// <returns>Peer Details</returns>
-        [HttpPost("RegisterPeer")]
         [AllowAnonymous]
+        [HttpPost("RegisterPeer")]
         public async Task<IActionResult> RegisterOrganiserPeer()
         {
             
@@ -110,8 +110,8 @@ namespace BookMyEvent.WebApi.Controllers
         /// Service toCreate Secondary Organizer
         /// </summary>
         /// <returns>Secondary Organization Details</returns>
-        [HttpPost("CreateOrganiser")]
         [AllowAnonymous]
+        [HttpPost("CreateOrganiser")]
         public async Task<IActionResult> CreateSecondaryOrganiser()
         {
             var image = Request.Form.Files[0];
@@ -160,8 +160,8 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <returns>Returns The Token if User Exists</returns>
-        [HttpPost("LoginOrganiser")]
         [AllowAnonymous]
+        [HttpPost("LoginOrganiser")]
         public async Task<IActionResult> LoginOrganiser(BLLoginModel login)
         {
             var result = await _organiserServices.LoginOrganiser(login.Email, login.Password);
@@ -316,8 +316,8 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="email"></param>
         /// <returns>true if valid else false</returns>
-        [HttpGet("IsEmailTaken")]
         [AllowAnonymous]
+        [HttpGet("IsEmailTaken")]
         public async Task<IActionResult> IsEmailTaken(string email)
         {
             var result = await _organiserServices.IsOrganiserAvailableWithEmail(email);

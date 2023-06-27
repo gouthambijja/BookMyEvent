@@ -1,5 +1,5 @@
 import AxiosPrivate from "../Hooks/AxiosPrivate";
-
+import { axiosPrivate } from "../Api/Axios";
 const apiBase = "/api/Organisation";
 
 const OrganisationService = () => {
@@ -30,7 +30,7 @@ const OrganisationService = () => {
     return response.data;
   };
   const IsOrgNameTaken = async (organisationName) => {
-    const response = await Axios.get(
+    const response = await axiosPrivate.get(
       `${apiBase}/CheckOrganisationName/${organisationName}`,
       {
         headers: { "Content-Type": "application/json" },
