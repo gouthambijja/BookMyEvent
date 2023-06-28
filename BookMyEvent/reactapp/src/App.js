@@ -59,6 +59,7 @@ const App = () => {
           errorElement={<Error />}
           loader={storeLoader.categoryLoader}
         >
+          <Route element={<PersistLogin />}>
           <Route
             index
             element={<LandingPage />}
@@ -67,7 +68,6 @@ const App = () => {
           <Route path="/event/:id" element={<SingleEventPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Register" element={<RegisterUser />} />
-          <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedroles={["User"]} />}>
               <Route path="/tickets/:eventId" element={<UserTicketList />} />
               <Route path="/registeredEvents" element={<RegisteredEvents/>}/>

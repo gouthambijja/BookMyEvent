@@ -1,6 +1,9 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { loginAdminThunk, loginThunk } from "../Features/ReducerSlices/authSlice";
+import {
+  loginAdminThunk,
+  loginThunk,
+} from "../Features/ReducerSlices/authSlice";
 import {
   Container,
   Typography,
@@ -14,13 +17,18 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Box, Modal } from "@mui/material";
+import { Google} from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
 import { setPersist, unsetPersist } from "../Hooks/Persist";
-import { getAdminByIdThunk, getOrganiserByIdThunk, getUserByIdThunk } from "../Features/ReducerSlices/ProfileSlice";
+import {
+  getAdminByIdThunk,
+  getOrganiserByIdThunk,
+  getUserByIdThunk,
+} from "../Features/ReducerSlices/ProfileSlice";
 import store from "../App/store";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import Logout from "../Hooks/Logout";
 
 const useStyles = makeStyles((theme) => ({
@@ -56,22 +64,21 @@ const Login = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   let role = "";
-  const auth = useSelector(store => store.auth);
+  const auth = useSelector((store) => store.auth);
 
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     unsetPersist();
-    Logout(); },[]);
+    Logout();
+  }, []);
 
   let from;
   if (location.pathname.toLowerCase() == "/admin/login") {
-    from =  "/admin";
+    from = "/admin";
     role = "Admin";
-  } 
-  else if(location.pathname.toLowerCase() == "/organiser/login"){
+  } else if (location.pathname.toLowerCase() == "/organiser/login") {
     from = "/organiser";
     role = "Organiser";
-  }
-  else {
+  } else {
     from = location.state?.pathname || "/";
     role = "User";
   }
@@ -90,26 +97,28 @@ const Login = () => {
       [e.target.name]: e.target.value,
     }));
   };
- 
+
   const HandleSubmit = async (e) => {
     console.log(role);
     e.preventDefault();
     dispatch(setLoading(true));
     try {
-      if(role === "Admin"){
-        await dispatch(loginThunk([role,formData])).unwrap();
+      if (role === "Admin") {
+        await dispatch(loginThunk([role, formData])).unwrap();
         await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
-      }else if(role === "Organiser"){
+      } else if (role === "Organiser") {
         console.log(formData);
-        await dispatch(loginThunk([role,formData])).unwrap();
-        await dispatch(getOrganiserByIdThunk(store.getState().auth.id)).unwrap();
-      }else{
-        await dispatch(loginThunk([role,formData])).unwrap();
+        await dispatch(loginThunk([role, formData])).unwrap();
+        await dispatch(
+          getOrganiserByIdThunk(store.getState().auth.id)
+        ).unwrap();
+      } else {
+        await dispatch(loginThunk([role, formData])).unwrap();
         await dispatch(getUserByIdThunk(store.getState().auth.id)).unwrap();
       }
       setPersist();
       console.log(from);
-      toast.success("Login Successful!")
+      toast.success("Login Successful!");
       navigate(from);
     } catch {
       setErrMsg({ open: true, msg: "Login Failed, please try again." });
@@ -120,17 +129,15 @@ const Login = () => {
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
-  const handleRegister=()=>{
-    if(role=="Organiser"){
+  const handleRegister = () => {
+    if (role == "Organiser") {
       navigate("/organiser/register");
-    }else if(role == "User"){
+    } else if (role == "User") {
       navigate("/Register");
-    }
-    else{
+    } else {
       navigate("/register");
     }
-    
-  }
+  };
   return (
     <>
       <Container component="main" maxWidth="xl" className={classes.container}>
@@ -181,14 +188,49 @@ const Login = () => {
             >
               Sign In
             </Button>
-            {isloading ? <div>Loading...</div> : <></>}
+
           </form>
-         {role!="Admin"?<>
-         <span>Don't have an Account?   </span>
-         <Button   onClick={handleRegister}>
-        <span style={{color:'#3f51b5'}}>Register</span>
-      </Button>
-         </>:<></>}
+          
+          {role != "Admin" ? (
+            <>
+            
+            <div
+              style={{
+                position: "relative",
+                borderBottom: "1px solid #d0d0d0",
+              }}
+            >
+              <span
+                style={{
+                  background: "#fff",
+                  padding: "0px 15px",
+                  position: "absolute",
+                  left:'50%',
+                  transform: " translate(-50%,-50%)",
+                  color:"#a0a0a0"
+                }}
+              >
+                or
+              </span>
+            </div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.submitButton}
+            >
+              Sign In with<span style={{padding:'0px 5px'}}><Google/></span>
+            </Button>
+            {isloading ? <div>Loading...</div> : <></>}
+              <span>Don't have an Account? </span>
+              <Button onClick={handleRegister}>
+                <span style={{ color: "#3f51b5" }}>Register</span>
+              </Button>
+            </>
+          ) : (
+            <></>
+          )}
         </Box>
         <Modal
           open={errMsg.open}
@@ -204,7 +246,6 @@ const Login = () => {
             </Typography>
           </Box>
         </Modal>
-      
       </Container>
     </>
   );

@@ -10,6 +10,8 @@ const footerStyle = {
   backgroundColor: '#3f51b5',
   color: '#fff',
   padding: '16px',
+  position:'relative',
+  zIndex:'100'
 };
 const Layout = () => {
   return (

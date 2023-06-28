@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
@@ -33,8 +33,9 @@ const EventsFilter = ({ onFilter }) => {
   const categories = useSelector((store) => store.category.categories);
   const [location, setLocation] = useState();
   const [isFree, setIsFree] = useState(false);
-  const [categoryIds, setcategoryIds] = useState();
+  const [categoryIds, setcategoryIds] = useState([]);
   const [Visibility, SetVisibility] = useState(false);
+  const [name, setName] = useState("");
   const handleFilter = () => {
     const filter = {
       location: location ? location : "",
@@ -46,17 +47,21 @@ const EventsFilter = ({ onFilter }) => {
     }
     SetVisibility((prev) => !prev);
   };
-
-  // const handlePriceChange = (event, newValue) => {
-  //   setPriceRange(newValue);
-  //   setStartPrice(newValue[0]);
-  //   setEndPrice(newValue[1]);
-  // };
-
-  // const handleChange = (event) => {
-  //   setcategoryIds(event.target.value);
-  // };
-
+  useEffect(() => {
+    console.log(categoryIds);
+  }, []);
+  const handleCategoryChange = (id) => {
+    id=id;
+    if (categoryIds.includes(id)) {
+      const cIds = [...categoryIds];
+      cIds.splice(cIds.indexOf(id),1);
+      setcategoryIds(cIds);
+    } else {
+      const cIds = [...categoryIds];
+      cIds.push(id);
+      setcategoryIds(cIds);
+    }
+  };
   return (
     <div>
       {Visibility ? (
@@ -69,10 +74,25 @@ const EventsFilter = ({ onFilter }) => {
               transform: "translateX(-50%)",
             }}
           >
-            
+            <InputLabel sx={{fontSize:'12px'}}>Categories</InputLabel>
+            <div style={{padding:'20px'}}>
+              {categories.map((category) => (
+                <FormControlLabel
+                  key={category.categoryId}
+                  control={
+                    <Checkbox
+                      checked={categoryIds.includes(category.categoryId-1)}
+                      onChange={() => handleCategoryChange(category.categoryId-1)}
+                    />
+                  }
+                  label={category.categoryName}
+                />
+              ))}
+            </div>
             <TextField
               label="Location"
               fullWidth
+              variant="outlined"
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}

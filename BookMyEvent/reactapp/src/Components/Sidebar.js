@@ -122,6 +122,7 @@ function Sidebar({ open, setOpen }) {
   const handleLogout = async () => {
     if (await logout()) {
       navigate("/");
+      window.location.reload();
       handleDrawerClose();
     }
   };

@@ -9,7 +9,6 @@ const Logout = () => {
     if (logout.data) {
         store.dispatch(clearAuth());
       localStorage.clear();
-     
       return true;
     } else return false;
   };
