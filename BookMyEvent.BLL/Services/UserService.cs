@@ -10,8 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
-
+using BookMyEvent.BLL;
 namespace BookMyEvent.BLL.Services
 {
     public class UserService : IUserService
@@ -29,6 +30,9 @@ namespace BookMyEvent.BLL.Services
             {
                 if (user != null)
                 {
+                  
+                   
+                   
                     var accountCred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = user.Password, UpdatedOn =DateTime.Now });
                     user.AccountCredentialsId = accountCred.AccountCredentialsId;
                     var mapper = Automapper.InitializeAutomapper();
@@ -41,6 +45,12 @@ namespace BookMyEvent.BLL.Services
             {
                 return (false, string.Empty);
             }
+        }
+        private static string GetHash(string text)
+        {
+            var sha256 = SHA256.Create();
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
         public async Task<(Guid UserId, string Message)> BlockUser(Guid UserId)
         {
@@ -121,6 +131,8 @@ namespace BookMyEvent.BLL.Services
         {
             if (login is not null)
             {
+          
+               
                 return await UserRepositoryDal.IsUserExists(login.Email, login.Password);
             }
             return Guid.Empty;

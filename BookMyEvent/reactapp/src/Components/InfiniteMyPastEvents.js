@@ -9,14 +9,13 @@ let cnt = 0;
 const InfiniteMyPastEvents = () => {
 
     var tempPageNo = useSelector((store) => store.events.myPastEventsPageNo);
-    const [pageNumber, setPageNumber] = useState(tempPageNo);
+    const [pageNumber, setPageNumber] = useState(2);
     const [pageSize, setPageSize] = useState(10);
     const dispatch = useDispatch();
     var profInfo = useSelector((store) => store.profile.info);
     var paginationDetails = {
-        administratorId : profInfo.administratorId,
-        pageNumber : { pageNumber },
-        pageSize : { pageSize }
+        organiserId : profInfo.administratorId,
+        pageSize :  pageSize 
     }
     //const isFetchedAlready = useSelector((store) => store.events.isMyPastEventsFetched);
     //if (isFetchedAlready) {
@@ -27,26 +26,25 @@ const InfiniteMyPastEvents = () => {
         const scrollPosition = document.documentElement.scrollTop;
         const contentHeight = document.documentElement.scrollHeight;
         const viewportHeight = window.innerHeight;
-        if (scrollPosition + viewportHeight >= contentHeight - 100) {
-            await dispatch(fetchOrganiserPastEvents(paginationDetails));
-            setPageNumber(pageNumber + 1);
+        if (scrollPosition + viewportHeight >= contentHeight - 100 && !store.getState().events.loading && !store.getState().events.myPastEventsEnd) {
+            await dispatch(fetchOrganiserPastEvents({...paginationDetails,pageNumber:store.getState().events.myPastEventsPageNo})).unwrap();
+            console.log(store.getState().events.myPastEvents)
+            console.log(events)
         }
     };
 
     useEffect(() => {
-        if(events.length==0){
-            dispatch(fetchOrganiserPastEvents( {
-                organiserId : profInfo.administratorId,
-                pageNumber : 1,
-                pageSize : 10
-            }))
-        }
+      
+        LoadEventOnPageEnd();
         console.log("I am in my past events");
+      
+    }, []);
+    useEffect(() => {
         window.addEventListener("scroll", LoadEventOnPageEnd);
         return () => {
-            window.addEventListener("scroll", LoadEventOnPageEnd);
+          window.addEventListener("scroll", LoadEventOnPageEnd);
         };
-    }, [pageNumber]);
+      });
 
     return (
         <div
@@ -58,9 +56,15 @@ const InfiniteMyPastEvents = () => {
                 marginTop: "60px",
             }}
         >
-            {events.length > 0 ? events.map((event) => (
+            {events.length}
+            {events.length > 0 ?
+            
+             events.map((event) => (
                 <OrganiserEventCard event={event} />
-            )) : <h1>No events to show here</h1>}
+            ))
+            
+            : <h1>No events to show here</h1>}
+        
         </div>
     );
 };

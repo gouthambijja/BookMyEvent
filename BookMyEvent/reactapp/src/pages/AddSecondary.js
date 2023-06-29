@@ -136,7 +136,7 @@ const AddSecondary = () => {
         if (profile.roleId == 1) {
             data = await AdminServices().addAdmin(_formData);
         } else {
-            data = await organiserServices.addOrganiser(_formData);
+            data = await organiserServices().addOrganiser(_formData);
         }
         setFormData({
             AdministratorName: "",

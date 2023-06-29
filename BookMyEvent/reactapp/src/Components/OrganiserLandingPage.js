@@ -5,6 +5,7 @@ import OrganiserEventCard from './OrganiserEventCards'
 import { Link } from 'react-router-dom';
 
 const OrganiserLandingPage = () => {
+  let cnt =0;
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.profile.info);
     console.log(profile);
@@ -17,7 +18,7 @@ const OrganiserLandingPage = () => {
   return (
     <div style={{display:'flex',justifyContent:"center",flexWrap:'wrap',gap:'20px',padding:'40px'}}>
           {myEvents.length > 0 ? myEvents.map((event) => (
-              <OrganiserEventCard event={event} />
+              <OrganiserEventCard key = {cnt++} event={event} />
           )) : <h1>No events created yet</h1>}
     </div>
   )

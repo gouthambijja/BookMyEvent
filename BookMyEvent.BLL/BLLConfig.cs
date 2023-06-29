@@ -10,9 +10,11 @@ namespace BookMyEvent.BLL
 {
     public class BLLConfig
     {
+       
         public static void BLLConfigure(IServiceCollection services, ConfigurationManager configuration)
         {
             DLLConfig.DLLConfigure(services, configuration);
+            
             services.AddScoped<IOrganiserFormServices, OrganiserFormServices>();
             services.AddScoped<IOrganisationServices, OrganisationServices>();
             services.AddScoped<IOrganiserServices, Organiserservices>();
@@ -24,6 +26,7 @@ namespace BookMyEvent.BLL
             services.AddScoped<ICategoryServices,CategoryServices>();
             services.AddScoped<IEventServices, EventServices>();
             services.AddScoped<ITransactionServices, TransactionServices>();
+            
         }
     }
 }

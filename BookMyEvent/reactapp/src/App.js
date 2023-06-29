@@ -44,6 +44,7 @@ import UserTicketList from "./pages/UserTickets";
 import SingleEventPage from "./Components/SingleEventPage";
 import RegisteredEvents from "./pages/RegisteredEvents";
 import EventTickets from "./pages/EventTickets";
+import EditEventCard from "./Components/EditEventCard";
 
 
 
@@ -116,6 +117,7 @@ const App = () => {
                   path="organisationEvents"
                   element={<OrganisationEventsPage />}
                 />
+                <Route path="EditEvent/:id" element={<EditEventCard />} />
                 <Route
                   path="organisationPastEvents"
                   element={<InfiniteOrganisationPastEvents />}

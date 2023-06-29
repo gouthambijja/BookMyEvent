@@ -108,6 +108,9 @@ const OrganiserEventCard = ({ event }) => {
     const handleClick = () => {
         navigate(`/organiser/event/${event.eventId}`);
     };
+    const handleEdit=()=>{
+        navigate(`/organiser/EditEvent/${event.eventId}`);
+    }
    React.useEffect(()=>{
     console.log("events changed")
    },[myEvents])
@@ -151,8 +154,11 @@ const OrganiserEventCard = ({ event }) => {
                             </Button>
                         </>
                     )}
-                    {(event.createdBy === profile.administratorId || auth.role=="Owner") && (event.acceptedBy !== null) && event.isActive && event.isPublished === false && (
+                    {(event.createdBy === profile.administratorId || auth.role=="Owner" || auth.role=="Secondary_Owner") && (event.acceptedBy !== null) && event.isActive && event.isPublished === false && (
                         <>
+                             <Button onClick={()=>handleEdit()} size="small" startIcon={<EditOutlined />} color="primary" variant="outlined">
+                                Edit
+                            </Button>
                             <Button onClick={()=>handlePublish(event)} size="small" startIcon={<PublishOutlined />} color="primary" variant="outlined">
                                 Publish
                             </Button>
@@ -163,7 +169,7 @@ const OrganiserEventCard = ({ event }) => {
                     )}
                     {(event.isPublished && !event.isCancelled) && (
                         <>
-                            {(event.createdBy === profile.administratorId || auth.role=="Owner") && (
+                            {(event.createdBy === profile.administratorId || auth.role=="Owner" || auth.role=="Secondary_Owner") && (
                                 <>
                                     <select value={event.registrationStatusId} style={{padding:'6px',marginRight:'10px'}} onChange={handleRegistrationStatusChange}>
                                         <option value={1}>Yet to Open</option>

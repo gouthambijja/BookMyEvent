@@ -295,6 +295,9 @@ namespace BookMyEvent.DLL.Repositories
                     eventToUpdate.Description = _event.Description;
                     eventToUpdate.StartDate = _event.StartDate;
                     eventToUpdate.EndDate = _event.EndDate;
+                    eventToUpdate.Country = _event.Country;
+                    eventToUpdate.State = _event.State;
+                    eventToUpdate.City = _event.City;
                     eventToUpdate.EventStartingPrice = _event.EventStartingPrice;
                     eventToUpdate.EventEndingPrice = _event.EventEndingPrice;
                     eventToUpdate.IsFree = _event.IsFree;
@@ -307,7 +310,7 @@ namespace BookMyEvent.DLL.Repositories
                     eventToUpdate.AcceptedBy = _event.AcceptedBy;
                     eventToUpdate.CreatedBy = _event.CreatedBy;
                     eventToUpdate.UpdatedBy = _event.UpdatedBy;
-                    eventToUpdate.UpdatedOn = _event.UpdatedOn;
+                    eventToUpdate.UpdatedOn = DateTime.Now;
                     eventToUpdate.RegistrationStatusId = _event.RegistrationStatusId;
                     await _db.SaveChangesAsync();
                     await _db.Entry(eventToUpdate).ReloadAsync();

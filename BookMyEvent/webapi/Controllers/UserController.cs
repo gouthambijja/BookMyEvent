@@ -18,11 +18,13 @@ namespace BookMyEvent.WebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly AuthController _authController;
+        private readonly IConfiguration _configuration;
 
-        public UserController(IUserService userService, AuthController auth)
+        public UserController(IUserService userService, AuthController auth, IConfiguration configuration)
         {
             this._userService = userService;
             _authController = auth;
+            _configuration = configuration;
         }
         [Authorize]
         [HttpGet("getFakestring")]
@@ -112,7 +114,9 @@ namespace BookMyEvent.WebApi.Controllers
                     ImgBody = imageBody
 
                 };
+                var passwordSalt = _configuration["Encryption:PasswordSalt"];
 
+                User.Password = HashPassword.GetHash(User.Password + passwordSalt);
                 return Ok(await _userService.AddUser(User));
             }
             catch (Exception ex)
@@ -152,10 +156,11 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-
+                var passwordSalt = _configuration["Encryption:PasswordSalt"];
+                login.Password=HashPassword.GetHash(login.Password+passwordSalt);
                 var userId = await _userService.Login(login);
 
-                if (User != null)
+                if (userId != Guid.Empty)
                 {
                     var accessToken = _authController.GenerateJwtToken(login.Email, userId, Roles.User.ToString(), TokenType.AccessToken);
                     string refreshToken = _authController.GenerateJwtToken(login.Email, userId, Roles.User.ToString(), TokenType.RefreshToken);

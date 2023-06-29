@@ -132,7 +132,7 @@ function Sidebar({ open, setOpen }) {
       handleDrawerClose();
     } else if (
       auth.role == "Owner" ||
-      auth.role == "peer" ||
+      auth.role == "Peer" ||
       auth.role == "Secondary_Owner"
     ) {
       navigate("/organiser/profile");

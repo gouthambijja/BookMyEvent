@@ -16,10 +16,12 @@ namespace BookMyEvent.WebApi.Controllers
     {
         private readonly IOrganiserServices _organiserServices;
         private readonly AuthController _authController;
-        public OrganiserController(IOrganiserServices organiserServices, AuthController authController)
+        private readonly IConfiguration _configuration;
+        public OrganiserController(IOrganiserServices organiserServices, AuthController authController, IConfiguration configuration)
         {
             _organiserServices = organiserServices;
             _authController = authController;
+            _configuration = configuration;
         }
         /// <summary>
         /// Service to Register OrganizationOwner
@@ -52,6 +54,8 @@ namespace BookMyEvent.WebApi.Controllers
 
 
             };
+            var passwordSalt = _configuration["Encryption:PasswordSalt"];
+            owner.Password = HashPassword.GetHash(owner.Password + passwordSalt);
             var organisation = new BLOrganisation()
             {
                 OrganisationName = Request.Form.Where(e => e.Key == "organisationName").First().Value,
@@ -101,6 +105,8 @@ namespace BookMyEvent.WebApi.Controllers
 
 
             };
+            var passwordSalt = _configuration["Encryption:PasswordSalt"];
+            peer.Password = HashPassword.GetHash(peer.Password + passwordSalt);
             var result = await _organiserServices.RegisterPeer(peer);
             if (result.IsSuccessfull)
                 return Ok(result.Message);
@@ -136,6 +142,8 @@ namespace BookMyEvent.WebApi.Controllers
                 Password = Request.Form.Where(e => e.Key == "password").First().Value,
                 ImgBody = imageBody
             };
+            var passwordSalt = _configuration["Encryption:PasswordSalt"];
+            secondaryOwner.Password = HashPassword.GetHash(secondaryOwner.Password + passwordSalt);
             var result = await _organiserServices.CreateSecondaryOwner(secondaryOwner);
             Console.WriteLine(result.Message);
             var response = new
@@ -164,6 +172,8 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPost("LoginOrganiser")]
         public async Task<IActionResult> LoginOrganiser(BLLoginModel login)
         {
+            var passwordSalt = _configuration["Encryption:PasswordSalt"];
+            login.Password=HashPassword.GetHash(login.Password+passwordSalt);
             var result = await _organiserServices.LoginOrganiser(login.Email, login.Password);
             if (result.IsSuccessfull)
             {

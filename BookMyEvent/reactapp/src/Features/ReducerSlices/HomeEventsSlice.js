@@ -50,6 +50,7 @@ const homeEventsSlice = createSlice({
         });
         builder.addCase(fetchEvents.fulfilled, (state, action) => {
             if(action.payload.length == 0) state.end = true;
+            else state.end=false;
             state.loading = false;
             state.events = [...state.events,...action.payload];
             state.error = false;

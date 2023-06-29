@@ -20,10 +20,12 @@ namespace BookMyEvent.WebApi.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly AuthController _authController;
-        public AdminController(IAdminService adminService, AuthController auth)
+        private readonly IConfiguration _configuration;
+        public AdminController(IAdminService adminService, AuthController auth, IConfiguration configuration)
         {
             _adminService = adminService;
             _authController = auth;
+            _configuration = configuration;
         }
         /// <summary>
         /// Used for AdminLogin
@@ -36,7 +38,9 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-
+                var passwordSalt = _configuration["Encryption:PasswordSalt"];
+                login.Password = HashPassword.GetHash(login.Password + passwordSalt);
+                Console.WriteLine(login.Password);
                 var user = await _adminService.LoginAdmin(login.Email, login.Password, Roles.Admin.ToString());
                 if (user != null)
                 {
@@ -131,6 +135,9 @@ namespace BookMyEvent.WebApi.Controllers
 
 
                 };
+                var passwordSalt = _configuration["Encryption:PasswordSalt"];
+
+                Admin.Password = HashPassword.GetHash(Admin.Password + passwordSalt);
                 BLAdministrator result = await _adminService.CreateAdministrator(Admin);
                 if (result != null)
                 {
