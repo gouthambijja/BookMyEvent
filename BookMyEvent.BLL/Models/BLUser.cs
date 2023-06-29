@@ -16,7 +16,7 @@ namespace BookMyEvent.BLL.Models
 
         public string Email { get; set; } = null!;
 
-        public string PhoneNumber { get; set; } = null!;
+        public string? PhoneNumber { get; set; } = null!;
 
         public Guid? AccountCredentialsId { get; set; }
 

@@ -46,6 +46,7 @@ import RegisteredEvents from "./pages/RegisteredEvents";
 import EventTickets from "./pages/EventTickets";
 
 
+
 const App = () => {
   const profile = store.getState().profile.info;
 

@@ -72,11 +72,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "10px",
     flexBasis: "100%",
     background: `#fff`,
-    border: "2px solid #757ce8",
-    backdropFilter: "blur(6px)",
     padding: theme.spacing(2),
-    borderRadius: "4px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+    boxShadow: "0 0px 4px rgba(0, 0, 0, 0.1)",
     borderRadius: "30px",
   },
   hoverEffect: {

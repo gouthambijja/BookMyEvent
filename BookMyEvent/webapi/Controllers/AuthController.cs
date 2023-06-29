@@ -139,6 +139,10 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var RefreshToken = Request.Cookies["RefreshToken"];
+                if(RefreshToken == null)
+                {
+                    return BadRequest();
+                }
                 //getting the secret key
                 string secretKey = _config["Authentication:JWTSettings:RefreshTokenSecretKey"];
                 var key = Encoding.ASCII.GetBytes(secretKey);

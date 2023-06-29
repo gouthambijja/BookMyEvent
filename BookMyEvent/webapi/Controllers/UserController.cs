@@ -4,6 +4,7 @@ using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using BookMyEvent.BLL.RequestModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -119,6 +120,27 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest();
             }
         }
+        /// <summary>
+        /// Registering user with googleID and credentials
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("GoogleSignUp")]
+        public async Task<IActionResult> GoogleSignUp([FromBody] BLUser? user)
+        {
+            try
+            {
+                user.Password = user.GoogleId;
+                var data = await _userService.AddUser(user);
+                return Ok(JsonConvert.SerializeObject(data));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         /// <summary>
         /// Service to LoginUSer
         /// </summary>

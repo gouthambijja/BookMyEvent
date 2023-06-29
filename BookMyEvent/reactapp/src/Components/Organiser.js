@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 const Organiser = () => {
 
   return (
-    <div className='ExternalContainer'>
+    <div >
         <Outlet/>
     </div>
   )

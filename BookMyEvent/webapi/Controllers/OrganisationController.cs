@@ -73,6 +73,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="orgName"></param>
         /// <returns>A tuple conatins of bool type and Id of Organization</returns>
+        [AllowAnonymous]
         [HttpGet("getOrgIdByName/{orgName}")]
         public async Task<IActionResult> GetOrgIdByName(string orgName)
         {

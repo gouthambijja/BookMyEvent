@@ -8,58 +8,50 @@ const ProfilePage = () => {
   const auth= useSelector(store => store.auth);
     console.log(profile);
   return (
-    <div>
+    <div style={{minHeight:'calc(100vh - 116px)'}} className="ProfilePage">
       <div
-        style={{ margin: "20px", boxShadow:'0px 0px 10px #d0d0d0  ',padding:'15px', display: "flex",flexWrap:'wrap !important' }}
+        style={{ display: "flex", flexWrap:"wrap" }}
       >
         <div
         className="profileImage"
           style={{
+            padding:"20px 0px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexBasis:'30%'
+            width:'100%'
           }}
         >
           <img
-            src={`data:image/jpeg;base64,${profile.imgBody}`}
-            style={{ width: "300px", height: "300px" }}
+            src={profile.imgBody !==""?`data:image/jpeg;base64,${profile.imgBody}`:profile.imageName}
+            style={{borderRadius:'4px',maxWidth:'90%', maxHeight: "300px" }}
           ></img>
         </div>
+        <div style={{display:'flex',flexBasis:'100%'}}>
         <div
         className="profileInfo"
-          style={{ display: "flex", flexDirection: "column", padding: "20px" ,flexBasis:'70%'}}
+          style={{ display: "flex",flexBasis:'100%', flexDirection: "column", padding: "20px" }}
         >
-          <div style={{ minWidth:'350px',fontSize: "2rem", fontWeight: "bold",boxShadow:'0px 0px 10px 	#D0D0D0',padding:'15px' }}>
+          <div style={{ textAlign:'center',fontVariant:'smallcaps',fontSize: "2rem", fontWeight: "bold",padding:'15px'}}>
             {auth.role=="User"?profile.name:profile.administratorName}
           </div>
-          <div style={{ marginTop: "10px", display: "flex" ,flexWrap:'wrap',justifyContent:'space-between',boxShadow:'0px 0px 10px 	#D0D0D0',padding:'15px'}}>
-            <div >
-              <LocationCity />
-              <span >{auth.role=="User"?profile.userAddress:profile.administratorAddress}</span>
+          <div style={{ marginTop: "10px", display: "flex" ,flexWrap:'wrap',justifyContent:'space-around',padding:'15px'}}>
+            <div style={{textAlign:'center'}}>
+              <LocationCity style={{fontSize:'72px'}} />
+              <p >{auth.role=="User"?profile.userAddress:profile.administratorAddress}</p>
             </div>
-            <div>
-                <Mail/>
-                {profile.email}
+            <div style={{textAlign:'center'}}>
+                <Mail style={{fontSize:'72px'}}/>
+                <p>{profile.email}</p>
             </div>
-            <div>
-                <Call/>
-                {profile.phoneNumber}
+            <div style={{textAlign:'center'}}>
+                <Call style={{fontSize:'72px'}}/>
+               <p>{profile.phoneNumber}</p> 
             </div>
           </div>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <p>{profile.administratorName}</p>
-        <span>
-          <i>{profile.email}</i>
-        </span>
+        </div>
+        
       </div>
     </div>
   );

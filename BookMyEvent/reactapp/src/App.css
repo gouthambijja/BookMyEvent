@@ -38,6 +38,11 @@
   color: #61dafb;
 }
 
+.ProfilePage{
+  background: url(../src/Images/benner_1.jpg);
+  background-size: cover;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -46,11 +51,4 @@
     transform: rotate(360deg);
   }
 }
-@media (max-width:1200px){
-  .profileImage{
-    flex-basis: 100% !important;
-  }
-  .profileInfo{
-    flex-basis: 100% !important;
-  }
-}
+

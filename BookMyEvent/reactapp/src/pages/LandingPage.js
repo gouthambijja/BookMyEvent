@@ -98,7 +98,7 @@ const LandingPage = () => {
           }}
         >
           {events.map((event) => (
-            <div key={cnt++}>
+            <div key={cnt++} style={{maxWidth:'95%'}}>
               <EventCard event={event} />
             </div>
           ))}

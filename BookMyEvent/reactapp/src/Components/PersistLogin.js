@@ -13,6 +13,7 @@ const PersistLogin = () => {
         let isMounted = true;
         const verifyRefreshToken = async () => {
             try {
+                console.log('hey');
                 await refresh();
             }
             catch (err) {

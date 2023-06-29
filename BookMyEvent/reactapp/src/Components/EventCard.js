@@ -22,10 +22,10 @@ const EventCard = ({ event }) => {
   return (
     <Card
       className="card"
-      sx={{ width: "400px", boxShadow: "0px 0px 9px #d0d0d0" }}
+      sx={{ maxWidth: "400px", boxShadow: "0px 0px 9px #d0d0d0" }}
     >
       <CardActionArea onClick={() => handleEvent(event.eventId)}>
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative",width:'100%' }}>
           <div>
             <CardMedia
               component="img"
@@ -33,74 +33,73 @@ const EventCard = ({ event }) => {
               image={`data:image/jpeg;base64,${event.profileImgBody}`}
               alt="green iguana"
             />
+            <div
+              style={{ position: "absolute", transform: "translate(0%,-105%)",paddingLeft:'20px',color:'#000',width:'90%',borderTopRightRadius:'30px',borderBottomRightRadius:'30px',background:'rgb(255,255,255,0.4)',backdropFilter:'blur(6px)' }}
+            >
+              <Typography variant="h4" component="div">
+                <div
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    fontFamily: "serif",
+                  }}
+                >
+                  {event.eventName}
+                </div>
+              </Typography>
+              <Typography variant="h6" component="div">
+                <div
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {
+                    categories.categories[Number(event.categoryId)]
+                      ?.categoryName
+                  }
+                </div>
+              </Typography>
+            </div>
           </div>
-          <div
-            style={{
-              position: "absolute",
-              top: "45%",
-              left:"2%",
-              width: "70%",
-             padding:'0px 20px',
-             borderRadius:'30px',
-              background:"rgba(255,255,255,0.4)",
-              backdropFilter:"blur(6px)"
-            }}
-          >
-            <Typography variant="h4" component="div">
-              <div
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  fontFamily: "serif",
-                }}
-              >
-                {event.eventName}
-              </div>
-            </Typography>
-            <Typography variant="h6" component="div">
-              <div
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {categories.categories[Number(event.categoryId)]?.categoryName}
-              </div>
-            </Typography>
-          </div>
+
           <CardContent>
-              <div
-                style={{
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-            <Typography variant="subtitle1" color="text.secondary">
+            <div
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              <Typography variant="subtitle1" color="text.secondary">
                 {event.startDate?.split("T")[0]} - {event.endDate.split("T")[0]}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
                 {event.location},
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-           
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
                 {event.city},{event.state}, {event.country}
-            </Typography>
-            <Typography variant="body1" color="text.primary">
-           
-                {event.eventStartingPrice == 0
-                  ? "Free"
-                  : `Tickets starts from ${event.eventStartingPrice}`}
-            </Typography>
+              </Typography>
+              <Typography variant="body1" color="text.primary">
+                {event.eventStartingPrice == 0 ? (
+                  <span style={{ color: "green" }}>Free</span>
+                ) : (
+                  `Ticket price starts from ₹${event.eventStartingPrice}/- `
+                )}
+              </Typography>
             </div>
           </CardContent>
         </div>
       </CardActionArea>
-      <div style={{display:'flex',justifyContent:'end'}}>
-        <Button size="small" color="primary" sx={{padding:'10px'}}onClick={handleEventRegister}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <Button
+          size="small"
+          color="primary"
+          sx={{ padding: "10px" }}
+          onClick={handleEventRegister}
+        >
           Register
         </Button>
       </div>

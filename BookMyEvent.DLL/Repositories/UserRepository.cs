@@ -102,7 +102,10 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                return await _db.Users.Where(e => e.UserId == Id).FirstAsync();
+               var user =  await _db.Users.Where(e => e.UserId == Id).FirstAsync();
+                user.GoogleId = "";
+                user.AccountCredentialsId = null;
+                return user;
             }
             catch (Exception ex)
             {

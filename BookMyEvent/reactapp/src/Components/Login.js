@@ -1,5 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 import { makeStyles } from "@material-ui/core/styles";
+import bcrypt from "bcryptjs";
 import {
   loginAdminThunk,
   loginThunk,
@@ -17,7 +19,7 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Box, Modal } from "@mui/material";
-import { Google} from "@mui/icons-material"
+import { Google } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Features/ReducerSlices/loadingSlice";
@@ -30,6 +32,7 @@ import {
 import store from "../App/store";
 import { toast } from "react-toastify";
 import Logout from "../Hooks/Logout";
+import jwtDecode from "jwt-decode";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -67,8 +70,13 @@ const Login = () => {
   const auth = useSelector((store) => store.auth);
 
   useLayoutEffect(() => {
-    unsetPersist();
-    Logout();
+    if (auth?.role == "User") {
+      navigate("/");
+    } else if (auth?.role == "Organiser") {
+      navigate("/organiser");
+    } else if (auth?.role == "Admin") {
+      navigate("/admin");
+    }
   }, []);
 
   let from;
@@ -138,6 +146,34 @@ const Login = () => {
       navigate("/register");
     }
   };
+  function byteArrayToHexString(byteArray) {
+    return Array.from(byteArray, (byte) => {
+      return ("0" + (byte & 0xff).toString(16)).slice(-2);
+    }).join("");
+  }
+  async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = byteArrayToHexString(hashArray);
+    return hashHex;
+  }
+  const handleGoogleLogin = async (credentialResponse) => {
+    console.log(credentialResponse);
+    const hash = await hashPassword(credentialResponse.sub);
+    try {
+      await dispatch(
+        loginThunk([role, { email: credentialResponse.email, password: hash }])
+      ).unwrap();
+      await dispatch(getUserByIdThunk(store.getState().auth.id)).unwrap();
+      setPersist();
+      toast.success("Login Successful!");
+      navigate(from);
+    } catch {
+      toast.error("Login failed");
+    }
+  };
   return (
     <>
       <Container component="main" maxWidth="xl" className={classes.container}>
@@ -188,41 +224,52 @@ const Login = () => {
             >
               Sign In
             </Button>
-
           </form>
-          
+
           {role != "Admin" ? (
             <>
-            
-            <div
-              style={{
-                position: "relative",
-                borderBottom: "1px solid #d0d0d0",
-              }}
-            >
-              <span
+              <div
                 style={{
-                  background: "#fff",
-                  padding: "0px 15px",
-                  position: "absolute",
-                  left:'50%',
-                  transform: " translate(-50%,-50%)",
-                  color:"#a0a0a0"
+                  position: "relative",
+                  borderBottom: "1px solid #d0d0d0",
                 }}
               >
-                or
-              </span>
-            </div>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              className={classes.submitButton}
-            >
-              Sign In with<span style={{padding:'0px 5px'}}><Google/></span>
-            </Button>
-            {isloading ? <div>Loading...</div> : <></>}
+                <span
+                  style={{
+                    background: "#fff",
+                    padding: "0px 15px",
+                    position: "absolute",
+                    left: "50%",
+                    transform: " translate(-50%,-50%)",
+                    color: "#a0a0a0",
+                  }}
+                >
+                  or
+                </span>
+              </div>
+              {role == "User" ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <GoogleLogin
+                    onSuccess={(credentialResponse) => {
+                      handleGoogleLogin(
+                        jwtDecode(credentialResponse.credential)
+                      );
+                    }}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+              {isloading ? <div>Loading...</div> : <></>}
               <span>Don't have an Account? </span>
               <Button onClick={handleRegister}>
                 <span style={{ color: "#3f51b5" }}>Register</span>

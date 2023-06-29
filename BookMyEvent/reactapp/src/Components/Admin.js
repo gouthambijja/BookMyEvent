@@ -6,7 +6,7 @@ import Login from './Login'
 const Admin = () => {
 
   return (
-    <div className='ExternalContainer'>
+    <div >
         <Outlet/>
     </div>
   )

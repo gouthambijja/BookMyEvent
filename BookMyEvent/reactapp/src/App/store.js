@@ -11,6 +11,9 @@ import eventsReducer from "../Features/ReducerSlices/EventsSlice";
 import EventRegistrationFormReducer from "../Features/ReducerSlices/EventRegistrationFormSlice"
 import EventRegistrationFormFieldsReducer from "../Features/ReducerSlices/EventRegistrationFormFieldsSlice"
 import HomeEventsReducer from "../Features/ReducerSlices/HomeEventsSlice"
+
+
+
 let store = configureStore({
     reducer: {
         auth: authReducer,

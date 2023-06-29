@@ -1,5 +1,5 @@
 import AxiosPrivate from "../Hooks/AxiosPrivate";
-
+import AxiosPublic from "../Api/Axios";
 const apiBase = "/api/Organiser";
 
 const OrganiserServices = () =>{
@@ -27,7 +27,7 @@ const checkEmail = async (email) => {
 }
 const loginOrganiser = async (formData) => {
 
-    const response = await Axios.post(`${apiBase}/loginOrganiser`,
+    const response = await AxiosPublic.post(`${apiBase}/loginOrganiser`,
         JSON.stringify(formData),
         {
             headers: { 'Content-Type': 'application/json' },
@@ -52,7 +52,7 @@ const addOrganiser = async (formData) => {
 
 const registerPeer = async (formData) => {
     console.log(formData);
-    const response = await Axios.post(`${apiBase}/RegisterPeer`,
+    const response = await AxiosPublic.post(`${apiBase}/RegisterPeer`,
         formData,
         {
             headers: { 'Content-Type': 'multipart/form-data' },
@@ -141,7 +141,7 @@ const getOrganisationOrganisers = async (id) => {
 };
 
 const isEmailTaken = async (email) => {
-    const response = await Axios.get(`${apiBase}/IsEmailTaken?email=${email}`, {
+    const response = await AxiosPrivate.get(`${apiBase}/IsEmailTaken?email=${email}`, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
     });

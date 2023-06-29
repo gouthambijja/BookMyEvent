@@ -17,6 +17,7 @@ const AxiosPrivate = () => {
         const responseIntercept = axiosPrivate.interceptors.response.use(
             response => response,
             async (error) => {
+                console.log(error);
                 const prevRequest = error?.config;
                 if ((error?.response?.status!=200) && !prevRequest?.sent) {
                     prevRequest.sent = true;

@@ -165,7 +165,7 @@ const OrganiserEventCard = ({ event }) => {
                         <>
                             {(event.createdBy === profile.administratorId || auth.role=="Owner") && (
                                 <>
-                                    <select value={event.registrationStatusId} onChange={handleRegistrationStatusChange}>
+                                    <select value={event.registrationStatusId} style={{padding:'6px',marginRight:'10px'}} onChange={handleRegistrationStatusChange}>
                                         <option value={1}>Yet to Open</option>
                                         <option value={2}>Open</option>
                                         <option value={3}>Closed</option>

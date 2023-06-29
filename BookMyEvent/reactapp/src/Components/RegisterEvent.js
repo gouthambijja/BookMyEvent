@@ -17,6 +17,7 @@ import store from "../App/store";
 import EventServices from "../Services/EventServices";
 import UserInputFormServices from "../Services/UserInputFormServices";
 import Transactions from "./Transactions";
+import { toast } from "react-toastify";
 
 const RegisterEvent = () => {
   const [eventRegistrationFormFields, setEventRegistrationFormFields] =
@@ -135,7 +136,7 @@ const RegisterEvent = () => {
       ]);
       console.log(eventRegistrationFormFields);
     } else {
-      console.log("exceeded max tickets");
+      toast.warning(`Per transaction you can register max of ${event.maxNoOfTicketsPerTransaction} tickets only`)
     }
   };
   const handleRemove = (index) => {

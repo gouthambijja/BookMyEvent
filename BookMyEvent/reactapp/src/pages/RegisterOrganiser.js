@@ -16,12 +16,13 @@ const useStyles = makeStyles((theme) => ({
     container: {
         display: "flex",
         flexDirection: "column",
-        height: "calc( 100vh - 64px)",
         alignItems: "center",
         justifyContent: "center",
+        padding:'40px',
     },
     form: {
-        width: "50%",
+        width: "90%",
+        maxWidth:"800px",
         marginTop: theme.spacing(1),
     },
     submitButton: {
@@ -274,16 +275,16 @@ const RegisterOrganiser = () => {
         <>
             <Container component="main" maxWidth="xl" className={classes.container}>
                 <Box
-                    sx={{ boxShadow: 3, p: 3, borderRadius: "16px", textAlign: "center" }}
+                    sx={{  textAlign: "center" }}
                 >
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography variant="h5" component="h1" sx={{ width: "50%" }} border={1}>
+                        <Typography variant="h5" component="h1" sx={{ width: "90%",maxWidth:'800px',color:'#3f50b5' }} >
                             Register
                         </Typography>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <form className={classes.form} onSubmit={handleSubmit}>
-                            <FormControl variant="outlined" margin="normal" fullWidth>
+                            <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
 
                                 <TextField
                                     label="Name"
@@ -292,7 +293,7 @@ const RegisterOrganiser = () => {
                                     variant="outlined"
                                     value={formData.AdministratorName}
                                     onChange={handleInputChange}
-                                    margin="normal"
+                                    sx={{marginTop:'10px'}}
                                     required
                                     fullWidth
                                 />
@@ -304,7 +305,7 @@ const RegisterOrganiser = () => {
                                 variant="outlined"
                                 value={formData.AdministratorAddress}
                                 onChange={handleInputChange}
-                                margin="normal"
+                                sx={{marginTop:'10px'}}
                                 required
                                 fullWidth
                             />
@@ -318,7 +319,7 @@ const RegisterOrganiser = () => {
                                 onChange={handleEmailChange}
                                 error={emailError !== ''}
                                 helperText={emailError}
-                                margin="normal"
+                                sx={{marginTop:'10px'}}
                                 required
                                 fullWidth
                             />
@@ -330,7 +331,7 @@ const RegisterOrganiser = () => {
                                 type="number"
                                 value={formData.PhoneNumber}
                                 onChange={handleInputChange}
-                                margin="normal"
+                                sx={{marginTop:'10px'}}
                                 required
                                 fullWidth
                             />
@@ -344,7 +345,7 @@ const RegisterOrganiser = () => {
                                 type="password"
                                 value={formData.Password}
                                 onChange={handlePasswordChange}
-                                margin="normal"
+                                sx={{marginTop:'10px'}}
                                 error={passwordValidation !== ''}
                                 helperText={passwordValidation}
                                 required
@@ -361,7 +362,7 @@ const RegisterOrganiser = () => {
                                 helperText={passwordError}
                                 value={confirmPassword}
                                 onChange={handleConfirmPassword}
-                                margin="normal"
+                                sx={{marginTop:'10px'}}
                                 required
                                 fullWidth
                             />
@@ -375,8 +376,8 @@ const RegisterOrganiser = () => {
                                 required
                                
                             />
-                            <label htmlFor="image-upload">
-                                <Button component="span" variant="contained" color="primary" fullWidth>
+                            <label htmlFor="image-upload" >
+                                <Button sx={{marginTop:'10px',background:"#3f50b5"}} component="span" variant="contained"  fullWidth>
                                     Upload Image
                                 </Button>
                             </label>
@@ -386,7 +387,7 @@ const RegisterOrganiser = () => {
                             </div>
 
 
-                            <FormControl required sx={{ width: '300px' }}>
+                            <FormControl required sx={{ width: '100%',maxWidth:'800px' }}>
                                 <InputLabel htmlFor="role-select">Select an option</InputLabel>
                                 <Select value={selectedRoleValue} labelId="role-select" id="role-select" onChange={handleRoleChange} >
 
@@ -397,10 +398,10 @@ const RegisterOrganiser = () => {
                                 </Select>
                             </FormControl>
                             {selectedRoleValue == "owner" ? (<>
-                                <Typography variant="h5" gutterBottom>
+                                {/* <Typography variant="h5" gutterBottom sx={{marginTop:'20px',color:'#3f50b5'}}>
                                     Please fill in your organization details
-                                </Typography>
-                                <FormControl variant="outlined" margin="normal" fullWidth>
+                                </Typography> */}
+                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
 
                                     <TextField
                                         label="Name of the Organisation"
@@ -409,14 +410,13 @@ const RegisterOrganiser = () => {
                                         variant="outlined"
                                         value={orgFormData.OrganisationName}
                                         onChange={handleOrgNameChange}
-                                        margin="normal"
                                         error={orgNameError !== ''}
                                         helperText={orgNameError}
                                         required
                                         fullWidth
                                     />
                                 </FormControl>
-                                <FormControl variant="outlined" margin="normal" fullWidth>
+                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
                                     <TextField
                                         label="Description"
                                         id="Description"
@@ -424,14 +424,13 @@ const RegisterOrganiser = () => {
                                         variant="outlined"
                                         value={orgFormData.OrganisationDescription}
                                         onChange={handleOrgInputChange}
-                                        margin="normal"
                                         required
                                         multiline
                                         rows={4}
                                         fullWidth
                                     />
                                 </FormControl>
-                                <FormControl variant="outlined" margin="normal" fullWidth>
+                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
 
                                     <TextField
                                         label="Location of the Organisation"
@@ -440,14 +439,13 @@ const RegisterOrganiser = () => {
                                         variant="outlined"
                                         value={orgFormData.Location}
                                         onChange={handleOrgInputChange}
-                                        margin="normal"
                                         required
                                         fullWidth
                                     />
                                 </FormControl>
                             </>) : (selectedRoleValue == "peer" ? (<>
                                
-                                <FormControl variant="outlined" margin="normal" fullWidth>
+                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
 
                                     <TextField
                                         label="Enter your Organisation name"
@@ -458,7 +456,7 @@ const RegisterOrganiser = () => {
                                         onChange={handleOptionChange}
                                         error={peerOrgNameError !== ''}
                                         helperText={peerOrgNameError}
-                                        margin="normal"
+                                        sx={{marginTop:'10px'}}
                                         required
                                         fullWidth
                                     />
@@ -469,8 +467,8 @@ const RegisterOrganiser = () => {
                             ) : <></>
                             )}
 
-                            <Button type="submit" variant="contained" sx={{ marginTop:"10px" }} className={classes.submitButton} color="primary" fullWidth>
-                                Register
+                            <Button type="submit" variant="contained" sx={{ background:'#3f50b5',marginTop:"10px" }} className={classes.submitButton}  fullWidth>
+                              {selectedRoleValue == "peer"?"Register":"Submit Organisation request & Register"}
                             </Button>
                         </form>
                     </div>
