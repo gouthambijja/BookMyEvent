@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { makeStyles } from "@material-ui/core/styles";
-import bcrypt from "bcryptjs";
 import {
   loginAdminThunk,
   loginThunk,

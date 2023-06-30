@@ -11,5 +11,7 @@ namespace BookMyEvent.BLL.Contracts
     public interface ICategoryServices
     {
         Task<List<BLEventCategory>> GetAllEventCategories();
+        Task<BLEventCategory> AddEventCategory(BLEventCategory category);
+        Task<BLEventCategory> UpdateEventCategory(BLEventCategory category);
     }
 }

@@ -45,6 +45,7 @@ import SingleEventPage from "./Components/SingleEventPage";
 import RegisteredEvents from "./pages/RegisteredEvents";
 import EventTickets from "./pages/EventTickets";
 import EditEventCard from "./Components/EditEventCard";
+import Categories from "./pages/Categories";
 
 
 
@@ -147,6 +148,7 @@ const App = () => {
                   path="Organisations/:id"
                   element={<OrganisationTree />}
                 />
+                <Route path="categories" element={<Categories/>}></Route>
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>

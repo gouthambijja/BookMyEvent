@@ -24,7 +24,7 @@ const ProfilePage = () => {
         >
           <img
             src={profile.imgBody !==""?`data:image/jpeg;base64,${profile.imgBody}`:profile.imageName}
-            style={{borderRadius:'4px',maxWidth:'90%', maxHeight: "300px" }}
+            style={{borderRadius:'4px',width:'300px',maxWidth:'90%', maxHeight: "300px" }}
           ></img>
         </div>
         <div style={{display:'flex',flexBasis:'100%'}}>

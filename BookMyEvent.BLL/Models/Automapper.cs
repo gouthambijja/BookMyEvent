@@ -31,6 +31,7 @@ public static class Automapper
             cfg.CreateMap<BLUserInputFormField, UserInputFormField>().ReverseMap();
             cfg.CreateMap<BLTicket, Ticket>().ReverseMap();
             cfg.CreateMap<BLOrganisation, Organisation>().ReverseMap();
+            cfg.CreateMap<BLEventCategory,EventCategory>().ReverseMap();
             cfg.CreateMap<BLFieldType, FieldType>().ReverseMap();
         });
         var mapper = new Mapper(config);

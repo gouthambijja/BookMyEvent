@@ -1,4 +1,5 @@
 ﻿using BookMyEvent.BLL.Contracts;
+using BookMyEvent.BLL.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventCategoryController:ControllerBase
+    public class EventCategoryController : ControllerBase
     {
         private readonly ICategoryServices _categoryServices;
         public EventCategoryController(ICategoryServices categoryServices)
@@ -27,6 +28,37 @@ namespace BookMyEvent.WebApi.Controllers
             catch
             {
                 return NotFound();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Post(BLEventCategory? category)
+        {
+            try
+            {
+                var _category = await _categoryServices.AddEventCategory(category);
+                if (_category != null)
+                {
+                    return Ok(_category);
+                }
+                return BadRequest();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }   
+        [HttpPut]
+        public async Task<IActionResult> Put(BLEventCategory? category)
+        {
+            try
+            {
+                var _category = await _categoryServices.UpdateEventCategory(category);
+                if (_category != null) return Ok(_category);
+                return BadRequest();
+            }
+            catch
+            {
+                return BadRequest();
             }
         }
     }

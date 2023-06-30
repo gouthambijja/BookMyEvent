@@ -42,6 +42,10 @@
   background: url(../src/Images/benner_1.jpg);
   background-size: cover;
 }
+.singleEventPageBg{
+  background: url(../src/Images/benner_1.jpg);
+  background-size: cover;
+}
 
 @keyframes App-logo-spin {
   from {

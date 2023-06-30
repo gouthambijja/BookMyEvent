@@ -21,7 +21,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
-import bcrypt from "bcryptjs";
 
 const useStyles = makeStyles((theme) => ({
   container: {

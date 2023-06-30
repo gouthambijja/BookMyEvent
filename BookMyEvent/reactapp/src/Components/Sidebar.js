@@ -23,6 +23,7 @@ import {
   EventBusy,
   EventNote,
   GroupWork,
+  Category,
   PostAdd,
   PersonAdd,
   SpeakerGroup,
@@ -232,8 +233,14 @@ function Sidebar({ open, setOpen }) {
     setActiveItem("home");
     handleDrawerClose();
   };
+  const handleCategories = async() =>{
+    navigate("/Admin/categories")
+    handleDrawerClose();
+  }
   return (
+
     <div className={classes.root}>
+      {open?<div style={{width:'100vw',height:'100vh',position:'absolute',background:'rgba(0,0,0,0.1)',zIndex:'40'}} onClick={handleDrawerClose}></div>:<></>}
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -243,11 +250,6 @@ function Sidebar({ open, setOpen }) {
           paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
@@ -335,12 +337,19 @@ function Sidebar({ open, setOpen }) {
             <></>
           )}
           {auth.role === "Admin" ? (
+            <>
             <ListItem button className={activeItem == 'organisations'?classes.activeBar:""} onClick={handleOrganisations}>
               <ListItemIcon>
               <AccountTree className={activeItem == 'organisations'?classes.activeBar:""} />
               </ListItemIcon>
               <ListItemText primary="Organisations" />
             </ListItem>
+            <ListItem button className={activeItem == 'categories'?classes.activeBar:""} onClick={handleCategories}>
+              <ListItemIcon>
+              <Category className={activeItem == 'categories'?classes.activeBar:""} />
+              </ListItemIcon>
+              <ListItemText primary="Categories" />
+            </ListItem></>
           ) : (
             <></>
           )}

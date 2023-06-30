@@ -29,7 +29,7 @@ const EventCard = ({ event }) => {
           <div>
             <CardMedia
               component="img"
-              sx={{ width: "100%", aspectRatio: 1 / 0.7 }}
+              sx={{ height:'280px', aspectRatio: 1 / 0.7 }}
               image={`data:image/jpeg;base64,${event.profileImgBody}`}
               alt="green iguana"
             />
@@ -99,8 +99,9 @@ const EventCard = ({ event }) => {
           color="primary"
           sx={{ padding: "10px" }}
           onClick={handleEventRegister}
+          disabled = {event.registrationStatusId==1?true:false}
         >
-          Register
+          Register 
         </Button>
       </div>
     </Card>

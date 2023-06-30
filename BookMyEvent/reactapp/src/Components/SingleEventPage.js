@@ -9,7 +9,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { CenterFocusStrong } from "@material-ui/icons";
 import CategoryIcon from "@material-ui/icons/Category";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   carouselContainer: {
     width: "100%",
@@ -49,32 +49,25 @@ const useStyles = makeStyles((theme) => ({
   activeDot: {
     backgroundColor: "#333",
   },
-  eventBox: {
-    backgroundColor: "#fff",
-  },
+  eventBox: {},
   description: {
     textAlign: "center",
     fontSize: "20px",
     flexBasis: "100%",
-    background: `#fff`,
-    fontStyle:'italic',
-    border: "2px solid #757ce8",
+    fontStyle: "italic",
     padding: theme.spacing(2),
     borderRadius: "4px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
-    color: "#757ce8",
-    borderRadius: "30px",
   },
   heading: {
     fontWeight: "bold",
+    width: "300px",
+    maxWidth: "90%",
+    textAlign: "left",
   },
   category: {
     marginBottom: "10px",
     flexBasis: "100%",
-    background: `#fff`,
     padding: theme.spacing(2),
-    boxShadow: "0 0px 4px rgba(0, 0, 0, 0.1)",
-    borderRadius: "30px",
   },
   hoverEffect: {
     transition: "background-color 0.3s ease",
@@ -130,11 +123,11 @@ const SingleEventPage = () => {
     transitionTime: 500, // Set the transition duration (in milliseconds)
   };
   const navigate = useNavigate();
-  const handleRegister = () =>{
+  const handleRegister = () => {
     navigate(`/registerEvent/${event.eventId}/${event.formId}`);
-  }
+  };
   return (
-    <Box >
+    <Box>
       <Carousel {...carouselSettings}>
         {images.map((image, index) => (
           <Paper
@@ -154,7 +147,7 @@ const SingleEventPage = () => {
       </Carousel>
       <Box p={2} className={classes.eventBox} sx={{ marginTop: "-85px" }}>
         <div
-          className={classes.detailsdiv}
+          className={"singleEventPageBg"}
           style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
         >
           <Box sx={{ flexBasis: "100%", color: "#fff", zIndex: "30" }}>
@@ -173,7 +166,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             <span className={classes.heading}> Category:</span>
             {categories.categories[Number(event?.categoryId)]?.categoryName}
@@ -182,7 +174,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             <span className={classes.heading}>Location:</span>
             {event?.location}, {event?.city},{event?.state}, {event?.country}
@@ -191,7 +182,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             <span className={classes.heading}>Price Range :</span>
             {event?.eventStartingPrice} to {event?.eventEndingPrice}
@@ -200,7 +190,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             <span className={classes.heading}>Start Date :</span>
             {event?.startDate?.split("T")[0]}
@@ -209,7 +198,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             {" "}
             <span className={classes.heading}>End Date :</span>
@@ -219,7 +207,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             {" "}
             <span className={classes.heading}>Capacity :</span>
@@ -229,7 +216,6 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             {" "}
             <span className={classes.heading}>Seats Available:</span>
@@ -239,15 +225,31 @@ const SingleEventPage = () => {
             variant="h6"
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
-            style={{ width: "50%", display: "flex", justifyContent: "center" }}
           >
             {event?.eventStartingPrice == 0
               ? "Free"
               : `Tickets starts from ${event?.eventStartingPrice}`}
           </Typography>
-      <Button onClick={handleRegister} sx={{border:'2px solid #757ce8',flexBasis:'100%',borderRadius:'30px','&:hover':{letterSpacing:'3px'}}}>
-        Register
-      </Button>
+          <Typography
+            variant="h6"
+            component="span"
+            className={`${classes.category} ${classes.hoverEffect}`}
+          >
+            {(event?.registrationStatusId == 1 )?<span>registrations opening soon</span>:<></>}
+          </Typography>
+
+          <Button
+            onClick={handleRegister}
+            sx={{
+              border: "2px solid #757ce8",
+              flexBasis: "100%",
+              borderRadius: "30px",
+              "&:hover": { letterSpacing: "3px" },
+            }}
+            disabled = {event.registrationStatusId==1?true:false}
+          >
+            Register
+          </Button>
         </div>
       </Box>
     </Box>
