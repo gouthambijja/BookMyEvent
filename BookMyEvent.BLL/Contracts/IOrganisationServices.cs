@@ -58,10 +58,11 @@ namespace BookMyEvent.BLL.Contracts
         /// An asynchronous method that deletes an organisation
         /// </summary>
         /// <param name="organisationId"></param>
+        /// <param name="blockerId"
         /// <returns>
         /// Returns a tuple of bool saying is organisation deleted successfully or not and a string message
         /// </returns>
-        Task<(bool IsOrganisationBlockToggled, string Message)> BlockOrganisation(Guid organisationId);
+        Task<(bool IsOrganisationBlockToggled, string Message)> BlockOrganisation(Guid organisationId, Guid blockerId);
 
         /// <summary>
         /// An asynchronous method that checks if the organisation name is taken or not

@@ -53,8 +53,8 @@ const OrganisationService = () => {
     return response.data;
   };
 
-  const deleteOrganisation = async (id) => {
-    const response = await Axios.delete(`${apiBase}/${id}`, {
+  const deleteOrganisation = async (orgId, blockerId) => {
+      const response = await Axios.delete(`${apiBase}/${orgId}/BlockedBy/${blockerId}`, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });

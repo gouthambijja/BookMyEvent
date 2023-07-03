@@ -14,10 +14,12 @@ namespace BookMyEvent.BLL.Services
     {
 
         private readonly IOrganisationRepository _organisationRepository;
+        private readonly IAdministrationRepository _administrationRepository;
 
-        public OrganisationServices(IOrganisationRepository organisationRepository)
+        public OrganisationServices(IOrganisationRepository organisationRepository, IAdministrationRepository administrationRepository)
         {
             _organisationRepository = organisationRepository;
+            _administrationRepository = administrationRepository;
         }
 
         public async Task<(BLOrganisation? org, bool IsSuccessfull, string Message)> CreateOrganisation(BLOrganisation organisation)
@@ -38,13 +40,20 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<(bool IsOrganisationBlockToggled, string Message)> BlockOrganisation(Guid organisationId)
+        public async Task<(bool IsOrganisationBlockToggled, string Message)> BlockOrganisation(Guid organisationId, Guid blockerId)
         {
             try
             {
                 var result = await _organisationRepository.ChangeIsActiveToFalse(organisationId);
                 if(result)
-                    return (true, "Organisation blocked/unblock operation successfull");
+                {
+                    var res2 = await _administrationRepository.UpdateAllOrganisationOrganisersIsActive(organisationId, blockerId);
+                    if(res2)
+                    {
+                        return (true, "Organisation blocked successfully");
+                    }
+                    return (false, "Organisation blocked but organiser block unsuccessfull");
+                }
                 return (false, "Organisation blocked/unblock unsuccessfull");
             }
             catch (Exception ex)

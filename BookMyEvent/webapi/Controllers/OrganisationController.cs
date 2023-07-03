@@ -109,10 +109,10 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Deleted Organization Details</returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrganisation(Guid id)
+        [HttpDelete("{orgId}/BlockedBy/{blockerId}")]
+        public async Task<IActionResult> DeleteOrganisation(Guid orgId, Guid blockerId)
         {
-            var result = await _organisationServices.BlockOrganisation(id);
+            var result = await _organisationServices.BlockOrganisation(orgId, blockerId);
             if (result.IsOrganisationBlockToggled)
                 return Ok(result.Message);
             else return BadRequest(result.Message);

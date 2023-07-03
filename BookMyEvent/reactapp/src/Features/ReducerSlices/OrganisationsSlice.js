@@ -44,10 +44,10 @@ export const updateOrganisation = createAsyncThunk(
 
 export const deleteOrganisation = createAsyncThunk(
     "organisations/deleteOrganisation",
-    async (id, { rejectWithValue }) => {
+    async (details, { rejectWithValue }) => {
         try {
-            const response = await orgServices().deleteOrganisation(id);
-            return response;
+            const response = await orgServices().deleteOrganisation(details.organisationId ,details.administratorId);
+            return details.organisationId;
         }
         catch (error) {
             return rejectWithValue(error.response.data);
@@ -126,7 +126,7 @@ const organisationSlice = createSlice({
             state.loading = false;
             state.message = "Updated organisation successfully";
             state.organisations.forEach(organisation => {
-                if (organisation.id === action.payload.id) {
+                if (organisation.organisationId === action.payload.organisationId) {
                     organisation = action.payload;
                 }
             });
@@ -142,10 +142,10 @@ const organisationSlice = createSlice({
         });
         builder.addCase(deleteOrganisation.fulfilled, (state, action) => {
             state.loading = false;
-            state.message = action.payload;
             state.error = false;
-            state.organisations = state.organisations.filter(organisation => organisation.id !== action.payload.id);
-        });
+            state.organisations = state.organisations.filter(organisation => organisation.organisationId !== action.payload);
+
+            });
         builder.addCase(deleteOrganisation.rejected, (state, action) => {
             state.loading = false;
             state.error = true;
