@@ -26,6 +26,7 @@ import store from "../App/store";
 import { fetchOrganiserForms } from "../Features/ReducerSlices/OrganiserFormsSlice";
 import EventServices from "../Services/EventServices";
 import { createEvent } from "../Features/ReducerSlices/EventsSlice";
+import { AddRegisteredEventId } from "../Features/ReducerSlices/HomeEventsSlice";
 const ColorfulForm = styled("form")({
   display: "flex",
   flexDirection: "column",
@@ -119,10 +120,12 @@ const EventForm = () => {
     if (auth.role == "Owner" || auth.role == "Secondary_Owner")
       _formData.append("AcceptedBy", auth.id);
     for (let i = 0; i < images.length; i++) {
-      _formData.append(`CoverImage${1}`, images[0]);
+      _formData.append(`CoverImage${i}`, images[i]);
     }
     try {
-      await dispatch(createEvent(_formData)).unwrap();
+      var resp= await dispatch(createEvent(_formData)).unwrap();
+      console.log(resp);
+ 
       dispatch(resetEventData());
       navigate("/organiser");
     } catch {

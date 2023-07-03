@@ -117,6 +117,7 @@ namespace BookMyEvent.WebApi.Controllers
                 var passwordSalt = _configuration["Encryption:PasswordSalt"];
 
                 User.Password = HashPassword.GetHash(User.Password + passwordSalt);
+                Console.WriteLine(User.Password);
                 return Ok(await _userService.AddUser(User));
             }
             catch (Exception ex)
@@ -136,6 +137,8 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 user.Password = user.GoogleId;
+                var passwordSalt = _configuration["Encryption:PasswordSalt"];
+                user.Password = HashPassword.GetHash(user.Password + passwordSalt);
                 var data = await _userService.AddUser(user);
                 return Ok(JsonConvert.SerializeObject(data));
             }
@@ -157,7 +160,9 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var passwordSalt = _configuration["Encryption:PasswordSalt"];
+                
                 login.Password=HashPassword.GetHash(login.Password+passwordSalt);
+                Console.WriteLine(login.Password);
                 var userId = await _userService.Login(login);
 
                 if (userId != Guid.Empty)

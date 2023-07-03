@@ -461,11 +461,11 @@ namespace BookMyEvent.DLL.Repositories
                 var filteredEvents = await _db.Events
                     .Where(e => e.StartDate >= startDate &&
                     (e.EndDate <= endDate && e.EndDate >= DateTime.Now) &&
-                    e.EventStartingPrice >= startPrice && 
+                    e.EventStartingPrice >= startPrice &&
                     e.EventEndingPrice <= endPrice &&
-                    ((location != "" && location != null) ? ( e.Location.Contains(location) || e.State.Contains(location) || e.Country.Contains(location) || e.City.Contains(location) ) : true) &&
+                    ((location != "" && location != null) ? (e.Location.Contains(location) || e.State.Contains(location) || e.Country.Contains(location) || e.City.Contains(location)) : true) &&
                     (isFree == true ? e.IsFree : true) &&
-                    (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) && 
+                    (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) &&
                     e.IsActive == true &&
                     e.IsPublished == true &&
                     e.RegistrationStatusId != 3)
@@ -546,7 +546,38 @@ namespace BookMyEvent.DLL.Repositories
                 throw new Exception("Failed to fetch past events from the database.", ex);
             }
         }
+        public async Task<int> GetOrganiserTotalNoOfPastEvents(Guid organiserId)
+        {
+            try
+            {
+                var events = await _db.Events
+                   .CountAsync(x => x.CreatedBy == organiserId &&
+                   (x.EndDate < DateTime.Now || x.IsCancelled) &&
+                   (x.AcceptedBy != null || x.RejectedBy != null));
+                return events;
 
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public async Task<int> GetOrganisationTotalNoOfPastEvents(Guid organisationId)
+        {
+            try
+            {
+                var events = await _db.Events
+                   .CountAsync(x => x.OrganisationId == organisationId &&
+                                       (x.EndDate < DateTime.Now || x.IsCancelled) &&
+                                                          (x.AcceptedBy != null || x.RejectedBy != null));
+                return events;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         public async Task<List<Event>> GetOrganiserRequestedEvents(Guid organiserId)
         {
             try
@@ -559,6 +590,7 @@ namespace BookMyEvent.DLL.Repositories
                 throw new Exception("Failed to fetch requested events from the database.", ex);
             }
         }
+
 
         public Task<List<Event>> GetOrganisationRequestedEvents(Guid organisationId)
         {
@@ -585,5 +617,5 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
-        }
     }
+}

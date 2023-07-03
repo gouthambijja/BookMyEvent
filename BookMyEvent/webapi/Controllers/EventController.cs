@@ -586,6 +586,32 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("TotalNoOfOrganiserPastEvents/{organiserId}")]
+        public async Task<IActionResult> GetOrganiserNoOfPastEvents(Guid organiserId)
+        {
+            try
+            {
+                return Ok(await _eventServices.GetNoOfPastEventsByOrganiser(organiserId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("TotalNoOfOrganisationPastEvents/{organisationId}")]
+        public async Task<IActionResult> GetOrganisationNoOfPastEvents(Guid organisationId)
+        {
+            try
+            {
+                return Ok(await _eventServices.GetNoOfPastEventsByOrganisation(organisationId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [Authorize(Roles = "Owner,Peer,Secondary_Owner")]
         [HttpGet("OrganiserPastEvents/{organiserId}")]
         public async Task<IActionResult> GetOrganiserPastEvents(Guid organiserId, int pageNumber, int pageSize)

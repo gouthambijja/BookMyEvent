@@ -405,7 +405,28 @@ namespace BookMyEvent.BLL.Services
                 throw new Exception("Failed to fetch past events.", ex);
             }
         }
-
+        public async Task<int> GetNoOfPastEventsByOrganiser(Guid organiserId)
+        {
+            try
+            {
+                return await eventRepository.GetOrganiserTotalNoOfPastEvents(organiserId);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public async Task<int> GetNoOfPastEventsByOrganisation(Guid organisationId)
+        {
+            try
+            {
+                return await eventRepository.GetOrganisationTotalNoOfPastEvents(organisationId);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         public async Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId)
         {
             try

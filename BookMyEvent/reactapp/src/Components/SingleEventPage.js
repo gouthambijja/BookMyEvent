@@ -145,12 +145,12 @@ const SingleEventPage = () => {
           </Paper>
         ))}
       </Carousel>
-      <Box p={2} className={classes.eventBox} sx={{ marginTop: "-85px" }}>
+      <Box  className={classes.eventBox} sx={{ marginTop: "-84px" }}>
         <div
           className={"singleEventPageBg"}
           style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
         >
-          <Box sx={{ flexBasis: "100%", color: "#fff", zIndex: "30" }}>
+          <Box sx={{ flexBasis: "100%", color: "#fff", zIndex: "30",background:'rgba(0,0,0,0.2)' }}>
             <Typography variant="h2" component="div">
               {event?.eventName}
             </Typography>

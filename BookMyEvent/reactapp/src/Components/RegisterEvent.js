@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import OrganiserFormServices from "../Services/OrganiserFormServices";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import store from "../App/store";
 import EventServices from "../Services/EventServices";
 import UserInputFormServices from "../Services/UserInputFormServices";
 import Transactions from "./Transactions";
 import { toast } from "react-toastify";
+import { AddRegisteredEventId } from "../Features/ReducerSlices/HomeEventsSlice";
 
 const RegisterEvent = () => {
   const [eventRegistrationFormFields, setEventRegistrationFormFields] =
@@ -29,6 +30,7 @@ const RegisterEvent = () => {
   const navigate = useNavigate();
   let fetchedFormFields = [];
   const { eventId, formId } = useParams();
+  const dispatch= useDispatch();
   const [TotalPrice, setTotalPrice] = useState(0);
   const FormFieldTypes = useSelector((store) => store.formFields.formFields);
   const [fieldRegistrationId, setFieldRegistrationId] = useState();
@@ -124,6 +126,7 @@ const RegisterEvent = () => {
     setRegisteredData(
       await UserInputFormServices().submitUserInputForm(formResultPost)
     );
+    dispatch(AddRegisteredEventId(event.eventId));
     setToggleRegistrationTransaction(false);
   };
   const handleAddPerson = () => {

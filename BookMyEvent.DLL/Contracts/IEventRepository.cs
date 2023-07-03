@@ -398,5 +398,8 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="eventIds"></param>
         /// <returns>returns a list of events</returns>
         Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds);
+
+        Task<int> GetOrganiserTotalNoOfPastEvents(Guid organiserId);
+        Task<int> GetOrganisationTotalNoOfPastEvents(Guid organisationId);
     }
 }

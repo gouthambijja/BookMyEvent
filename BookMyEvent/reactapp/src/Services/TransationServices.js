@@ -36,11 +36,38 @@ const getAllRegisteredEventsByUserid = async (userId) => {
     });
     return response.data;
 }
+const getAllRegisteredEventIdsByUserid = async (userId) => {
+    const response = await Axios.get(`${apiBase}/GetAllRegisteredEventIds/${userId}`,
+    {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
+const getNoOfTransactionsByUserid = async (userId) => {
+    const response = await Axios.get(`${apiBase}/GetNoOfTransactionsByUserId/${userId}`,
+    {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
+const getAmountByUserid = async (userId) => {
+    const response = await Axios.get(`${apiBase}/GetAmountByUserId/${userId}`,
+    {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
 return  {
     addTransaction,
     getAllTransactionsByEventId,
     getAllTransactionsByUserId,
     getAllRegisteredEventsByUserid,
+    getAllRegisteredEventIdsByUserid,
+    getNoOfTransactionsByUserid,
+    getAmountByUserid,
 };
 }
 export default TransationServices;

@@ -20,7 +20,33 @@ namespace BookMyEvent.DLL.Repositories
         {
             return await context.Transactions.Where(e => e.UserId.Equals(UserId)).ToListAsync();
         }
+        public async Task<int> GetNoOfTransactionsByUserId(Guid UserId)
+        {
+            try {
 
+            return await context.Transactions.CountAsync(e => e.UserId.Equals(UserId));
+
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
+        public async Task<decimal> GetTotalAmountByUserId(Guid UserId)
+        {
+            try
+            {
+
+                return await context.Transactions.Where(t => t.UserId == UserId).SumAsync(t => t.Amount);
+
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
         public async Task<Guid> GetUserIdByTransactionId(Guid transactionId)
         {
             try

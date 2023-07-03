@@ -48,5 +48,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="UserId"></param>
         /// <returns>List<guid></returns>
         public Task<List<Guid>> GetAllDistinctEventIds(Guid UserId);
+        Task<int> GetNoOfTransactionsByUserId(Guid UserId);
+        Task<decimal> GetTotalAmountByUserId(Guid UserId);
     }
 }

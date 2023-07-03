@@ -39,5 +39,8 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<List<Event>> GetAllRegisteredEventsByUserId(Guid userId);
+        Task<List<Guid>> GetAllUserRegisteredEventIds(Guid userId);
+        Task<int> GetNoOfTransactionsByUserId(Guid userId);
+        Task<decimal> GetAmountByUserId(Guid userId);
     }
 }

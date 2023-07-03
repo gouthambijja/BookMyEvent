@@ -73,7 +73,18 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-
+        public async Task<List<Guid>> GetAllUserRegisteredEventIds(Guid userId)
+        {
+            try
+            {
+                var eventIds = await transactionRepository.GetAllDistinctEventIds(userId);
+                return eventIds;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId)
         {
             try
@@ -112,7 +123,21 @@ namespace BookMyEvent.BLL.Services
                 return new List<BLTransaction>();
             }
         }
-
-      
+         public async Task<int> GetNoOfTransactionsByUserId(Guid userId)
+        {
+            try
+            {
+                return await transactionRepository.GetNoOfTransactionsByUserId(userId);
+            }
+            catch { return 0;}
+        }
+        public async Task<decimal> GetAmountByUserId(Guid userId)
+        {
+            try
+            {
+                return await transactionRepository.GetTotalAmountByUserId(userId);
+            }
+            catch { return 0; }
+        }
     }
 }

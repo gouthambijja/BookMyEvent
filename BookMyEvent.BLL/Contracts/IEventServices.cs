@@ -62,6 +62,8 @@ namespace BookMyEvent.BLL.Contracts
 
         Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId);
         Task<List<BLEvent>> GetOrganisationRequestedEvents(Guid organisationId);
+        Task<int> GetNoOfPastEventsByOrganiser(Guid organiserId);
+        Task<int> GetNoOfPastEventsByOrganisation(Guid organisationId);
 
     }
 }

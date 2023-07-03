@@ -8,11 +8,13 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TransationServices from "../Services/TransationServices";
+import { UpdateAmountSpent, UpdateNoOfTransactions } from "../Features/ReducerSlices/HomeEventsSlice";
 const Transactions = ({ transactionData }) => {
     const auth = useSelector(store=> store.auth)
     const navigate = useNavigate();
+    const dispatch=useDispatch();
   const eventImage = transactionData.event.profileImgBody;
   const numberOfTickets = transactionData.NoOfTickets;
   const totalPrice = transactionData.TotalPrice;
@@ -32,6 +34,8 @@ const handlePay = async () =>{
     }
     const formData = {transaction:transactionInfo,ListOfUserInputForm:userInputFormData};
     await TransationServices().addTransaction(formData);
+    dispatch(UpdateNoOfTransactions());
+    dispatch(UpdateAmountSpent(totalPrice))
     navigate(`/tickets/${transactionData.event.eventId}`);
 }
   return (
