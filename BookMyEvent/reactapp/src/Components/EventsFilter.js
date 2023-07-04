@@ -81,8 +81,8 @@ const EventsFilter = ({ onFilter }) => {
                   key={category.categoryId}
                   control={
                     <Checkbox
-                      checked={categoryIds.includes(category.categoryId-1)}
-                      onChange={() => handleCategoryChange(category.categoryId-1)}
+                      checked={categoryIds.includes(category.categoryId)}
+                      onChange={() => {handleCategoryChange(category?.categoryId)}}
                     />
                   }
                   label={category.categoryName}
