@@ -13,7 +13,6 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "User")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -55,6 +54,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // GET api/<UserController>/5
+        [Authorize(Roles = "User")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -194,6 +194,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="User"></param>
         /// <returns>Updated User Details</returns>
         // PUT api/<UserController>/5
+        [Authorize(Roles = "User")]
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> Put([FromBody] BLUser User)
         {
@@ -211,6 +212,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// </summary>
         /// <param name="changePassword"></param>
         /// <returns>true if Successful else false</returns>
+        [Authorize(Roles = "User")]
         [HttpPut("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] BLChangePassword changePassword)
         {
@@ -227,14 +229,16 @@ namespace BookMyEvent.WebApi.Controllers
         /// Service to Block the User
         /// </summary>
         /// <param name="UserId"></param>
+        /// <param name="BlockedBy"></param>
         /// <returns>true if successful else false</returns>
         // DELETE api/<UserController>/5
-        [HttpDelete("BlockUser")]
-        public async Task<IActionResult> BlockUser(Guid UserId)
+        [Authorize(Roles="Admin")]
+        [HttpDelete("BlockUser/{UserId}/{BlockedBy}")]
+        public async Task<IActionResult> BlockUser(Guid UserId, Guid BlockedBy)
         {
             try
             {
-                return Ok(await _userService.ToggleIsActiveById(UserId));
+                return Ok(await _userService.ToggleIsActiveById(UserId, BlockedBy));
             }
             catch (Exception ex)
             {
@@ -279,6 +283,20 @@ namespace BookMyEvent.WebApi.Controllers
             catch
             {
                 return BadRequest("error");
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetFilteredUsers")]
+        public async Task<IActionResult> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null)
+        {
+            try
+            {
+                Console.WriteLine("Im in controller ________________________________________________________________________________________________________________________________________________________");
+                return Ok(await _userService.GetFilteredUsers(name, email, phoneNumber, isActive));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

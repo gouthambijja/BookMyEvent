@@ -70,9 +70,12 @@ namespace BookMyEvent.BLL.Contracts
         /// Method to Delete User Account
         /// </summary>
         /// <param name="Id"></param>
+        /// <param name="blockedBy"></param>
         /// <returns>returns User Object</returns>
-        Task<BLUser> ToggleIsActiveById(Guid Id);
+        Task<BLUser> ToggleIsActiveById(Guid Id, Guid blockedBy);
 
         Task<(bool IsUserEmailExists, string Message)> IsUserAvailableWithEmail(string email);
+
+        Task<List<BLUser>> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null);
     }
 }

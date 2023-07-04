@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrganizationCard = ({ organization }) => {
-    console.log(organization);
     const classes = useStyles();
     const { organisationId } = organization;
     const navigate = useNavigate();
@@ -98,7 +97,6 @@ const OrganisationsListPage = () => {
     const dispatch = useDispatch();
     //var organisations = store.getState().organisations.organisations;
     var organisations = useSelector((state) => state.organisations.organisations);
-    console.log(organisations);
 
 
 

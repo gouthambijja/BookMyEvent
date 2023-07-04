@@ -10,7 +10,7 @@ import { RotateLeftOutlined } from '@material-ui/icons';
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { fetchOrganisationOrganisers, clearMyOrganisers } from "../Features/ReducerSlices/OrganisersSlice";
 import { useDispatch, useSelector } from 'react-redux';
-
+import ConfirmationDialog from '../Components/ConfirmationDialog';
 
 const useStyles = makeStyles({
     root: {
@@ -113,28 +113,29 @@ const OrganisationTree = () => {
     const orgMembers = useSelector(store => store.organisers.myOrganisationOrganisers);
     const auth = useSelector(store => store.auth);
     const [selectedRole, setSelectedRole] = useState('2');
+    const [selectedUser, setSeletedUser] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
-    console.log(orgMembers);
     const handleRoleFilter = (roleId) => {
         setSelectedRole(roleId);
     };
     const classes = useStyles();
     const membersByRole = {};
 
-    //const handleBlock = () => {
-    //    setOpenDialog(true);
-    //    //dispatch(deleteOrganisation(organisationId));
-    //}
+    const handleBlock = (organiser) => {
+        setSeletedUser(organiser);
+        setOpenDialog(true);
+        //dispatch(deleteOrganisation(organisationId));
+    }
 
-    //const handleCancel = () => {
-    //    setOpenDialog(false);
-    //};
+    const handleCancel = () => {
+        setOpenDialog(false);
+    };
 
-    //const handleConfirm = () => {
-    //    dispatch();
-    //    setOpenDialog(false);
-    //    setBlock(!block);
-    //};
+    const handleConfirm = async () => {
+        //dispatch();
+        setOpenDialog(false);
+        //setBlock(!block);
+    };
 
 
     // Group members by role
@@ -198,38 +199,45 @@ const OrganisationTree = () => {
                 <div className={classes.section}>
                     {membersByRole[selectedRole] != null ? <>
                         {membersByRole[selectedRole].map((member, index) => (
-                            <Card key={index} className={classes.card}>
-
-                                <CardContent className={classes.cardContent}>
-                                    <Typography variant="h6" component="h2" className={classes.memberImageContainer}>
-                                        <img
-                                            src={`data:image/jpeg;base64,${member.imgBody}`}
-                                            alt={member.administratorName}
-                                            className={classes.memberImage}
-                                        ></img>
-                                    </Typography>
-                                    <Typography variant="h6" component="h2" className={classes.memberName}>
-                                        {member.administratorName}
-                                    </Typography>
-                                    <Typography color="textSecondary" gutterBottom className={classes.memberRole}>
-                                        Address: {member.administratorAddress}
-                                    </Typography>
-                                    <Typography color="textSecondary" className={classes.memberEmail}>
-                                        Email: {member.email}
-                                    </Typography>
-                                    <Typography color="textSecondary" className={classes.memberEmail}>
-                                        Phone: {member.phoneNumber}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
-                                    {profile.roleId < member.roleId && <Button> Block User </Button>}
-                                </CardActions>
-                            </Card>
+                            <>
+                                <Card key={index} className={classes.card} sx={{ display: 'flex', flexDirection: "column", height: "auto" }}>
+                                    <CardContent className={classes.cardContent} sx={{ flexBasis: "90%" }}>
+                                        <Typography variant="h6" component="h2" className={classes.memberImageContainer}>
+                                            <img
+                                                src={`data:image/jpeg;base64,${member.imgBody}`}
+                                                alt={member.administratorName}
+                                                className={classes.memberImage}
+                                            ></img>
+                                        </Typography>
+                                        <Typography variant="h6" component="h2" className={classes.memberName}>
+                                            {member.administratorName}
+                                        </Typography>
+                                        <Typography color="textSecondary" gutterBottom className={classes.memberRole}>
+                                            Address: {member.administratorAddress}
+                                        </Typography>
+                                        <Typography color="textSecondary" className={classes.memberEmail}>
+                                            Email: {member.email}
+                                        </Typography>
+                                        <Typography color="textSecondary" className={classes.memberEmail}>
+                                            Phone: {member.phoneNumber}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions sx={{ display: 'flex', justifyContent: 'right', flexBasis: "10%" }}>
+                                        {profile.roleId < member.roleId && member.roleId !== 2 && <Button onClick={() => handleBlock(member)}>{member.isActive ? 'Block' : 'Unblock'}</Button>}
+                                    </CardActions>
+                                </Card>
+                            </>
                         ))}
                     </> : <>No Members to display</>}
                 </div>
             </div>
-
+            <ConfirmationDialog key="confirmation-dialog"
+                open={openDialog}
+                title="Confirmation"
+                content={selectedUser.isActive ? "Are you sure you want to block?" : "Are you sure you want to unblock?"}
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            />
         </div>
     </>)
 }

@@ -137,11 +137,11 @@ namespace BookMyEvent.BLL.Services
             }
             return Guid.Empty;
         }
-        public async Task<BLUser> ToggleIsActiveById(Guid Id)
+        public async Task<BLUser> ToggleIsActiveById(Guid Id, Guid BlockedBy)
         {
             if (!Id.Equals(string.Empty))
             {
-                User user = await UserRepositoryDal.ToggleIsActiveById(Id);
+                User user = await UserRepositoryDal.ToggleIsActiveById(Id,BlockedBy);
                 var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<User, BLUser>(user);
             }
@@ -176,6 +176,22 @@ namespace BookMyEvent.BLL.Services
             {
                 return (false, ex.Message);
             }
+        }
+
+        public async Task<List<BLUser>> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null)
+        {
+            try
+            {
+                Console.WriteLine("i've reached bll get filtered users _________________________________________________________________________________________________________________________________________");
+                var mapper = Automapper.InitializeAutomapper();
+                var users = await UserRepositoryDal.GetFilteredUsers(name, email, phoneNumber, isActive);
+                return mapper.Map<List<BLUser>>(users);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

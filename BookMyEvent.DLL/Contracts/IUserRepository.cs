@@ -70,10 +70,11 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="Id">
         /// Takes the Id of the user as input as Guid type
         /// </param>
+        /// <param name="blockedBy"></param>
         /// <returns>
         /// Returns a User object
         /// </returns>
-        Task<User> ToggleIsActiveById(Guid Id);
+        Task<User> ToggleIsActiveById(Guid Id, Guid blockedBy);
 
         /// <summary>
         /// An Asynchronous method that gets all users
@@ -104,5 +105,7 @@ namespace BookMyEvent.DLL.Contracts
         Task<(Guid UserId, string Message)> BlockUser(Guid UserId);
 
         Task<bool> IsEmailExists(string Email);
+
+        Task<List<User>> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null);
     }
 }

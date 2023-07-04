@@ -113,14 +113,20 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<User> ToggleIsActiveById(Guid Id)
+        public async Task<User> ToggleIsActiveById(Guid Id, Guid blockedBy)
         {
             try
             {
                 var user = await _db.Users.FindAsync(Id);
                 if (user != null)
                 {
+                    if (user.IsActive == true)
+                        user.DeletedBy = blockedBy;
+                    else
+                        user.DeletedBy = null;
                     user.IsActive = !user.IsActive;
+                    user.UpdatedOn = DateTime.Now;
+
                     _db.SaveChanges();
                     return user;
                 }
@@ -206,6 +212,36 @@ namespace BookMyEvent.DLL.Repositories
                 return (user.UserId,"User Blocked");
             }
             return (UserId,"User Not Blocked");
+        }
+
+        public async Task<List<User>> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null)
+        {
+            try
+            {
+                Console.WriteLine("I've reached into the user repository---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                var users = await _db.Users.ToListAsync();
+                if (name != null)
+                {
+                    users = users.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
+                }
+                if (email != null)
+                {
+                    users = users.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+                }
+                if (phoneNumber != null)
+                {
+                    users = users.Where(x => x.PhoneNumber.ToLower().Contains(phoneNumber.ToLower())).ToList();
+                }
+                if (isActive != null)
+                {
+                    users = users.Where(x => x.IsActive == isActive).ToList();
+                }
+                return users;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }   
         }
     }
 }

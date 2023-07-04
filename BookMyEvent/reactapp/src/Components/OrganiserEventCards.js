@@ -116,8 +116,8 @@ const OrganiserEventCard = ({ event }) => {
    },[myEvents])
     return (
         <>
-            <Card sx={{ width: '400px', boxShadow: '0px 0px 9px #d0d0d0' }}>
-                <CardActionArea onClick={handleClick}>
+            <Card sx={{ width: '400px', boxShadow: '0px 0px 9px #d0d0d0', display: 'flex', flexDirection: "column", height: "auto" }}>
+                <CardActionArea onClick={handleClick} sx={{ flexBasis: "90%" }}>
                     <CardMedia component="img" sx={{ width: '100%', aspectRatio: 1 / 0.7 }} image={`data:image/jpeg;base64,${event.profileImgBody}`} alt="green iguana" />
                     <CardContent>
                         <Typography variant="h5" component="div">
@@ -143,7 +143,7 @@ const OrganiserEventCard = ({ event }) => {
                         </Typography>
                     </CardContent>
                 </CardActionArea>
-                <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
+                <CardActions sx={{ display: 'flex', justifyContent: 'right', flexBasis: "10%" }}>
                     {((event.acceptedBy === null && event.rejectedBy === null) && (auth.role=="Owner" || auth.role=="Secondary_Owner")) && event.isActive && (
                         <>
                             <Button onClick={()=>handleAcceptEvent()} size="small" startIcon={<EditOutlined />} color="primary" variant="outlined">
