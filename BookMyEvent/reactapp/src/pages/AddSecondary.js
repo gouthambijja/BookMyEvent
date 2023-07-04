@@ -114,7 +114,7 @@ const AddSecondary = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("before post call " + formData)
+        //console.log("before post call " + formData)
         const _formData = new FormData();
         _formData.append("administratorName", formData.AdministratorName);
         _formData.append("administratorAddress", formData.AdministratorAddress);

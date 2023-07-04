@@ -14,7 +14,7 @@ const EditCategory = ({ category }) => {
   const [categoryErrorMsg, setCategoryErrorMsg] = useState("");
   const handleCategoryNameInput = (e) => {
     setCategoryState(e.target.value);
-    console.log(e.target.value, _category.categoryName);
+    //console.log(e.target.value, _category.categoryName);
     if (category.categories.find((a) => a.categoryName == e.target.value)) {
       setCategoryErrorMsg(
         "Category Name shouldn't present in the previous categories!"

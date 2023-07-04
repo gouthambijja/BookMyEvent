@@ -74,7 +74,7 @@ const OrganiserEventCard = ({ event }) => {
         const tempEvent = { ...event };
         tempEvent.acceptedBy=profile.administratorId;
         tempEvent.updatedBy=profile.administratorId;
-        console.log("accept event");
+        //console.log("accept event");
         dispatch(acceptEvent(tempEvent));
       setOpenDialogtoAccept(false);
 
@@ -91,8 +91,8 @@ const OrganiserEventCard = ({ event }) => {
         const tempEvent = { ...event };
         tempEvent.rejectedBy=profile.administratorId;
         tempEvent.updatedBy=profile.administratorId;
-        console.log(event);
-        console.log(tempEvent);
+        //console.log(event);
+        //console.log(tempEvent);
         dispatch(rejectEvent(tempEvent));
       setOpenDialogtoAccept(false);
         toast.error("Event Rejected!")
@@ -112,7 +112,7 @@ const OrganiserEventCard = ({ event }) => {
         navigate(`/organiser/EditEvent/${event.eventId}`);
     }
    React.useEffect(()=>{
-    console.log("events changed")
+    //console.log("events changed")
    },[myEvents])
     return (
         <>

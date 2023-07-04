@@ -3,7 +3,7 @@ import EventsFilter from "../Components/EventsFilter"
 
 const EventsPage = () => {
     const handleFilter = (filter) => {
-        console.log(filter);
+        //console.log(filter);
     };
     return (
         <div>

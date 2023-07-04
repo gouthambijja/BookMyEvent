@@ -77,7 +77,7 @@ const OwnerRequests = () => {
     setOpen(false);
   };
   const handleAccept = async (Owner) => {
-    console.log(Owner);
+    //console.log(Owner);
     const updatedOwner = {
       administratorId: Owner.administratorId,
       administratorName: Owner.administratorName,

@@ -133,8 +133,8 @@ const UserListPage = () => {
                                     <TableCell>{user.isActive ? 'Active' : 'Blocked'}</TableCell>
                                     <TableCell>
                                         <Button
-                                            variant="contained"
-                                            color={user.isActive ? 'secondary' : 'primary'}
+                                            variant="outlined"
+                                            color={user.isActive ? 'error' : 'primary'}
                                             onClick={() => handleBlockUnblock(user)}
                                         >
                                             {user.isActive ? 'Block' : 'Unblock'}

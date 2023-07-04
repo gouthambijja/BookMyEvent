@@ -112,7 +112,7 @@ const RegisterOrganiser = () => {
         if (event.target?.value != "") {
             const result = await organisationServices().getOrganisationByName(event.target.value);
             if (result.isExists) {
-                console.log(result.orgId)
+                //console.log(result.orgId)
                 setPeerOrgNameError("");
                 setSelectedOption(result.orgId);
             }
@@ -123,7 +123,7 @@ const RegisterOrganiser = () => {
         else {
             setPeerOrgNameError("");
         }
-        console.log(selectedOption);
+        //console.log(selectedOption);
     };
     const handleInputChange = (e) => {
         setFormData((prevState) => ({
@@ -137,7 +137,7 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
         if (!passwordRegex.test(e.target.value)) {
-            console.log(passwordRegex.test("Kakarot1#"));
+            //console.log(passwordRegex.test("Kakarot1#"));
             setPasswordValidation('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.');
           } else {
             setPasswordValidation('');
@@ -198,7 +198,7 @@ const RegisterOrganiser = () => {
         
 
       
-        console.log("before post call " + formData)
+        //console.log("before post call " + formData)
         const _formData = new FormData();
         if (selectedRoleValue == "peer") {
 
@@ -215,9 +215,9 @@ const RegisterOrganiser = () => {
             _formData.append("isActive", true);
             _formData.append("password", formData.Password);
             _formData.append("imgBody", formData.ImgBody);
-            console.log(_formData);
+            //console.log(_formData);
             const data = await organiserServices().registerPeer(_formData);
-            console.log("after call " + data)
+            //console.log("after call " + data)
         }
         else {
 
@@ -241,9 +241,9 @@ const RegisterOrganiser = () => {
             _formData.append("orgIsActive", orgFormData.IsActive);
             _formData.append("orgUpdatedOn", orgFormData.UpdatedOn);
 
-            console.log(_formData);
+            //console.log(_formData);
             const data = await organiserServices().addOwner(_formData);
-            console.log("after call " + data)
+            //console.log("after call " + data)
 
 
         }

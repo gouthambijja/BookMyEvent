@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const OrganisationEventsPage = () => {
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.profile.info);
-    console.log(profile);
+    //console.log(profile);
     let myEvents = useSelector((state) => state.events.organisationEvents);
     useEffect(() => {
         if (myEvents.length === 0) {

@@ -80,7 +80,7 @@ const PeerRequest = () => {
  
 
   const handleAccept = async (peer) => {
-    console.log(peer);
+    //console.log(peer);
     const updatedPeer = {
       administratorId: peer.administratorId,
       administratorName: peer.administratorName,

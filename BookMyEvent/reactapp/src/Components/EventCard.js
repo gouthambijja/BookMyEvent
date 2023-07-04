@@ -13,7 +13,7 @@ const EventCard = ({ event }) => {
   const navigate = useNavigate();
   const handleEvent = (eventId) => {
     navigate(`event/${eventId}`);
-    console.log("inside");
+    //console.log("inside");
   };
 
   const handleEventRegister = () => {

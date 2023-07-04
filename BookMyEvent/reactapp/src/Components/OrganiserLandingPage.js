@@ -8,7 +8,7 @@ const OrganiserLandingPage = () => {
   let cnt =0;
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.profile.info);
-    console.log(profile);
+    //console.log(profile);
     let myEvents = useSelector((state) => state.events.myEvents);
     useEffect(() => {
         if (myEvents.length === 0) {

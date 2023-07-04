@@ -30,7 +30,7 @@ const AdminServices = () => {
     }
     
     const addAdmin = async (formData) => {
-        console.log(formData);
+        //console.log(formData);
         const response = await axiosPrivate.post('/api/admin/AddAdmin',
             formData,
             {

@@ -49,7 +49,7 @@ const LandingPage = () => {
     dispatch(clearHomeEvents());
     dispatch(SetPageNumber(1));
     setfilters(filters);
-    console.log("HEY");
+    //console.log("HEY");
     // await dispatch(fetchEvents(filters)).unwrap();
   };
   const LoadEventOnPageEnd = async () => {
@@ -61,9 +61,9 @@ const LandingPage = () => {
       !store.getState().homeEvents.loading &&
       !store.getState().homeEvents.end
     ) {
-      console.log(
-        _filters
-      );
+      //console.log(
+      //   _filters
+      // );
       await dispatch(
         fetchEvents({
           ..._filters,

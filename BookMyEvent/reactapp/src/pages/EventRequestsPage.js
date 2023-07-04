@@ -8,15 +8,15 @@ import OrganiserEventCard from '../Components/OrganiserEventCards';
 const EventRequestsPage = () => {
     const dispatch = useDispatch();
     const profile = useSelector((state) => state.profile.info);
-    console.log(profile);
+    //console.log(profile);
     let eventRequests = useSelector((state) => state.events.eventRequests);
     useEffect(() => {
-        console.log("I am in useffect out");
-        console.log(eventRequests);
-        console.log(eventRequests.length);
+        //console.log("I am in useffect out");
+        //console.log(eventRequests);
+        //console.log(eventRequests.length);
 
         if (eventRequests.length == 0) {
-            console.log("I am in useffect");
+            //console.log("I am in useffect");
             if (profile.roleId != 4)
                 dispatch(fetchOrganisationEventsRequests(profile.organisationId));
             else {

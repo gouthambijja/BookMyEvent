@@ -23,7 +23,7 @@ const OrganisationService = () => {
     return response.data;
   };
   const getOrganisationByName = async (orgName) => {
-    console.log("helo");
+    //console.log("helo");
     const response = await axiosPrivate.get(`${apiBase}/getOrgIdByName/${orgName}`, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,

@@ -38,7 +38,7 @@ const RegisterEvent = () => {
     const loadUserEventRegistrationFormFields = async () => {
       const event = await EventServices().getEventById(eventId);
       setEvent(event);
-      console.log(event);
+      //console.log(event);
       const formFields = await OrganiserFormServices().getFieldTypesByFormId(
         formId
       );
@@ -52,7 +52,7 @@ const RegisterEvent = () => {
         [...formFields],
       ]);
       fetchedFormFields = [...formFields];
-      console.log(fetchedFormFields);
+      //console.log(fetchedFormFields);
     };
     loadUserEventRegistrationFormFields();
     return () => {
@@ -65,10 +65,10 @@ const RegisterEvent = () => {
     const { name, value } = event.target;
     setFormData((prevData) => {
       prevData[index] = { ...prevData[index], [name]: value };
-      console.log(prevData);
+      //console.log(prevData);
       return prevData;
     });
-    console.log(formData);
+    //console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -89,7 +89,7 @@ const RegisterEvent = () => {
           });
           if (i == "Ticket Prices") {
             setTotalPrice((prev) => prev + Number(e[i]));
-            console.log(TotalPrice);
+            //console.log(TotalPrice);
           }
         } else if (type == 2) {
           formFieldResponse.push({
@@ -134,7 +134,7 @@ const RegisterEvent = () => {
         ...eventRegistrationFormFields,
         [...eventRegistrationFormFields[0]],
       ]);
-      console.log(eventRegistrationFormFields);
+      //console.log(eventRegistrationFormFields);
     } else {
       toast.warning(`Per transaction you can register max of ${event.maxNoOfTicketsPerTransaction} tickets only`)
     }}

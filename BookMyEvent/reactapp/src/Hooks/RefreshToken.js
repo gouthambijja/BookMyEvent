@@ -12,14 +12,14 @@ const RefreshToken = () => {
         });
         store.dispatch(setAuth(response?.data));
         const auth = jwtDecode(response?.data);
-        console.log(auth);
+        //console.log(auth);
         if(auth.role == "Admin")
         await store.dispatch(getAdminByIdThunk(auth.nameid)).unwrap();
         else if(["Owner","Secondary_Owner","Peer"].includes(auth.role))
         await store.dispatch(getOrganiserByIdThunk(auth.nameid)).unwrap();
         else 
         await store.dispatch(getUserByIdThunk(auth.nameid)).unwrap();
-        console.log(store.getState());
+        //console.log(store.getState());
         return response.data;
     }
     return refresh;

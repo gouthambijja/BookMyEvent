@@ -79,7 +79,7 @@ const EventDynamicForm = () => {
         [name]: name == "IsRequired" ? checked : value,
       };
     }
-    console.log(values);
+    //console.log(values);
     dispatch(setInputFields(values));
   };
   const handleAddFields = () => {
@@ -108,7 +108,7 @@ const EventDynamicForm = () => {
     options = [...options, FieldOption];
     Field = { ...Field, Options: [...options] };
     values[index] = { ...Field };
-    console.log(values);
+    //console.log(values);
     SetFieldOption("");
     dispatch(setInputFields(values));
   };

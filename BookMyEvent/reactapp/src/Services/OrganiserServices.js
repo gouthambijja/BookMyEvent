@@ -39,7 +39,7 @@ const loginOrganiser = async (formData) => {
 }
 
 const addOrganiser = async (formData) => {
-    console.log(formData);
+    //console.log(formData);
     const response = await Axios.post(`${apiBase}/CreateOrganiser`,
         formData,
         {
@@ -51,7 +51,7 @@ const addOrganiser = async (formData) => {
 }
 
 const registerPeer = async (formData) => {
-    console.log(formData);
+    //console.log(formData);
     const response = await AxiosPublic.post(`${apiBase}/RegisterPeer`,
         formData,
         {
@@ -64,7 +64,7 @@ const registerPeer = async (formData) => {
 }
 
 const addOwner = async (formData) => {
-    console.log(formData);
+    //console.log(formData);
     const response = await Axios.post(`${apiBase}/RegisterOwner`,
         formData,
         {

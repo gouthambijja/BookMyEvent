@@ -12,7 +12,7 @@ import { IncrementHomePageNumber, fetchEvents } from "../Features/ReducerSlices/
     const categoryLoader = async () => {
       if (store.getState().category.categories.length > 0) return null;
       else{
-        console.log("heyyeh");
+        //console.log("heyyeh");
         await store.dispatch(getCategoryThunk()).unwrap();
         return null;
       }
@@ -46,7 +46,7 @@ import { IncrementHomePageNumber, fetchEvents } from "../Features/ReducerSlices/
     const LandingPageEventsLoader = async() =>{
       if(!store.getState().homeEvents.end && store.getState().homeEvents.events.length ==0 && store.getState().homeEvents.page == 1){
         store.dispatch(IncrementHomePageNumber());
-        console.log("hey");
+        //console.log("hey");
         await store.dispatch(fetchEvents({pageNumber:1,})).unwrap();
       }
       return null;

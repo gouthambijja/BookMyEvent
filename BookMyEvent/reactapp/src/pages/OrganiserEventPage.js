@@ -25,7 +25,7 @@ const OrganiserEventPage = () => {
     const event = useSelector(state => {
         return state.events.myEvents.find((event) => event.eventId === eventId);
     });
-    console.log(event);
+    //console.log(event);
     const [eventData, setEventData] = useState(event || {});
     const [isEditMode, setIsEditMode] = useState(false);
 

@@ -18,7 +18,7 @@ const updateEvent = async (newEvent) => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
 };
 
@@ -105,7 +105,7 @@ const getFilteredEvents = async (filterEvent) => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
-    console.log(response.data);
+    //console.log(response.data);
     return response.data;
 };
 
@@ -120,7 +120,7 @@ const deleteEvent = async (eventId, deletedBy) => {
     }
 }
 catch(error){
-    console.log(error);
+    //console.log(error);
     throw error;
 }
 };

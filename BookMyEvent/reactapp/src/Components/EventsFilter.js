@@ -48,7 +48,7 @@ const EventsFilter = ({ onFilter }) => {
     SetVisibility((prev) => !prev);
   };
   useEffect(() => {
-    console.log(categoryIds);
+    //console.log(categoryIds);
   }, []);
   const handleCategoryChange = (id) => {
     id=id;

@@ -6,7 +6,7 @@ import { Outlet,useNavigate,Navigate, useLocation } from 'react-router-dom'
 const RequireAuth = ({allowedroles}) => {
     const auth = useSelector(store => store.auth);
     const location = useLocation();
-    console.log(allowedroles,auth.role)
+    //console.log(allowedroles,auth.role)
   return (
     <>  {
         

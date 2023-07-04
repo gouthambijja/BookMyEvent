@@ -39,7 +39,7 @@ const TicketServices = () => {
   };
 
   const getEventTickets = async (eventId) => {
-    console.log(eventId);
+    //console.log(eventId);
     const response = await Axios.get(`${apiBase}/getEventTickets?eventId=${eventId}`,
     {
         headers: { "Content-Type": "application/json" },

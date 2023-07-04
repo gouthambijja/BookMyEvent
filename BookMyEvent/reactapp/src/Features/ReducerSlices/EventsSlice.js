@@ -364,7 +364,7 @@ let eventsSlice = createSlice({
         });
         builder.addCase(createEvent.fulfilled, (state, action) => {
             state.loading = false;
-            console.log(action.payload);
+            //console.log(action.payload);
             if (action.payload.acceptedBy === null) {
                 if(state.eventRequests.length != 0)
                 state.eventRequests = [...state.eventRequests,action.payload];
@@ -417,13 +417,13 @@ let eventsSlice = createSlice({
         });
         builder.addCase(updateEvent.fulfilled, (state, action) => {
             let index = state.myEvents.findIndex((event) => event.eventId === action.payload.eventId);
-            console.log(action.payload);
-            console.log(index);
+            //console.log(action.payload);
+            //console.log(index);
 
             if (index !== -1) {
                 state.myEvents[index]=action.payload;
                 
-                console.log("inside reducer")
+                //console.log("inside reducer")
             };
             index = state.organisationEvents.findIndex((event) => event.eventId === action.payload.eventId);
             if (index !== -1) {
@@ -445,8 +445,8 @@ let eventsSlice = createSlice({
         });
         builder.addCase(acceptEvent.fulfilled, (state, action) => {
             let index = state.eventRequests.findIndex((event) => event.eventId === action.payload.eventId);
-            console.log(action.payload)
-            console.log(index)
+            //console.log(action.payload)
+            //console.log(index)
             if (index !== -1) {
                 state.eventRequests.splice(index,1);
                 if(state.organisationEvents.length != 0){

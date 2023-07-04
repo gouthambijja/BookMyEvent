@@ -28,15 +28,15 @@ const InfiniteMyPastEvents = () => {
         const viewportHeight = window.innerHeight;
         if (scrollPosition + viewportHeight >= contentHeight - 100 && !store.getState().events.loading && !store.getState().events.myPastEventsEnd) {
             await dispatch(fetchOrganiserPastEvents({...paginationDetails,pageNumber:store.getState().events.myPastEventsPageNo})).unwrap();
-            console.log(store.getState().events.myPastEvents)
-            console.log(events)
+            //console.log(store.getState().events.myPastEvents)
+            //console.log(events)
         }
     };
 
     useEffect(() => {
       
         LoadEventOnPageEnd();
-        console.log("I am in my past events");
+        //console.log("I am in my past events");
       
     }, []);
     useEffect(() => {

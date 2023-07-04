@@ -148,7 +148,7 @@ const SingleEventPage = () => {
       <Box  className={classes.eventBox} sx={{ marginTop: "-84px" }}>
         <div
           className={"singleEventPageBg"}
-          style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+          style={{ display: "flex", flexWrap: "wrap", gap: "10px" ,paddingBottom:'20px'}}
         >
           <Box sx={{ flexBasis: "100%", color: "#fff", zIndex: "30",background:'rgba(0,0,0,0.2)' }}>
             <Typography variant="h2" component="div">

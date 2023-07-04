@@ -14,7 +14,7 @@ const UserTickets = () => {
         const loadTickets = async () => {
           
             const _tickets = await TicketServices().getAllUserEventTickets(auth.id, eventId);
-            console.log(_tickets);
+            //console.log(_tickets);
             setTickets(_tickets);
         }
         loadTickets();
@@ -24,7 +24,7 @@ const UserTickets = () => {
     useEffect(() => {
       const loadevent = async () => {
         const Event = await EventServices().getEventById(eventId);
-        console.log(Event);
+        //console.log(Event);
         setEvent(Event);
       };
       loadevent();

@@ -5,7 +5,7 @@ import OwnerRequests from './OwnerRequests';
 const AdminHomePage = () => {
 const [fakeString,setFakeString] = useState(['hey']);
 const admin = useSelector(store => store.profile.info)
-console.log(admin);
+//console.log(admin);
  
   return (
     <OwnerRequests/>

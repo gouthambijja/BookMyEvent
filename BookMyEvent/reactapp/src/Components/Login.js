@@ -106,7 +106,7 @@ const Login = () => {
   };
 
   const HandleSubmit = async (e) => {
-    console.log(role);
+    //console.log(role);
     e.preventDefault();
     dispatch(setLoading(true));
     try {
@@ -114,7 +114,7 @@ const Login = () => {
         await dispatch(loginThunk([role, formData])).unwrap();
         await dispatch(getAdminByIdThunk(store.getState().auth.id)).unwrap();
       } else if (role === "Organiser") {
-        console.log(formData);
+        //console.log(formData);
         await dispatch(loginThunk([role, formData])).unwrap();
         await dispatch(
           getOrganiserByIdThunk(store.getState().auth.id)
@@ -124,7 +124,7 @@ const Login = () => {
         await dispatch(getUserByIdThunk(store.getState().auth.id)).unwrap();
       }
       setPersist();
-      console.log(from);
+      //console.log(from);
       toast.success("Login Successful!");
       navigate(from);
     } catch {
@@ -159,7 +159,7 @@ const Login = () => {
     return hashHex;
   }
   const handleGoogleLogin = async (credentialResponse) => {
-    console.log(credentialResponse);
+    //console.log(credentialResponse);
     const hash = await hashPassword(credentialResponse.sub);
     try {
       await dispatch(
@@ -261,7 +261,7 @@ const Login = () => {
                       );
                     }}
                     onError={() => {
-                      console.log("Login Failed");
+                      //console.log("Login Failed");
                     }}
                   />
                 </div>

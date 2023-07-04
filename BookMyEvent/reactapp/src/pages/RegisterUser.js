@@ -137,7 +137,7 @@ const RegisterUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("before post call " + formData);
+    //console.log("before post call " + formData);
     const _formData = new FormData();
     _formData.append("Name", formData.Name);
     _formData.append("email", formData.Email);
@@ -149,9 +149,9 @@ const RegisterUser = () => {
     _formData.append("isActive", true);
     _formData.append("password", formData.Password);
     _formData.append("imgBody", formData.ImgBody);
-    console.log(_formData);
+    //console.log(_formData);
     const data = await userServices().registerUser(_formData);
-    console.log("after call " + data);
+    //console.log("after call " + data);
     setFormData({
       Name: "",
       UserAddress: "",
@@ -187,7 +187,7 @@ const RegisterUser = () => {
         return;
       } 
     const credentials = jwtDecode(credentialResponse.credential);
-    console.log(credentials);
+    //console.log(credentials);
     const hash = await hashPassword(credentials.sub);
     const formData = {
       GoogleId: hash,
@@ -195,7 +195,7 @@ const RegisterUser = () => {
       Email: credentials.email,
       ImageName: credentials.picture,
     };
-    console.log(formData);
+    //console.log(formData);
     const data = await userServices().GoogleSignUp(formData);
     if (data.Item1) {
       toast.success("Registration success!");

@@ -2,7 +2,7 @@ import Axios from "../Api/Axios";
 import AxiosPrivate from "../Hooks/AxiosPrivate";
 
 const UserServices = () => {
-    console.log("hey");
+    //console.log("hey");
     const axiosPrivate = AxiosPrivate();
     const getUserById = async (id) => {
         const response = await axiosPrivate.get(`api/User/${id}`, {
@@ -33,7 +33,7 @@ const UserServices = () => {
         return response.data;
     };
     const loginUser = async (formData) => {
-        console.log("hey");
+        //console.log("hey");
         const response = await Axios.post(
             "api/User/login",
             formData,

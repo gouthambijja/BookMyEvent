@@ -73,13 +73,13 @@ const EventForm = () => {
   const handleProfileImage = async (e) => {
     const file = e.target.files[0];
     setProfileImage(file);
-    console.log(profileImage);
+    //console.log(profileImage);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(eventData);
-    console.log(profileImage);
-    console.log(images);
+    //console.log(eventData);
+    //console.log(profileImage);
+    //console.log(images);
     const _formData = new FormData();
     _formData.append("EventName", eventData.EventName);
     _formData.append("StartDate", eventData.StartDate);
@@ -124,12 +124,12 @@ const EventForm = () => {
     }
     try {
       var resp= await dispatch(createEvent(_formData)).unwrap();
-      console.log(resp);
+      //console.log(resp);
  
       dispatch(resetEventData());
       navigate("/organiser");
     } catch {
-      console.log("event Form Registration Failed");
+      //console.log("event Form Registration Failed");
     }
     // const res = await EventServices.addNewEvent(_formData);
   };
@@ -168,7 +168,7 @@ const EventForm = () => {
       setSelectedCity(value);
     }
     dispatch(setEventData({ checked, value, name, type }));
-    console.log(eventData);
+    //console.log(eventData);
   };
   const [EventCategory, SetEventCategory] = useState("");
   const [SelectedCountry, setSelectedCountry] = useState("");

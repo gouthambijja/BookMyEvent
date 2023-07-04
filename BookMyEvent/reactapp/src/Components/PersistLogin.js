@@ -13,7 +13,7 @@ const PersistLogin = () => {
         let isMounted = true;
         const verifyRefreshToken = async () => {
             try {
-                console.log('hey');
+                //console.log('hey');
                 await refresh();
             }
             catch (err) {
@@ -32,8 +32,8 @@ const PersistLogin = () => {
     }, [])
 
     useEffect(() => {
-        console.log(`isLoading: ${isLoading}`)
-        console.log(`aT: ${JSON.stringify(auth?.accessToken)}`)
+        //console.log(`isLoading: ${isLoading}`)
+        //console.log(`aT: ${JSON.stringify(auth?.accessToken)}`)
     }, [isLoading])
 
     return (

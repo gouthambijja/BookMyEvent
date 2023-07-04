@@ -75,7 +75,7 @@ const homeEventsSlice = createSlice({
         },
         IncrementHomePageNumber:(state,action) =>{
             state.page = state.page + 1;
-            console.log(state.page);
+            //console.log(state.page);
         },
         SetPageNumber:(state,action) =>{
             state.page = action.payload;

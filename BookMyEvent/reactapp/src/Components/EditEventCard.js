@@ -59,9 +59,9 @@ const EditEventCard = () => {
     const [SelectedCity, setSelectedCity] = useState("");
     let count = 1;
 
-    console.log(event);
+    //console.log(event);
     const [eventData, setEventData] = useState({});
-    console.log(eventData);
+    //console.log(eventData);
 
     const handleChange = (e) => {
         let { name, value, type, checked } = e.target;
@@ -110,28 +110,28 @@ const EditEventCard = () => {
     }
     const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log(eventData);
+        //console.log(eventData);
        await dispatch(updateEvent(eventData));
        toast.success("Event Edited Successfully!")
         navigate(-1);
     }
     useEffect(() => {
         const temp = async () => {
-            console.log("inside temp")
+            //console.log("inside temp")
             if (event == undefined) {
                 const event = await eventsServices().getEventById(id);
                 setEvent(event);
             }
         }
-        console.log("inside edit use effect")
+        //console.log("inside edit use effect")
         temp();
         
         if (event) {
-            console.log(event?.categoryId);
+            //console.log(event?.categoryId);
          
 
             let catName = categoryOptions.find((e) => e.categoryId == event?.categoryId).categoryName;
-            console.log(catName);
+            //console.log(catName);
             SetEventCategory(catName);
             setSelectedCountry(event?.country);
             
