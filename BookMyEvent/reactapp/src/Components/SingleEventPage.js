@@ -168,7 +168,7 @@ const SingleEventPage = () => {
             className={`${classes.category} ${classes.hoverEffect}`}
           >
             <span className={classes.heading}> Category:</span>
-            {categories.categories[Number(event?.categoryId)]?.categoryName}
+            {categories.categories.find(e => e.categoryId == Number(event?.categoryId)).categoryName}
           </Typography>
           <Typography
             variant="h6"
@@ -246,7 +246,7 @@ const SingleEventPage = () => {
               borderRadius: "30px",
               "&:hover": { letterSpacing: "3px" },
             }}
-            disabled = {event?.registrationStatusId==1?true:false}
+            disabled = {event?.registrationStatusId==1 || event?.availableSeats == 0?true:false}
           >
             Register
           </Button>

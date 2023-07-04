@@ -57,8 +57,7 @@ const EventCard = ({ event }) => {
                   }}
                 >
                   {
-                    categories.categories[Number(event.categoryId)]
-                      ?.categoryName
+                    categories?.categories?.find(e => e.categoryId == Number(event?.categoryId)).categoryName
                   }
                 </div>
               </Typography>
@@ -103,7 +102,7 @@ const EventCard = ({ event }) => {
           color="primary"
           sx={{ padding: "10px" }}
           onClick={handleEventRegister}
-          disabled = {event.registrationStatusId==1?true:false}
+          disabled = {event.registrationStatusId==1 || event.availableSeats == 0?true:false}
         >
           Register 
         </Button>
