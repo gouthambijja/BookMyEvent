@@ -168,7 +168,7 @@ const SingleEventPage = () => {
             className={`${classes.category} ${classes.hoverEffect}`}
           >
             <span className={classes.heading}> Category:</span>
-            {categories.categories.find(e => e.categoryId == Number(event?.categoryId)).categoryName}
+            {categories?.categories?.find(e => e.categoryId == Number(event?.categoryId))?.categoryName}
           </Typography>
           <Typography
             variant="h6"
