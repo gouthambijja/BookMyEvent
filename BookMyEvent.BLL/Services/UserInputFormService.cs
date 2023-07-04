@@ -15,11 +15,13 @@ namespace BookMyEvent.BLL.Services
     {
         private readonly IUserInputFormRepository _userInputForm;
         private readonly IUserInputFormFieldsRepository _userInputFormField;
+        private readonly IEventServices _eventServices;
 
-        public UserInputFormService(IUserInputFormRepository userInputForm, IUserInputFormFieldsRepository userInputFormField)
+        public UserInputFormService(IUserInputFormRepository userInputForm, IUserInputFormFieldsRepository userInputFormField,IEventServices eventServices)
         {
             _userInputForm = userInputForm;
             _userInputFormField = userInputFormField;
+            _eventServices = eventServices;
         }
 
         public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm(List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
@@ -28,7 +30,9 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> newFormsBL = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>();
+                
                 int totalForms = userForms.Count;
+                var EventId = userForms[0].userInputForm.EventId;
                 var mapper = Automapper.InitializeAutomapper();
                 for (int i = 0; i < totalForms; i++)
                 {
@@ -61,6 +65,17 @@ namespace BookMyEvent.BLL.Services
                     BLNewSingleForm.userInputForm = newUserInputFormBL;
                     BLNewSingleForm.UserInputFormFields = BLNewUserInputFormFields;
                     newFormsBL.Add(BLNewSingleForm);
+                }
+                if (newFormsBL.Count > 0)
+                {
+                    try
+                    {
+                        var isSuccess = await _eventServices.UpdateEventAvailableSeats((Guid)EventId, newFormsBL.Count);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
                 }
                 return newFormsBL;
             }

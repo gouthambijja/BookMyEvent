@@ -243,17 +243,7 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-        //public async Task<List<BLEvent>> GetAllActivePublishedEventsByMode(bool isOffline)
-        //{
-        //    try
-        //    {
-        //        return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByMode(isOffline));
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
+        
         public async Task<List<BLEvent>> GetAllActivePublishedIsFreeEvents(bool isFree)
         {
             try
@@ -460,6 +450,26 @@ namespace BookMyEvent.BLL.Services
             catch
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> UpdateEventAvailableSeats(Guid eventId, int availableSeats)
+        {
+            try
+            {
+               var isSuccess =  await eventRepository.UpdateEventAvailableSeats(eventId, availableSeats);
+                if(isSuccess)
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+                throw new Exception();
             }
         }
     }

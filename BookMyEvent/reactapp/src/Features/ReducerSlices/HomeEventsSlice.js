@@ -3,15 +3,15 @@ import eventsServices from "../../Services/EventServices";
 import TransationServices from "../../Services/TransationServices";
 
 export const fetchEvents = createAsyncThunk(
-    "homeEvents/fetchEvents",
-    async (filters, { rejectWithValue }) => {
-        try {
-            const response = await eventsServices().getFilteredEvents(filters);
-            return response;
-        } catch (error) {
-            return rejectWithValue(error.response);
-        }
+  "homeEvents/fetchEvents",
+  async (filters, { rejectWithValue }) => {
+    try {
+      const response = await eventsServices().getFilteredEvents(filters);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response);
     }
+  }
 );
 export const fetchUserRegisteredEventIds = createAsyncThunk(
     "homeEvents/RegisteredEventIds",
@@ -93,6 +93,21 @@ const homeEventsSlice = createSlice({
             if(state.AmountSpent !=0)
             state.AmountSpent=state.AmountSpent+action.payload;
         },
+        UpdateAvailableSeats: (state, action) => {
+            let eventsCpy = [...state.events];
+            eventsCpy = eventsCpy.map((e) => {
+                if (e.eventId == action.payload.eventId) {
+                    e.availableSeats =
+                        e.availableSeats == -1
+                            ? e.capacity - action.payload.availableSeats
+                            : e.availableSeats - action.payload.availableSeats;
+                    return e;
+                } else {
+                    return e;
+                }
+            });
+            state.events = eventsCpy;
+        },
 
     },
     extraReducers(builder) {
@@ -161,4 +176,4 @@ const homeEventsSlice = createSlice({
 });
 
 export default homeEventsSlice.reducer;
-export const {SetPageNumber, clearHomeEvents,IncrementHomePageNumber, clearErrorMsg, AddRegisteredEventId,UpdateNoOfTransactions,UpdateAmountSpent } = homeEventsSlice.actions;
+export const { SetPageNumber, clearHomeEvents, IncrementHomePageNumber, UpdateAvailableSeats,clearErrorMsg, AddRegisteredEventId,UpdateNoOfTransactions,UpdateAmountSpent } = homeEventsSlice.actions;

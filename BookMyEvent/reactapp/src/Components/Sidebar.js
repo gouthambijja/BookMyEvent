@@ -129,100 +129,101 @@ function Sidebar({ open, setOpen }) {
   };
   const handleProfile = async () => {
     if (auth.role == "Admin") {
-      navigate("/admin/profile");
       handleDrawerClose();
+      navigate("/admin/profile");
     } else if (
       auth.role == "Owner" ||
       auth.role == "Peer" ||
       auth.role == "Secondary_Owner"
     ) {
+      handleDrawerClose();
       navigate("/organiser/profile");
-      handleDrawerClose();
     } else {
-      navigate("/profile");
       handleDrawerClose();
+      navigate("/profile");
     }
     setActiveItem("profile");
   };
   const handleAdd = async () => {
+    handleDrawerClose();
     if (auth?.role == "Admin") navigate("/admin/addadmin");
     else navigate("/organiser/addSecondaryOwner");
     setActiveItem("addanother");
-    handleDrawerClose();
   };
   const handleRequests = async () => {
+    handleDrawerClose();
     if (auth?.role == "Admin") navigate("/admin/Requests");
 
-    handleDrawerClose();
   };
   const handleOrganisations = async () => {
+    handleDrawerClose();
     if (auth?.role == "Admin") navigate("/admin/Organisations");
     setActiveItem("organisations")
-    handleDrawerClose();
   };
   const handlePeerRequests = async () => {
+    handleDrawerClose();
     if (auth.role == "Owner" || auth.role == "Secondary_Owner")
       navigate("organiser/PeerRequests");
 
     setActiveItem("peerrequests");
-    handleDrawerClose();
   };
   const handleOrganiseEvent = async () => {
+    handleDrawerClose();
     navigate("/organiser/AddEvent");
     setActiveItem("createevent");
-    handleDrawerClose();
   };
   const handleOrganisationTree = async () => {
     const profile = store.getState().profile.info;
+    handleDrawerClose();
     navigate(`/organiser/OrganisationTree/${profile.organisationId}`);
     setActiveItem("orgTree");
-    handleDrawerClose();
   };
   const handleLogin = async () => {
+    handleDrawerClose();
     navigate("login");
     setActiveItem("login");
-    handleDrawerClose();
   };
   const handleGlobalHome= () => {
+    handleDrawerClose();
     navigate("/");
     setActiveItem("globalhome"); 
-    handleDrawerClose();
   };
   const handleOrganiseAnEvent = async () => {
+    handleDrawerClose();
     navigate("/organiser");
     setActiveItem("organiseanevent");
 
-    handleDrawerClose();
   };
 
   const handleMyPastEvents = async () => {
+    handleDrawerClose();
     navigate("/organiser/myPastEvents");
     setActiveItem("mypastevents")
-    handleDrawerClose();
   };
   const handleOrgPastEvents = async () => {
+    handleDrawerClose();
     navigate("/organiser/organisationPastEvents");
     setActiveItem("orgpastevents");
-    handleDrawerClose();
   };
 
   const handleEventRequests = async () => {
+    handleDrawerClose();
     navigate("/organiser/eventReq");
     setActiveItem("eventreq");
-    handleDrawerClose();
   };
 
   const handleOrganisationEvents = async () => {
+    handleDrawerClose();
     navigate("/organiser/organisationEvents");
     setActiveItem("orgevents");
-    handleDrawerClose();
   };
   const handleRegisteredEvents = async () => {
+    handleDrawerClose();
     navigate("/registeredEvents");
     setActiveItem("registeredevents");
-    handleDrawerClose();
   };
   const handleHome = async () => {
+    handleDrawerClose();
     if (auth.role == "User") {
       navigate("/");
     } else if (["Owner", "Secondary_Owner", "Peer"].includes(auth.role)) {
@@ -231,11 +232,10 @@ function Sidebar({ open, setOpen }) {
       navigate("/Admin");
     }
     setActiveItem("home");
-    handleDrawerClose();
   };
   const handleCategories = async() =>{
-    navigate("/Admin/categories")
     handleDrawerClose();
+    navigate("/Admin/categories")
   }
   return (
 

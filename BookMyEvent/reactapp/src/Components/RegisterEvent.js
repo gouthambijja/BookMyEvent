@@ -19,6 +19,7 @@ import UserInputFormServices from "../Services/UserInputFormServices";
 import Transactions from "./Transactions";
 import { toast } from "react-toastify";
 import { AddRegisteredEventId } from "../Features/ReducerSlices/HomeEventsSlice";
+import { UpdateAvailableSeats } from "../Features/ReducerSlices/HomeEventsSlice";
 
 const RegisterEvent = () => {
   const [eventRegistrationFormFields, setEventRegistrationFormFields] =
@@ -27,10 +28,9 @@ const RegisterEvent = () => {
   const [toggleRegistrationTransaction, setToggleRegistrationTransaction] =
     useState(true);
   const [RegisteredData, setRegisteredData] = useState();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   let fetchedFormFields = [];
   const { eventId, formId } = useParams();
-  const dispatch= useDispatch();
   const [TotalPrice, setTotalPrice] = useState(0);
   const FormFieldTypes = useSelector((store) => store.formFields.formFields);
   const [fieldRegistrationId, setFieldRegistrationId] = useState();
@@ -72,7 +72,6 @@ const RegisterEvent = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(fieldRegistrationId);
     e.preventDefault();
     let formResult = [];
     formData.forEach((e, index) => {
@@ -109,30 +108,28 @@ const RegisterEvent = () => {
       }
       formResult.push(formFieldResponse);
     });
-    console.log(formResult);
-    console.log(formData);
     let formResultPost = [];
     for (let i = 0; i < eventRegistrationFormFields.length; i++) {
       formResultPost.push({
         ["userInputFormBL"]: {
-          // ["userInputFormId"]: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           ["userId"]: store.getState().auth.id,
           ["eventId"]: event.eventId,
         },
         ["userInputFormFields"]: formResult[i],
       });
     }
-    console.log(formResultPost);
     setRegisteredData(
       await UserInputFormServices().submitUserInputForm(formResultPost)
     );
     dispatch(AddRegisteredEventId(event.eventId));
+    dispatch(UpdateAvailableSeats({eventId:eventId,availableSeats:eventRegistrationFormFields.length}));
     setToggleRegistrationTransaction(false);
   };
   const handleAddPerson = () => {
+    if(Number.parseInt(event.availableSeats == -1?event.capacity:event.availableSeats)>(Number.parseInt(eventRegistrationFormFields.length))){
     if (
-      eventRegistrationFormFields.length < event.maxNoOfTicketsPerTransaction
-    ) {
+      eventRegistrationFormFields.length < event.maxNoOfTicketsPerTransaction ) 
+       {
       setEventRegistrationFormFields([
         ...eventRegistrationFormFields,
         [...eventRegistrationFormFields[0]],
@@ -140,6 +137,9 @@ const RegisterEvent = () => {
       console.log(eventRegistrationFormFields);
     } else {
       toast.warning(`Per transaction you can register max of ${event.maxNoOfTicketsPerTransaction} tickets only`)
+    }}
+    else{
+      toast.warning(`No seats Available`)
     }
   };
   const handleRemove = (index) => {

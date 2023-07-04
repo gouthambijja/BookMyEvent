@@ -398,6 +398,13 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="eventIds"></param>
         /// <returns>returns a list of events</returns>
         Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds);
+        /// <summary>
+        /// Updates the available seats Property of the Event class
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="availableSeats"></param>
+        /// <returns></returns>
+        Task<bool> UpdateEventAvailableSeats(Guid eventId,int availableSeats);
 
         Task<int> GetOrganiserTotalNoOfPastEvents(Guid organiserId);
         Task<int> GetOrganisationTotalNoOfPastEvents(Guid organisationId);

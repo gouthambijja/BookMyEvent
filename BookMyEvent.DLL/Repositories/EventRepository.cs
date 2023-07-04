@@ -617,5 +617,34 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
+
+        public async Task<bool> UpdateEventAvailableSeats(Guid eventId, int availableSeats)
+        {
+            try
+            {
+                var _event = await _db.Events.FindAsync(eventId);
+                if (_event != null)
+                {
+                    if(_event.AvailableSeats == -1) {
+                        _event.AvailableSeats = _event.Capacity;
+                    }
+                    if (_event.AvailableSeats > 0)
+                    {
+                        _event.AvailableSeats -= availableSeats;
+                        _db.SaveChangesAsync();
+                        return true;
+                    }
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
-}
+    }

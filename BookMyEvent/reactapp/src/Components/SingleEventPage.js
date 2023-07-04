@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
   category: {
     marginBottom: "10px",
-    flexBasis: "100%",
+    flexBasis: "80%",
     padding: theme.spacing(2),
   },
   hoverEffect: {
@@ -219,7 +219,7 @@ const SingleEventPage = () => {
           >
             {" "}
             <span className={classes.heading}>Seats Available:</span>
-            {event?.availableSeats}
+            {event?.availableSeats == -1 ? event?.capacity :event?.availableSeats}
           </Typography>
           <Typography
             variant="h6"
@@ -235,7 +235,7 @@ const SingleEventPage = () => {
             component="span"
             className={`${classes.category} ${classes.hoverEffect}`}
           >
-            {(event?.registrationStatusId == 1 )?<span>registrations opening soon</span>:<></>}
+            {(event?.registrationStatusId == 1 )?<span>registrations opening soon...</span>:<></>}
           </Typography>
 
           <Button
@@ -246,7 +246,7 @@ const SingleEventPage = () => {
               borderRadius: "30px",
               "&:hover": { letterSpacing: "3px" },
             }}
-            disabled = {event.registrationStatusId==1?true:false}
+            disabled = {event?.registrationStatusId==1?true:false}
           >
             Register
           </Button>

@@ -89,6 +89,10 @@ const EventCard = ({ event }) => {
                   `Ticket price starts from ₹${event.eventStartingPrice}/- `
                 )}
               </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                {event.registrationStatusId == 1?"Registration starts soon....":`Available Seats :${(event.availableSeats == -1)?event.capacity:event.availableSeats}`}
+              </Typography>
+
             </div>
           </CardContent>
         </div>

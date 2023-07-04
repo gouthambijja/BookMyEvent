@@ -131,7 +131,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.HasKey(e => e.EventId).HasName("PK__Events__7944C81054279AF9");
 
             entity.Property(e => e.EventId).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.AvailableSeats).HasComputedColumnSql("([Capacity])", false);
+            entity.Property(e => e.AvailableSeats).HasDefaultValueSql("((-1))");
             entity.Property(e => e.CreatedOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

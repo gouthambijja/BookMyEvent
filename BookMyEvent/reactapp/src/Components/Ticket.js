@@ -46,7 +46,7 @@ const Ticket = ({ ticket }) => {
                 ))}
               </div>
               <div style={{padding:'10px'}}>
-                <QRCodeGenerator data={JSON.stringify(tkt.ticket)} />
+                <QRCodeGenerator data={JSON.stringify(tkt?.ticket)} />
               </div>
             </section>
           </article>

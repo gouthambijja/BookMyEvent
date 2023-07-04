@@ -24,7 +24,6 @@ namespace BookMyEvent.WebApi.Controllers
         /// <returns>List of User form fields and those values</returns>
         [HttpPost("submitform")]
         public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm> InputUserForms)
-        //public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm([FromBody] List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
         {
             try
             {
@@ -47,6 +46,7 @@ namespace BookMyEvent.WebApi.Controllers
                     _form.UserInputFormFields=form.userInputFormFields;
                     newInputUserForm.Add(_form);
                 }
+
                 return Ok(newInputUserForm);
             }
             catch

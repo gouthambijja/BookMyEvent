@@ -30,6 +30,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return NotFound();
             }
         }
+        /// <summary>
+        /// Method to add new event category 
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post(BLEventCategory? category)
         {
@@ -47,6 +52,11 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest();
             }
         }   
+        /// <summary>
+        /// Method to update event Category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> Put(BLEventCategory? category)
         {
