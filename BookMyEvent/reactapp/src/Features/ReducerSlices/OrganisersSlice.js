@@ -17,7 +17,7 @@ export const fetchRequestedOwners = createAsyncThunk(
 
 export const fetchRequestedPeers = createAsyncThunk(
     "organisers/fetchRequestedPeers",
-    async(organisationId, { rejectWithValue }) => {
+    async (organisationId, { rejectWithValue }) => {
         try {
             const response = await orgServices().getRequestedPeers(organisationId);
             return response;
@@ -47,10 +47,10 @@ export const acceptOrganiser = createAsyncThunk(
     async (organiser, { rejectWithValue }) => {
         try {
             const response = await orgServices().acceptOrganiser(organiser);
-           if(response) {
-               return organiser;
-           }
-          
+            if (response) {
+                return organiser;
+            }
+
         }
         catch (error) {
             return rejectWithValue(error.response.data);
@@ -80,6 +80,19 @@ export const createOrganiser = createAsyncThunk(
         try {
             const response = await orgServices().createOrganiser(organiser);
             return response;
+        }
+        catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const blockOrganiser = createAsyncThunk(
+    "organisers/blockOrganiser",
+    async (details, { rejectWithValue }) => {
+        try {
+            const response = await orgServices().deleteOrganiser(details.id, details.deletedById);
+            return details;
         }
         catch (error) {
             return rejectWithValue(error.response.data);
@@ -135,7 +148,7 @@ const organisersSlice = createSlice({
             state.loading = false;
             state.error = true
             state.message = payload;
-        }); 
+        });
         builder.addCase(fetchOrganisationOrganisers.pending, (state) => {
             state.loading = true;
         });
@@ -153,12 +166,12 @@ const organisersSlice = createSlice({
         builder.addCase(acceptOrganiser.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(acceptOrganiser.fulfilled, (state, action ) => {
+        builder.addCase(acceptOrganiser.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
-            const index=state.requestedOrganisers.findIndex((e)=>e.administratorId===action.payload.administratorId);
-            if(index !== -1){
-                state.requestedOrganisers.splice(index,1);
+            const index = state.requestedOrganisers.findIndex((e) => e.administratorId === action.payload.administratorId);
+            if (index !== -1) {
+                state.requestedOrganisers.splice(index, 1);
                 state.myOrganisationOrganisers.push(action.payload);
             }
             //need to write the code to remove the organiser from the requested table and move it to organisation list
@@ -175,9 +188,9 @@ const organisersSlice = createSlice({
         builder.addCase(rejectOrganiser.fulfilled, (state, action) => {
             state.loading = false;
             state.error = false;
-            const index=state.requestedOrganisers.findIndex((e)=>e.administratorId===action.payload.administratorId);
-            if(index !== -1){
-                state.requestedOrganisers.splice(index,1);
+            const index = state.requestedOrganisers.findIndex((e) => e.administratorId === action.payload.administratorId);
+            if (index !== -1) {
+                state.requestedOrganisers.splice(index, 1);
             }
             state.message = "Organiser rejected successfully";
         });
@@ -196,6 +209,24 @@ const organisersSlice = createSlice({
             state.message = "Organiser created successfully";
         });
         builder.addCase(createOrganiser.rejected, (state, { payload }) => {
+            state.loading = false;
+            state.error = true
+            state.message = payload;
+        });
+
+        builder.addCase(blockOrganiser.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(blockOrganiser.fulfilled, (state, { payload }) => {
+            state.loading = false;
+            state.error = false;
+            const index = state.myOrganisationOrganisers.findIndex((e) => e.administratorId === payload.id);
+            if (index !== -1) {
+                state.myOrganisationOrganisers.splice(index, 1);
+            }
+            state.message = "Organiser blocked successfully";
+        });
+        builder.addCase(blockOrganiser.rejected, (state, { payload }) => {
             state.loading = false;
             state.error = true
             state.message = payload;

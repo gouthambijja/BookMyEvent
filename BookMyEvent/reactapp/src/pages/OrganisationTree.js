@@ -8,10 +8,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import store from "../App/store";
 import { RotateLeftOutlined } from '@material-ui/icons';
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
-import { fetchOrganisationOrganisers, clearMyOrganisers } from "../Features/ReducerSlices/OrganisersSlice";
+import { fetchOrganisationOrganisers, clearMyOrganisers, blockOrganiser } from "../Features/ReducerSlices/OrganisersSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import ConfirmationDialog from '../Components/ConfirmationDialog';
-
+import { toast } from 'react-toastify';
 const useStyles = makeStyles({
     root: {
         // width: '100%',
@@ -133,7 +133,10 @@ const OrganisationTree = () => {
 
     const handleConfirm = async () => {
         //dispatch();
+        let temp = { id: selectedUser.administratorId, deletedById: profile.administratorId };
+        await dispatch(blockOrganiser(temp));
         setOpenDialog(false);
+        toast.success("Blocked Successfully");
         //setBlock(!block);
     };
 

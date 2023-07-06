@@ -445,7 +445,7 @@ namespace BookMyEvent.DLL.Repositories
                 if (administrator != null)
                 {
 
-                    administrator.AcceptedBy = deletedByUserId;
+                    administrator.DeletedBy = deletedByUserId;
                     administrator.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
                     return true;

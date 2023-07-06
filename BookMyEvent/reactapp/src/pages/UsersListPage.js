@@ -1,8 +1,9 @@
-import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
+import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, InputLabel, MenuItem, FormControl, Select } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import UserServices from '../Services/UserServices';
 import ConfirmationDialog from '../Components/ConfirmationDialog';
+import { toast } from 'react-toastify';
 
 const UserListPage = () => {
     const [openDialog, setOpenDialog] = useState(false);
@@ -41,6 +42,15 @@ const UserListPage = () => {
         var updatedUser = await UserServices().blockUser(selectedUser.userId, profile.administratorId);
         var updatedUsersList = users.filter(x => x.userId !== updatedUser.userId);
         setUsers(updatedUsersList);
+        if (selectedUser.isActive)
+            toast.success('Blocked Successfully', {
+                position: toast.POSITION.BOTTOM_RIGHT
+            });
+        else {
+            toast.success('Unblocked Successfully', {
+                position: toast.POSITION.BOTTOM_RIGHT
+            });
+        }
     };
 
     const handleBlockUnblock = async (user) => {
@@ -88,7 +98,7 @@ const UserListPage = () => {
                         <Select
                             labelId="isActive"
                             id="isActive"
-                            name = "isActive"
+                            name="isActive"
                             value={filters.isActive}
                             label="Status"
                             onChange={handleFilterChange}

@@ -64,7 +64,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                if (await _administrationRepository.UpdateDeletedByAndIsActive(administratorId, blockedBy))
+                if (await _administrationRepository.UpdateDeletedByAndIsActive( blockedBy, administratorId))
                 {
                     return (true, "Organiser Blocked");
                 }
