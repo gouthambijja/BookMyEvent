@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -395,26 +396,17 @@ namespace BookMyEvent.BLL.Services
                 throw new Exception("Failed to fetch past events.", ex);
             }
         }
-        public async Task<int> GetNoOfPastEventsByOrganiser(Guid organiserId)
+        public async Task<(int NoOfOrganiserPastEvents, int NoOfOrganisationPastEvents)> GetNoOfPastEvents(Guid organiserId,Guid organisationId)
         {
             try
             {
-                return await eventRepository.GetOrganiserTotalNoOfPastEvents(organiserId);
+                int organiserPastEvents = await eventRepository.GetOrganiserTotalNoOfPastEvents(organiserId);
+                int organisationPastEvents = await eventRepository.GetOrganisationTotalNoOfPastEvents(organisationId);
+                return (organiserPastEvents, organisationPastEvents);
             }
             catch
             {
-                return 0;
-            }
-        }
-        public async Task<int> GetNoOfPastEventsByOrganisation(Guid organisationId)
-        {
-            try
-            {
-                return await eventRepository.GetOrganisationTotalNoOfPastEvents(organisationId);
-            }
-            catch
-            {
-                return 0;
+                return (0,0);
             }
         }
         public async Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId)

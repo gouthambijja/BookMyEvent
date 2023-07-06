@@ -13,41 +13,18 @@ export const fetchEvents = createAsyncThunk(
     }
   }
 );
-export const fetchUserRegisteredEventIds = createAsyncThunk(
-    "homeEvents/RegisteredEventIds",
+export const fetchUserInfoByUserId = createAsyncThunk(
+    "homeEvents/fetchuserInfoByUserid",
     async (userId,{rejectWithValue})=>{
         try{
-            const response= await TransationServices().getAllRegisteredEventIdsByUserid(userId);
+            const response= await TransationServices().getUserInfoByUserid(userId);
+            console.log(response)
             return response;
         } catch (error) {
             return rejectWithValue(error.response);
         }
     }
 )
-export const fetchNoOfRegisteredTransactions = createAsyncThunk(
-    "homeEvents/getNoOfTransactionsByUserid",
-    async (userId,{rejectWithValue})=>{
-        try{
-            const response= await TransationServices().getNoOfTransactionsByUserid(userId);
-            return response;
-        } catch (error) {
-            return rejectWithValue(error.response);
-        }
-    }
-)
-
-export const fetchAmountByUserId = createAsyncThunk(
-    "homeEvents/getAmountByUserid",
-    async (userId,{rejectWithValue})=>{
-        try{
-            const response= await TransationServices().getAmountByUserid(userId);
-            return response;
-        } catch (error) {
-            return rejectWithValue(error.response);
-        }
-    }
-)
-
 const homeEventsSlice = createSlice({
     name: "homeEvents",
     initialState: {
@@ -127,47 +104,19 @@ const homeEventsSlice = createSlice({
             state.error = true;
             state.message = action.payload.message;
         });
-        builder.addCase(fetchUserRegisteredEventIds.pending, (state) => {
+        builder.addCase(fetchUserInfoByUserId.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(fetchUserRegisteredEventIds.fulfilled, (state, action) => {
-            
+        builder.addCase(fetchUserInfoByUserId.fulfilled, (state, action) => {
+            console.log(action.payload);
             state.loading = false;
-            state.registeredEventIds=action.payload;
+            state.AmountSpent=action.payload.amount;
+            state.NoOfTransactions=action.payload.noOfTransactions;
+            state.registeredEventIds=action.payload.registeredEventIds;
             state.error = false;
             state.message = "fetched successfully";
         });
-        builder.addCase(fetchUserRegisteredEventIds.rejected, (state, action) => {
-            state.loading = false;
-            state.error = true;
-            state.message = action.payload.message;
-        });
-        builder.addCase(fetchNoOfRegisteredTransactions.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(fetchNoOfRegisteredTransactions.fulfilled, (state, action) => {
-            
-            state.loading = false;
-            state.NoOfTransactions=action.payload;
-            state.error = false;
-            state.message = "fetched successfully";
-        });
-        builder.addCase(fetchNoOfRegisteredTransactions.rejected, (state, action) => {
-            state.loading = false;
-            state.error = true;
-            state.message = action.payload.message;
-        });
-        builder.addCase(fetchAmountByUserId.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(fetchAmountByUserId.fulfilled, (state, action) => {
-            
-            state.loading = false;
-            state.AmountSpent=action.payload;
-            state.error = false;
-            state.message = "fetched successfully";
-        });
-        builder.addCase(fetchAmountByUserId.rejected, (state, action) => {
+        builder.addCase(fetchUserInfoByUserId.rejected, (state, action) => {
             state.loading = false;
             state.error = true;
             state.message = action.payload.message;

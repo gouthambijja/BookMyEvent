@@ -158,26 +158,13 @@ export const fetchOrganiserPastEvents = createAsyncThunk(
         }
     }
 );
-export const fetchOrganiserNoOfPastEvents = createAsyncThunk(
-    "events/fetchOrganiserNoOfPastEvents",
-    async (organiserId, { rejectWithValue }) => {
+export const fetchNoOfPastEvents = createAsyncThunk(
+    "events/fetchNoOfPastEvents",
+    async (OrganiserInfo, { rejectWithValue }) => {
         try {
             
-            const response = await eventServices().getOrganiserNoOfPastEvents(organiserId);
-            return response;
-        }
-        catch (error) {
-            return rejectWithValue(error.response);
-        }
-    }
-);
-
-export const fetchOrganisationNoOfPastEvents = createAsyncThunk(
-    "events/fetchOrganisationNoOfPastEvents",
-    async (organisationId, { rejectWithValue }) => {
-        try {
-            
-            const response = await eventServices().getOrganisationNoOfPastEvents(organisationId);
+            const response = await eventServices().getNoOfPastEvents(OrganiserInfo.organiserId,OrganiserInfo.organisationId);
+            console.log(response);
             return response;
         }
         catch (error) {
@@ -606,38 +593,22 @@ let eventsSlice = createSlice({
             state.error = true;
             state.message = action.payload;
         });
-        builder.addCase(fetchOrganiserNoOfPastEvents.pending, (state) => {
+        builder.addCase(fetchNoOfPastEvents.pending, (state) => {
             state.loading = true;
             state.error = false;
             state.message = "";
         });
-        builder.addCase(fetchOrganiserNoOfPastEvents.fulfilled, (state, action) => {
+        builder.addCase(fetchNoOfPastEvents.fulfilled, (state, action) => {
            
             state.loading = false;
             state.error = false;
             state.message = "Successfully fetched my past events";
-            state.organiserNoOfPastEvents=action.payload;
+            state.organisationNoOfPastEvents=action.payload.organisationEvents;
+            state.organiserNoOfPastEvents=action.payload.organiserEvents;
+
             // state.myPastEventsPageNo = state.myPastEventsPageNo + 1;
         });
-        builder.addCase(fetchOrganiserNoOfPastEvents.rejected, (state, action) => {
-            state.loading = false;
-            state.error = true;
-            state.message = action.payload;
-        });
-        builder.addCase(fetchOrganisationNoOfPastEvents.pending, (state) => {
-            state.loading = true;
-            state.error = false;
-            state.message = "";
-        });
-        builder.addCase(fetchOrganisationNoOfPastEvents.fulfilled, (state, action) => {
-           
-            state.loading = false;
-            state.error = false;
-            state.message = "Successfully fetched my past events";
-            state.organisationNoOfPastEvents=action.payload;
-            // state.myPastEventsPageNo = state.myPastEventsPageNo + 1;
-        });
-        builder.addCase(fetchOrganisationNoOfPastEvents.rejected, (state, action) => {
+        builder.addCase(fetchNoOfPastEvents.rejected, (state, action) => {
             state.loading = false;
             state.error = true;
             state.message = action.payload;

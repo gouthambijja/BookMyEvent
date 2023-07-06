@@ -153,10 +153,11 @@ namespace BookMyEvent.BLL.Services
             {
                 var mapper = Automapper.InitializeAutomapper();
                 User user1 = mapper.Map<BLUser, User>(user);
-                await UserRepositoryDal.UpdateUser(user1);
-                return (user, "Updated");
+              var resp= await UserRepositoryDal.UpdateUser(user1);
+                return (mapper.Map<BLUser>(resp.Item1), resp.Item2);
+                
             }
-            return (new BLUser(), "Not Updated");
+            return (null, "Not Updated");
         }
 
         public async Task<(bool IsUserEmailExists, string Message)> IsUserAvailableWithEmail(string email)

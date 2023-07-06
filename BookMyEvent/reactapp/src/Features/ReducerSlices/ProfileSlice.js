@@ -25,6 +25,20 @@ export const getOrganiserByIdThunk = createAsyncThunk(
     return profile;
   }
 );
+export const updateOrganiserThunk = createAsyncThunk(
+  "Organiser/updateOrganiserProfile",
+  async (organiser) => {
+    const profile = await organiserServices().updateOrganiser(organiser);
+    return profile;
+  }
+);
+export const updateUserThunk = createAsyncThunk(
+  "Organiser/updateUserProfile",
+  async (user) => {
+    const profile = await UserServices().updateUserProfile(user);
+    return profile;
+  }
+);
 const ProfileInitialState = {
   info:{}
 };
@@ -40,6 +54,18 @@ const profileSlice = createSlice({
       state.info = action.payload;
     })
     .addCase(getOrganiserByIdThunk.fulfilled,(state,action)=>{
+      state.info = action.payload;
+    })
+    // builder.addCase(updateOrganiserThunk.fulfilled, (state, action) => {
+    //   state.info = action.payload;
+    // })
+    // .addCase(updateOrganiserThunk.fulfilled,(state,action)=>{
+    //   state.info = action.payload;
+    // })
+    .addCase(updateOrganiserThunk.fulfilled,(state,action)=>{
+      state.info = action.payload;
+    })
+    .addCase(updateUserThunk.fulfilled,(state,action)=>{
       state.info = action.payload;
     })
   },

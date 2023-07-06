@@ -1,6 +1,7 @@
 ﻿    using BookMyEvent.DLL.Contracts;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,19 +153,22 @@ namespace BookMyEvent.DLL.Repositories
                     user.Email = _user.Email;
                     user.PhoneNumber = _user.PhoneNumber;
                     //user.Address = _user.Address;
-                    user.UpdatedOn = _user.UpdatedOn;
+                    user.UserAddress = _user.UserAddress;
+                    user.UpdatedOn = DateTime.Now;
                     user.IsActive = _user.IsActive;
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
+                    await _db.Entry(_user).GetDatabaseValuesAsync();
+
                     return (_user, "User Updated Successfully");
                 }
                 else
                 {
-                    return (new User(), "User Not Found");
+                    return (null, "User Not Found");
                 }
             }
             catch (Exception ex)
             {
-                return (new User(), ex.Message);
+                return (null, ex.Message);
             }
         }
         public async Task<bool> ChangePassword(Guid UserId, string Password)

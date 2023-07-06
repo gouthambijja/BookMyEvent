@@ -73,16 +73,21 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-        public async Task<List<Guid>> GetAllUserRegisteredEventIds(Guid userId)
+     
+
+        public async Task<(List<Guid>? RegisteredEventIds,int NoOfTransactions,decimal Amount)> GetUserInfo(Guid userId)
         {
             try
             {
                 var eventIds = await transactionRepository.GetAllDistinctEventIds(userId);
-                return eventIds;
+                int transactions= await transactionRepository.GetNoOfTransactionsByUserId(userId);
+                decimal Amount= await transactionRepository.GetTotalAmountByUserId(userId);
+                return (eventIds,transactions,Amount);
+
             }
             catch
             {
-                return null;
+                return(null,0,0);
             }
         }
         public async Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId)
@@ -123,21 +128,6 @@ namespace BookMyEvent.BLL.Services
                 return new List<BLTransaction>();
             }
         }
-         public async Task<int> GetNoOfTransactionsByUserId(Guid userId)
-        {
-            try
-            {
-                return await transactionRepository.GetNoOfTransactionsByUserId(userId);
-            }
-            catch { return 0;}
-        }
-        public async Task<decimal> GetAmountByUserId(Guid userId)
-        {
-            try
-            {
-                return await transactionRepository.GetTotalAmountByUserId(userId);
-            }
-            catch { return 0; }
-        }
+        
     }
 }

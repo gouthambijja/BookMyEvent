@@ -14,7 +14,7 @@ const OrganiserLandingPage = () => {
         if (myEvents.length === 0) {
         dispatch(fetchEventsCreatedBy(profile.administratorId));
         }
-}, [myEvents]);
+},[]);
   return (
     <div style={{display:'flex',justifyContent:"center",flexWrap:'wrap',gap:'20px',padding:'40px'}}>
           {myEvents.length > 0 ? myEvents.map((event) => (

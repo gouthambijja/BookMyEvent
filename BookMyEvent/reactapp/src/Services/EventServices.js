@@ -149,18 +149,9 @@ const getOrganiserPastEvents = async (organiserId, pageNumber, pageSize) => {
     });
     return response.data;
 };
+const getNoOfPastEvents = async (organiserId,organisationId) => {
 
-const getOrganiserNoOfPastEvents = async (organiserId) => {
-
-    const response = await Axios.get(`${apiBase}/TotalNoOfOrganiserPastEvents/${organiserId}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
-};
-const getOrganisationNoOfPastEvents = async (organisationId) => {
-
-    const response = await Axios.get(`${apiBase}/TotalNoOfOrganisationPastEvents/${organisationId}`, {
+    const response = await Axios.get(`${apiBase}/GetNoOfPastEvents/${organiserId}/${organisationId}`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
     });
@@ -209,8 +200,7 @@ return {
     getOrganiserPastEvents,
     getOrganiserEventRequests,
     getOrganisationEventRequests,
-    getOrganiserNoOfPastEvents,
-    getOrganisationNoOfPastEvents
+    getNoOfPastEvents,
 };
 }
 export default EventServices;

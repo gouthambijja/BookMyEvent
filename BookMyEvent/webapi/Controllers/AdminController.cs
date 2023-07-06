@@ -40,7 +40,7 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 var passwordSalt = _configuration["Encryption:PasswordSalt"];
                 login.Password = HashPassword.GetHash(login.Password + passwordSalt);
-                Console.WriteLine(login.Password);
+               
                 var user = await _adminService.LoginAdmin(login.Email, login.Password, Roles.Admin.ToString());
                 if (user != null)
                 {

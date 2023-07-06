@@ -36,24 +36,8 @@ const getAllRegisteredEventsByUserid = async (userId) => {
     });
     return response.data;
 }
-const getAllRegisteredEventIdsByUserid = async (userId) => {
-    const response = await Axios.get(`${apiBase}/GetAllRegisteredEventIds/${userId}`,
-    {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
-}
-const getNoOfTransactionsByUserid = async (userId) => {
-    const response = await Axios.get(`${apiBase}/GetNoOfTransactionsByUserId/${userId}`,
-    {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-    });
-    return response.data;
-}
-const getAmountByUserid = async (userId) => {
-    const response = await Axios.get(`${apiBase}/GetAmountByUserId/${userId}`,
+const getUserInfoByUserid = async (userId) => {
+    const response = await Axios.get(`${apiBase}/GetUserInfo/${userId}`,
     {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
@@ -65,9 +49,7 @@ return  {
     getAllTransactionsByEventId,
     getAllTransactionsByUserId,
     getAllRegisteredEventsByUserid,
-    getAllRegisteredEventIdsByUserid,
-    getNoOfTransactionsByUserid,
-    getAmountByUserid,
+    getUserInfoByUserid,
 };
 }
 export default TransationServices;

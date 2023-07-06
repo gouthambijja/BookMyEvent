@@ -200,7 +200,15 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                return Ok(await _userService.UpdateUser(User));
+                var resp=await _userService.UpdateUser(User);
+                if(resp.Item1 != null)
+                {
+                    return Ok(resp.Item1);
+                }
+                else
+                {
+                    return BadRequest(resp.Message);
+                }
             }
             catch (Exception ex)
             {

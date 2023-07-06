@@ -81,43 +81,19 @@ namespace BookMyEvent.WebApi.Controllers
             }
         }
 
-        [HttpGet("GetAllRegisteredEventIds/{userId}")]
-        public async Task<IActionResult> GetAllRegisteredEventIds(Guid userId)
+        
+        [HttpGet("GetUserInfo/{userId}")]
+        public async Task<IActionResult> GetUserInfoByUSerId(Guid userId)
         {
             try
             {
-                var eventIds = await _transactionServices.GetAllUserRegisteredEventIds(userId);
-                if (eventIds != null)
+                (List<Guid>? RegisteredEventIds, int NoOfTransactions, decimal Amount) Info = await _transactionServices.GetUserInfo(userId);
+                return Ok(new
                 {
-                    return Ok(eventIds);
-                }
-                else { return BadRequest("Error in Services"); }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("GetNoOfTransactionsByUserId/{userId}")]
-        public async Task<IActionResult> GetNoOfTransactionsByUserId(Guid userId)
-        {
-            try
-            {
-                int transactions = await _transactionServices.GetNoOfTransactionsByUserId(userId);
-                return Ok(transactions);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("GetAmountByUserId/{userId}")]
-        public async Task<IActionResult> GetAMountByUSerId(Guid userId)
-        {
-            try
-            {
-                decimal amount =await _transactionServices.GetAmountByUserId(userId);
-                return Ok(amount);
+                    RegisteredEventIds=Info.RegisteredEventIds,
+                    NoOfTransactions=Info.NoOfTransactions,
+                    Amount=Info.Amount
+                });
             }
             catch (Exception ex)
             {
