@@ -14,6 +14,7 @@ import {
   Grid, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField,
   Divider,
 } from '@material-ui/core';
+import Chip from '@mui/material/Chip';
 import { updateOrganiserThunk, updateUserThunk } from "../Features/ReducerSlices/ProfileSlice";
 
 
@@ -43,6 +44,16 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     // backgroundColor:theme.palette.secondary.light,
     right: "20px",
+    top: "85px",
+    zIndex: "9",
+    // margin:'8px',
+
+  },
+  incompleteProfile: {
+    position: "absolute",
+    backgroundColor:theme.palette.warning.dark,
+    right: "200px",
+    padding:"6px 16px 6px 16px",
     top: "85px",
     zIndex: "9",
     // margin:'8px',
@@ -158,7 +169,8 @@ const ProfilePage = () => {
   const classes = useStyles();
   return (<div style={{ margin: '0px', display: "flex", borderBottom: '1px solid white', flexWrap: 'wrap', flexDirection: 'column', backgroundImage: 'url(https://images.pexels.com/photos/276223/pexels-photo-276223.jpeg)', backgroundPosition: 'center', backgroundSize: 'cover' }}>
     <Card className={classes.card}>
-      <Button onClick={handleEditProfile} variant="contained" className={classes.editButton} >Edit Profile</Button>
+      {(auth.role==="User" && (profile.userAddress===null || profile.phoneNumber===null))?<Chip  className={classes.incompleteProfile}  color="error" label="Incomplete profile!" />  :<></>}
+      <Button onClick={handleEditProfile} variant="contained" className={classes.editButton} >{(auth.role==="User" && (profile.userAddress===null || profile.phoneNumber===null))? <>Update Profile </>:<>Edit Profile </>}</Button>
       <div style={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', position: 'absolute', top: '0', width: '100%', margin: 'auto', height: '30%', backgroundImage: 'url(https://images.pexels.com/photos/276223/pexels-photo-276223.jpeg)', backgroundPosition: 'center', backgroundSize: 'cover' }}></div>
       {/* <div style={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)', position: 'absolute', top: '0', width: '100%', margin: 'auto', height: '30%', backgroundImage: 'url(https://kiranworkspace.com/demo/projects/code-snippets/card/profile-card/img/banner.jpg)', backgroundPosition: 'center', backgroundSize: 'cover' }}></div> */}
       <Avatar
