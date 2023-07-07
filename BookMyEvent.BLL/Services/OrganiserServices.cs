@@ -21,7 +21,7 @@ namespace BookMyEvent.BLL.Services
             _organisationServices = organisationServices;
             _accountCredentialsRepository = accountCredentialsRepository;
         }
-        public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy,byte RoleId,Guid orgId)
+        public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy, byte RoleId, Guid orgId)
         {
             try
             {
@@ -29,7 +29,8 @@ namespace BookMyEvent.BLL.Services
                 if (RoleId == 2)
                 {
                     var isOrganisationStatusChanged = await _organisationServices.AcceptOrganisation(orgId);
-                    if (!isOrganisationStatusChanged) {
+                    if (!isOrganisationStatusChanged)
+                    {
                         return false;
                     }
                 }
@@ -64,7 +65,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                if (await _administrationRepository.UpdateDeletedByAndIsActive( blockedBy, administratorId))
+                if (await _administrationRepository.UpdateDeletedByAndIsActive(blockedBy, administratorId))
                 {
                     return (true, "Organiser Blocked");
                 }
@@ -120,36 +121,36 @@ namespace BookMyEvent.BLL.Services
                 (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(administrator.Email);
                 if (IsAvailable)
                 {
-                    return (false, Message,null);
+                    return (false, Message, null);
                 }
                 else
                 {
                     //var newOrg = await _organisationServices.CreateOrganisation(bLOrganisation);
                     //if (newOrg.IsSuccessfull)
                     //{
-                        var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
+                    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
                     administrator.AccountCredentialsId = passModel.AccountCredentialsId;
-                        Console.WriteLine(administrator.AccountCredentialsId);
-                        Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                        if (passModel != null)
+                    Console.WriteLine(administrator.AccountCredentialsId);
+                    Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                    if (passModel != null)
+                    {
+                        var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
+                        Console.WriteLine(newAdministrator.AdministratorId);
+                        Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                        if (newAdministrator != null)
                         {
-                            var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
-                            Console.WriteLine(newAdministrator.AdministratorId);
-                            Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-                            if (newAdministrator != null)
-                            {
-                                return (true, "Organiser registration successfull",mapper.Map<BLAdministrator>(newAdministrator));
-                            }
-                            else
-                            {
-                                return (false, "Organiser registration unsuccessfull",null);
-                            }
+                            return (true, "Organiser registration successfull", mapper.Map<BLAdministrator>(newAdministrator));
                         }
                         else
                         {
-                            return (false, "organiser password creation  unsuccessfull", null);
+                            return (false, "Organiser registration unsuccessfull", null);
                         }
-                
+                    }
+                    else
+                    {
+                        return (false, "organiser password creation  unsuccessfull", null);
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -273,13 +274,14 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var result = await _administrationRepository.GetAdministratorByEmail(email);
-                if(result.RoleId == 1)return (Guid.Empty, 0, false, "Email doesn't exists"); 
+
                 if (result != null)
                 {
+                    if (result.RoleId == 1) return (Guid.Empty, 0, false, "Email doesn't exists");
                     var res = await _accountCredentialsRepository.CheckPassword(result.AccountCredentialsId, password);
                     if (res)
                     {
-                        
+
                         return (result.AdministratorId, result.RoleId, true, "Login Successfull");
                     }
                     else
@@ -361,7 +363,7 @@ namespace BookMyEvent.BLL.Services
                 }
                 else
                 {
-                   var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = peer.Password, UpdatedOn = DateTime.Now });
+                    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = peer.Password, UpdatedOn = DateTime.Now });
                     peer.AccountCredentialsId = passModel.AccountCredentialsId;
                     var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(peer));
                     if (newAdministrator != null)
