@@ -1,7 +1,8 @@
 using BookMyEvent.WebApi;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
-
+using Serilog;
+using Serilog.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,9 +24,19 @@ builder.Services.AddSwaggerGen(c =>
     // c.AddSecurityRequirement(/*...*/);
     c.OperationFilter<SecureEndpointAuthRequirementFilter>();
 });
+
 Startup.StartUpConfigure(builder.Services, builder.Configuration);
 var SpecificAllowOrigins = "origin_names";
+    Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+        .WriteTo.File("logs/logs.txt", rollingInterval: RollingInterval.Day)
+        .CreateLogger();
 
+    builder.Services.AddLogging(loggingBuilder =>
+    {
+        loggingBuilder.ClearProviders();
+        loggingBuilder.AddSerilog(dispose: true);
+    });
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -43,6 +54,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
 }
 
 app.UseCors(SpecificAllowOrigins);

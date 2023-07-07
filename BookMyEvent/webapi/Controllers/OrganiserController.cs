@@ -17,11 +17,13 @@ namespace BookMyEvent.WebApi.Controllers
         private readonly IOrganiserServices _organiserServices;
         private readonly AuthController _authController;
         private readonly IConfiguration _configuration;
-        public OrganiserController(IOrganiserServices organiserServices, AuthController authController, IConfiguration configuration)
+        private readonly FileLogger _fileLogger;
+        public OrganiserController(IOrganiserServices organiserServices, AuthController authController, IConfiguration configuration, FileLogger fileLogger)
         {
             _organiserServices = organiserServices;
             _authController = authController;
             _configuration = configuration;
+            _fileLogger = fileLogger;
         }
         /// <summary>
         /// Service to Register OrganizationOwner
@@ -47,7 +49,7 @@ namespace BookMyEvent.WebApi.Controllers
                 RoleId = byte.Parse(Request.Form.Where(e => e.Key == "roleId").First().Value),
                 IsAccepted = bool.Parse(Request.Form.Where(e => e.Key == "isAccepted").First().Value),
                 ImageName = Request.Form.Where(e => e.Key == "imageName").First().Value,
-      
+
                 IsActive = bool.Parse(Request.Form.Where(e => e.Key == "isActive").First().Value),
                 Password = Request.Form.Where(e => e.Key == "password").First().Value,
                 ImgBody = imageBody
@@ -59,18 +61,26 @@ namespace BookMyEvent.WebApi.Controllers
             var organisation = new BLOrganisation()
             {
                 OrganisationName = Request.Form.Where(e => e.Key == "organisationName").First().Value,
-               OrganisationDescription = Request.Form.Where(e => e.Key == "organisationDescription").First().Value,
+                OrganisationDescription = Request.Form.Where(e => e.Key == "organisationDescription").First().Value,
                 Location = Request.Form.Where(e => e.Key == "Location").First().Value,
-                CreatedOn =  DateTime.Parse(Request.Form.Where(e => e.Key == "orgcreatedOn").First().Value),
+                CreatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "orgcreatedOn").First().Value),
                 IsActive = bool.Parse(Request.Form.Where(e => e.Key == "orgIsActive").First().Value),
-                UpdatedOn =  DateTime.Parse(Request.Form.Where(e => e.Key == "orgUpdatedOn").First().Value),
-                
+                UpdatedOn = DateTime.Parse(Request.Form.Where(e => e.Key == "orgUpdatedOn").First().Value),
+
             };
 
             var result = await _organiserServices.RegisterOwner(owner, organisation);
             if (result.IsSuccessfull)
+            {
+                _fileLogger.AddInfoToFile("[RegisterOrganiserOwner]" + result.Message);
                 return Ok(result.Message);
-            else return BadRequest(result.Message);
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[RegisterOrganiserOwner]" + result.Message);
+
+                return BadRequest(result.Message);
+            }
         }
         /// <summary>
         /// Service to Register Organization Peer
@@ -80,9 +90,9 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPost("RegisterPeer")]
         public async Task<IActionResult> RegisterOrganiserPeer()
         {
-            
+
             var image = Request.Form.Files[0];
-           
+
             var memoryStream = new MemoryStream();
             await image.CopyToAsync(memoryStream);
             var imageBody = memoryStream.ToArray();
@@ -97,7 +107,7 @@ namespace BookMyEvent.WebApi.Controllers
                 RoleId = byte.Parse(Request.Form.Where(e => e.Key == "roleId").First().Value),
                 IsAccepted = bool.Parse(Request.Form.Where(e => e.Key == "isAccepted").First().Value),
                 ImageName = Request.Form.Where(e => e.Key == "imageName").First().Value,
-               
+
                 OrganisationId = Guid.Parse(Request.Form.Where(e => e.Key == "organisationId").First().Value),
                 IsActive = bool.Parse(Request.Form.Where(e => e.Key == "isActive").First().Value),
                 Password = Request.Form.Where(e => e.Key == "password").First().Value,
@@ -109,8 +119,17 @@ namespace BookMyEvent.WebApi.Controllers
             peer.Password = HashPassword.GetHash(peer.Password + passwordSalt);
             var result = await _organiserServices.RegisterPeer(peer);
             if (result.IsSuccessfull)
+            {
+                _fileLogger.AddInfoToFile("[RegisterOrganiserPeer]" + result.Message);
+
                 return Ok(result.Message);
-            else return BadRequest(result.Message);
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[RegisterOrganiserPeer]" + result.Message);
+
+                return BadRequest(result.Message);
+            }
         }
         /// <summary>
         /// Service toCreate Secondary Organizer
@@ -152,16 +171,25 @@ namespace BookMyEvent.WebApi.Controllers
                 Message = result.Message
             };
             if (result.IsSuccessfull)
+            {
+                _fileLogger.AddInfoToFile("[CreateSecondaryOrganiser]" + result.Message);
+
                 return Ok(new
                 {
                     IsSuccess = result.IsSuccessfull,
                     Message = result.Message
                 });
-            else return BadRequest(new
+            }
+            else
             {
-                IsSuccess = new BLAdministrator(),
-                Message = result.Message
-            });
+                _fileLogger.AddExceptionToFile("[CreateSecondaryOrganiser]" + result.Message);
+
+                return BadRequest(new
+                {
+                    IsSuccess = new BLAdministrator(),
+                    Message = result.Message
+                });
+            }
         }
         /// <summary>
         /// Service to Login Organizer
@@ -173,7 +201,7 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> LoginOrganiser(BLLoginModel login)
         {
             var passwordSalt = _configuration["Encryption:PasswordSalt"];
-            login.Password=HashPassword.GetHash(login.Password+passwordSalt);
+            login.Password = HashPassword.GetHash(login.Password + passwordSalt);
             var result = await _organiserServices.LoginOrganiser(login.Email, login.Password);
             if (result.IsSuccessfull)
             {
@@ -187,6 +215,8 @@ namespace BookMyEvent.WebApi.Controllers
                             {
                                 HttpOnly = true
                             });
+                _fileLogger.AddInfoToFile("[LoginOrganiser]" + result.Message);
+
                 return Ok(new
                 {
 
@@ -195,11 +225,16 @@ namespace BookMyEvent.WebApi.Controllers
                     AccessToken = accessToken
                 });
             }
-            else return BadRequest(new
+            else
             {
-                IsSuccess = result.IsSuccessfull,
-                Message = result.Message,
-            });
+                _fileLogger.AddExceptionToFile("[LoginOrganiser]" + result.Message);
+
+                return BadRequest(new
+                {
+                    IsSuccess = result.IsSuccessfull,
+                    Message = result.Message,
+                });
+            }
         }
         /// <summary>
         /// Service to Get Organizer By Id
@@ -211,8 +246,16 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.GetOrganiserById(id);
             if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[GetOrganiserById] Fetch Organiser By Id Success");
+
                 return Ok(result);
-            else return BadRequest("Organiser not found");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[GetOrganiserById] Fetch Organiser By Id Failed");
+                return BadRequest("Organiser not found");
+            }
         }
         /// <summary>
         /// Service to Get all The Requested Owners
@@ -223,8 +266,15 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.GetAllRequestedOwners();
             if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[GetRequestedOwners] Fetch Owner Requests success");
                 return Ok(result);
-            else return Ok("No requests found");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[GetRequestedOwners] Fetch Owner Requests Failed");
+                return BadRequest("No requests found");
+            }
         }
         /// <summary>
         /// Service to Get Requested Peers
@@ -236,8 +286,17 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.GetAllRequestedOrganisers(orgId);
             if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[GetRequestedPeers] Fetch Peer Requests success");
+
                 return Ok(result);
-            else return Ok("No requests found");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[GetRequestedPeers] Fetch Peer Requests Failed");
+
+                return BadRequest("No requests found");
+            }
         }
         /// <summary>
         /// Service to Accept Organizer
@@ -247,12 +306,19 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPut("{id}/Accept")]
         public async Task<IActionResult> AcceptOrganiser(BLAdministrator administrator)
         {
-                Console.WriteLine(administrator.RoleId);
+            Console.WriteLine(administrator.RoleId);
 
-            var result = await _organiserServices.AcceptOrganiser(administrator.AdministratorId, administrator.AcceptedBy,administrator.RoleId,administrator.OrganisationId);
+            var result = await _organiserServices.AcceptOrganiser(administrator.AdministratorId, administrator.AcceptedBy, administrator.RoleId, administrator.OrganisationId);
             if (result)
+            {
+                _fileLogger.AddInfoToFile("[AcceptOrganiser] Organiser Accept Success");
                 return Ok("Accepted Successfully");
-            else return BadRequest("Accept failed");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[AcceptOrganiser] Organiser Accept Failed");
+                return BadRequest("Accept failed"); 
+            }
         }
         /// <summary>
         /// Service to Reject Organizer 
@@ -264,8 +330,15 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy);
             if (result)
+            {
+                _fileLogger.AddInfoToFile("[RejectOrganiser] Organiser Reject Success");
                 return Ok("rejected successfully");
-            else return BadRequest("reject failed");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[RejectOrganiser] Organiser Reject Failed");
+                return BadRequest("reject failed");
+            }
         }
         /// <summary>
         /// Service to Update Organizer
@@ -277,8 +350,16 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.UpdateOrganiser(administrator);
             if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[UpdateOrganiser] Organiser Update Success");
                 return Ok(result);
-            else return BadRequest("Update failed");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[UpdateOrganiser] Organiser Update Failed");
+
+                return BadRequest("Update failed");
+            }
         }
         /// <summary>
         /// Service to Delete an Organizer
@@ -291,8 +372,16 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.BlockOrganiser(id, deletedById);
             if (result.IsSuccessfull)
+            {
+                _fileLogger.AddInfoToFile("[DeleteOrganiser]" + result.Message);
                 return Ok(result.Message);
-            else return BadRequest(result.Message);
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[DeleteOrganiser]" + result.Message);
+
+                return BadRequest(result.Message);
+            }
         }
         /// <summary>
         /// Service to Delete All the Organization Organizers
@@ -305,8 +394,16 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.BlockAllOrganisationOrganisers(id, blockerId);
             if (result.IsSuccessfull)
+            {
+                _fileLogger.AddInfoToFile("[DeleteAllOrganisationOrganisers]" + result.Message);
                 return Ok(result.Message);
-            else return BadRequest(result.Message);
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[DeleteAllOrganisationOrganisers]" + result.Message);
+
+                return BadRequest(result.Message);
+            }
         }
         /// <summary>
         /// Service to 
@@ -318,8 +415,16 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organiserServices.GetAllOrganisationOrganisers(id);
             if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[GetOrganisationOrganisers] Fetch All Active Organisation Organisers Success");
+
                 return Ok(result);
-            else return BadRequest("No organisers found");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[GetOrganisationOrganisers] Fetch All Active Organisation Organisers Failed");
+                return BadRequest("No organisers found");
+            }
         }
         /// <summary>
         /// Service to Check Email Is Valid or Not
@@ -331,11 +436,13 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> IsEmailTaken(string email)
         {
             var result = await _organiserServices.IsOrganiserAvailableWithEmail(email);
+            _fileLogger.AddInfoToFile("[IsEmailTaken] Check IsOrgansierAvailablewithEmail Success");
+
             return Ok(new
             {
                 IsEmailTaken = result.IsOrganiserEmailAvailable,
                 Message = result.Message
-            }) ;
+            });
         }
         /// <summary>
         /// Service to Get All Owners 
@@ -345,9 +452,18 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> GetAllOwners()
         {
             var result = await _organiserServices.GetAllOwners();
-            return Ok(result);
+            if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[GetAllOwners] Fetch All Active Owners Success");
+                return Ok(result);
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[GetAllOwners] Fetch All Active Owners Failed");
+            return BadRequest("Error");
+            }
         }
 
-        
+
     }
 }

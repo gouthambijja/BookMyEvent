@@ -1,5 +1,6 @@
 ﻿using BookMyEvent.BLL;
 using BookMyEvent.WebApi.Controllers;
+using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -32,6 +33,7 @@ namespace BookMyEvent.WebApi
             services.AddAuthorization();
             AuthController.config(configuration);
             services.AddSingleton<AuthController>();
+            services.AddSingleton<FileLogger>();
             BLLConfig.BLLConfigure(services, configuration);
 
 

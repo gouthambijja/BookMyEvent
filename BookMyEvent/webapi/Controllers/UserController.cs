@@ -5,6 +5,7 @@ using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 using BookMyEvent.BLL.RequestModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,12 +19,16 @@ namespace BookMyEvent.WebApi.Controllers
         private readonly IUserService _userService;
         private readonly AuthController _authController;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<UserController> _logger;
+        private readonly FileLogger _fileLogger;
 
-        public UserController(IUserService userService, AuthController auth, IConfiguration configuration)
+        public UserController(IUserService userService, AuthController auth, IConfiguration configuration, ILogger<UserController> logger, FileLogger fileLogger)
         {
             this._userService = userService;
             _authController = auth;
             _configuration = configuration;
+            _logger = logger;
+            _fileLogger = fileLogger;
         }
         [Authorize]
         [HttpGet("getFakestring")]
@@ -41,10 +46,22 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                return Ok(await _userService.GetUsers());
+                var users = await _userService.GetUsers();
+                if (users != null)
+                {
+                    _fileLogger.AddInfoToFile("[GetAllUsers] Fetch All Active Users Success");
+                    return Ok(users);
+                    
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[GetAllUsers] Fetcj All Users Failed");
+                    return BadRequest("Error");
+                }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetAllUsers]" + ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -56,14 +73,25 @@ namespace BookMyEvent.WebApi.Controllers
         // GET api/<UserController>/5
         [Authorize(Roles = "User")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> GetUserById(Guid id)
         {
             try
             {
-                return Ok(await _userService.GetUserById(id));
+                var user = await _userService.GetUserById(id);
+                if (user != null)
+                {
+                    _fileLogger.AddInfoToFile("[GetUserById] Get User By Id Success");
+                    return Ok(user);
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[GetUserById] Get USer By Id Failed");
+                    return BadRequest("Error");
+                }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetUserById]" + ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -77,10 +105,22 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                return Ok(await _userService.GetUserByEmail(Email));
+                var user = await _userService.GetUserByEmail(Email);
+                if (user != null)
+                {
+                    _fileLogger.AddInfoToFile("[GetUserByEmail] Get User By Email Success");
+                    return Ok(user);
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[GetUserByEmail] User By this Email is null");
+
+                    return BadRequest("Error");
+                }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetUserByEmail]" + ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -91,7 +131,7 @@ namespace BookMyEvent.WebApi.Controllers
         // POST api/<UserController>
         [AllowAnonymous]
         [HttpPost("AddUser")]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> AddUser()
         {
             try
             {
@@ -118,11 +158,22 @@ namespace BookMyEvent.WebApi.Controllers
 
                 User.Password = HashPassword.GetHash(User.Password + passwordSalt);
                 Console.WriteLine(User.Password);
-                return Ok(await _userService.AddUser(User));
+                var resp = await _userService.AddUser(User);
+                if (resp.IsUserAdded)
+                {
+                    _fileLogger.AddInfoToFile("[AddUser] Add User Success");
+                    return Ok(resp);
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[AddUser]" + resp.Message);
+                    return BadRequest(resp.Message);
+                }
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                _fileLogger.AddExceptionToFile("[AddUser]" + ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         /// <summary>
@@ -140,11 +191,13 @@ namespace BookMyEvent.WebApi.Controllers
                 var passwordSalt = _configuration["Encryption:PasswordSalt"];
                 user.Password = HashPassword.GetHash(user.Password + passwordSalt);
                 var data = await _userService.AddUser(user);
+                _fileLogger.AddInfoToFile("[GoogleSignUp] Google Sign Up Success");
                 return Ok(JsonConvert.SerializeObject(data));
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                _fileLogger.AddExceptionToFile("[GoogleSignUp]" + ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -159,9 +212,12 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
+
+
+                _logger.LogInformation("my first log");
                 var passwordSalt = _configuration["Encryption:PasswordSalt"];
-                
-                login.Password=HashPassword.GetHash(login.Password+passwordSalt);
+
+                login.Password = HashPassword.GetHash(login.Password + passwordSalt);
                 Console.WriteLine(login.Password);
                 var userId = await _userService.Login(login);
 
@@ -176,15 +232,22 @@ namespace BookMyEvent.WebApi.Controllers
                                 {
                                     HttpOnly = true
                                 });
+                    _fileLogger.AddInfoToFile("[LoginUser] User Login Success");
                     return Ok(accessToken);
                 }
                 else
                 {
+
+                    _fileLogger.AddExceptionToFile("[LoginUser] User Login Failed");
+
                     return NotFound();
                 }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[LoginUser]" + ex.Message);
+
+
                 return BadRequest(ex.Message);
             }
         }
@@ -196,22 +259,28 @@ namespace BookMyEvent.WebApi.Controllers
         // PUT api/<UserController>/5
         [Authorize(Roles = "User")]
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> Put([FromBody] BLUser User)
+        public async Task<IActionResult> UpdateUser([FromBody] BLUser User)
         {
             try
             {
-                var resp=await _userService.UpdateUser(User);
-                if(resp.Item1 != null)
+                var resp = await _userService.UpdateUser(User);
+                if (resp.Item1 != null)
                 {
+                    _fileLogger.AddInfoToFile("[UpdateUser] User Update Success");
+
                     return Ok(resp.Item1);
                 }
                 else
                 {
+                    _fileLogger.AddExceptionToFile("[UpdateUser]" + resp.Message);
+
                     return BadRequest(resp.Message);
                 }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[UpdateUser]" + ex.Message);
+
                 return BadRequest(ex.Message);
             }
         }
@@ -222,14 +291,28 @@ namespace BookMyEvent.WebApi.Controllers
         /// <returns>true if Successful else false</returns>
         [Authorize(Roles = "User")]
         [HttpPut("ChangePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody] BLChangePassword changePassword)
+        public async Task<IActionResult> ChangeUserPassword([FromBody] BLChangePassword changePassword)
         {
             try
             {
-                return Ok(await _userService.ChangePassword(changePassword.AdminId, changePassword.Password));
+                bool isPasswordChanged = await _userService.ChangePassword(changePassword.AdminId, changePassword.Password);
+                if (isPasswordChanged)
+                {
+                    _fileLogger.AddInfoToFile("[ChangeUserPassword] User Password Change Success");
+
+                    return Ok(isPasswordChanged);
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[ChangeUserPassword] User Password Change Failed");
+
+                    return BadRequest(false);
+                }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[ChangeUserPassword]" + ex.Message);
+
                 return BadRequest(ex.Message);
             }
         }
@@ -240,16 +323,21 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="BlockedBy"></param>
         /// <returns>true if successful else false</returns>
         // DELETE api/<UserController>/5
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("BlockUser/{UserId}/{BlockedBy}")]
         public async Task<IActionResult> BlockUser(Guid UserId, Guid BlockedBy)
         {
             try
             {
-                return Ok(await _userService.ToggleIsActiveById(UserId, BlockedBy));
+                var user = await _userService.ToggleIsActiveById(UserId, BlockedBy);
+                _fileLogger.AddInfoToFile("[BlockUser] User Block Success");
+
+                return Ok(user);
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[BlockUser]" + ex.Message);
+
                 return BadRequest(ex.Message);
             }
         }
@@ -263,10 +351,23 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                return Ok(await _userService.DeleteUser(UserId));
+                var resp = await _userService.DeleteUser(UserId);
+                if (resp.IsDeleted)
+                {
+                    _fileLogger.AddInfoToFile("[DeleteUser] Delete User Success");
+                    return Ok(resp);
+
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[DeleteUser]" + resp.Message);
+
+                    return BadRequest(resp.Message);
+                }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[DeleteUser]" + ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -282,14 +383,17 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var result = await _userService.IsUserAvailableWithEmail(email);
+                _fileLogger.AddInfoToFile("[IsEmailExists] Checked for Email ");
+
                 return Ok(new
                 {
                     IsEmailTaken = result.IsUserEmailExists,
                     Message = result.Message
                 });
             }
-            catch
+            catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[IsEmailExists] " + ex.Message);
                 return BadRequest("error");
             }
         }
@@ -299,11 +403,24 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                Console.WriteLine("Im in controller ________________________________________________________________________________________________________________________________________________________");
-                return Ok(await _userService.GetFilteredUsers(name, email, phoneNumber, isActive));
+                var users = await _userService.GetFilteredUsers(name, email, phoneNumber, isActive);
+                if (users != null)
+                {
+                    _fileLogger.AddInfoToFile("[GetFilteredUsers] Fetch Filtered Users Success");
+
+                    return Ok(users);
+                }
+                else
+                {
+                    _fileLogger.AddExceptionToFile("[GetFilteredUsers] Fetch Filtered Users Failed");
+
+                    return BadRequest("Error");
+                }
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetFilteredUsers]" + ex.Message);
+
                 return BadRequest(ex.Message);
             }
         }
