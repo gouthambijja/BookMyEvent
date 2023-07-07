@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding:'40px',
+        padding: '40px',
     },
     form: {
         width: "90%",
-        maxWidth:"800px",
+        maxWidth: "800px",
         marginTop: theme.spacing(1),
     },
     submitButton: {
@@ -41,9 +41,9 @@ const RegisterOrganiser = () => {
     const [emailError, setEmailError] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordValidation,setPasswordValidation]=useState('');
+    const [passwordValidation, setPasswordValidation] = useState('');
     const [imageError, setImageError] = useState('');
-    const [isValid,setIsValid]=useState(false);
+    const [isValid, setIsValid] = useState(false);
     const navigate = useNavigate();
 
     const [selectedRoleValue, setSelectedRoleValue] = useState('dummy');
@@ -58,8 +58,6 @@ const RegisterOrganiser = () => {
         RoleId: 1,
         IsAccepted: true,
         ImageName: "profile",
-
-
         IsActive: true,
         Password: "",
     });
@@ -83,17 +81,17 @@ const RegisterOrganiser = () => {
         }));
         if (file) {
             // Perform image validations here
-            const allowedTypes = ['image/jpeg', 'image/png','image/jpg'];
-         
-      
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+
             if (!allowedTypes.includes(file.type)) {
-              setImageError('Invalid file type. Please select a JPEG, PNG or JPG image.');
-            } 
-             else {
-            
-              setImageError('');
+                setImageError('Invalid file type. Please select a JPEG, PNG or JPG image.');
             }
-          }
+            else {
+
+                setImageError('');
+            }
+        }
     };
     const handleConfirmPassword = (e) => {
         setConfirmPassword(e.target.value)
@@ -101,9 +99,9 @@ const RegisterOrganiser = () => {
             setPasswordError('Passwords do not match');
         }
         else {
-         
+
             setPasswordError('');
-         
+
         }
     }
 
@@ -131,7 +129,7 @@ const RegisterOrganiser = () => {
             [e.target.name]: e.target.value,
         }));
     };
-    const handlePasswordChange=(e)=>{
+    const handlePasswordChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
@@ -139,13 +137,13 @@ const RegisterOrganiser = () => {
         if (!passwordRegex.test(e.target.value)) {
             //console.log(passwordRegex.test("Kakarot1#"));
             setPasswordValidation('Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character.');
-          } else {
+        } else {
             setPasswordValidation('');
-          }
-          if(e.target.value==''){
+        }
+        if (e.target.value == '') {
             setPasswordValidation('');
 
-          }
+        }
     }
     const handleEmailChange = async (e) => {
         setFormData((prevState) => ({
@@ -194,10 +192,10 @@ const RegisterOrganiser = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        
 
-      
+
+
+
         //console.log("before post call " + formData)
         const _formData = new FormData();
         if (selectedRoleValue == "peer") {
@@ -265,26 +263,26 @@ const RegisterOrganiser = () => {
             IsActive: true,
             Password: "",
         })
-    toast.success('Registered Succussfully!');
+        toast.success('Registered Succussfully!');
 
         navigate("/organiser/login");
-    
+
     };
 
     return (
         <>
             <Container component="main" maxWidth="xl" className={classes.container}>
                 <Box
-                    sx={{  textAlign: "center" }}
+                    sx={{ textAlign: "center" }}
                 >
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography variant="h5" component="h1" sx={{ width: "90%",maxWidth:'800px',color:'#3f50b5' }} >
+                        <Typography variant="h5" component="h1" sx={{ width: "90%", maxWidth: '800px', color: '#3f50b5' }} >
                             Register
                         </Typography>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <form className={classes.form} onSubmit={handleSubmit}>
-                            <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
+                            <FormControl variant="outlined" sx={{ marginTop: '10px' }} fullWidth>
 
                                 <TextField
                                     label="Name"
@@ -293,7 +291,7 @@ const RegisterOrganiser = () => {
                                     variant="outlined"
                                     value={formData.AdministratorName}
                                     onChange={handleInputChange}
-                                    sx={{marginTop:'10px'}}
+                                    sx={{ marginTop: '10px' }}
                                     required
                                     fullWidth
                                 />
@@ -305,7 +303,7 @@ const RegisterOrganiser = () => {
                                 variant="outlined"
                                 value={formData.AdministratorAddress}
                                 onChange={handleInputChange}
-                                sx={{marginTop:'10px'}}
+                                sx={{ marginTop: '10px' }}
                                 required
                                 fullWidth
                             />
@@ -319,7 +317,7 @@ const RegisterOrganiser = () => {
                                 onChange={handleEmailChange}
                                 error={emailError !== ''}
                                 helperText={emailError}
-                                sx={{marginTop:'10px'}}
+                                sx={{ marginTop: '10px' }}
                                 required
                                 fullWidth
                             />
@@ -331,7 +329,7 @@ const RegisterOrganiser = () => {
                                 type="number"
                                 value={formData.PhoneNumber}
                                 onChange={handleInputChange}
-                                sx={{marginTop:'10px'}}
+                                sx={{ marginTop: '10px' }}
                                 required
                                 fullWidth
                             />
@@ -345,7 +343,7 @@ const RegisterOrganiser = () => {
                                 type="password"
                                 value={formData.Password}
                                 onChange={handlePasswordChange}
-                                sx={{marginTop:'10px'}}
+                                sx={{ marginTop: '10px' }}
                                 error={passwordValidation !== ''}
                                 helperText={passwordValidation}
                                 required
@@ -362,7 +360,7 @@ const RegisterOrganiser = () => {
                                 helperText={passwordError}
                                 value={confirmPassword}
                                 onChange={handleConfirmPassword}
-                                sx={{marginTop:'10px'}}
+                                sx={{ marginTop: '10px' }}
                                 required
                                 fullWidth
                             />
@@ -374,10 +372,10 @@ const RegisterOrganiser = () => {
                                 onChange={handleImageChange}
                                 style={{ display: 'none' }}
                                 required
-                               
+
                             />
                             <label htmlFor="image-upload" >
-                                <Button sx={{marginTop:'10px',background:"#3f50b5"}} component="span" variant="contained"  fullWidth>
+                                <Button sx={{ marginTop: '10px', background: "#3f50b5" }} component="span" variant="contained" fullWidth>
                                     Upload Image
                                 </Button>
                             </label>
@@ -387,7 +385,7 @@ const RegisterOrganiser = () => {
                             </div>
 
 
-                            <FormControl required sx={{ width: '100%',maxWidth:'800px' }}>
+                            <FormControl required sx={{ width: '100%', maxWidth: '800px' }}>
                                 <InputLabel htmlFor="role-select">Select an option</InputLabel>
                                 <Select value={selectedRoleValue} labelId="role-select" id="role-select" onChange={handleRoleChange} >
 
@@ -401,7 +399,7 @@ const RegisterOrganiser = () => {
                                 {/* <Typography variant="h5" gutterBottom sx={{marginTop:'20px',color:'#3f50b5'}}>
                                     Please fill in your organization details
                                 </Typography> */}
-                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
+                                <FormControl variant="outlined" sx={{ marginTop: '10px' }} fullWidth>
 
                                     <TextField
                                         label="Name of the Organisation"
@@ -416,7 +414,7 @@ const RegisterOrganiser = () => {
                                         fullWidth
                                     />
                                 </FormControl>
-                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
+                                <FormControl variant="outlined" sx={{ marginTop: '10px' }} fullWidth>
                                     <TextField
                                         label="Description"
                                         id="Description"
@@ -430,7 +428,7 @@ const RegisterOrganiser = () => {
                                         fullWidth
                                     />
                                 </FormControl>
-                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
+                                <FormControl variant="outlined" sx={{ marginTop: '10px' }} fullWidth>
 
                                     <TextField
                                         label="Location of the Organisation"
@@ -444,19 +442,17 @@ const RegisterOrganiser = () => {
                                     />
                                 </FormControl>
                             </>) : (selectedRoleValue == "peer" ? (<>
-                               
-                                <FormControl variant="outlined" sx={{marginTop:'10px'}} fullWidth>
 
+                                <FormControl variant="outlined" sx={{ marginTop: '10px' }} fullWidth>
                                     <TextField
                                         label="Enter your Organisation name"
                                         id="Name"
                                         name="Organisation"
                                         variant="outlined"
-
                                         onChange={handleOptionChange}
                                         error={peerOrgNameError !== ''}
                                         helperText={peerOrgNameError}
-                                        sx={{marginTop:'10px'}}
+                                        sx={{ marginTop: '10px' }}
                                         required
                                         fullWidth
                                     />
@@ -467,13 +463,13 @@ const RegisterOrganiser = () => {
                             ) : <></>
                             )}
 
-                            <Button type="submit" variant="contained" sx={{ background:'#3f50b5',marginTop:"10px" }} className={classes.submitButton}  fullWidth>
-                              {selectedRoleValue == "peer"?"Register":"Submit Organisation request & Register"}
+                            <Button type="submit" variant="contained" sx={{ background: '#3f50b5', marginTop: "10px" }} className={classes.submitButton} disabled={selectedRoleValue != "peer" && selectedRoleValue != "owner"} fullWidth>
+                                {selectedRoleValue == "peer" ? "Register" : "Submit Organisation request & Register"}
                             </Button>
                         </form>
                     </div>
                 </Box>
-              
+
             </Container>
         </>
     );
