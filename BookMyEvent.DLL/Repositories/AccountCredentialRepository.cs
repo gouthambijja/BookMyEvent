@@ -25,10 +25,12 @@ namespace BookMyEvent.DLL.Repositories
                     await context.AccountCredentials.AddAsync(credential);
                     await context.SaveChangesAsync();
                     await context.Entry(credential).GetDatabaseValuesAsync();
+                    Console.WriteLine("Credential Added succefully   ", credential.Password);
                     return credential;
                 }
                 else
                 {
+                    Console.WriteLine("Credential is null");
                     return new AccountCredential();
                 }
             }
@@ -56,6 +58,35 @@ namespace BookMyEvent.DLL.Repositories
         public async Task<AccountCredential> GetCredential(Guid AccountCredentialId)
         {
             return await context.AccountCredentials.FirstOrDefaultAsync(e => e.AccountCredentialsId.Equals(AccountCredentialId));
+        }
+
+        public async Task<bool> CheckPassword(Guid? credId, string password)
+        {
+            try
+            {
+                var cred = await context.AccountCredentials.FirstOrDefaultAsync(e => e.AccountCredentialsId.Equals(credId));
+                if (cred.Password.Equals(password))
+                    return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> IsValidCredential(Guid? AccountCredentialId, string password)
+        {
+            try
+            {
+                var AccountCredential = await context.AccountCredentials.FirstOrDefaultAsync(e => e.AccountCredentialsId == AccountCredentialId && e.Password == password);
+                if (AccountCredential == null) return false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

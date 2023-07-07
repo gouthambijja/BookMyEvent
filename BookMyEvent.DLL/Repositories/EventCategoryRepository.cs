@@ -16,7 +16,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             this.context = context;
         }
-        public async Task<(bool IsEventCategoryAdded, string Message)> AddEventCategory(EventCategory _eventCategory)
+        public async Task<(EventCategory eventCategory, string Message)> AddEventCategory(EventCategory _eventCategory)
         {
             try
             {
@@ -24,16 +24,16 @@ namespace BookMyEvent.DLL.Repositories
                 {
                     await context.EventCategories.AddAsync(_eventCategory);
                     await context.SaveChangesAsync();
-                    return (true, "Added");
+                    return (_eventCategory, "Added");
                 }
                 else
                 {
-                    return (false, "Not Added");
+                    return (null, "Not Added");
                 }
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                return (null, ex.Message);
             }
         }
         public async Task<EventCategory> GetEventCategoryById(byte Id)
@@ -48,7 +48,7 @@ namespace BookMyEvent.DLL.Repositories
                 return new EventCategory();
             }
         }
-        public async Task<(EventCategory, string Message)> UpdateEventCategory(EventCategory _eventCategory)
+        public async Task<(EventCategory category, string Message)> UpdateEventCategory(EventCategory _eventCategory)
         {
             var EventCategory = await context.EventCategories.FindAsync(_eventCategory.CategoryId);
             if (EventCategory != null)

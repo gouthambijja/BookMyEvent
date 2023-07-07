@@ -13,9 +13,9 @@ namespace BookMyEvent.DLL.Repositories
     public class AdministrationRepository : IAdministrationRepository
     {
         private readonly EventManagementSystemTeamZealContext _dbcontext;
-        public AdministrationRepository(EventManagementSystemTeamZealContext dbcontext) 
+        public AdministrationRepository(EventManagementSystemTeamZealContext dbcontext)
         {
-            _dbcontext = dbcontext; 
+            _dbcontext = dbcontext;
         }
 
         public async Task<Administration?> AddAdministrator(Administration administrator)
@@ -24,7 +24,8 @@ namespace BookMyEvent.DLL.Repositories
             {
                 if (administrator != null)
                 {
-                    _dbcontext.Administrations.Add(administrator);
+                    await _dbcontext.Administrations.AddAsync(administrator);
+
                     await _dbcontext.SaveChangesAsync();
                     await _dbcontext.Entry(administrator).GetDatabaseValuesAsync();
                     return administrator;
@@ -61,7 +62,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-       
+
         public async Task<Administration?> GetAdministratorByEmail(string email)
         {
             try
@@ -81,6 +82,26 @@ namespace BookMyEvent.DLL.Repositories
                 return null;
             }
         }
+        public async Task<Administration?> GetAdminByEmail(string email)
+        {
+            try
+            {
+                Administration? administrator = await _dbcontext.Administrations.Where(a => a.Email == email && a.RoleId == 1).FirstOrDefaultAsync();
+                if (administrator != null)
+                {
+                    return administrator;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
 
         public async Task<Administration?> GetAdministratorByGoogleId(string GoogleId)
@@ -109,6 +130,25 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId != 1 && a.IsActive == true && a.IsAccepted == true).ToListAsync();
+                if (administrators != null)
+                {
+                    return administrators;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<List<Administration>> GetSecondaryAdministrators()
+        {
+            try
+            {
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 1 && a.IsActive == true).ToListAsync();
                 if (administrators != null)
                 {
                     return administrators;
@@ -234,7 +274,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 2 && a.IsActive == true && a.IsAccepted == false).ToListAsync();
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 2 && a.IsActive == true && a.AcceptedBy==null && a.RejectedBy==null).ToListAsync();
                 if (administrators != null)
                 {
                     return administrators;
@@ -255,7 +295,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.RoleId == 4 && a.IsActive == true && a.IsAccepted == false).ToListAsync();
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.RoleId == 4 && a.IsActive == true && a.AcceptedBy == null && a.RejectedBy == null).ToListAsync();
                 if (administrators != null)
                 {
                     return administrators;
@@ -346,16 +386,16 @@ namespace BookMyEvent.DLL.Repositories
         }
 
 
-        public async Task<bool> UpdateIsAcceptedAndAcceptedBy(Guid acceptedByUserId, Guid acceptedAccountId)
+        public async Task<bool> UpdateIsAcceptedAndAcceptedBy(Guid? acceptedByUserId, Guid acceptedAccountId)
         {
             try
             {
                 Administration? administrator = await _dbcontext.Administrations.FindAsync(acceptedAccountId);
                 if (administrator != null)
                 {
-
                     administrator.AcceptedBy = acceptedByUserId;
                     administrator.IsAccepted = true;
+                    administrator.UpdatedOn=DateTime.Now;
                     await _dbcontext.SaveChangesAsync();
                     return true;
                 }
@@ -371,7 +411,7 @@ namespace BookMyEvent.DLL.Repositories
         }
 
 
-        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedByUserId, Guid rejectedAccountId)
+        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId)
         {
             try
             {
@@ -379,7 +419,8 @@ namespace BookMyEvent.DLL.Repositories
                 if (administrator != null)
                 {
 
-                    administrator.AcceptedBy = rejectedByUserId;
+                    administrator.RejectedBy = rejectedByUserId;
+                    //administrator.RejectedReason = reason;
                     administrator.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
                     return true;
@@ -404,7 +445,7 @@ namespace BookMyEvent.DLL.Repositories
                 if (administrator != null)
                 {
 
-                    administrator.AcceptedBy = deletedByUserId;
+                    administrator.DeletedBy = deletedByUserId;
                     administrator.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
                     return true;
@@ -434,6 +475,104 @@ namespace BookMyEvent.DLL.Repositories
                     await _dbcontext.SaveChangesAsync();
                     return true;
 
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> ChangeAdministratorPassword(Guid AdministratorID, string Password)
+        {
+            try
+            {
+                var Admin = await _dbcontext.Administrations.FindAsync(AdministratorID);
+                if (Admin != null)
+                {
+                    var password = await _dbcontext.AccountCredentials.FindAsync(Admin.AccountCredentialsId);
+                    Console.WriteLine(password.Password);
+                    if (password != null)
+                    {
+                        password.Password = Password;
+                        await _dbcontext.SaveChangesAsync();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateAllOrganisationOrganisersIsActive(Guid orgId, Guid updatedBy)
+        {
+            try
+            {
+                Organisation? organisation = await _dbcontext.Organisations.FindAsync(orgId);
+                if (organisation != null)
+                {
+                    organisation.IsActive = false;
+                }
+                else
+                {
+                    return false;
+                }
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == orgId && a.IsActive == true).ToListAsync();
+                if (administrators != null)
+                {
+                    foreach (var administrator in administrators)
+                    {
+                        administrator.IsActive = false;
+                        administrator.DeletedBy = updatedBy;
+                    }
+                    await _dbcontext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<Administration>> GetAdministrationsByOrgId(Guid OrgId)
+        {
+            try
+            {
+                List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.IsActive == true && a.IsAccepted==true).ToListAsync();
+                if (administrators != null)
+                {
+                    return administrators;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> IsEmailExists(string Email)
+        {
+            try
+            {
+                var administrator = await _dbcontext.Administrations.Where(a => a.Email == Email).FirstOrDefaultAsync();
+                if (administrator != null)
+                {
+                    return true;
                 }
                 else
                 {

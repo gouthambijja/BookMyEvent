@@ -21,17 +21,35 @@ public partial class Event
 
     public string Description { get; set; } = null!;
 
-    public string Location { get; set; } = null!;
+    public string? State { get; set; }
+
+    public string? Country { get; set; }
+
+    public string? City { get; set; } 
+    public string? Location { get; set; }
 
     public bool IsPublished { get; set; }
-
-    public bool? IsOffline { get; set; }
 
     public bool IsCancelled { get; set; }
 
     public byte MaxNoOfTicketsPerTransaction { get; set; }
 
     public DateTime CreatedOn { get; set; }
+    public Byte[]? ProfileImgBody { get; set; }
+
+    public Guid? RejectedBy { get; set; }
+
+    public DateTime? RejectedOn { get; set; }
+
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
+    public string? RejectedReason { get; set; }
+
+    public decimal EventStartingPrice { get; set; }
+
+    public decimal EventEndingPrice { get; set; }
 
     public bool IsFree { get; set; }
 
@@ -45,7 +63,7 @@ public partial class Event
 
     public Guid CreatedBy { get; set; }
 
-    public Guid AcceptedBy { get; set; }
+    public Guid? AcceptedBy { get; set; }
 
     public virtual Administration AcceptedByNavigation { get; set; } = null!;
 
@@ -59,9 +77,14 @@ public partial class Event
 
     public virtual RegistrationStatus RegistrationStatus { get; set; } = null!;
 
+    public virtual Administration RejectedByNavigation { get; set; } = null!;
+
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
+    public virtual Administration? UpdatedByNavigation { get; set; }
+
     public virtual ICollection<UserInputForm> UserInputForms { get; set; } = new List<UserInputForm>();
+    public virtual ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
 }

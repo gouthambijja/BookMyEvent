@@ -1,6 +1,7 @@
-﻿using BookMyEvent.DLL.Contracts;
+﻿    using BookMyEvent.DLL.Contracts;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,35 +70,64 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                return await _db.Users.FirstOrDefaultAsync(x=>x.Email==email);
+                return await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return new User();
             }
 
         }
+        public async Task<bool> IsEmailExists(string Email)
+        {
+            try
+            {
+                var user = await _db.Users.Where(a => a.Email == Email).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    
 
         public async Task<User> GetUserById(Guid Id)
         {
             try
             {
-                return await _db.Users.FindAsync(Id);
+               var user =  await _db.Users.Where(e => e.UserId == Id).FirstAsync();
+                user.GoogleId = "";
+                user.AccountCredentialsId = null;
+                return user;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return new User();
             }
         }
 
-        public async Task<User> ToggleIsActiveById(Guid Id)
+        public async Task<User> ToggleIsActiveById(Guid Id, Guid blockedBy)
         {
             try
             {
                 var user = await _db.Users.FindAsync(Id);
                 if (user != null)
                 {
+                    if (user.IsActive == true)
+                        user.DeletedBy = blockedBy;
+                    else
+                        user.DeletedBy = null;
                     user.IsActive = !user.IsActive;
+                    user.UpdatedOn = DateTime.Now;
+
                     _db.SaveChanges();
                     return user;
                 }
@@ -123,20 +153,99 @@ namespace BookMyEvent.DLL.Repositories
                     user.Email = _user.Email;
                     user.PhoneNumber = _user.PhoneNumber;
                     //user.Address = _user.Address;
-                    user.UpdatedOn = _user.UpdatedOn;
+                    user.UserAddress = _user.UserAddress;
+                    user.UpdatedOn = DateTime.Now;
                     user.IsActive = _user.IsActive;
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
+                    await _db.Entry(_user).GetDatabaseValuesAsync();
+
                     return (_user, "User Updated Successfully");
                 }
                 else
                 {
-                    return (new User(), "User Not Found");
+                    return (null, "User Not Found");
                 }
             }
             catch (Exception ex)
             {
-                return (new User(), ex.Message);
+                return (null, ex.Message);
             }
+        }
+        public async Task<bool> ChangePassword(Guid UserId, string Password)
+        {
+            try
+            {
+                var user = await _db.Users.FindAsync(UserId);
+                if (user.AccountCredentialsId != null)
+                {
+                    var credential = await _db.AccountCredentials.FindAsync(user.AccountCredentialsId);
+                    credential.Password = Password;
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<Guid> IsUserExists(string Email, string Password)
+        {
+            var user = await _db.Users.Where(e =>e.Email == Email).FirstAsync();
+            if (user is not null)
+            {
+                var password = await _db.AccountCredentials.Where(e => e.Password == Password).FirstAsync();
+                if (password != null)
+                {
+                    return user.UserId;
+                }
+            }
+            return user.UserId;
+        }
+        public async Task<(Guid UserId,string Message)> BlockUser(Guid UserId)
+        {
+            var user = await _db.Users.FindAsync(UserId);
+            if (user is not null)
+            {
+                user.IsActive = false;
+                await _db.SaveChangesAsync();
+                return (user.UserId,"User Blocked");
+            }
+            return (UserId,"User Not Blocked");
+        }
+
+        public async Task<List<User>> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null)
+        {
+            try
+            {
+                Console.WriteLine("I've reached into the user repository---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                var users = await _db.Users.ToListAsync();
+                if (name != null)
+                {
+                    users = users.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
+                }
+                if (email != null)
+                {
+                    users = users.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+                }
+                if (phoneNumber != null)
+                {
+                    users = users.Where(x => x.PhoneNumber.ToLower().Contains(phoneNumber.ToLower())).ToList();
+                }
+                if (isActive != null)
+                {
+                    users = users.Where(x => x.IsActive == isActive).ToList();
+                }
+                return users;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }   
         }
     }
 }

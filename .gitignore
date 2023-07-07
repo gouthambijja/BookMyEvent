@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BookMyEvent/reactapp/src/pages/PageSizeCustomOptions.js

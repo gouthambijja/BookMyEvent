@@ -16,13 +16,20 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns>List of transactions with User id</returns>
-        public List<Transaction> GetTransactionsByUserId(Guid UserId);
+        public Task<List<Transaction>> GetTransactionsByUserId(Guid UserId);
+
+        /// <summary>
+        /// Method to get userId by TransactionId
+        /// </summary>
+        /// <param name="transactionId"></param>
+        /// <returns> UserID of that Transaction </returns>
+        public Task<Guid> GetUserIdByTransactionId(Guid transactionId);
         /// <summary>
         /// Method used to return all the Transactions associated with the Event 
         /// </summary>
         /// <param name="EventId"></param>
         /// <returns>Lis of Transactions with Event Id</returns>
-        public List<Transaction> GetTransactionsByEventId(Guid EventId);
+        public Task<List<Transaction>> GetTransactionsByEventId(Guid EventId);
         /// <summary>
         /// Method for Adding Transaction by taking transaction object as input
         /// </summary>
@@ -35,5 +42,13 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="TransactionId"></param>
         /// <returns>Deleted Transaction</returns>
         public Task<Transaction> DeleteTransaction(Guid TransactionId);
+        /// <summary>
+        /// gets all the distinct event ids from the transaction table of a particular userId
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns>List<guid></returns>
+        public Task<List<Guid>> GetAllDistinctEventIds(Guid UserId);
+        Task<int> GetNoOfTransactionsByUserId(Guid UserId);
+        Task<decimal> GetTotalAmountByUserId(Guid UserId);
     }
 }

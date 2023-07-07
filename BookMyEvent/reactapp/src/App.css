@@ -1,12 +1,22 @@
 .App {
   text-align: center;
 }
-
+*{
+  box-sizing: border-box;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+.BookMyEventLogo:hover{
+  cursor: pointer;
+}
 
+.ExternalContainer{
+  height: calc(100vh - 64px);
+  overflow: scroll;
+  overflow-x: hidden;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -28,6 +38,15 @@
   color: #61dafb;
 }
 
+.ProfilePage{
+  background: url(../src/Images/benner_1.jpg);
+  background-size: cover;
+}
+.singleEventPageBg{
+  background: url(../src/Images/benner_1.jpg);
+  background-size: cover;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +55,4 @@
     transform: rotate(360deg);
   }
 }
+
