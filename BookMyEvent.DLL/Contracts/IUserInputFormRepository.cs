@@ -31,10 +31,18 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>return true if success , false if exception or failure</returns>
         Task<bool> Delete(Guid inputFormId);
         /// <summary>
-        /// This method is used to Get UserInputForm by using inputFormId
+        /// This method is used to Get UserInputForm by using inputFormId and eventId
         /// </summary>
-        /// <param name="inputFormId"></param>
+        /// <param name="userId"></param>
+        /// <param name="eventId"></param>
         /// <returns>It returns UserInputForm on success  , Null on Exception or failure</returns>
-        Task<UserInputForm> Get(Guid inputFormId);
+        Task<List<Guid>?> GetInputFormIdByUserIdAndEventId(Guid userId, Guid eventId);
+
+        /// <summary>
+        /// This method is used to Get UserInputForms by using eventId
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>It returns UserInputForm on success  , Null on Exception or failure</returns>
+        Task<List<UserInputForm>?> GetUserInputFormsByEventId(Guid eventId);
     }
 }

@@ -28,5 +28,21 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="AccountCredentialId"></param>
         /// <returns>AccountCredential Object</returns>
         public Task<AccountCredential> GetCredential(Guid AccountCredentialId);
+        /// <summary>
+        /// This method is compares the given password with password present in the table 
+        /// </summary>
+        /// <param name="AccountCredentialId"></param>
+        /// <returns>return true if same passwords else false</returns>
+        public Task<bool> IsValidCredential(Guid? AccountCredentialId,string password);
+
+        /// <summary>
+        /// Method to check if the password is correct or not
+        /// </summary>
+        /// <param name="credId"></param>
+        /// <param name="password"></param>
+        /// <returns>
+        /// Returns true if the password is correct
+        /// </returns>
+        Task<bool> CheckPassword(Guid? credId, string password);
     }
 }

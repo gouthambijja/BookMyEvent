@@ -31,17 +31,17 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<bool> AddMany(List<UserInputFormField> formFields)
+        public async Task<List<UserInputFormField>?> AddMany(List<UserInputFormField> formFields)
         {
             try
             {
                 await _DBContext.UserInputFormFields.AddRangeAsync(formFields);
                 await _DBContext.SaveChangesAsync();
-                return true;
+                return formFields;
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 

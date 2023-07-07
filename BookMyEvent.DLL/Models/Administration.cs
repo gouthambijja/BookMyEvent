@@ -27,6 +27,10 @@ public partial class Administration
 
     public bool? IsAccepted { get; set; }
 
+    public byte[]? ImgBody { get; set; }
+
+    public string? ImageName { get; set; }
+
     public Guid? CreatedBy { get; set; }
 
     public Guid? AcceptedBy { get; set; }
@@ -37,15 +41,11 @@ public partial class Administration
 
     public Guid OrganisationId { get; set; }
 
-    public Guid? BlockedBy { get; set; }
-
     public bool? IsActive { get; set; }
 
     public virtual Administration? AcceptedByNavigation { get; set; }
 
     public virtual AccountCredential? AccountCredentials { get; set; }
-
-    public virtual Administration? BlockedByNavigation { get; set; }
 
     public virtual Administration? CreatedByNavigation { get; set; }
 
@@ -55,11 +55,13 @@ public partial class Administration
 
     public virtual ICollection<Event> EventCreatedByNavigations { get; set; } = new List<Event>();
 
+    public virtual ICollection<Event> EventRejectedByNavigations { get; set; } = new List<Event>();
+
+    public virtual ICollection<Event> EventUpdatedByNavigations { get; set; } = new List<Event>();
+
     public virtual ICollection<Form> Forms { get; set; } = new List<Form>();
 
     public virtual ICollection<Administration> InverseAcceptedByNavigation { get; set; } = new List<Administration>();
-
-    public virtual ICollection<Administration> InverseBlockedByNavigation { get; set; } = new List<Administration>();
 
     public virtual ICollection<Administration> InverseCreatedByNavigation { get; set; } = new List<Administration>();
 

@@ -16,13 +16,66 @@ namespace BookMyEvent.DLL.Repositories
         {
             this.context = context;
         }
-        public List<Transaction> GetTransactionsByUserId(Guid UserId)
+        public async Task<List<Transaction>> GetTransactionsByUserId(Guid UserId)
         {
-            return context.Transactions.Where(e => e.UserId.Equals(UserId)).ToList();
+            return await context.Transactions.Where(e => e.UserId.Equals(UserId)).ToListAsync();
         }
-        public List<Transaction> GetTransactionsByEventId(Guid EventId)
+        public async Task<int> GetNoOfTransactionsByUserId(Guid UserId)
         {
-            return context.Transactions.Where(e => e.EventId.Equals(EventId)).ToList();
+            try {
+
+            return await context.Transactions.CountAsync(e => e.UserId.Equals(UserId));
+
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
+        public async Task<decimal> GetTotalAmountByUserId(Guid UserId)
+        {
+            try
+            {
+
+                return await context.Transactions.Where(t => t.UserId == UserId).SumAsync(t => t.Amount);
+
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
+        public async Task<Guid> GetUserIdByTransactionId(Guid transactionId)
+        {
+            try
+            {
+                Transaction? transaction = await context.Transactions.FindAsync(transactionId);
+                if (transaction != null)
+                {
+                    Guid userId = transaction.UserId;
+                    return userId;
+                }
+                else { return Guid.Empty; }
+            }
+            catch
+            {
+                return Guid.Empty; // or any appropriate value indicating an error occurred
+            }
+        }
+        public async Task<List<Transaction>> GetTransactionsByEventId(Guid EventId)
+        {
+            try
+            {
+
+                List<Transaction> transactions = await context.Transactions.Where(e => e.EventId.Equals(EventId) && e.IsSuccessful.Equals(true)).ToListAsync();
+                return transactions;
+            }
+            catch
+            {
+                return new List<Transaction>();
+            }
         }
         public async Task<Transaction> AddTransaction(Transaction transaction)
         {
@@ -49,7 +102,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                var transaction = await context.Transactions.FirstOrDefaultAsync(e => e.TransactionId.Equals(TransactionId));
+                var transaction = await context.Transactions.FindAsync(TransactionId);
                 if (transaction != null)
                 {
                     context.Transactions.Remove(transaction);
@@ -61,6 +114,19 @@ namespace BookMyEvent.DLL.Repositories
             catch (Exception e)
             {
                 return new Transaction();
+            }
+        }
+
+        public async Task<List<Guid>> GetAllDistinctEventIds(Guid UserId)
+        {
+            try
+            {
+                var eventIds = await context.Transactions.Where(t => t.UserId == UserId).Select(t => t.EventId).Distinct().ToListAsync();
+                return eventIds;
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
     }

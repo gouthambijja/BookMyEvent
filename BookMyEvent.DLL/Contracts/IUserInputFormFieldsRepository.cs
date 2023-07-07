@@ -22,8 +22,8 @@ namespace BookMyEvent.DLL.Contracts
         /// This method is used to add multiple UserinputFormFields into the table
         /// </summary>
         /// <param name="formFields"></param>
-        /// <returns>Returns True on successful operation and false on Exception</returns>
-        Task<bool> AddMany(List<UserInputFormField> formFields);
+        /// <returns>Returns Added UserInputFormFields on successful operation and null on Exception</returns>
+        Task<List<UserInputFormField>?> AddMany(List<UserInputFormField> formFields);
         /// <summary>
         /// This method is used to update the userInputFormField in the DataBase
         /// </summary>
