@@ -37,14 +37,15 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
+                Console.WriteLine(registrationFormFieldList.Count());
                 await _DBContext.RegistrationFormFields.AddRangeAsync(registrationFormFieldList);
                 await _DBContext.SaveChangesAsync();
                 return true;
             }
-            catch
-            {
-                return false;
-            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            return false;
+
         }
 
         public async Task<bool> Delete(Guid registrationFormFieldId)

@@ -70,10 +70,11 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="Id">
         /// Takes the Id of the user as input as Guid type
         /// </param>
+        /// <param name="blockedBy"></param>
         /// <returns>
         /// Returns a User object
         /// </returns>
-        Task<User> ToggleIsActiveById(Guid Id);
+        Task<User> ToggleIsActiveById(Guid Id, Guid blockedBy);
 
         /// <summary>
         /// An Asynchronous method that gets all users
@@ -82,5 +83,29 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a list of User objects
         /// </returns>
         Task<List<User>> GetAllUsers();
+        /// <summary>
+        /// Method Used to Change the User Password
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="Password"></param>
+        /// <returns>returns true if Password Changes Successfully or else false</returns>
+        Task<bool> ChangePassword(Guid UserId, string Password);
+        /// <summary>
+        /// Method Used to Login User
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Password">Returns Id of the User</param>
+        /// <returns></returns>
+        Task<Guid> IsUserExists(string Email, string Password);
+        /// <summary>
+        /// Method to Block User by User ID
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns>return the UserID with the Message</returns>
+        Task<(Guid UserId, string Message)> BlockUser(Guid UserId);
+
+        Task<bool> IsEmailExists(string Email);
+
+        Task<List<User>> GetFilteredUsers(string name = null, string email = null, string phoneNumber = null, bool? isActive = null);
     }
 }

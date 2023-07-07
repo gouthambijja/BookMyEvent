@@ -34,6 +34,12 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="email">Administration Email</param>
         /// <returns>Administration Object Model</returns>
         public Task<Administration?> GetAdministratorByEmail(string email);
+        /// <summary>
+        /// Method to get Admin Details By Email
+        /// </summary>
+        /// <param name="email">Administration Email</param>
+        /// <returns>Administration Object Model</returns>
+        public Task<Administration?> GetAdminByEmail(string email);
 
         /// <summary>
         /// Method to get Administrator Details By GoogleId
@@ -47,6 +53,7 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <returns> List of Administrators who are active and accepted </returns>
         public Task<List<Administration>?> GetAdministrators();
+        Task<List<Administration>?> GetSecondaryAdministrators();
 
         /// <summary>
         /// Method to get all the active Accounts that are accepted by provided Id
@@ -134,19 +141,20 @@ namespace BookMyEvent.DLL.Contracts
         /// True:If updated successfully
         /// False:If update operation fails
         /// </returns>
-        public Task<bool> UpdateIsAcceptedAndAcceptedBy(Guid acceptedByUserId, Guid acceptedAccountId);
+        public Task<bool> UpdateIsAcceptedAndAcceptedBy(Guid? acceptedByUserId, Guid acceptedAccountId);
 
         /// <summary>
         /// Method to update rejectedBy field
         /// Used when administrator rejects new administrator account request
         /// </summary>
-        /// <param name="rejectedByUserId"> Id of administrator who is rejecting the Account </param>
         /// <param name="rejectedAccountId"> Id of the administrator whose account need to be rejected </param>
+        /// <param name="rejectedByUserId"> Id of administrator who is rejecting the Account </param>
+        /// <param name="reason"> Reason for rejecting the account </param>
         /// <returns>
         /// True:If updated successfully
         /// False:If update operation fails
         /// </returns>
-        public Task<bool> UpdateRejectedByAndIsActive(Guid rejectedByUserId, Guid rejectedAccountId);
+        public Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId);
 
         /// <summary>
         /// Method to Delete Administrator Account
@@ -169,7 +177,33 @@ namespace BookMyEvent.DLL.Contracts
         /// False:If delete operation fails</returns>
         public Task<bool> DeleteAdministratorsByOrgId(Guid deletedByUserId, Guid OrgId);
 
+        /// <summary>
+        /// Method to Change Admin Password
+        /// </summary>
+        /// <param name="AdminID"></param>
+        /// <param name="Password"></param>
+        /// <returns>return true if Password Changes Successfully else false</returns>
+        Task<bool> ChangeAdministratorPassword(Guid AdministratorID, string Password);
 
+        /// <summary>
+        /// Method to update IsActive field of all the Organisation Organisers
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="updatedBy"
+        /// <returns>
+        /// Returns bool value indicating whether IsActive field of all the Organisation Organisers is updated or not
+        /// </returns>
+        Task<bool> UpdateAllOrganisationOrganisersIsActive(Guid orgId, Guid updatedBy);
 
+        /// <summary>
+        /// Method to get all the Administrators of an Organisation
+        /// </summary>
+        /// <param name="OrgId"></param>
+        /// <returns>
+        /// Returns list of all the Administrators of an Organisation
+        /// </returns>
+        Task<List<Administration>> GetAdministrationsByOrgId(Guid OrgId);
+
+        Task<bool> IsEmailExists(string Email);
     }
 }

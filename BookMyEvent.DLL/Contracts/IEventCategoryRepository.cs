@@ -18,7 +18,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a tuple of bool to say if EventCategory is added successfully or not and a string message
         /// </returns>
-        Task<(bool IsEventCategoryAdded, string Message)> AddEventCategory(EventCategory _eventCategory);
+        Task<(EventCategory eventCategory, string Message)> AddEventCategory(EventCategory _eventCategory);
 
         /// <summary>
         /// An Asynchronous method that gets an event category by its Id
@@ -40,7 +40,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a tuple of EventCategory object and a string message
         /// </returns>
-        Task<(EventCategory, string Message)> UpdateEventCategory(EventCategory _eventCategory);
+        Task<(EventCategory category, string Message)> UpdateEventCategory(EventCategory _eventCategory);
 
         /// <summary>
         /// An Asynchronous method that deletes an event category

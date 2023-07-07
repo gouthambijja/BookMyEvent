@@ -13,11 +13,11 @@ public partial class RegistrationFormField
 
     public string Lable { get; set; } = null!;
 
+    public string Validations { get; set; } = null!;
+
     public string? Options { get; set; }
 
     public bool? IsRequired { get; set; }
-
-    public string Validations { get; set; } = null!;
 
     public virtual FieldType FieldType { get; set; } = null!;
 
