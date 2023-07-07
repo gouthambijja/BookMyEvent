@@ -49,7 +49,7 @@ export default function Navbar() {
               variant="h6"
               className="BookMyEventLogo"
               component="div"
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1 ,fontVariant:'small-caps'}}
               onClick={handleNavLogo}
             >
               BookMyEvent
