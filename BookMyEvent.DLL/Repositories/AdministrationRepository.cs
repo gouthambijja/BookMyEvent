@@ -311,7 +311,25 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-
+        public async Task<int> GetNoOfPeerAdministratorRequests(Guid OrgId)
+        {
+            try
+            {
+                int administrators = await _dbcontext.Administrations.CountAsync(a => a.OrganisationId == OrgId && a.RoleId == 4 && a.IsActive == true && a.AcceptedBy == null && a.RejectedBy == null);
+                if (administrators != null)
+                {
+                    return administrators;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         public async Task<Administration?> UpdateAdministrator(Administration updatedAdministrator)
         {
             try

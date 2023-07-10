@@ -106,8 +106,11 @@ const useStyles = makeStyles((theme) => ({
 function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
     const auth = useSelector((store) => store.auth);
-    let eventRequests = useSelector((state) => state.events.eventRequests);
-  const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
+    const NoOfRequestedPeers = useSelector(store => store.organisers.NoOfRequestedOrganisers);
+    let NoOfEventRequests = useSelector((state) => state.events.noOfEventRequests);
+
+    // let eventRequests = useSelector((state) => state.events.eventRequests);
+//   const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
     const logout = useLogout();
     const classes = useStyles();
     const [activeItem, setActiveItem] = useState('');
@@ -326,9 +329,9 @@ function Sidebar({ open, setOpen }) {
                     {auth.role == "Owner" || auth.role == "Secondary_Owner" ? (
                         <ListItem button className={activeItem == 'peerrequests' ? classes.activeBar : ""} onClick={handlePeerRequests}>
                             <ListItemIcon>
-                                {requestedPeers==0?
+                                {NoOfRequestedPeers==0?
                                 <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                : <Badge badgeContent={requestedPeers.length} color="secondary">
+                                : <Badge badgeContent={NoOfRequestedPeers} color="secondary">
                                 <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
                                 </Badge>}
                             </ListItemIcon>
@@ -422,9 +425,9 @@ function Sidebar({ open, setOpen }) {
 
                             <ListItem button className={activeItem == 'eventreq' ? classes.activeBar : ""} onClick={handleEventRequests}>
                                     <ListItemIcon>
-                                {eventRequests.length == 0 ?
+                                {NoOfEventRequests == 0 ?
                                         <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} /> :
-                                        <Badge badgeContent={eventRequests.length} color="secondary">
+                                        <Badge badgeContent={NoOfEventRequests} color="secondary">
                                             <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} />
                                             </Badge>}
                                     </ListItemIcon> 
