@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchEventsCreatedBy, fetchMyEventsRequests, fetchOrganisationEventsRequests } from '../Features/ReducerSlices/EventsSlice';
+import {  fetchMyEventsRequests, fetchOrganisationEventsRequests } from '../Features/ReducerSlices/EventsSlice';
 //import OrganiserEventCard from './OrganiserEventCards'
 import { Link } from 'react-router-dom';
 import OrganiserEventCard from '../Components/OrganiserEventCards';

@@ -36,7 +36,7 @@ import {
     SupervisedUserCircle,
     SupervisorAccount,
 } from "@material-ui/icons";
-
+import Badge from '@mui/material/Badge';
 import { useNavigate } from "react-router-dom";
 import useLogout from "../Hooks/Logout";
 import { useSelector } from "react-redux";
@@ -106,143 +106,145 @@ const useStyles = makeStyles((theme) => ({
 function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
     const auth = useSelector((store) => store.auth);
+    let eventRequests = useSelector((state) => state.events.eventRequests);
+  const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
     const logout = useLogout();
     const classes = useStyles();
     const [activeItem, setActiveItem] = useState('');
     //   const [open, setOpen] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleItemClick = (item) => {
-    setActiveItem(item);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const handleLogout = async () => {
-    if (await logout()) {
-      navigate("/");
-      window.location.reload();
-      handleDrawerClose();
-    }
-  };
-  const handleProfile = async () => {
-    if (auth.role == "Admin") {
-      handleDrawerClose();
-      navigate("/admin/profile");
-    } else if (
-      auth.role == "Owner" ||
-      auth.role == "Peer" ||
-      auth.role == "Secondary_Owner"
-    ) {
-      handleDrawerClose();
-      navigate("/organiser/profile");
-    } else {
-      handleDrawerClose();
-      navigate("/profile");
-    }
-    setActiveItem("profile");
-  };
-  const handleAdd = async () => {
-    handleDrawerClose();
-    if (auth?.role == "Admin") navigate("/admin/addadmin");
-    else navigate("/organiser/addSecondaryOwner");
-    setActiveItem("addanother");
-  };
-  const handleRequests = async () => {
-    handleDrawerClose();
-    if (auth?.role == "Admin") navigate("/admin/Requests");
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleItemClick = (item) => {
+        setActiveItem(item);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
+    const handleLogout = async () => {
+        if (await logout()) {
+            navigate("/");
+            window.location.reload();
+            handleDrawerClose();
+        }
+    };
+    const handleProfile = async () => {
+        if (auth.role == "Admin") {
+            handleDrawerClose();
+            navigate("/admin/profile");
+        } else if (
+            auth.role == "Owner" ||
+            auth.role == "Peer" ||
+            auth.role == "Secondary_Owner"
+        ) {
+            handleDrawerClose();
+            navigate("/organiser/profile");
+        } else {
+            handleDrawerClose();
+            navigate("/profile");
+        }
+        setActiveItem("profile");
+    };
+    const handleAdd = async () => {
+        handleDrawerClose();
+        if (auth?.role == "Admin") navigate("/admin/addadmin");
+        else navigate("/organiser/addSecondaryOwner");
+        setActiveItem("addanother");
+    };
+    const handleRequests = async () => {
+        handleDrawerClose();
+        if (auth?.role == "Admin") navigate("/admin/Requests");
 
-  };
-  const handleOrganisations = async () => {
-    handleDrawerClose();
-    if (auth?.role == "Admin") navigate("/admin/Organisations");
-    setActiveItem("organisations")
-  };
-  const handlePeerRequests = async () => {
-    handleDrawerClose();
-    if (auth.role == "Owner" || auth.role == "Secondary_Owner")
-      navigate("organiser/PeerRequests");
+    };
+    const handleOrganisations = async () => {
+        handleDrawerClose();
+        if (auth?.role == "Admin") navigate("/admin/Organisations");
+        setActiveItem("organisations")
+    };
+    const handlePeerRequests = async () => {
+        handleDrawerClose();
+        if (auth.role == "Owner" || auth.role == "Secondary_Owner")
+            navigate("organiser/PeerRequests");
 
-    setActiveItem("peerrequests");
-  };
-  const handleOrganiseEvent = async () => {
-    handleDrawerClose();
-    navigate("/organiser/AddEvent");
-    setActiveItem("createevent");
-  };
-  const handleOrganisationTree = async () => {
-    const profile = store.getState().profile.info;
-    handleDrawerClose();
-    navigate(`/organiser/OrganisationTree/${profile.organisationId}`);
-    setActiveItem("orgTree");
-  };
-  const handleLogin = async () => {
-    handleDrawerClose();
-    navigate("login");
-    setActiveItem("login");
-  };
-  const handleGlobalHome= () => {
-    handleDrawerClose();
-    navigate("/");
-    setActiveItem("globalhome"); 
-  };
-  const handleOrganiseAnEvent = async () => {
-    handleDrawerClose();
-    navigate("/organiser");
-    setActiveItem("organiseanevent");
+        setActiveItem("peerrequests");
+    };
+    const handleOrganiseEvent = async () => {
+        handleDrawerClose();
+        navigate("/organiser/AddEvent");
+        setActiveItem("createevent");
+    };
+    const handleOrganisationTree = async () => {
+        const profile = store.getState().profile.info;
+        handleDrawerClose();
+        navigate(`/organiser/OrganisationTree/${profile.organisationId}`);
+        setActiveItem("orgTree");
+    };
+    const handleLogin = async () => {
+        handleDrawerClose();
+        navigate("login");
+        setActiveItem("login");
+    };
+    const handleGlobalHome = () => {
+        handleDrawerClose();
+        navigate("/");
+        setActiveItem("globalhome");
+    };
+    const handleOrganiseAnEvent = async () => {
+        handleDrawerClose();
+        navigate("/organiser");
+        setActiveItem("organiseanevent");
 
-  };
+    };
 
-  const handleMyPastEvents = async () => {
-    handleDrawerClose();
-    navigate("/organiser/myPastEvents");
-    setActiveItem("mypastevents")
-  };
-  const handleOrgPastEvents = async () => {
-    handleDrawerClose();
-    navigate("/organiser/organisationPastEvents");
-    setActiveItem("orgpastevents");
-  };
+    const handleMyPastEvents = async () => {
+        handleDrawerClose();
+        navigate("/organiser/myPastEvents");
+        setActiveItem("mypastevents")
+    };
+    const handleOrgPastEvents = async () => {
+        handleDrawerClose();
+        navigate("/organiser/organisationPastEvents");
+        setActiveItem("orgpastevents");
+    };
 
-  const handleEventRequests = async () => {
-    handleDrawerClose();
-    navigate("/organiser/eventReq");
-    setActiveItem("eventreq");
-  };
+    const handleEventRequests = async () => {
+        handleDrawerClose();
+        navigate("/organiser/eventReq");
+        setActiveItem("eventreq");
+    };
 
-  const handleOrganisationEvents = async () => {
-    handleDrawerClose();
-    navigate("/organiser/organisationEvents");
-    setActiveItem("orgevents");
-  };
-  const handleRegisteredEvents = async () => {
-    handleDrawerClose();
-    navigate("/registeredEvents");
-    setActiveItem("registeredevents");
-  };
-  const handleHome = async () => {
-    handleDrawerClose();
-    if (auth.role == "User") {
-      navigate("/");
-    } else if (["Owner", "Secondary_Owner", "Peer"].includes(auth.role)) {
-      navigate("/organiser");
-    } else {
-      navigate("/Admin");
-    }
-    setActiveItem("home");
-  };
-  const handleCategories = async() =>{
-    handleDrawerClose();
-    navigate("/Admin/categories")
+    const handleOrganisationEvents = async () => {
+        handleDrawerClose();
+        navigate("/organiser/organisationEvents");
+        setActiveItem("orgevents");
+    };
+    const handleRegisteredEvents = async () => {
+        handleDrawerClose();
+        navigate("/registeredEvents");
+        setActiveItem("registeredevents");
+    };
+    const handleHome = async () => {
+        handleDrawerClose();
+        if (auth.role == "User") {
+            navigate("/");
+        } else if (["Owner", "Secondary_Owner", "Peer"].includes(auth.role)) {
+            navigate("/organiser");
+        } else {
+            navigate("/Admin");
+        }
+        setActiveItem("home");
+    };
+    const handleCategories = async () => {
+        handleDrawerClose();
+        navigate("/Admin/categories")
     }
 
     const handleUsersList = async () => {
         handleDrawerClose();
         navigate("/Admin/userslist")
     }
-  return (
+    return (
 
         <div className={classes.root}>
             {open ? <div style={{ width: '100vw', height: '100vh', position: 'absolute', background: 'rgba(0,0,0,0.1)', zIndex: '40' }} onClick={handleDrawerClose}></div> : <></>}
@@ -324,7 +326,11 @@ function Sidebar({ open, setOpen }) {
                     {auth.role == "Owner" || auth.role == "Secondary_Owner" ? (
                         <ListItem button className={activeItem == 'peerrequests' ? classes.activeBar : ""} onClick={handlePeerRequests}>
                             <ListItemIcon>
+                                {requestedPeers==0?
                                 <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                : <Badge badgeContent={requestedPeers.length} color="secondary">
+                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                </Badge>}
                             </ListItemIcon>
                             <ListItemText primary="Peer Requests" />
                         </ListItem>
@@ -415,9 +421,14 @@ function Sidebar({ open, setOpen }) {
                             </ListItem>
 
                             <ListItem button className={activeItem == 'eventreq' ? classes.activeBar : ""} onClick={handleEventRequests}>
-                                <ListItemIcon>
-                                    <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} />
-                                </ListItemIcon>
+                                    <ListItemIcon>
+                                {eventRequests.length == 0 ?
+                                        <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} /> :
+                                        <Badge badgeContent={eventRequests.length} color="secondary">
+                                            <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} />
+                                            </Badge>}
+                                    </ListItemIcon> 
+                                        
                                 <ListItemText primary="Event Requests" />
                             </ListItem>
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEventsCreatedBy } from '../Features/ReducerSlices/EventsSlice';
+import {  fetchMyEventsRequests, fetchOrganisationEventsRequests } from '../Features/ReducerSlices/EventsSlice';
 import OrganiserEventCard from './OrganiserEventCards'
 import { Link } from 'react-router-dom';
 
@@ -10,9 +11,14 @@ const OrganiserLandingPage = () => {
     const profile = useSelector((state) => state.profile.info);
     //console.log(profile);
     let myEvents = useSelector((state) => state.events.myEvents);
+    let eventRequests = useSelector((state) => state.events.eventRequests);
+
     useEffect(() => {
         if (myEvents.length === 0) {
         dispatch(fetchEventsCreatedBy(profile.administratorId));
+        }
+        if (eventRequests == 0 && profile.roleId !=4){
+          dispatch(fetchOrganisationEventsRequests(profile.organisationId));
         }
 },[]);
   return (
