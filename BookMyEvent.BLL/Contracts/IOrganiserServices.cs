@@ -75,6 +75,7 @@ namespace BookMyEvent.BLL.Contracts
         /// Returns a list of BLAdministrator objects
         /// </returns>
         Task<List<BLAdministrator>> GetAllRequestedOrganisers(Guid orgId);
+        Task<int> GetNoOfRequestedOrganisers(Guid orgId);
 
         /// <summary>
         /// An asynchronous method that gets all the organisers of the organisation

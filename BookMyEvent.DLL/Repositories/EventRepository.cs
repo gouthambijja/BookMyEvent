@@ -605,6 +605,18 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
+        public async Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId)
+        {
+            try
+            {
+                var events =await _db.Events.CountAsync(x => x.OrganisationId == organisationId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true);
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch requested events from the database.", ex);
+            }
+        }
         public async Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds)
         {
             try

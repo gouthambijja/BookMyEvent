@@ -201,6 +201,20 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
+        public async Task<int> GetNoOfRequestedOrganisers(Guid orgId)
+        {
+
+            try
+            {
+            
+                var result = await _administrationRepository.GetNoOfPeerAdministratorRequests(orgId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
 
         public async Task<List<BLAdministrator>> GetAllRequestedOwners()
         {

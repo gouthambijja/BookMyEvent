@@ -640,6 +640,21 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(Roles = "Owner,Peer,Secondary_Owner,Admin")]
+        [HttpGet("NoOfOrganisationRequests/{orgId}")]
+        public async Task<IActionResult> GetNoOfOrganisationRequests(Guid orgId)
+        {
+            try
+            {
+                var result = await _eventServices.GetNoOfOrganisationRequestedEvents(orgId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [Authorize(Roles = "Owner,Peer,Secondary_Owner,Admin")]
         [HttpGet("OrganiserRequests/{organiserId}")]
         public async Task<IActionResult> GetOrganiserRequests(Guid organiserId)

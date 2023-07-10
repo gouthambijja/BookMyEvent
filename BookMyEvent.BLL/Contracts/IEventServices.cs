@@ -62,6 +62,7 @@ namespace BookMyEvent.BLL.Contracts
 
         Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId);
         Task<List<BLEvent>> GetOrganisationRequestedEvents(Guid organisationId);
+        Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId);
         Task<bool> UpdateEventAvailableSeats(Guid eventId, int availableSeats);
 
         Task<(int NoOfOrganiserPastEvents, int NoOfOrganisationPastEvents)> GetNoOfPastEvents(Guid organiserId, Guid organisationId);

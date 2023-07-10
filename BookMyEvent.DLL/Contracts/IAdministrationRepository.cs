@@ -103,6 +103,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="OrgId"></param>
         /// <returns> List of Peer Administrators whose requests are yet to accept/reject (role id=4, isAccepted=false and isactive=true) </returns>
         public Task<List<Administration>?> GetPeerAdministratorRequests(Guid OrgId);
+        Task<int> GetNoOfPeerAdministratorRequests(Guid OrgId);
 
         /// <summary>
         /// Method to Update Administrator Details
