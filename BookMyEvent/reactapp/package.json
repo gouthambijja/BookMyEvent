@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "country-state-city": "^3.1.4",
+    "excel-date-to-js": "^1.1.5",
     "export-from-json": "^1.7.2",
     "http-proxy-middleware": "^2.0.6",
     "jwt-decode": "^3.1.2",

@@ -42,6 +42,7 @@ const RegisterEvent = () => {
       const formFields = await OrganiserFormServices().getFieldTypesByFormId(
         formId
       );
+      console.log(formFields);
       formFields.forEach((e) => {
         setFieldRegistrationId((prev) => {
           return { ...prev, [e.lable]: e.registrationFormFieldId };

@@ -72,10 +72,12 @@ const EventTickets = () => {
         const ws = wb.Sheets[wsname];
         /* Convert array of arrays */
         const data = utils.sheet_to_json(ws);
+
         /* Update state */
         // this.setState(, () => {
         //   console.log(JSON.stringify(this.state.data, null, 2));
         // });
+        
         console.log( data );
       };
    
