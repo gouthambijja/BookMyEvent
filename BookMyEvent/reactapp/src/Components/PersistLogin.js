@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import useRefreshToken from "../Hooks/RefreshToken";
 import { useSelector } from "react-redux";
 import usePersist from "../Hooks/Persist";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +43,7 @@ const PersistLogin = () => {
             {!persist
                 ? <Outlet />
                 : isLoading
-                    ? <p>Loading...</p>
+                    ? <p><CircularProgress sx={{position:'absolute',top:'50vh',left:'50vw',transform:'translate(-50%,-50%)'}}/></p>
                     : <Outlet />
             }
         </>
