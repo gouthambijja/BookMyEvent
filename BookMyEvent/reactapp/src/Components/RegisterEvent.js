@@ -123,24 +123,35 @@ const RegisterEvent = () => {
       await UserInputFormServices().submitUserInputForm(formResultPost)
     );
     dispatch(AddRegisteredEventId(event.eventId));
-    dispatch(UpdateAvailableSeats({eventId:eventId,availableSeats:eventRegistrationFormFields.length}));
+    dispatch(
+      UpdateAvailableSeats({
+        eventId: eventId,
+        availableSeats: eventRegistrationFormFields.length,
+      })
+    );
     setToggleRegistrationTransaction(false);
   };
   const handleAddPerson = () => {
-    if(Number.parseInt(event.availableSeats == -1?event.capacity:event.availableSeats)>(Number.parseInt(eventRegistrationFormFields.length))){
     if (
-      eventRegistrationFormFields.length < event.maxNoOfTicketsPerTransaction ) 
-       {
-      setEventRegistrationFormFields([
-        ...eventRegistrationFormFields,
-        [...eventRegistrationFormFields[0]],
-      ]);
-      //console.log(eventRegistrationFormFields);
+      Number.parseInt(
+        event.availableSeats == -1 ? event.capacity : event.availableSeats
+      ) > Number.parseInt(eventRegistrationFormFields.length)
+    ) {
+      if (
+        eventRegistrationFormFields.length < event.maxNoOfTicketsPerTransaction
+      ) {
+        setEventRegistrationFormFields([
+          ...eventRegistrationFormFields,
+          [...eventRegistrationFormFields[0]],
+        ]);
+        //console.log(eventRegistrationFormFields);
+      } else {
+        toast.warning(
+          `Per transaction you can register max of ${event.maxNoOfTicketsPerTransaction} tickets only`
+        );
+      }
     } else {
-      toast.warning(`Per transaction you can register max of ${event.maxNoOfTicketsPerTransaction} tickets only`)
-    }}
-    else{
-      toast.warning(`No seats Available`)
+      toast.warning(`No seats Available`);
     }
   };
   const handleRemove = (index) => {
@@ -241,6 +252,23 @@ const RegisterEvent = () => {
                       required
                     />
                   ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                    "File" ? (
+                    <TextField
+                      style={{
+                        marginBottom: "20px",
+                        width: "100%",
+                        maxWidth: "800px",
+                      }}
+                      type="file"
+                      name={formField.lable}
+                      label={formField.lable}
+                      value={formData[formField.lable]}
+                      onChange={(e) => {
+                        handlechange(e, index);
+                      }}
+                      required
+                    />
+                  ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
                     "Email" ? (
                     <TextField
                       style={{
@@ -303,29 +331,34 @@ const RegisterEvent = () => {
                     </FormControl>
                   ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
                     "Select" ? (
-                    <FormControl
-                      style={{
-                        marginBottom: "20px",
-                        width: "100%",
-                        maxWidth: "800px ",
-                      }}
-                    >
-                      <FormLabel>{formField.lable}</FormLabel>
-                      <Select
-                        name={formField.lable}
-                        value={formData[formField.lable]}
-                        onChange={(e) => {
-                          handlechange(e, index);
+                    event.isFree == false &&
+                    formField.lable == "Ticket Prices" ? (
+                      <FormControl
+                        style={{
+                          marginBottom: "20px",
+                          width: "100%",
+                          maxWidth: "800px ",
                         }}
-                        required
                       >
-                        {JSON.parse(formField.options).map((option) => (
-                          <MenuItem key={cnt++} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                        <FormLabel>{formField.lable}</FormLabel>
+                        <Select
+                          name={formField.lable}
+                          value={formData[formField.lable]}
+                          onChange={(e) => {
+                            handlechange(e, index);
+                          }}
+                          required
+                        >
+                          {JSON.parse(formField.options).map((option) => (
+                            <MenuItem key={cnt++} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    ) : (
+                      <></>
+                    )
                   ) : (
                     <></>
                   )}

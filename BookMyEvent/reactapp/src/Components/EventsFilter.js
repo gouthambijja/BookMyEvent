@@ -27,17 +27,19 @@ const filtersStyle = {
   padding: "30px",
   width: "100%",
   backdropFilter: "blur(6px)",
+  borderBottom:"1px solid #d0d0d0",
 };
 
 const EventsFilter = ({ onFilter }) => {
   const categories = useSelector((store) => store.category.categories);
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState('');
   const [isFree, setIsFree] = useState(false);
   const [categoryIds, setcategoryIds] = useState([]);
   const [Visibility, SetVisibility] = useState(false);
   const [name, setName] = useState("");
   const handleFilter = () => {
     const filter = {
+      name:name?name:"",
       location: location ? location : "",
       isFree: isFree ? isFree : false,
       categoryIds: categoryIds ? categoryIds : [],
@@ -63,7 +65,7 @@ const EventsFilter = ({ onFilter }) => {
     }
   };
   return (
-    <div>
+    <div >
       {Visibility ? (
         <div style={filtersStyle}>
           <div
@@ -100,6 +102,19 @@ const EventsFilter = ({ onFilter }) => {
                 shrink: true,
               }}
             />
+            <Box sx={{marginTop:"10px"}}>
+            <TextField
+              label="EventName"
+              fullWidth
+              variant="outlined"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              
+            /></Box>
 
             <FormControlLabel
               control={
@@ -125,7 +140,7 @@ const EventsFilter = ({ onFilter }) => {
           zIndex: "30   ",
         }}
       >
-        <Button variant="contained" color="primary" onClick={handleFilter}>
+        <Button variant="contained" color="primary" onClick={handleFilter} >
           {!Visibility ? "Filter" : "ApplyFilter"}
         </Button>
         {Visibility ? (

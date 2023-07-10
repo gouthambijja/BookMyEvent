@@ -453,7 +453,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
+        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string? name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
         {
             try
             {
@@ -464,6 +464,7 @@ namespace BookMyEvent.DLL.Repositories
                     e.EventStartingPrice >= startPrice &&
                     e.EventEndingPrice <= endPrice &&
                     ((location != "" && location != null) ? (e.Location.Contains(location) || e.State.Contains(location) || e.Country.Contains(location) || e.City.Contains(location)) : true) &&
+                    ((name != "" && name != null)?e.EventName.Contains(name):true) &&
                     (isFree == true ? e.IsFree : true) &&
                     (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) &&
                     e.IsActive == true &&

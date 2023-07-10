@@ -18,11 +18,9 @@ namespace BookMyEvent.DLL.Repositories
         }
         public async Task<List<FieldType>> GetAllFieldTypes()
         {
-            Console.WriteLine("hye");
             try
             {
                 var formFields =  await context.FieldTypes.ToListAsync();
-                Console.WriteLine(formFields.Count());
                 return formFields;
             }
             catch

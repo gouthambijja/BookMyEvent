@@ -4,6 +4,7 @@ namespace BookMyEvent.BLL.RequestModels
 {
     public class FilterEvent
     {
+        public string? name { get;set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
         public decimal? startPrice { get; set; }
