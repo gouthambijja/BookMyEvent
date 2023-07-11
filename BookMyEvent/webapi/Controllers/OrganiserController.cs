@@ -328,7 +328,7 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPut("{id}/reject")]
         public async Task<IActionResult> rejectorganiser(BLAdministrator? administrator)
         {
-            var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy);
+            var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy, administrator.RejectedReason);
             if (result)
             {
                 _fileLogger.AddInfoToFile("[RejectOrganiser] Organiser Reject Success");

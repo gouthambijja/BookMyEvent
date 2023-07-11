@@ -302,10 +302,13 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="updatedAt">
         /// Takes the updated at as input as DateTime type
         /// </param>
+        /// <param name="reason">
+        /// Takes the reason as input as string type
+        /// </param>
         /// <returns>
         /// Returns a Event object
         /// </returns>
-        Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
+        Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason);
 
         /// <summary>
         /// An asynchronous mthod to get list of all the events created by an organisation
