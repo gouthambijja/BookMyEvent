@@ -7,9 +7,11 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "BookMyEvent.ReactApp", "rea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyEvent.WebApi", "webapi\BookMyEvent.WebApi.csproj", "{B6FBFE45-2DD4-43A4-91F9-049C8BBEDDB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyEvent.BLL", "..\BookMyEvent.BLL\BookMyEvent.BLL.csproj", "{A06F5414-0BE3-46ED-B389-D8D738058CE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyEvent.BLL", "..\BookMyEvent.BLL\BookMyEvent.BLL.csproj", "{A06F5414-0BE3-46ED-B389-D8D738058CE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyEvent.DLL", "..\BookMyEvent.DLL\BookMyEvent.DLL.csproj", "{7C1F15FF-3939-47DD-A327-405CF05254F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyEvent.DLL", "..\BookMyEvent.DLL\BookMyEvent.DLL.csproj", "{7C1F15FF-3939-47DD-A327-405CF05254F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyEvent.xUnitTests", "BookMyEvent.xUnitTests\BookMyEvent.xUnitTests.csproj", "{A6B088A2-439E-4107-81A2-253D05184496}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{7C1F15FF-3939-47DD-A327-405CF05254F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C1F15FF-3939-47DD-A327-405CF05254F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C1F15FF-3939-47DD-A327-405CF05254F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B088A2-439E-4107-81A2-253D05184496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B088A2-439E-4107-81A2-253D05184496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B088A2-439E-4107-81A2-253D05184496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B088A2-439E-4107-81A2-253D05184496}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
