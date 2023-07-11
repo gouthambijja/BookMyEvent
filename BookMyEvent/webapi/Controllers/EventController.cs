@@ -420,7 +420,7 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+                BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now, _event.RejectedReason);
                 if (Events == null) { return BadRequest("error in BL"); }
                 return Ok(Events);
             }
@@ -528,15 +528,17 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 // Set default values if parameters are not provided
                 Console.WriteLine(filterEvent.startPrice + " " + filterEvent.pageSize + filterEvent.endDate + filterEvent.startPrice + "---");
+
                 filterEvent.startDate = filterEvent.startDate == default ? DateTime.Now.AddYears(-20) : filterEvent.startDate;
                 filterEvent.endDate = filterEvent.endDate == default ? DateTime.Now.AddYears(20) : filterEvent.endDate;
                 filterEvent.startPrice = filterEvent.startPrice == default ? 0 : filterEvent.startPrice;
                 filterEvent.endPrice = filterEvent.endPrice == default ? 214748367 : filterEvent.endPrice;
                 filterEvent.location = filterEvent.location ?? string.Empty;
+                filterEvent.name = filterEvent.name ?? string.Empty;
                 filterEvent.categoryIds = filterEvent.categoryIds ?? new List<int>();
                 filterEvent.pageNumber = filterEvent.pageNumber == default ? 0 : filterEvent.pageNumber;
                 filterEvent.pageSize = filterEvent.pageSize == default ? 10 : filterEvent.pageSize;
-                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize);
+                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.name,filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -634,6 +636,21 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 var result = await _eventServices.GetOrganisationRequestedEvents(orgId);
                     return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Owner,Peer,Secondary_Owner,Admin")]
+        [HttpGet("NoOfOrganisationRequests/{orgId}")]
+        public async Task<IActionResult> GetNoOfOrganisationRequests(Guid orgId)
+        {
+            try
+            {
+                var result = await _eventServices.GetNoOfOrganisationRequestedEvents(orgId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

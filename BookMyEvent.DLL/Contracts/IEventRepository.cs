@@ -302,10 +302,13 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="updatedAt">
         /// Takes the updated at as input as DateTime type
         /// </param>
+        /// <param name="reason">
+        /// Takes the reason as input as string type
+        /// </param>
         /// <returns>
         /// Returns a Event object
         /// </returns>
-        Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
+        Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason);
 
         /// <summary>
         /// An asynchronous mthod to get list of all the events created by an organisation
@@ -340,7 +343,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a list of Event objects
         /// </returns>
-        Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
+        Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
 
         /// <summary>
         /// An asynchronous method to update the IsActive status of an event
@@ -392,6 +395,7 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a list of Event objects
         /// </returns>
         Task<List<Event>> GetOrganisationRequestedEvents(Guid organisationId);
+        Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId);
         /// <summary>
         /// return all the events whose ids present in the eventIds list
         /// </summary>

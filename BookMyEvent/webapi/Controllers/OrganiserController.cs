@@ -298,6 +298,25 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest("No requests found");
             }
         }
+        [HttpGet("Organisation/{orgId}/NoOfRequestedPeers")]
+        public async Task<IActionResult> GetNoOfRequestedPeers(Guid orgId)
+        {
+            try
+            {
+
+            var result = await _organiserServices.GetNoOfRequestedOrganisers(orgId);
+                _fileLogger.AddInfoToFile("[GetNoOfRequestedPeers] Fetch No Of Peer Requests success");
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _fileLogger.AddExceptionToFile("[GetNoOfRequestedPeers]"+ex.Message);
+
+                return BadRequest(ex.Message);
+            }
+
+        }
         /// <summary>
         /// Service to Accept Organizer
         /// </summary>
@@ -317,7 +336,7 @@ namespace BookMyEvent.WebApi.Controllers
             else
             {
                 _fileLogger.AddExceptionToFile("[AcceptOrganiser] Organiser Accept Failed");
-                return BadRequest("Accept failed"); 
+                return BadRequest("Accept failed");
             }
         }
         /// <summary>
@@ -328,7 +347,7 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpPut("{id}/reject")]
         public async Task<IActionResult> rejectorganiser(BLAdministrator? administrator)
         {
-            var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy);
+            var result = await _organiserServices.RejectOrganiser(administrator.AdministratorId, administrator.RejectedBy, administrator.RejectedReason);
             if (result)
             {
                 _fileLogger.AddInfoToFile("[RejectOrganiser] Organiser Reject Success");
@@ -460,7 +479,7 @@ namespace BookMyEvent.WebApi.Controllers
             else
             {
                 _fileLogger.AddExceptionToFile("[GetAllOwners] Fetch All Active Owners Failed");
-            return BadRequest("Error");
+                return BadRequest("Error");
             }
         }
 

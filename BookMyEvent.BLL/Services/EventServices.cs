@@ -311,11 +311,11 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-        public async Task<BLEvent> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt)
+        public async Task<BLEvent> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason)
         {
             try
             {
-                return _mapper.Map<BLEvent>(await eventRepository.UpdateRejectedBy(eventId, rejectedBy, updatedBy, updatedAt));
+                return _mapper.Map<BLEvent>(await eventRepository.UpdateRejectedBy(eventId, rejectedBy, updatedBy, updatedAt, reason));
             }
             catch
             {
@@ -349,11 +349,11 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<List<BLEvent>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
+        public async Task<List<BLEvent>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string? name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
         {
             try
             {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location, isFree, categoryIds, pageNumber,pageSize));
+                return _mapper.Map<List<BLEvent>>(await eventRepository.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location,name, isFree, categoryIds, pageNumber,pageSize));
             }
             catch(Exception ex)
             {
@@ -431,6 +431,15 @@ namespace BookMyEvent.BLL.Services
             {
                 throw new Exception("Failed to fetch organisation requested events.", ex);
             }
+        }
+
+        public async Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId)
+        {
+            try
+            {
+                return await eventRepository.GetNoOfOrganisationRequestedEvents(organisationId);
+            }
+            catch  { return 0; }
         }
         public async Task<List<BLEventImages>> GetEventImages(Guid eventId)
         {

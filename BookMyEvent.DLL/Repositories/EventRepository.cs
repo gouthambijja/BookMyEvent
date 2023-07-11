@@ -402,7 +402,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt)
+        public async Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason)
         {
             try
             {
@@ -412,6 +412,7 @@ namespace BookMyEvent.DLL.Repositories
                     _event.RejectedBy = rejectedBy;
                     _event.UpdatedBy = updatedBy;
                     _event.UpdatedOn = updatedAt;
+                    _event.RejectedReason = reason;
                     await _db.SaveChangesAsync();
                     await _db.Entry(_event).ReloadAsync();
                     return _event;
@@ -453,7 +454,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
+        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string? name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
         {
             try
             {
@@ -464,6 +465,7 @@ namespace BookMyEvent.DLL.Repositories
                     e.EventStartingPrice >= startPrice &&
                     e.EventEndingPrice <= endPrice &&
                     ((location != "" && location != null) ? (e.Location.Contains(location) || e.State.Contains(location) || e.Country.Contains(location) || e.City.Contains(location)) : true) &&
+                    ((name != "" && name != null)?e.EventName.Contains(name):true) &&
                     (isFree == true ? e.IsFree : true) &&
                     (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) &&
                     e.IsActive == true &&
@@ -605,6 +607,18 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
+        public async Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId)
+        {
+            try
+            {
+                var events =await _db.Events.CountAsync(x => x.OrganisationId == organisationId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true);
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch requested events from the database.", ex);
+            }
+        }
         public async Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds)
         {
             try

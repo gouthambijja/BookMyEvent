@@ -39,7 +39,7 @@ namespace BookMyEvent.BLL.Contracts
         Task<BLEvent> UpdateIsCancelledEvent(Guid eventId, Guid updatedBy, DateTime updatedAt);
         Task<BLEvent> UpdateIsPublishedEvent(Guid eventId, Guid updatedBy, DateTime updatedAt);
         Task<BLEvent> UpdateAcceptedBy(Guid eventId, Guid acceptBy, Guid updatedBy, DateTime updatedAt);
-        Task<BLEvent> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
+        Task<BLEvent> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason);
         Task<List<BLEvent>> GetAllCreatedEventsByOrganisation(Guid orgId);
         Task<List<BLEvent>> GetAllCreatedEventsByOrganiser(Guid organiserId);
 
@@ -54,7 +54,7 @@ namespace BookMyEvent.BLL.Contracts
         /// Returns a tuple of bool to say if event is deleted succeefully or not and string
         /// </returns>
         Task<(bool isActiveUpdated, string message)> SoftDelete(Guid eventId, Guid updatedBy, DateTime updatedOn);
-        Task<List<BLEvent>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
+        Task<List<BLEvent>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string? name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
         Task<List<BLEventImages>> GetEventImages(Guid eventId);
 
         Task<List<BLEvent>> GetAllPastEventsByOrganisationId(Guid organisationId, int pageNumber, int pageSize);
@@ -62,6 +62,7 @@ namespace BookMyEvent.BLL.Contracts
 
         Task<List<BLEvent>> GetOrganiserRequestedEvents(Guid organiserId);
         Task<List<BLEvent>> GetOrganisationRequestedEvents(Guid organisationId);
+        Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId);
         Task<bool> UpdateEventAvailableSeats(Guid eventId, int availableSeats);
 
         Task<(int NoOfOrganiserPastEvents, int NoOfOrganisationPastEvents)> GetNoOfPastEvents(Guid organiserId, Guid organisationId);

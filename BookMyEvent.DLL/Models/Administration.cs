@@ -16,6 +16,7 @@ public partial class Administration
     public string Email { get; set; } = null!;
 
     public string PhoneNumber { get; set; } = null!;
+    public string? RejectedReason { get; set; } 
 
     public Guid? AccountCredentialsId { get; set; }
 
