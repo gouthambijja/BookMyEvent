@@ -47,6 +47,7 @@ import EventTickets from "./pages/EventTickets";
 import EditEventCard from "./Components/EditEventCard";
 import Categories from "./pages/Categories";
 import UserListPage from "./pages/UsersListPage";
+import VerificationPage from "./pages/VerificationPage";
 
 
 

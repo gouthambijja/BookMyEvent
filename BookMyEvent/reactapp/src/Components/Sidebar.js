@@ -107,7 +107,8 @@ function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
     const auth = useSelector((store) => store.auth);
     let eventRequests = useSelector((state) => state.events.eventRequests);
-  const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
+    const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
+    const Profile = useSelector((state) => (state.profile.info));
     const logout = useLogout();
     const classes = useStyles();
     const [activeItem, setActiveItem] = useState('');
@@ -323,14 +324,14 @@ function Sidebar({ open, setOpen }) {
                     ) : (
                         <></>
                     )}
-                    {auth.role == "Owner" || auth.role == "Secondary_Owner" ? (
+                    {auth.role == "Owner" && Profile.isAccepted == true || auth.role == "Secondary_Owner" ? (
                         <ListItem button className={activeItem == 'peerrequests' ? classes.activeBar : ""} onClick={handlePeerRequests}>
                             <ListItemIcon>
-                                {requestedPeers==0?
-                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                : <Badge badgeContent={requestedPeers.length} color="secondary">
-                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                </Badge>}
+                                {requestedPeers == 0 ?
+                                    <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                    : <Badge badgeContent={requestedPeers.length} color="secondary">
+                                        <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                    </Badge>}
                             </ListItemIcon>
                             <ListItemText primary="Peer Requests" />
                         </ListItem>
@@ -371,8 +372,8 @@ function Sidebar({ open, setOpen }) {
                     ) : (
                         <></>
                     )}
-                    {auth.role == "Owner" ||
-                        auth.role == "Peer" ||
+                    {auth.role == "Owner" && Profile.isAccepted == true ||
+                        (auth.role == "Peer" && Profile.isAccepted == true) ||
                         auth.role == "Secondary_Owner" ? (
                         <ListItem button className={activeItem == 'createevent' ? classes.activeBar : ""} onClick={handleOrganiseEvent}>
                             <ListItemIcon>
@@ -383,7 +384,7 @@ function Sidebar({ open, setOpen }) {
                     ) : (
                         <></>
                     )}
-                    {auth.role === "Owner" ? (
+                    {auth.role === "Owner" && Profile.isAccepted == true ? (
                         <ListItem button className={activeItem == 'addanother' ? classes.activeBar : ""} onClick={handleAdd}>
                             <ListItemIcon>
                                 <PersonAdd className={activeItem == 'addanother' ? classes.activeBar : ""} />
@@ -393,8 +394,8 @@ function Sidebar({ open, setOpen }) {
                     ) : (
                         <></>
                     )}
-                    {auth.role == "Owner" ||
-                        auth.role == "Peer" ||
+                    {auth.role == "Owner" && Profile.isAccepted == true ||
+                        (auth.role == "Peer" && Profile.isAccepted == true) ||
                         auth.role == "Secondary_Owner" ? (
                         <>
                             <ListItem button className={activeItem == 'orgTree' ? classes.activeBar : ""} onClick={handleOrganisationTree}>
@@ -421,14 +422,14 @@ function Sidebar({ open, setOpen }) {
                             </ListItem>
 
                             <ListItem button className={activeItem == 'eventreq' ? classes.activeBar : ""} onClick={handleEventRequests}>
-                                    <ListItemIcon>
-                                {eventRequests.length == 0 ?
+                                <ListItemIcon>
+                                    {eventRequests.length == 0 ?
                                         <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} /> :
                                         <Badge badgeContent={eventRequests.length} color="secondary">
                                             <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} />
-                                            </Badge>}
-                                    </ListItemIcon> 
-                                        
+                                        </Badge>}
+                                </ListItemIcon>
+
                                 <ListItemText primary="Event Requests" />
                             </ListItem>
 
