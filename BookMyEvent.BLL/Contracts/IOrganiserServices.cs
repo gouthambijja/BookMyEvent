@@ -115,7 +115,7 @@ namespace BookMyEvent.BLL.Contracts
         /// <returns>
         /// Returns a bool value saying is organiser rejected successfully or not
         /// </returns>
-        Task<bool> RejectOrganiser(Guid administratorId, Guid? rejectedBy);
+        Task<bool> RejectOrganiser(Guid administratorId, Guid? rejectedBy, string reason);
 
         /// <summary>
         /// An asynchronous method that checks if the organiser with email is available or not

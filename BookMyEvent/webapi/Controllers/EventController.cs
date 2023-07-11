@@ -420,7 +420,7 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now);
+                BLEvent Events = await _eventServices.UpdateRejectedBy(_event.EventId, _event.RejectedBy.Value, _event.UpdatedBy.Value, DateTime.Now, _event.RejectedReason);
                 if (Events == null) { return BadRequest("error in BL"); }
                 return Ok(Events);
             }

@@ -402,7 +402,7 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt)
+        public async Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason)
         {
             try
             {
@@ -412,6 +412,7 @@ namespace BookMyEvent.DLL.Repositories
                     _event.RejectedBy = rejectedBy;
                     _event.UpdatedBy = updatedBy;
                     _event.UpdatedOn = updatedAt;
+                    _event.RejectedReason = reason;
                     await _db.SaveChangesAsync();
                     await _db.Entry(_event).ReloadAsync();
                     return _event;

@@ -429,7 +429,7 @@ namespace BookMyEvent.DLL.Repositories
         }
 
 
-        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId)
+        public async Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId, string reason)
         {
             try
             {
@@ -438,7 +438,7 @@ namespace BookMyEvent.DLL.Repositories
                 {
 
                     administrator.RejectedBy = rejectedByUserId;
-                    //administrator.RejectedReason = reason;
+                    administrator.RejectedReason = reason;
                     administrator.IsActive = false;
                     await _dbcontext.SaveChangesAsync();
                     return true;

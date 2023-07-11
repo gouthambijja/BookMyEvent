@@ -155,7 +155,7 @@ namespace BookMyEvent.DLL.Contracts
         /// True:If updated successfully
         /// False:If update operation fails
         /// </returns>
-        public Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId);
+        public Task<bool> UpdateRejectedByAndIsActive(Guid rejectedAccountId, Guid? rejectedByUserId, string reason);
 
         /// <summary>
         /// Method to Delete Administrator Account

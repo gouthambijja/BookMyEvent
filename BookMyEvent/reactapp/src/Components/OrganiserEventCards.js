@@ -87,12 +87,13 @@ const OrganiserEventCard = ({ event }) => {
       setOpenDialogtoAccept(true);
 
     }
-    const handleRejectConfirm=()=>{
+    const handleRejectConfirm=(reason)=>{
         const tempEvent = { ...event };
+        tempEvent.rejectedReason= reason;
         tempEvent.rejectedBy=profile.administratorId;
         tempEvent.updatedBy=profile.administratorId;
         //console.log(event);
-        //console.log(tempEvent);
+        console.log(tempEvent);
         dispatch(rejectEvent(tempEvent));
       setOpenDialogtoAccept(false);
         toast.error("Event Rejected!")
@@ -204,6 +205,7 @@ const OrganiserEventCard = ({ event }) => {
                 title="Confirmation"
                 content={accept?"Are you sure you want to accept this Event?":"Are you sure to reject this Event?"}
                 onConfirm={accept ? handleAcceptConfirm : handleRejectConfirm}
+                showReason={!accept}
                 onCancel={handleCancel}
             />
 
