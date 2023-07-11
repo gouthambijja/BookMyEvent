@@ -22,4 +22,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BookMyEvent.BLL\BookMyEvent.BLL.csproj" />
+    <ProjectReference Include="..\..\BookMyEvent.DLL\BookMyEvent.DLL.csproj" />
+    <ProjectReference Include="..\webapi\BookMyEvent.WebApi.csproj" />
+  </ItemGroup>
+
 </Project>
