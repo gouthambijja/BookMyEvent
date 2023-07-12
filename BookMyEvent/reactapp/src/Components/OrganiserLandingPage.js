@@ -38,7 +38,7 @@ const OrganiserLandingPage = () => {
   return (
     <div style={{display:'flex',justifyContent:"center",flexWrap:'wrap',gap:'20px',padding:'40px'}}>
           {myEvents.length > 0 ? myEvents.map((event) => (
-              <OrganiserEventCard key = {cnt++} event={event} />
+            <div key={cnt++}>  <OrganiserEventCard  event={event} /></div>
           )) : <h1>No events created yet</h1>}
     </div>
   )

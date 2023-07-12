@@ -9,7 +9,7 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Roles = "User")]
+    [Authorize]
     public class UserInputFormController:ControllerBase
     {
         private readonly IUserInputFormService _userInputFormService;

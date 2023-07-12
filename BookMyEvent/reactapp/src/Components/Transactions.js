@@ -21,8 +21,9 @@ const Transactions = ({ transactionData }) => {
     const eventName = transactionData.event.eventName;
     const RegisteredData = transactionData.RegisteredData;
     const handlePay = async () => {
+        const id = (auth.role == "User")?"UserId":"AdministratorId";
         const transactionInfo = {
-            UserId: auth.id,
+            [id]: auth.id,
             EventId: transactionData.event.eventId,
             Amount: transactionData.TotalPrice,
             NoOfTickets: transactionData.NoOfTickets,
@@ -36,7 +37,11 @@ const Transactions = ({ transactionData }) => {
         await TransationServices().addTransaction(formData);
         dispatch(UpdateNoOfTransactions());
         dispatch(UpdateAmountSpent(totalPrice))
+        console.log(auth.role);
+        if(auth.role == "User")
         navigate(`/tickets/${transactionData.event.eventId}`);
+        else{
+        navigate(`/organiser`);}
     }
     return (
         <Box sx={{ width: '100vw', height: "calc( 100vh - 64px )", display: "flex", justifyContent: "center", alignItems: "center" }}>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using db.Models;
 
@@ -11,9 +12,11 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    partial class EventManagementSystemTeamZealContextModelSnapshot : ModelSnapshot
+    [Migration("20230712101310_madeUserIdNullableInUserInputForm")]
+    partial class madeUserIdNullableInUserInputForm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -574,9 +577,6 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
-                    b.Property<Guid?>("AdministratorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 0)");
 
@@ -594,13 +594,11 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TransactionId")
                         .HasName("PK__Transact__55433A6B86BD076C");
-
-                    b.HasIndex("AdministratorId");
 
                     b.HasIndex("EventId");
 
@@ -690,9 +688,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<Guid>("UserInputFormId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AdministratorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
@@ -701,8 +696,6 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.HasKey("UserInputFormId")
                         .HasName("PK__UserInpu__A2369B98D4D521DB");
-
-                    b.HasIndex("AdministratorId");
 
                     b.HasIndex("EventId");
 
@@ -944,11 +937,6 @@ namespace BookMyEvent.DLL.Migrations
 
             modelBuilder.Entity("db.Models.Transaction", b =>
                 {
-                    b.HasOne("db.Models.Administration", "Administration")
-                        .WithMany("Transactions")
-                        .HasForeignKey("AdministratorId")
-                        .HasConstraintName("FK_Transactions_Administrators");
-
                     b.HasOne("db.Models.Event", "Event")
                         .WithMany("Transactions")
                         .HasForeignKey("EventId")
@@ -960,8 +948,6 @@ namespace BookMyEvent.DLL.Migrations
                         .HasForeignKey("UserId")
                         .IsRequired()
                         .HasConstraintName("FK_Transactions_Users");
-
-                    b.Navigation("Administration");
 
                     b.Navigation("Event");
 
@@ -987,11 +973,6 @@ namespace BookMyEvent.DLL.Migrations
 
             modelBuilder.Entity("db.Models.UserInputForm", b =>
                 {
-                    b.HasOne("db.Models.Administration", "Administration")
-                        .WithMany("UserInputForms")
-                        .HasForeignKey("AdministratorId")
-                        .HasConstraintName("FK_ADMINISTRATORID_ADMINISTRATION");
-
                     b.HasOne("db.Models.Event", "Event")
                         .WithMany("UserInputForms")
                         .HasForeignKey("EventId")
@@ -1003,8 +984,6 @@ namespace BookMyEvent.DLL.Migrations
                         .HasForeignKey("UserId")
                         .IsRequired()
                         .HasConstraintName("FK_UserID_Users");
-
-                    b.Navigation("Administration");
 
                     b.Navigation("Event");
 
@@ -1056,10 +1035,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Navigation("InverseDeletedByNavigation");
 
                     b.Navigation("InverseRejectedByNavigation");
-
-                    b.Navigation("Transactions");
-
-                    b.Navigation("UserInputForms");
 
                     b.Navigation("Users");
                 });

@@ -367,6 +367,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.TransactionTime)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.UserId).IsRequired(false); // Set UserId column as nullable
+            entity.Property(e => e.AdministratorId).IsRequired(false);
 
             entity.HasOne(d => d.Event).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.EventId)
@@ -377,6 +379,10 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Transactions_Users");
+            entity.HasOne(d => d.Administration).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.AdministratorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Transactions_Administrators");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -429,6 +435,9 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.ToTable("UserInputForm");
 
             entity.Property(e => e.UserInputFormId).ValueGeneratedNever();
+            entity.Property(e => e.UserId).IsRequired(false);
+            entity.Property(e => e.AdministratorId).IsRequired(false);
+
 
             entity.HasOne(d => d.Event).WithMany(p => p.UserInputForms)
                 .HasForeignKey(d => d.EventId)
@@ -439,6 +448,11 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserID_Users");
+
+            entity.HasOne(d => d.Administration).WithMany(p => p.UserInputForms)
+                .HasForeignKey(d => d.AdministratorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ADMINISTRATORID_ADMINISTRATION");
         });
 
         modelBuilder.Entity<UserInputFormField>(entity =>

@@ -76,6 +76,7 @@ const RegisterEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formResult = [];
+    console.log(formData);
     formData.forEach((e, index) => {
       let formFieldResponse = [];
       for (let i in e) {
