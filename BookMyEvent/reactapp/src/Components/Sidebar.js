@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import store from "../App/store";
-
+import { Button, Popover, Typography, } from '@material-ui/core';
 import {
     Drawer,
     IconButton,
@@ -36,6 +36,10 @@ import {
     SupervisedUserCircle,
     SupervisorAccount,
 } from "@material-ui/icons";
+import Popper from '@mui/material/Popper';
+import ListItemButton from '@mui/material/ListItemButton';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import Paper from '@mui/material/Paper';
 import Badge from '@mui/material/Badge';
 import { useNavigate } from "react-router-dom";
 import useLogout from "../Hooks/Logout";
@@ -83,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
         width: drawerWidth,
         background: "#f5f5f5",
+        paddingBottom: '64px',
         backdropFilter: "blur(6px)",
     },
     drawerHeader: {
@@ -105,17 +110,19 @@ const useStyles = makeStyles((theme) => ({
 
 function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
+
+
+
+
     const auth = useSelector((store) => store.auth);
     const NoOfRequestedPeers = useSelector(store => store.organisers.NoOfRequestedOrganisers);
     let NoOfEventRequests = useSelector((state) => state.events.noOfEventRequests);
 
-    // let eventRequests = useSelector((state) => state.events.eventRequests);
-//   const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
     const Profile = useSelector((state) => (state.profile.info));
     const logout = useLogout();
     const classes = useStyles();
     const [activeItem, setActiveItem] = useState('');
-    //   const [open, setOpen] = useState(false);
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -248,10 +255,27 @@ function Sidebar({ open, setOpen }) {
         handleDrawerClose();
         navigate("/Admin/userslist")
     }
+
+    const [isHovered, setIsHovered] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const anchorRef = React.useRef(null);
+    const dropdownRef = React.useRef(null);
+    const handleMouseEnter = () => {
+        console.log("enter");
+        setIsHovered(true);
+        setDropdownOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        console.log("close");
+        setIsHovered(false);
+        setDropdownOpen(false);
+    };
+
     return (
 
         <div className={classes.root}>
-            {open ? <div style={{ width: '100vw', height: '100vh', position: 'absolute', background: 'rgba(0,0,0,0.1)', zIndex: '40' }} onClick={handleDrawerClose}></div> : <></>}
+            {open ? <div style={{ width: '100vw', height: '100vh', position: 'absolute', background: 'rgba(0,0,0,0.1)', zIndex: '40', }} onClick={handleDrawerClose}></div> : <></>}
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
@@ -330,11 +354,11 @@ function Sidebar({ open, setOpen }) {
                     {auth.role == "Owner" && Profile.isAccepted == true || auth.role == "Secondary_Owner" ? (
                         <ListItem button className={activeItem == 'peerrequests' ? classes.activeBar : ""} onClick={handlePeerRequests}>
                             <ListItemIcon>
-                                {NoOfRequestedPeers==0?
-                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                : <Badge badgeContent={NoOfRequestedPeers} color="secondary">
-                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                </Badge>}
+                                {NoOfRequestedPeers == 0 ?
+                                    <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                    : <Badge badgeContent={NoOfRequestedPeers} color="secondary">
+                                        <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                    </Badge>}
                             </ListItemIcon>
                             <ListItemText primary="Peer Requests" />
                         </ListItem>
@@ -408,6 +432,64 @@ function Sidebar({ open, setOpen }) {
                                 </ListItemIcon>
                                 <ListItemText primary="Organisation Tree" />
                             </ListItem>
+                            <div
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                                ref={anchorRef}
+                            >
+                                <ListItem
+                                    button
+                                    className=""
+                                    style={{ background: "rgba(0,0,0,0.2)" }}
+                                >
+                                    <ListItemIcon>
+                                        <AccountTreeIcon className="" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Events" />
+                                </ListItem>
+
+                                {isHovered && (
+                                     <div
+                                     onMouseEnter={handleMouseEnter}
+                                     onMouseLeave={handleMouseLeave}
+                                     style={{ display: "flex" }}
+                                   >
+                                    <Popper
+                                        open={dropdownOpen}
+                                        anchorEl={anchorRef.current}
+                                        placement="right-start"
+                                        disablePortal={false}
+                                        modifiers={[
+                                            {
+                                                name: "preventOverflow",
+                                                enabled: false,
+                                                options: {
+                                                    altAxis: true,
+                                                    altBoundary: true,
+                                                    tether: true,
+                                                    rootBoundary: "document",
+                                                    padding: 8,
+                                                },
+                                            },
+                                        ]}
+                                    >
+                                        <Paper>
+                                            <List>
+                                                <ListItemButton onClick={() => console.log("Option 1 clicked")}>
+                                                    <ListItemText primary="Active Organisation Events" />
+                                                </ListItemButton>
+                                                <ListItemButton onClick={() => console.log("Option 2 clicked")}>
+                                                    <ListItemText primary="My Past events" />
+                                                </ListItemButton>
+                                                <ListItemButton onClick={() => console.log("Option 3 clicked")}>
+                                                    <ListItemText primary="Organisation Past Events" />
+                                                </ListItemButton>
+                                            </List>
+                                        </Paper>
+                                    </Popper>
+                                    </div>
+                                )}
+                            </div>
 
                             <ListItem button className={activeItem == 'mypastevents' ? classes.activeBar : ""} onClick={handleMyPastEvents}>
                                 <ListItemIcon>
@@ -425,8 +507,8 @@ function Sidebar({ open, setOpen }) {
                             </ListItem>
 
                             <ListItem button className={activeItem == 'eventreq' ? classes.activeBar : ""} onClick={handleEventRequests}>
-                                    <ListItemIcon>
-                                {NoOfEventRequests == 0 ?
+                                <ListItemIcon>
+                                    {NoOfEventRequests == 0 ?
                                         <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} /> :
                                         <Badge badgeContent={NoOfEventRequests} color="secondary">
                                             <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} />
