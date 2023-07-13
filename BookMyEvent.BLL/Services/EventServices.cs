@@ -128,19 +128,6 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsByCategoryId(byte categoryId)
-        {
-            try
-            {
-                List<BLEvent> AllEvents = _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByCategoryId(categoryId));
-              
-                return AllEvents;
-            }
-            catch 
-            {
-                return null;
-            }
-        }
         public async Task<List<BLEvent>> GetAllActivePublishedEventsByOrgId(Guid orgId)
         {
             try
@@ -166,107 +153,7 @@ namespace BookMyEvent.BLL.Services
             {
                 return null;
             }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsByStartDate(DateTime date)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByStartDate(date));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsByEndDate(DateTime date)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByEndDate(date));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsByStartDateAndEndDate(startDate, endDate));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingMoreThanPrice(decimal startingPrice)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingMoreThanPrice(startingPrice));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingLessThanPrice(decimal endingPrice)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingLessThanPrice(endingPrice));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingPriceRange(decimal startingPrice, decimal endingPrice)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingPriceRange(startingPrice, endingPrice));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActivePublishedEventsHavingName(string name)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedEventsHavingName(name));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        
-        public async Task<List<BLEvent>> GetAllActivePublishedIsFreeEvents(bool isFree)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActivePublishedIsFreeEvents(isFree));
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public async Task<List<BLEvent>> GetAllActiveEventsByIsPublished(bool isPublished)
-        {
-            try
-            {
-                return _mapper.Map<List<BLEvent>>(await eventRepository.GetAllActiveEventsByIsPublished(isPublished));
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        }        
         public async Task<BLEvent> UpdateEventRegistrationStatus(Guid eventId, byte registrationStatusId, Guid updatedBy, DateTime updatedAt)
         {
             try

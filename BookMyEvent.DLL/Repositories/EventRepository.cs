@@ -71,47 +71,6 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        public async Task<List<Event>> GetAllActivePublishedEventsByCategoryId(byte categoryId)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.CategoryId == categoryId && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByEndDate(DateTime date)
-        {
-
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EndDate <= date && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActiveEventsByIsPublished(bool isPublished)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
         public async Task<List<Event>> GetAllActivePublishedEventsByLocation(string location)
         {
             try
@@ -125,119 +84,11 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
-        //public async Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline)
-        //{
-        //    try
-        //    {
-        //        var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.IsOffline == isOffline && x.RegistrationStatusId != 3).ToList();
-        //        return events;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new List<Event>();
-        //    }
-        //}
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByStartDate(DateTime date)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.StartDate >= date && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.StartDate >= startDate && x.EndDate <= endDate && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
         public async Task<List<Event>> GetAllActivePublishedEventsByOrgId(Guid orgId)
         {
             try
             {
                 var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.OrganisationId == orgId && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingLessThanPrice(decimal endingPrice)
-        {
-
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventEndingPrice <= endingPrice && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingMoreThanPrice(decimal startingPrice)
-        {
-
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventStartingPrice >= startingPrice && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingName(string name)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventName.Contains(name) && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingPriceRange(decimal startingPrice, decimal endingPrice)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventStartingPrice >= startingPrice && x.EventEndingPrice <= endingPrice && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedIsFreeEvents(bool isFree)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.IsFree == isFree).ToList();
                 return events;
             }
             catch (Exception ex)
