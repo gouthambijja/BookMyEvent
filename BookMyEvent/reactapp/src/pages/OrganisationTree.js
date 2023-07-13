@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -12,6 +13,7 @@ import { fetchOrganisationOrganisers, clearMyOrganisers, blockOrganiser } from "
 import { useDispatch, useSelector } from 'react-redux';
 import ConfirmationDialog from '../Components/ConfirmationDialog';
 import { toast } from 'react-toastify';
+import {GroupAdd,} from "@material-ui/icons";
 const useStyles = makeStyles({
     root: {
         // width: '100%',
@@ -28,12 +30,28 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
         justifyContent: 'center',
     },
+    addButton: {
+        padding:'16px',
+        cursor:'pointer',
+        borderRadius: '4px',
+        border:'0px ',
+        float: 'right',
+        backgroundColor: '#2986CE',
+        margin:'1%',
+        color:'white',
+        display:'flex',
+        alignItems:'center',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: '#555',
+        },
+    },
     sectionTitle: {
         fontWeight: 'bold',
         marginBottom: '0.5rem',
-        fontSize: '1.5rem', // Adjust the font size as needed
+        fontSize: '1.5rem',
         textAlign: 'center',
-        color: '#333', // Set the desired color
+        color: '#333', 
     },
     card: {
         width: '250px',
@@ -86,8 +104,7 @@ const useStyles = makeStyles({
     },
 
     filterButton: {
-        // margin: '0 0.5rem',
-
+     
         margin: '0.5rem 0.5rem',
         padding: '0.5rem 1rem',
         border: 'none',
@@ -103,7 +120,7 @@ const useStyles = makeStyles({
         },
     },
     activeButton: {
-        backgroundColor: '#f44336',
+        backgroundColor: '#d81b60',
     },
 });
 const OrganisationTree = () => {
@@ -115,6 +132,7 @@ const OrganisationTree = () => {
     const [selectedRole, setSelectedRole] = useState('2');
     const [selectedUser, setSeletedUser] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
+    const navigate= useNavigate();
     const handleRoleFilter = (roleId) => {
         setSelectedRole(roleId);
     };
@@ -194,13 +212,16 @@ const OrganisationTree = () => {
             >
                 Peers
             </button>
+            {auth.role == "Owner" && selectedRole == '3' ? <>
+                <button className={classes.addButton} onClick={()=>navigate("/organiser/addSecondaryOwner")}><GroupAdd/> <span style={{marginLeft:'5px'}}> Add Secondary Owner</span></button>
+            </> : <></>}
         </div>
         <div className={classes.root}>
 
             <div >
                 {/* <h2 className={classes.sectionTitle}> {selectedRole == 2 ? "Owner" : selectedRole == 3 ? "Secondary Owners" : "Peers"}</h2> */}
-                <div className={classes.section}>
-                    {membersByRole[selectedRole] != null ? <>
+                {membersByRole[selectedRole] != null ? <>
+                    <div className={classes.section}>
                         {membersByRole[selectedRole].map((member, index) => (
                             <>
                                 <Card key={index} className={classes.card} sx={{ display: 'flex', flexDirection: "column", height: "auto" }}>
@@ -231,8 +252,8 @@ const OrganisationTree = () => {
                                 </Card>
                             </>
                         ))}
-                    </> : <>No Members to display</>}
-                </div>
+                    </div>
+                </> : <>No Members to display</>}
             </div>
             <ConfirmationDialog key="confirmation-dialog"
                 open={openDialog}
