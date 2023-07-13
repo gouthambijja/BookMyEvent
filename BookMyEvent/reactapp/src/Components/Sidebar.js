@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import store from "../App/store";
-
+import { Button, Popover, Typography, createTheme, ThemeProvider } from '@material-ui/core';
 import {
     Drawer,
     IconButton,
@@ -26,26 +26,45 @@ import {
     Category,
     PostAdd,
     PersonAdd,
+    ArrowForwardIosTwoTone,
+    ArrowBackIos,
     SpeakerGroup,
     AccountTree,
     People,
-    EmojiPeople,
-    NaturePeople,
-    PeopleAlt,
-    VerifiedUser,
-    SupervisedUserCircle,
-    SupervisorAccount,
+  
 } from "@material-ui/icons";
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Popper from '@mui/material/Popper';
+import ListItemButton from '@mui/material/ListItemButton';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import Paper from '@mui/material/Paper';
 import Badge from '@mui/material/Badge';
 import { useNavigate } from "react-router-dom";
 import useLogout from "../Hooks/Logout";
 import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
-
+const theme = createTheme({
+    components: {
+        MuiPaper: {
+            styleOverrides: {
+                elevation8: {
+                    boxShadow: 'none',
+                },
+                rounded: {
+                    borderRadius: 0,
+                },
+            },
+        },
+    },
+});
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
+    },
+    customPaper: {
+        boxShadow: 'none',
+        borderRadius: 'none'
     },
     appBar: {
         transition: theme.transitions.create(["margin", "width"], {
@@ -83,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
         width: drawerWidth,
         background: "#f5f5f5",
+        paddingBottom: '64px',
         backdropFilter: "blur(6px)",
     },
     drawerHeader: {
@@ -105,24 +125,24 @@ const useStyles = makeStyles((theme) => ({
 
 function Sidebar({ open, setOpen }) {
     const navigate = useNavigate();
+
+
+
+
     const auth = useSelector((store) => store.auth);
     const NoOfRequestedPeers = useSelector(store => store.organisers.NoOfRequestedOrganisers);
     let NoOfEventRequests = useSelector((state) => state.events.noOfEventRequests);
 
-    // let eventRequests = useSelector((state) => state.events.eventRequests);
-//   const requestedPeers = useSelector(store => store.organisers.requestedOrganisers);
     const Profile = useSelector((state) => (state.profile.info));
     const logout = useLogout();
     const classes = useStyles();
     const [activeItem, setActiveItem] = useState('');
-    //   const [open, setOpen] = useState(false);
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
     };
-    const handleItemClick = (item) => {
-        setActiveItem(item);
-    };
+
     const handleDrawerClose = () => {
         setOpen(false);
     };
@@ -248,10 +268,29 @@ function Sidebar({ open, setOpen }) {
         handleDrawerClose();
         navigate("/Admin/userslist")
     }
+
+    const [isHovered, setIsHovered] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const anchorRef = React.useRef(null);
+    const dropdownRef = React.useRef(null);
+
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleItemClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const isDropdownOpen = Boolean(anchorEl);
+    const dropdownId = isDropdownOpen ? 'dropdown-menu' : undefined;
+
     return (
 
         <div className={classes.root}>
-            {open ? <div style={{ width: '100vw', height: '100vh', position: 'absolute', background: 'rgba(0,0,0,0.1)', zIndex: '40' }} onClick={handleDrawerClose}></div> : <></>}
+            {open ? <div style={{ width: '100vw', height: '100vh', position: 'absolute', background: 'rgba(0,0,0,0.1)', zIndex: '40', }} onClick={handleDrawerClose}></div> : <></>}
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
@@ -330,11 +369,11 @@ function Sidebar({ open, setOpen }) {
                     {auth.role == "Owner" && Profile.isAccepted == true || auth.role == "Secondary_Owner" ? (
                         <ListItem button className={activeItem == 'peerrequests' ? classes.activeBar : ""} onClick={handlePeerRequests}>
                             <ListItemIcon>
-                                {NoOfRequestedPeers==0?
-                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                : <Badge badgeContent={NoOfRequestedPeers} color="secondary">
-                                <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
-                                </Badge>}
+                                {NoOfRequestedPeers == 0 ?
+                                    <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                    : <Badge badgeContent={NoOfRequestedPeers} color="secondary">
+                                        <GroupAdd className={activeItem == 'peerrequests' ? classes.activeBar : ""} />
+                                    </Badge>}
                             </ListItemIcon>
                             <ListItemText primary="Peer Requests" />
                         </ListItem>
@@ -387,7 +426,7 @@ function Sidebar({ open, setOpen }) {
                     ) : (
                         <></>
                     )}
-                    {auth.role === "Owner" && Profile.isAccepted == true ? (
+                    {/* {auth.role === "Owner" && Profile.isAccepted == true ? (
                         <ListItem button className={activeItem == 'addanother' ? classes.activeBar : ""} onClick={handleAdd}>
                             <ListItemIcon>
                                 <PersonAdd className={activeItem == 'addanother' ? classes.activeBar : ""} />
@@ -396,7 +435,7 @@ function Sidebar({ open, setOpen }) {
                         </ListItem>
                     ) : (
                         <></>
-                    )}
+                    )} */}
                     {auth.role == "Owner" && Profile.isAccepted == true ||
                         (auth.role == "Peer" && Profile.isAccepted == true) ||
                         auth.role == "Secondary_Owner" ? (
@@ -409,24 +448,94 @@ function Sidebar({ open, setOpen }) {
                                 <ListItemText primary="Organisation Tree" />
                             </ListItem>
 
-                            <ListItem button className={activeItem == 'mypastevents' ? classes.activeBar : ""} onClick={handleMyPastEvents}>
+                            <ListItem
+                                button
+                                className={activeItem == 'orgevents' || activeItem == 'mypastevents' || activeItem == 'orgpastevents' ? classes.activeBar : ""}
+
+                                onClick={handleItemClick}
+
+                            >
+                                <ListItemIcon className={activeItem == 'orgevents' || activeItem == 'mypastevents' || activeItem == 'orgpastevents' ? classes.activeBar : ""} >
+                                    <AccountTreeIcon className="" />
+                                </ListItemIcon>
+                                <ListItemText primary="Events" />
+                                {/* <ListItemSecondaryAction   className={activeItem == 'orgevents' || activeItem == 'mypastevents' || activeItem == 'orgpastevents' ? classes.activeBar : ""}> */}
+                                {anchorEl == null ? <><ArrowForwardIosTwoTone onClick={handleItemClick} style={{ fontSize: '1rem' }} /></> : <><ArrowBackIos style={{ fontSize: '1rem' }} /></>}
+
+                                {/* </ListItemSecondaryAction> */}
+                            </ListItem>
+                            <ThemeProvider theme={theme}>
+                            <Popover
+                                
+                                id={dropdownId}
+                                open={isDropdownOpen}
+                                anchorEl={anchorEl}
+                                PaperProps={{
+                                    style: {
+                                      boxShadow: 'none', // Remove the box shadow
+                                      background: "#f0f0f0",
+                                    },
+                                  }}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                            >
+                               
+                                <div   onClick={handleClose}>
+                                    <List>
+                                        <ListItem button className={activeItem == 'orgevents' ? classes.activeBar : ""} onClick={handleOrganisationEvents}>
+                                            <ListItemIcon>
+                                                <EventAvailable className={activeItem == 'orgevents' ? classes.activeBar : ""} />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Active Organisation Events" />
+                                        </ListItem>
+                                        <ListItem button className={activeItem == 'mypastevents' ? classes.activeBar : ""} onClick={handleMyPastEvents}>
+                                            <ListItemIcon>
+                                                <Event className={activeItem == 'mypastevents' ? classes.activeBar : ""} />
+                                            </ListItemIcon>
+                                            <ListItemText primary="My Past events" />
+                                        </ListItem>
+                                        <ListItem button className={activeItem == 'orgpastevents' ? classes.activeBar : ""} onClick={handleOrgPastEvents}>
+                                            <ListItemIcon>
+
+                                                <EventBusy className={activeItem == 'orgpastevents' ? classes.activeBar : ""} />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Organisation Past Events" />
+                                        </ListItem>
+                                    </List>
+                                </div> 
+
+                                 </Popover>
+                                 </ThemeProvider>
+
+
+
+
+
+                            {/* <ListItem button className={activeItem == 'mypastevents' ? classes.activeBar : ""} onClick={handleMyPastEvents}>
                                 <ListItemIcon>
                                     <Event className={activeItem == 'mypastevents' ? classes.activeBar : ""} />
                                 </ListItemIcon>
                                 <ListItemText primary="My Past Events" />
-                            </ListItem>
+                            </ListItem> */}
 
-                            <ListItem button className={activeItem == 'orgpastevents' ? classes.activeBar : ""} onClick={handleOrgPastEvents}>
+                            {/* <ListItem button className={activeItem == 'orgpastevents' ? classes.activeBar : ""} onClick={handleOrgPastEvents}>
                                 <ListItemIcon>
 
                                     <EventBusy className={activeItem == 'orgpastevents' ? classes.activeBar : ""} />
                                 </ListItemIcon>
                                 <ListItemText primary="Organisation Past Events" />
-                            </ListItem>
+                            </ListItem> */}
 
                             <ListItem button className={activeItem == 'eventreq' ? classes.activeBar : ""} onClick={handleEventRequests}>
-                                    <ListItemIcon>
-                                {NoOfEventRequests == 0 ?
+                                <ListItemIcon>
+                                    {NoOfEventRequests == 0 ?
                                         <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} /> :
                                         <Badge badgeContent={NoOfEventRequests} color="secondary">
                                             <EventNote className={activeItem == 'eventreq' ? classes.activeBar : ""} />
@@ -436,12 +545,12 @@ function Sidebar({ open, setOpen }) {
                                 <ListItemText primary="Event Requests" />
                             </ListItem>
 
-                            <ListItem button className={activeItem == 'orgevents' ? classes.activeBar : ""} onClick={handleOrganisationEvents}>
+                            {/* <ListItem button className={activeItem == 'orgevents' ? classes.activeBar : ""} onClick={handleOrganisationEvents}>
                                 <ListItemIcon>
                                     <EventAvailable className={activeItem == 'orgevents' ? classes.activeBar : ""} />
                                 </ListItemIcon>
                                 <ListItemText primary=" Active Organisation Events" />
-                            </ListItem>
+                            </ListItem> */}
                         </>
                     ) : (
                         <></>
