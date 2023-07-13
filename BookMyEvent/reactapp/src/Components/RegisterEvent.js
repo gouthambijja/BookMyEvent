@@ -64,6 +64,7 @@ const RegisterEvent = () => {
 
   const handlechange = (event, index, label) => {
     const { name, value } = event.target;
+    console.log(name,value);
     setFormData((prevData) => {
       prevData[index] = { ...prevData[index], [name]: value };
       //console.log(prevData);
@@ -158,7 +159,16 @@ const RegisterEvent = () => {
     if (eventRegistrationFormFields.length > 1) {
       const copyArray = [...eventRegistrationFormFields];
       copyArray.splice(index, 1);
+      console.log(copyArray);
+      console.log(formData);
       setEventRegistrationFormFields(copyArray);
+    //-------------------------------------
+      const copyFormData = [...formData];
+      console.log(copyFormData);
+      copyFormData.splice(index,1);
+      console.log(copyFormData);
+      setFormData([...copyFormData]);
+      console.log(copyArray);
     }
   };
   const formContainerStyle = {
@@ -213,8 +223,8 @@ const RegisterEvent = () => {
             >
               {person.map((formField) => (
                 <div key={cnt++}>
-                  {FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
-                  "Text" ? (
+                  {(FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
+                  "Text") ? (
                     <TextField
                       style={{
                         marginBottom: "20px",
@@ -224,7 +234,7 @@ const RegisterEvent = () => {
                       type="text"
                       name={formField.lable}
                       label={formField.lable}
-                      value={formData[formField.lable]}
+                      value={formData[index]?.[formField.lable]}
                       onChange={(e) => {
                         handlechange(e, index, formField.lable);
                       }}
@@ -241,7 +251,7 @@ const RegisterEvent = () => {
                       type="number"
                       name={formField.lable}
                       label={formField.lable}
-                      value={formData[formField.lable]}
+                      value={formData[index]?.[formField.lable] }
                       onChange={(e) => {
                         handlechange(e, index);
                       }}
@@ -262,7 +272,7 @@ const RegisterEvent = () => {
                       type="file"
                       name={formField.lable}
                       label={formField.lable}
-                      value={formData[formField.lable]}
+                      value={formData[index]?.[formField.lable]}
                       onChange={(e) => {
                         handlechange(e, index);
                       }}
@@ -279,7 +289,7 @@ const RegisterEvent = () => {
                       type="email"
                       name={formField.lable}
                       label={formField.lable}
-                      value={formData[formField.lable]}
+                      value={formData[index]?.[formField.lable]}
                       onChange={(e) => {
                         handlechange(e, index);
                       }}
@@ -296,7 +306,7 @@ const RegisterEvent = () => {
                       type="date"
                       name={formField.lable}
                       label={formField.lable}
-                      value={formData[formField.lable]}
+                      value={formData[index]?.[formField.lable] }
                       onChange={(e) => {
                         handlechange(e, index);
                       }}
@@ -314,7 +324,7 @@ const RegisterEvent = () => {
                       <FormLabel>{formField.lable}</FormLabel>
                       <RadioGroup
                         name={formField.lable}
-                        value={formData[formField.lable]}
+                        value={formData[index]?.[formField.lable] }
                         onChange={(e) => {
                           handlechange(e, index);
                         }}
@@ -331,8 +341,8 @@ const RegisterEvent = () => {
                     </FormControl>
                   ) : FormFieldTypes[Number(formField.fieldTypeId) - 1].type ==
                     "Select" ? (
-                    event.isFree == false &&
-                    formField.lable == "Ticket Prices" ? (
+                   ((event.isFree == false &&
+                    formField.lable == "Ticket Prices") || formField.lable != "Ticket Prices") ? (
                       <FormControl
                         style={{
                           marginBottom: "20px",
@@ -343,7 +353,7 @@ const RegisterEvent = () => {
                         <FormLabel>{formField.lable}</FormLabel>
                         <Select
                           name={formField.lable}
-                          value={formData[formField.lable]}
+                          value={formData[index]?.[formField.lable]  }
                           onChange={(e) => {
                             handlechange(e, index);
                           }}
