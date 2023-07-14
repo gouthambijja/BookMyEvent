@@ -266,7 +266,7 @@ function Sidebar({ open, setOpen }) {
                         <ChevronLeftIcon />
                     </IconButton>
                 </div>
-                <List>
+                <List style={{paddingTop:'0px'}}>
                     {auth.accessToken ? (
                         <>
                             <ListItem button className={activeItem == 'home' ? classes.activeBar : ""} onClick={handleHome}>

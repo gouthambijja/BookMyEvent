@@ -105,7 +105,7 @@ const App = () => {
                                 <Route
                                     path="AddEvent"
                                     element={<AddEvent />}
-                                    loader={storeLoader.OrganisationFormLoaders}
+                                    loader={storeLoader.FormFieldsLoader}
                                 ></Route>
                                 <Route
                                     path="OrganisationTree/:id"

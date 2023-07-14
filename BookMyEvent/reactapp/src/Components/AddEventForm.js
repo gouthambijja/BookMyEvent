@@ -27,6 +27,9 @@ import { fetchOrganiserForms } from "../Features/ReducerSlices/OrganiserFormsSli
 import EventServices from "../Services/EventServices";
 import { createEvent } from "../Features/ReducerSlices/EventsSlice";
 import { AddRegisteredEventId } from "../Features/ReducerSlices/HomeEventsSlice";
+import Modal from "@mui/material/Modal";
+import ViewForm from "./ViewForm";
+import OrganiserFormServices from "../Services/OrganiserFormServices";
 const ColorfulForm = styled("form")({
   display: "flex",
   flexDirection: "column",
@@ -45,6 +48,20 @@ const ColorfulButton = styled(Button)({
     backgroundColor: "#d81b60",
   },
 });
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "90%",
+  maxWidth: "800px",
+  backgroundColor: "#fff",
+  borderRadius: "4px",
+  boxShadow: 24,
+  boxShadow: "0px 0px 15px rgb(0,0,0,0.6)",
+  p: 4,
+};
+
 let count = 1;
 
 const EventForm = () => {
@@ -66,6 +83,10 @@ const EventForm = () => {
 
   const [images, setImages] = useState([]);
   const [profileImage, setProfileImage] = useState();
+  const [modalData, setModalData] = useState({ open: false, formId: "" });
+  const handleOpen = (e, formId) =>
+    setModalData({ open: true, formId: formId });
+  const handleClose = () => setModalData({ open: false, formId: "" });
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     setImages((prev) => [...prev, file]);
@@ -80,6 +101,23 @@ const EventForm = () => {
     //console.log(eventData);
     //console.log(profileImage);
     //console.log(images);
+    const formFields = await OrganiserFormServices().getFieldTypesByFormId(
+      eventData.FormId
+    );
+    let ticketPrices = formFields.find(e=> e.lable == "Ticket Prices")?.options;
+    let min=0,max =0,isFree = false;
+    if(ticketPrices){
+      ticketPrices = JSON.parse(ticketPrices);
+      min = Number(ticketPrices[0]);
+      max = min;
+      for(let i=1;i<ticketPrices.length;i++){
+        min = Math.min(min,Number(ticketPrices[i]));
+        max = Math.max(max,Number(ticketPrices[i]));
+      }
+    }
+    if(min == 0 && max == 0 ){
+      isFree = true;
+    }
     const _formData = new FormData();
     _formData.append("EventName", eventData.EventName);
     _formData.append("StartDate", eventData.StartDate);
@@ -101,17 +139,12 @@ const EventForm = () => {
       "MaxNoOfTicketsPerTransaction",
       eventData.MaxNoOfTicketsPerTransaction
     );
+    _formData.append("EventStartingPrice",min);
+    _formData.append("EventEndingPrice",max);
     _formData.append("CreatedOn", new Date().toLocaleString());
     _formData.append("UpdatedBy", auth.id);
     _formData.append("UpdatedOn", new Date().toLocaleString());
-    _formData.append("IsFree", eventData.IsFree);
-    if (eventData.IsFree) {
-      _formData.append("EventStartingPrice", 0);
-      _formData.append("EventEndingPrice", 0);
-    } else {
-      _formData.append("EventStartingPrice", eventData.EventStartingPrice);
-      _formData.append("EventEndingPrice", eventData.EventEndingPrice);
-    }
+    _formData.append("IsFree", isFree);
     _formData.append("IsActive", true);
     _formData.append("OrganisationId", OrganiserInfo.organisationId);
     _formData.append("FormId", eventData.FormId);
@@ -123,9 +156,9 @@ const EventForm = () => {
       _formData.append(`CoverImage${i}`, images[i]);
     }
     try {
-      var resp= await dispatch(createEvent(_formData)).unwrap();
+      var resp = await dispatch(createEvent(_formData)).unwrap();
       //console.log(resp);
- 
+
       dispatch(resetEventData());
       navigate("/organiser");
     } catch {
@@ -232,7 +265,27 @@ const EventForm = () => {
             <Select required name="Form" value={Form} onChange={handleChange}>
               {organisationForms.map((option, index) => (
                 <MenuItem key={++count} value={option.formName}>
-                  {option.formName}
+                  <div style={{ postion: "relative", padding: "0px 20px" }}>
+                    {option.formName}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpen(e, option.formId);
+                      }}
+                      style={{
+                        position: "absolute",
+                        right: "30px",
+                        border: "none",
+                        color: "#fff",
+                        background: "#3f50b5",
+                        outline: "none",
+                        borderRadius: "4px",
+                        padding: "4px",
+                      }}
+                    >
+                      view
+                    </button>
+                  </div>
                 </MenuItem>
               ))}
             </Select>
@@ -357,38 +410,6 @@ const EventForm = () => {
         fullWidth
         required
       />
-      <TextField
-        label="Event Starting Price"
-        name="EventStartingPrice"
-        type="number"
-        inputProps={{ min: 0 }}
-        value={eventData.IsFree ? 0 : eventData.EventStartingPrice}
-        onChange={handleChange}
-        fullWidth
-        required
-      />
-      <TextField
-        label="Event Ending Price"
-        name="EventEndingPrice"
-        type="number"
-        inputProps={{
-          min: eventData.IsFree ? 0 : eventData.EventStartingPrice,
-        }}
-        value={eventData.IsFree ? 0 : eventData.EventEndingPrice}
-        onChange={handleChange}
-        fullWidth
-        required
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            name="IsFree"
-            checked={eventData.IsFree}
-            onChange={handleChange}
-          />
-        }
-        label="Is Free"
-      />
       <Box
         sx={{
           border: "1px solid #d0d0d0",
@@ -425,6 +446,21 @@ const EventForm = () => {
       <ColorfulButton type="submit" variant="contained" fullWidth>
         Submit
       </ColorfulButton>
+      <Modal
+        open={modalData.open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box
+            className="customScrollbar"
+            sx={{ maxHeight: "90vh", overflow: "auto" }}
+          >
+            <ViewForm formId={modalData.formId} />
+          </Box>
+        </Box>
+      </Modal>
     </ColorfulForm>
   );
 };
