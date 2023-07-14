@@ -27,14 +27,16 @@ builder.Services.AddSwaggerGen(c =>
 
 Startup.StartUpConfigure(builder.Services, builder.Configuration);
 var SpecificAllowOrigins = "origin_names";
+
     Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
+    .MinimumLevel.Verbose()
         .WriteTo.File("logs/logs.txt", rollingInterval: RollingInterval.Day)
         .CreateLogger();
 
     builder.Services.AddLogging(loggingBuilder =>
     {
         loggingBuilder.ClearProviders();
+        loggingBuilder.AddConsole();
         loggingBuilder.AddSerilog(dispose: true);
     });
 // Add services to the container.
