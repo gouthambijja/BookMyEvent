@@ -1,3 +1,4 @@
+import ViewForm from "./ViewForm";
 import React, { useEffect, useState } from "react";
 import { Country, State, City } from "country-state-city";
 import {
@@ -28,7 +29,6 @@ import EventServices from "../Services/EventServices";
 import { createEvent } from "../Features/ReducerSlices/EventsSlice";
 import { AddRegisteredEventId } from "../Features/ReducerSlices/HomeEventsSlice";
 import Modal from "@mui/material/Modal";
-import ViewForm from "./ViewForm";
 import OrganiserFormServices from "../Services/OrganiserFormServices";
 const ColorfulForm = styled("form")({
   display: "flex",
