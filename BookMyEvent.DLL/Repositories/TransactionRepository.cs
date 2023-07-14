@@ -47,14 +47,14 @@ namespace BookMyEvent.DLL.Repositories
             }
 
         }
-        public async Task<Guid> GetUserIdByTransactionId(Guid transactionId)
+        public async Task<Guid?> GetUserIdByTransactionId(Guid transactionId)
         {
             try
             {
                 Transaction? transaction = await context.Transactions.FindAsync(transactionId);
                 if (transaction != null)
                 {
-                    Guid userId = transaction.UserId;
+                    Guid? userId = transaction.UserId;
                     return userId;
                 }
                 else { return Guid.Empty; }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QRCodeGenerator from "./QRCodeGenerator";
 const Ticket = ({ ticket }) => {
     const tkt = ticket.ticket;
-    //console.log(tkt);
+    // console.log(tkt);
     const index = ticket.index;
     const event = ticket.event;
 

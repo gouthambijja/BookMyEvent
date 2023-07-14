@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import store from "../App/store";
 import AxiosPrivate from "../Hooks/AxiosPrivate";
 
@@ -10,6 +11,16 @@ const OrganiserFormServices = () => {
     const organiser = store.getState().profile.info;
     const FieldTypes = store.getState().formFields.formFields;
     const FormFields = store.getState().EventRegistrationFormFields.inputFields;
+    console.log("hey")
+    FormFields.forEach(e=>{
+      if(e.FieldType == "Select" || e.FieldType == "Radio"){
+        if(e.Options.length < 1){
+          console.log(e.Options);
+          toast.error("For Select or Radio type there should be atleast one option field");
+          throw new Error("For Select or Radio type there should be atleast one option field");
+      }
+      }
+    })
     try {
       const RegistrationFormFields = [];
       const form = await Axios.post(

@@ -105,7 +105,7 @@ const App = () => {
                                 <Route
                                     path="AddEvent"
                                     element={<AddEvent />}
-                                    loader={storeLoader.OrganisationFormLoaders}
+                                    loader={storeLoader.FormFieldsLoader}
                                 ></Route>
                                 <Route
                                     path="OrganisationTree/:id"
@@ -125,7 +125,7 @@ const App = () => {
                                     path="organisationPastEvents"
                                     element={<InfiniteOrganisationPastEvents />}
                                 />
-                                <Route path="event/:eventId" element={<EventTickets />} />
+                                <Route path="event/:eventId" element={<EventTickets />} loader={storeLoader.FormFieldsLoader} />
                             </Route>
                         </Route>
                     </Route>

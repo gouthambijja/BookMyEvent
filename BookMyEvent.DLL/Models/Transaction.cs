@@ -7,7 +7,9 @@ public partial class Transaction
 {
     public Guid TransactionId { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
+
+    public Guid? AdministratorId { get; set; }
 
     public Guid EventId { get; set; }
 
@@ -24,4 +26,6 @@ public partial class Transaction
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     public virtual User User { get; set; } = null!;
+
+    public virtual Administration Administration { get; set; } = null!;
 }

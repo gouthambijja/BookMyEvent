@@ -117,7 +117,7 @@ const OrganiserEventCard = ({ event }) => {
    },[myEvents])
     return (
         <>
-            <Card sx={{ width: '400px', boxShadow: '0px 0px 9px #d0d0d0', display: 'flex', flexDirection: "column", height: "auto" }}>
+            <Card sx={{ maxWidth: '400px', boxShadow: '0px 0px 9px #d0d0d0', display: 'flex', flexDirection: "column", height: "auto" }}>
                 <CardActionArea onClick={handleClick} sx={{ flexBasis: "90%" }}>
                     <CardMedia component="img" sx={{ width: '100%', aspectRatio: 1 / 0.7 }} image={`data:image/jpeg;base64,${event.profileImgBody}`} alt="green iguana" />
                     <CardContent>

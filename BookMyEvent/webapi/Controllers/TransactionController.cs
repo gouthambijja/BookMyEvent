@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "User")]
+    [Authorize]
     [Route("[controller]")]
     public class TransactionController : ControllerBase
     {

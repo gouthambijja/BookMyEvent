@@ -33,7 +33,7 @@ export default function Navbar() {
             {true ? (
               <IconButton
                 size="large"
-                edge="start"
+                                edge="start"
                 color="inherit"
                 aria-label="menu"
                 sx={{ mr: 2 }}
