@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 {
-    internal class UserServiceTest
+    public class UserServiceTest
     {
     }
 }
