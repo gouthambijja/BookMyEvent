@@ -74,7 +74,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new User();
+                return null;
             }
 
         }
@@ -110,7 +110,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new User();
+                return null;
             }
         }
 
