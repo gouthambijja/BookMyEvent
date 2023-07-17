@@ -30,31 +30,6 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             _mapper = Automapper.InitializeAutomapper();
         }
 
-        //[Fact]
-        //public async Task AddUser_SuccessfullAddingTest()
-        //{
-        //    //Arrange
-        //    var user = UsersMockData.CreateUser();
-        //    user.Password = "Test@123";
-        //    var accountCredential = new AccountCredential
-        //    {
-        //        AccountCredentialsId = Guid.NewGuid(),
-        //        Password = user.Password,
-        //        UpdatedOn = DateTime.Now
-        //    };
-        //    var userDAL = _mapper.Map<User>(user);
-        //    _mockAccountCredentialsRepository.Setup(x => x.AddCredential(accountCredential)).ReturnsAsync((AccountCredential accountCredential) =>
-        //    {
-        //        return accountCredential;
-        //    });
-        //    _mockUserRepository.Setup(x => x.AddUser(userDAL)).ReturnsAsync((true, "User Added Successfully"));
-        //    //Act
-        //    var result = await _userService.AddUser(user);
-        //    //Assert
-        //    Assert.False(result.IsUserAdded);
-        //    Assert.Equal("User Added Successfully", result.Message);
-        //}
-
         [Fact]
         public async Task AddUser_SuccessfullAddingTest()
         {
