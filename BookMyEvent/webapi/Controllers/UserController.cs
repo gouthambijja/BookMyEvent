@@ -85,8 +85,8 @@ namespace BookMyEvent.WebApi.Controllers
                 }
                 else
                 {
-                    _fileLogger.AddExceptionToFile("[GetUserById] Get USer By Id Failed");
-                    return BadRequest("Error");
+                    _fileLogger.AddExceptionToFile("[GetUserById] Get User By Id Failed");
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -115,7 +115,7 @@ namespace BookMyEvent.WebApi.Controllers
                 {
                     _fileLogger.AddExceptionToFile("[GetUserByEmail] User By this Email is null");
 
-                    return BadRequest("Error");
+                    return NotFound();
                 }
             }
             catch (Exception ex)

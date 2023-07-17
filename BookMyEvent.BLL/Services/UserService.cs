@@ -19,10 +19,12 @@ namespace BookMyEvent.BLL.Services
     {
         public IUserRepository UserRepositoryDal { get; set; }
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
+        private readonly Mapper mapper;
         public UserService(IUserRepository userRepositoryDal, IAccountCredentialsRepository accountCredentialsRepository)
         {
             this.UserRepositoryDal = userRepositoryDal;
             _accountCredentialsRepository = accountCredentialsRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
         public async Task<(bool IsUserAdded, string Message)> AddUser(BLUser user)
         {
@@ -30,12 +32,9 @@ namespace BookMyEvent.BLL.Services
             {
                 if (user != null)
                 {
-                  
-                   
-                   
-                    var accountCred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = user.Password, UpdatedOn =DateTime.Now });
+                    var credentials = new AccountCredential { Password = user.Password, UpdatedOn = DateTime.Now };
+                    var accountCred = await _accountCredentialsRepository.AddCredential(credentials);
                     user.AccountCredentialsId = accountCred.AccountCredentialsId;
-                    var mapper = Automapper.InitializeAutomapper();
                     var User = mapper.Map<BLUser, User>(user);
                     return await UserRepositoryDal.AddUser(User);
                 }
@@ -43,7 +42,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (false, string.Empty);
+                return (false, "oops something went wrong");
             }
         }
         private static string GetHash(string text)
@@ -105,7 +104,6 @@ namespace BookMyEvent.BLL.Services
                 if (Email is not null)
                 {
                     User user = await UserRepositoryDal.GetUserByEmail(Email);
-                    var mapper = Automapper.InitializeAutomapper();
                     return mapper.Map<User, BLUser>(user);
                 }
                 return new BLUser();
@@ -130,9 +128,7 @@ namespace BookMyEvent.BLL.Services
         public async Task<Guid> Login(BLLoginModel login)
         {
             if (login is not null)
-            {
-          
-               
+            {              
                 return await UserRepositoryDal.IsUserExists(login.Email, login.Password);
             }
             return Guid.Empty;
@@ -145,7 +141,7 @@ namespace BookMyEvent.BLL.Services
                 var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<User, BLUser>(user);
             }
-            return new BLUser();
+            return null;
         }
         public async Task<(BLUser, string Message)> UpdateUser(BLUser user)
         {

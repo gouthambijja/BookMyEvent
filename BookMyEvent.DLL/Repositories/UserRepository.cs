@@ -74,7 +74,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new User();
+                return null;
             }
 
         }
@@ -110,7 +110,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new User();
+                return null;
             }
         }
 
@@ -204,7 +204,7 @@ namespace BookMyEvent.DLL.Repositories
                     return user.UserId;
                 }
             }
-            return user.UserId;
+            return Guid.Empty;
         }
         public async Task<(Guid UserId,string Message)> BlockUser(Guid UserId)
         {
