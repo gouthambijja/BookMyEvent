@@ -128,9 +128,7 @@ namespace BookMyEvent.BLL.Services
         public async Task<Guid> Login(BLLoginModel login)
         {
             if (login is not null)
-            {
-          
-               
+            {              
                 return await UserRepositoryDal.IsUserExists(login.Email, login.Password);
             }
             return Guid.Empty;

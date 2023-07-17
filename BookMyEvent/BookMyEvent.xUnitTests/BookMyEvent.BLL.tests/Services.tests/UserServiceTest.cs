@@ -12,6 +12,7 @@ using Moq;
 using AutoMapper;
 using BookMyEvent.BLL.Services;
 using Microsoft.IdentityModel.Tokens;
+using BookMyEvent.BLL.RequestModels;
 
 namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 {
@@ -331,6 +332,38 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var result = await _userService.GetFilteredUsers("abc", "tester@abc.com", "9999999999", true);
             //Assert
             Assert.True(result.IsNullOrEmpty());
+        }
+
+        [Fact]
+        public async Task LoginUser_SuccessfulTest()
+        {
+            var userLogin = new BLLoginModel
+            {
+                Email = "tester@abc.com",
+                Password = "tester@123"
+            };
+
+            var expected = Guid.NewGuid();
+            _mockUserRepository.Setup(x => x.IsUserExists(userLogin.Email, userLogin.Password)).ReturnsAsync(expected);
+
+            var result = await _userService.Login(userLogin);
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public async Task LoginUser_FailedTest()
+        {
+            var userLogin = new BLLoginModel
+            {
+                Email = "tester@abc.com",
+                Password = "tester@123"
+            };
+
+            var expected = Guid.Empty;
+            _mockUserRepository.Setup(x => x.IsUserExists(userLogin.Email, userLogin.Password)).ReturnsAsync(expected);
+            var result = await _userService.Login(userLogin);
+            Assert.Equal(expected, result);
         }
     }
 }
