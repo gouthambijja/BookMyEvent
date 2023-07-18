@@ -105,7 +105,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch
             {
-                return new List<BLTransaction>();
+                return null;
             }
         }
 
@@ -125,7 +125,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch
             {
-                return new List<BLTransaction>();
+                return null;
             }
         }
         

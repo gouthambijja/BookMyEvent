@@ -42,9 +42,12 @@ namespace BookMyEvent.DLL.Repositories
                 await _DBContext.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex) {
+                Console.WriteLine(ex);
+                return false; 
+            }
 
-            return false;
+            
 
         }
 

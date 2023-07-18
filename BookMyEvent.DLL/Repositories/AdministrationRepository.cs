@@ -47,14 +47,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 Administration? administrator = await _dbcontext.Administrations.FindAsync(Id);
-                if (administrator != null)
-                {
-                    return administrator;
-                }
-                else
-                {
-                    return null;
-                }
+               
+                return administrator;
+               
             }
             catch
             {
@@ -68,14 +63,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 Administration? administrator = await _dbcontext.Administrations.Where(a => a.Email == email).FirstOrDefaultAsync();
-                if (administrator != null)
-                {
-                    return administrator;
-                }
-                else
-                {
-                    return null;
-                }
+               
+                return administrator;
+               
             }
             catch
             {
@@ -87,14 +77,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 Administration? administrator = await _dbcontext.Administrations.Where(a => a.Email == email && a.RoleId == 1).FirstOrDefaultAsync();
-                if (administrator != null)
-                {
+               
                     return administrator;
-                }
-                else
-                {
-                    return null;
-                }
+               
             }
             catch
             {
@@ -109,14 +94,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 Administration? administrator = await _dbcontext.Administrations.Where(a => a.GoogleId == GoogleId).FirstOrDefaultAsync();
-                if (administrator != null)
-                {
+              
                     return administrator;
-                }
-                else
-                {
-                    return null;
-                }
+              
             }
             catch
             {
@@ -130,14 +110,7 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId != 1 && a.IsActive == true && a.IsAccepted == true).ToListAsync();
-                if (administrators != null)
-                {
-                    return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+                return administrators;         
             }
             catch
             {
@@ -149,14 +122,10 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 1 && a.IsActive == true).ToListAsync();
-                if (administrators != null)
-                {
+              
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+                
+              
             }
             catch
             {
@@ -170,14 +139,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.AcceptedBy == Id && a.IsActive == true).ToListAsync();
-                if (administrators != null)
-                {
+             
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+              
             }
             catch
             {
@@ -191,14 +155,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.CreatedBy == Id && a.IsActive == true).ToListAsync();
-                if (administrators != null)
-                {
+              
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+              
             }
             catch
             {
@@ -212,14 +171,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 2 && a.IsActive == true && a.IsAccepted == true).ToListAsync();
-                if (administrators != null)
-                {
+            
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+             
             }
             catch
             {
@@ -233,14 +187,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.RoleId == 3 && a.IsActive == true && a.IsAccepted == true).ToListAsync();
-                if (administrators != null)
-                {
+              
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+               
             }
             catch
             {
@@ -254,14 +203,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.RoleId == 4 && a.IsActive == true && a.IsAccepted == true).ToListAsync();
-                if (administrators != null)
-                {
+              
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+              
             }
             catch
             {
@@ -275,14 +219,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.RoleId == 2 && a.IsActive == true && a.AcceptedBy==null && a.RejectedBy==null).ToListAsync();
-                if (administrators != null)
-                {
+              
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+                
             }
             catch
             {
@@ -296,14 +235,9 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.RoleId == 4 && a.IsActive == true && a.AcceptedBy == null && a.RejectedBy == null).ToListAsync();
-                if (administrators != null)
-                {
+               
                     return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+              
             }
             catch
             {
@@ -316,14 +250,8 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 int administrators = await _dbcontext.Administrations.CountAsync(a => a.OrganisationId == OrgId && a.RoleId == 4 && a.IsActive == true && a.AcceptedBy == null && a.RejectedBy == null);
-                if (administrators != null)
-                {
-                    return administrators;
-                }
-                else
-                {
-                    return 0;
-                }
+                return administrators;
+               
             }
             catch
             {
@@ -522,7 +450,7 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -568,14 +496,7 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<Administration> administrators = await _dbcontext.Administrations.Where(a => a.OrganisationId == OrgId && a.IsActive == true && a.IsAccepted==true).ToListAsync();
-                if (administrators != null)
-                {
-                    return administrators;
-                }
-                else
-                {
-                    return null;
-                }
+                return administrators;
             }
             catch
             {

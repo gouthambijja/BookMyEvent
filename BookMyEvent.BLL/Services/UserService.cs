@@ -44,15 +44,10 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (false, "oops something went wrong");
+                return (false,ex.Message);
             }
         }
-        private static string GetHash(string text)
-        {
-            var sha256 = SHA256.Create();
-            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
-            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-        }
+       
         public async Task<(Guid UserId, string Message)> BlockUser(Guid UserId)
         {
             try
@@ -65,7 +60,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (UserId, "Bll Block Error");
+                return (UserId, ex.Message);
             }
         }
         public async Task<bool> ChangePassword(Guid UserId, string Password)
@@ -78,7 +73,7 @@ namespace BookMyEvent.BLL.Services
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -96,7 +91,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (false, "Bll Error");
+                return (false, ex.Message);
             }
         }
         public async Task<BLUser> GetUserByEmail(string Email)
@@ -108,11 +103,11 @@ namespace BookMyEvent.BLL.Services
                     User user = await UserRepositoryDal.GetUserByEmail(Email);
                     return mapper.Map<User, BLUser>(user);
                 }
-                return new BLUser();
+                return null;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new BLUser();
+                return null;
             }
         }
         public async Task<BLUser> GetUserById(Guid UserId)

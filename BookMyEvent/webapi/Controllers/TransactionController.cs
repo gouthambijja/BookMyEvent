@@ -41,9 +41,9 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 return Ok(await _transactionServices.GetAllRegisteredEventsByUserId(UserId));
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
         /// <summary>

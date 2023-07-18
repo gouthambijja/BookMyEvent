@@ -88,7 +88,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return new BLOrganisation();
+                return null;
             }
         }
 
@@ -127,7 +127,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return new BLOrganisation();
+                return null;
             }
         }
        public async Task<bool> AcceptOrganisation(Guid orgId)

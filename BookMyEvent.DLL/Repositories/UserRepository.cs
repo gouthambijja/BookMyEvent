@@ -60,9 +60,9 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await _db.Users.ToListAsync();
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<User> { };
+                return null;
             }
         }
 
@@ -72,7 +72,7 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -108,7 +108,7 @@ namespace BookMyEvent.DLL.Repositories
                 user.AccountCredentialsId = null;
                 return user;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -133,12 +133,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new User();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new User();
+                return null;
             }
         }
 
@@ -188,7 +188,7 @@ namespace BookMyEvent.DLL.Repositories
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -222,8 +222,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                Console.WriteLine("I've reached into the user repository---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                var users = await _db.Users.ToListAsync();
+                        var users = await _db.Users.ToListAsync();
                 if (name != null)
                 {
                     users = users.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();

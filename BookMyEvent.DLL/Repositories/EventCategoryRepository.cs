@@ -45,7 +45,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             else
             {
-                return new EventCategory();
+                return null;
             }
         }
         public async Task<(EventCategory category, string Message)> UpdateEventCategory(EventCategory _eventCategory)
@@ -60,7 +60,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             else
             {
-                return (new EventCategory(), "EventCategory Not Added");
+                return (null, "EventCategory Not Added");
             }
         }
         public async Task<(bool IsEventCategoryDeleted, string Message)> DeleteEventCategory(byte id)
@@ -92,7 +92,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new List<EventCategory>();
+                return null;
             }
         }
     }

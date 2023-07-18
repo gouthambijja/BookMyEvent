@@ -45,11 +45,11 @@ namespace BookMyEvent.WebApi.Controllers
                 {
                     return Ok(_category);
                 }
-                return BadRequest();
+                return BadRequest("error");
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("error");
             }
         }   
         /// <summary>
@@ -64,11 +64,11 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 var _category = await _categoryServices.UpdateEventCategory(category);
                 if (_category != null) return Ok(_category);
-                return BadRequest();
+                return BadRequest("error");
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("error");
             }
         }
     }

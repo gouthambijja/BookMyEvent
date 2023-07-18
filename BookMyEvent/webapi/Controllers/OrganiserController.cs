@@ -184,11 +184,7 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 _fileLogger.AddExceptionToFile("[CreateSecondaryOrganiser]" + result.Message);
 
-                return BadRequest(new
-                {
-                    IsSuccess = new BLAdministrator(),
-                    Message = result.Message
-                });
+                return BadRequest("error");
             }
         }
         /// <summary>

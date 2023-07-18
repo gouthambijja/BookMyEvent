@@ -83,9 +83,9 @@ namespace BookMyEvent.WebApi.Controllers
                 var json = JsonConvert.SerializeObject(allTickets);
                 return Ok(json);
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
         /// <summary>
@@ -103,7 +103,7 @@ namespace BookMyEvent.WebApi.Controllers
                 return Ok(true);
 
             }
-            catch { return BadRequest("Error in Controller"); }
+            catch(Exception ex) { return BadRequest(ex.Message); }
         }
 
     }

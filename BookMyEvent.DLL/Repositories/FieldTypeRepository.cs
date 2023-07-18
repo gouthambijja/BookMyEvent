@@ -34,7 +34,7 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await context.FieldTypes.FirstOrDefaultAsync(e => e.FieldTypeId.Equals(FieldTypeId));
             }
-            return new FieldType();
+            return null;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace BookMyEvent.DLL.Repositories
                 await _db.Entry(_event).GetDatabaseValuesAsync();
                 return _event;
             }
-            catch (Exception ex) { return null; }
+            catch  { return null; }
         }
 
         public async Task<(bool, string Message)> DeleteEvent(Guid id)
@@ -65,7 +65,7 @@ namespace BookMyEvent.DLL.Repositories
 
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -78,7 +78,7 @@ namespace BookMyEvent.DLL.Repositories
                 var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.Location == location && x.RegistrationStatusId != 3).ToList();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -91,7 +91,7 @@ namespace BookMyEvent.DLL.Repositories
                 var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.OrganisationId == orgId && x.RegistrationStatusId != 3).ToList();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -128,7 +128,7 @@ namespace BookMyEvent.DLL.Repositories
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
 
@@ -197,7 +197,7 @@ namespace BookMyEvent.DLL.Repositories
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -247,7 +247,7 @@ namespace BookMyEvent.DLL.Repositories
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -273,7 +273,7 @@ namespace BookMyEvent.DLL.Repositories
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -286,9 +286,9 @@ namespace BookMyEvent.DLL.Repositories
                 var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.OrganisationId == orgId && x.AcceptedBy != null).ToListAsync();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -299,7 +299,7 @@ namespace BookMyEvent.DLL.Repositories
                 var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.CreatedBy == organiserId && x.AcceptedBy != null).ToListAsync();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -329,8 +329,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                // Handle any exceptions
-                Console.WriteLine(ex);
+               
                 throw new Exception("Failed to fetch filtered events from the database.", ex);
             }
         }
@@ -356,7 +355,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return (false, "Event Not Updated");
+                return (false, ex.Message);
             }
         }
 
