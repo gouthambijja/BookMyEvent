@@ -32,9 +32,6 @@ namespace BookMyEvent.BLL.Services
             {
                 if (user != null)
                 {
-
-
-
                     var accountCred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = user.Password, UpdatedOn = DateTime.Now });
                     user.AccountCredentialsId = accountCred.AccountCredentialsId;
                     var User = mapper.Map<BLUser, User>(user);
@@ -87,7 +84,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-
                 if (!UserId.Equals(string.Empty))
                 {
                     return await UserRepositoryDal.DeleteUser(UserId);
@@ -118,21 +114,17 @@ namespace BookMyEvent.BLL.Services
         public async Task<BLUser> GetUserById(Guid UserId)
         {
             User user = await UserRepositoryDal.GetUserById(UserId);
-            var mapper = Automapper.InitializeAutomapper();
             return mapper.Map<User, BLUser>(user);
         }
         public async Task<List<BLUser>> GetUsers()
         {
             List<User> UsersList = await UserRepositoryDal.GetAllUsers();
-            var mapper = Automapper.InitializeAutomapper();
             return mapper.Map<List<User>, List<BLUser>>(UsersList);
         }
         public async Task<Guid> Login(BLLoginModel login)
         {
             if (login is not null)
             {
-          
-               
                 return await UserRepositoryDal.IsUserExists(login.Email, login.Password);
             }
             return Guid.Empty;
@@ -142,7 +134,6 @@ namespace BookMyEvent.BLL.Services
             if (!Id.Equals(string.Empty))
             {
                 User user = await UserRepositoryDal.ToggleIsActiveById(Id, BlockedBy);
-                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<User, BLUser>(user);
             }
             return null;
@@ -151,11 +142,9 @@ namespace BookMyEvent.BLL.Services
         {
             if (user is not null)
             {
-                var mapper = Automapper.InitializeAutomapper();
                 User user1 = mapper.Map<BLUser, User>(user);
                 var resp = await UserRepositoryDal.UpdateUser(user1);
                 return (mapper.Map<BLUser>(resp.Item1), resp.Item2);
-
             }
             return (null, "Not Updated");
         }
@@ -184,7 +173,6 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 Console.WriteLine("i've reached bll get filtered users _________________________________________________________________________________________________________________________________________");
-                var mapper = Automapper.InitializeAutomapper();
                 var users = await UserRepositoryDal.GetFilteredUsers(name, email, phoneNumber, isActive);
                 return mapper.Map<List<BLUser>>(users);
             }

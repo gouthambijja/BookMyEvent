@@ -1,4 +1,5 @@
-﻿using BookMyEvent.BLL.Contracts;
+﻿using AutoMapper;
+using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
@@ -15,11 +16,14 @@ namespace BookMyEvent.BLL.Services
         private readonly IAdministrationRepository _administrationRepository;
         private readonly IOrganisationServices _organisationServices;
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
+        private readonly Mapper mapper;
+
         public Organiserservices(IAdministrationRepository administrationRepository, IOrganisationServices organisationServices, IAccountCredentialsRepository accountCredentialsRepository)
         {
             _administrationRepository = administrationRepository;
             _organisationServices = organisationServices;
             _accountCredentialsRepository = accountCredentialsRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
         public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy, byte RoleId, Guid orgId)
         {
@@ -90,8 +94,7 @@ namespace BookMyEvent.BLL.Services
                 //    return (false, Message, null);
                 //}
                 //else
-                //{
-                //    var mapper = Automapper.InitializeAutomapper();
+                //{  
                 //    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
                 //    administrator.AccountCredentialsId = passModel.AccountCredentialsId;
                 //    Console.WriteLine(administrator.AccountCredentialsId);
@@ -116,8 +119,6 @@ namespace BookMyEvent.BLL.Services
                 //    }
                 //}
 
-
-                var mapper = Automapper.InitializeAutomapper();
                 (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(administrator.Email);
                 if (IsAvailable)
                 {
@@ -163,7 +164,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetAdministrationsByOrgId(orgId);
                 return mapper.Map<List<BLAdministrator>>(result);
             }
@@ -177,7 +177,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetPrimaryAdministrators();
                 return mapper.Map<List<BLAdministrator>>(result);
             }
@@ -192,7 +191,6 @@ namespace BookMyEvent.BLL.Services
 
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetPeerAdministratorRequests(orgId);
                 return mapper.Map<List<BLAdministrator>>(result);
             }
@@ -206,7 +204,6 @@ namespace BookMyEvent.BLL.Services
 
             try
             {
-            
                 var result = await _administrationRepository.GetNoOfPeerAdministratorRequests(orgId);
                 return result;
             }
@@ -220,7 +217,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetPrimaryAdministratorRequests();
                 return mapper.Map<List<BLAdministrator>>(result);
             }
@@ -234,7 +230,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetAdministratorById(administratorId);
                 return mapper.Map<BLAdministrator>(result);
             }
@@ -288,14 +283,12 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var result = await _administrationRepository.GetAdministratorByEmail(email);
-
                 if (result != null)
                 {
                     if (result.RoleId == 1) return (Guid.Empty, 0, false, "Email doesn't exists");
                     var res = await _accountCredentialsRepository.CheckPassword(result.AccountCredentialsId, password);
                     if (res)
                     {
-
                         return (result.AdministratorId, result.RoleId, true, "Login Successfull");
                     }
                     else
@@ -318,7 +311,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
+
                 (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(owner.Email);
                 if (IsAvailable)
                 {
@@ -369,7 +362,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
+
                 var res = await IsOrganiserAvailableWithEmail(peer.Email);
                 if (res.IsOrganiserEmailAvailable)
                 {
@@ -420,7 +413,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.UpdateAdministrator(mapper.Map<Administration>(administrator));
                 return mapper.Map<BLAdministrator>(result);
             }

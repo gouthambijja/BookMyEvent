@@ -1,4 +1,5 @@
-﻿using BookMyEvent.BLL.Contracts;
+﻿using AutoMapper;
+using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.DLL.Contracts;
@@ -11,17 +12,20 @@ using System.Threading.Tasks;
 
 namespace BookMyEvent.BLL.Services
 {
-    public class UserInputFormService:IUserInputFormService
+    public class UserInputFormService : IUserInputFormService
     {
         private readonly IUserInputFormRepository _userInputForm;
         private readonly IUserInputFormFieldsRepository _userInputFormField;
         private readonly IEventServices _eventServices;
+        private readonly Mapper mapper;
 
-        public UserInputFormService(IUserInputFormRepository userInputForm, IUserInputFormFieldsRepository userInputFormField,IEventServices eventServices)
+
+        public UserInputFormService(IUserInputFormRepository userInputForm, IUserInputFormFieldsRepository userInputFormField, IEventServices eventServices)
         {
             _userInputForm = userInputForm;
             _userInputFormField = userInputFormField;
             _eventServices = eventServices;
+            mapper = Automapper.InitializeAutomapper();
         }
 
         public async Task<List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>?> SubmitUserInputForm(List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms)
@@ -30,19 +34,14 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> newFormsBL = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>();
-                
                 int totalForms = userForms.Count;
                 var EventId = userForms[0].userInputForm.EventId;
-                var mapper = Automapper.InitializeAutomapper();
                 for (int i = 0; i < totalForms; i++)
                 {
                     var SingleForm = userForms[i];
-
                     UserInputForm DLInputForm = mapper.Map<UserInputForm>(SingleForm.userInputForm);
-                   
-
                     UserInputForm newInputForm = await _userInputForm.Add(DLInputForm);
-                    if(newInputForm == null) { return null; }
+                    if (newInputForm == null) { return null; }
                     BLUserInputForm newUserInputFormBL = mapper.Map<BLUserInputForm>(newInputForm);
                     List<UserInputFormField>? DLUserInputFormFields = new List<UserInputFormField>();
                     foreach (var userInputFormField in SingleForm.userInputFormFields)
@@ -53,7 +52,7 @@ namespace BookMyEvent.BLL.Services
                         DLUserInputFormFields.Add(DLUserInputFormField);
                     }
                     List<UserInputFormField>? DLNewUserInputFormFields = await _userInputFormField.AddMany(DLUserInputFormFields);
-                    if(DLNewUserInputFormFields == null) { return null; }
+                    if (DLNewUserInputFormFields == null) { return null; }
                     List<BLUserInputFormField>? BLNewUserInputFormFields = new List<BLUserInputFormField>();
 
                     foreach (var DLNewuserInputFormField in DLNewUserInputFormFields)
@@ -88,19 +87,17 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
-
                 List<Guid>? inputFormIds = await _userInputForm.GetInputFormIdByUserIdAndEventId(userId, EventId);
                 if (inputFormIds == null) return null;
                 List<List<BLUserInputFormField>> BLUserInputFormFieldsLists = new List<List<BLUserInputFormField>>();
                 foreach (var id in inputFormIds)
                 {
                     List<UserInputFormField> DLUserinputFormFields = await _userInputFormField.GetAllFieldsByFormId(id);
-                    if(DLUserinputFormFields== null) return null;
-                    List<BLUserInputFormField> BLUserInputFormFields=new List<BLUserInputFormField>();
+                    if (DLUserinputFormFields == null) return null;
+                    List<BLUserInputFormField> BLUserInputFormFields = new List<BLUserInputFormField>();
                     foreach (var field in DLUserinputFormFields)
                     {
-                        BLUserInputFormField bLUserInputFormField=mapper.Map<BLUserInputFormField>(field);
+                        BLUserInputFormField bLUserInputFormField = mapper.Map<BLUserInputFormField>(field);
                         BLUserInputFormFields.Add(bLUserInputFormField);
 
                     }
@@ -118,18 +115,16 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> newFormsBL = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)>();
-
                 List<UserInputForm>? DLuserInputForms = await _userInputForm.GetUserInputFormsByEventId(eventId);
                 if (DLuserInputForms == null) return null;
-                foreach(var inputForm in DLuserInputForms)
+                foreach (var inputForm in DLuserInputForms)
                 {
                     List<UserInputFormField> DLUserInputFormFields = await _userInputFormField.GetAllFieldsByFormId(inputForm.UserInputFormId);
-                    if(DLUserInputFormFields == null) return null;
+                    if (DLUserInputFormFields == null) return null;
                     BLUserInputForm bLUserInputForm = mapper.Map<BLUserInputForm>(inputForm);
                     List<BLUserInputFormField> BLUserInputFormFields = new List<BLUserInputFormField>();
-                    foreach(var field in DLUserInputFormFields)
+                    foreach (var field in DLUserInputFormFields)
                     {
                         BLUserInputFormField BLField = mapper.Map<BLUserInputFormField>(field);
                         BLUserInputFormFields.Add(BLField);
@@ -146,8 +141,5 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-
-
-
     }
 }
