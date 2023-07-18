@@ -67,7 +67,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -80,7 +80,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -93,7 +93,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -105,7 +105,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -125,12 +125,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new Event();
+                return null;
 
             }
         }
@@ -169,12 +169,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return (new Event(), "Event Not Found");
+                    return (null, "Event Not Found");
                 }
             }
             catch (Exception ex)
             {
-                return (new Event(), "Event Not Updated");
+                return (null, ex.Message);
             }
         }
 
@@ -194,12 +194,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -219,12 +219,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -244,12 +244,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -270,12 +270,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -301,7 +301,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return new List<Event>();
+                return null;
             }
         }
 
