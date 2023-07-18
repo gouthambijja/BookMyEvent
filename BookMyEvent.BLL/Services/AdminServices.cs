@@ -14,12 +14,14 @@ namespace BookMyEvent.BLL.Services
 {
     public class AdminServices : IAdminService
     {
+        private readonly Mapper mapper;
         private readonly IAdministrationRepository _administrationRepository;
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
         public AdminServices(IAdministrationRepository administrationRepository, IAccountCredentialsRepository accountCredentialsRepository)
         {
             _administrationRepository = administrationRepository;
             _accountCredentialsRepository = accountCredentialsRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
         public async Task<BLAdministrator> CreateAdministrator(BLAdministrator secondaryAdmin)
         {
@@ -28,9 +30,8 @@ namespace BookMyEvent.BLL.Services
                 if (secondaryAdmin is not null)
                 {
                     Console.WriteLine(secondaryAdmin.AdministratorName);
-                    var acccred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = secondaryAdmin.Password, UpdatedOn =DateTime.Now });
+                    var acccred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = secondaryAdmin.Password, UpdatedOn = DateTime.Now });
                     secondaryAdmin.AccountCredentialsId = acccred.AccountCredentialsId;
-                    var mapper = Automapper.InitializeAutomapper();
                     Administration administration = mapper.Map<Administration>(secondaryAdmin);
                     Console.WriteLine(administration.RoleId);
                     Console.WriteLine(administration.AccountCredentialsId);
@@ -78,7 +79,6 @@ namespace BookMyEvent.BLL.Services
                 if (AdminId != null)
                 {
                     Administration Admin = await _administrationRepository.GetAdministratorById(AdminId);
-                    var mapper = Automapper.InitializeAutomapper();
                     return mapper.Map<Administration, BLAdministrator>(Admin);
                 }
                 return new BLAdministrator();
@@ -94,7 +94,6 @@ namespace BookMyEvent.BLL.Services
             {
                 List<Administration> ListOfAdmins = await _administrationRepository.GetSecondaryAdministrators();
                 Console.WriteLine(ListOfAdmins.Count);
-                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<List<Administration>, List<BLAdministrator>>(ListOfAdmins);
             }
             catch (Exception ex)
@@ -124,7 +123,6 @@ namespace BookMyEvent.BLL.Services
 
                 if (secondaryAdmin is not null)
                 {
-                    var mapper = Automapper.InitializeAutomapper();
                     Administration Admin = await _administrationRepository.UpdateAdministrator(mapper.Map<BLAdministrator, Administration>(secondaryAdmin));
                     return secondaryAdmin;
                 }
@@ -170,7 +168,6 @@ namespace BookMyEvent.BLL.Services
                 if (AdminId != null)
                 {
                     List<Administration> CreatedAdmins = await _administrationRepository.GetCreatedAdministratorsById(AdminId);
-                    var mapper = Automapper.InitializeAutomapper();
                     return mapper.Map<List<Administration>, List<BLAdministrator>>(CreatedAdmins);
                 }
                 return new List<BLAdministrator>();

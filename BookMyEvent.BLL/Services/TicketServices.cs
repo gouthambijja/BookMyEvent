@@ -1,4 +1,5 @@
-﻿using BookMyEvent.BLL.Contracts;
+﻿using AutoMapper;
+using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.DLL.Contracts;
@@ -12,23 +13,25 @@ using System.Threading.Tasks;
 
 namespace BookMyEvent.BLL.Services
 {
-    public class TicketServices:ITicketServices
+    public class TicketServices : ITicketServices
     {
         private readonly ITicketRepository _ticketRepository;
         private readonly IUserInputFormRepository _userInputFormRepository;
         private readonly IUserInputFormFieldsRepository _userInputFormFieldsRepository;
+        private readonly Mapper mapper;
+
         public TicketServices(ITicketRepository ticketRepository, IUserInputFormRepository userInputFormRepository, IUserInputFormFieldsRepository userInputFormFieldsRepository)
         {
             _ticketRepository = ticketRepository;
             _userInputFormRepository = userInputFormRepository;
             _userInputFormFieldsRepository = userInputFormFieldsRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
 
         public async Task<BLTicket?> AddTickect(BLTicket ticket)
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 Ticket ticketDL = mapper.Map<Ticket>(ticket);
                 Ticket newTicketDL = await _ticketRepository.AddTicket(ticketDL);
                 if (newTicketDL == null) return null;
@@ -45,7 +48,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
+
                 List<(BLTicket ticket, List<BLUserInputFormField> userDetails)> AllTickets = new List<(BLTicket ticket, List<BLUserInputFormField> userDetails)>();
                 List<Ticket> tickets = await _ticketRepository.GetTicketByTransactionId(transactionId);
                 foreach (var ticket in tickets)
@@ -76,7 +79,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var AllTickets = new List<UserTicketsWithDetails>();
                 List<Guid>? formIds = await _userInputFormRepository.GetInputFormIdByUserIdAndEventId(userId, eventId);
                 //List<Ticket> ticketsDL = await _ticketRepository.GetTicketsByFormids(formIds);
@@ -104,13 +106,12 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<List<UserTicketsWithDetails>> GetEventTickets( Guid eventId)
+        public async Task<List<UserTicketsWithDetails>> GetEventTickets(Guid eventId)
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var AllTickets = new List<UserTicketsWithDetails>();
-                var forms = await _userInputFormRepository.GetUserInputFormsByEventId( eventId);
+                var forms = await _userInputFormRepository.GetUserInputFormsByEventId(eventId);
                 foreach (var form in forms)
                 {
                     Ticket DLticket = await _ticketRepository.GetTicketByFormId(form.UserInputFormId);
@@ -159,12 +160,11 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 //List<Ticket> ticketDL = mapper.Map<List<Ticket>>(ticketList);
                 List<Ticket> ticketListDL = new List<Ticket>();
                 foreach (var ticket in ticketList)
                 {
-                    Ticket ticketDL=mapper.Map<Ticket>(ticket);
+                    Ticket ticketDL = mapper.Map<Ticket>(ticket);
                     ticketListDL.Add(ticketDL);
                 }
                 bool newTicketDL = await _ticketRepository.AddMultipleTickets(ticketListDL);
@@ -173,7 +173,7 @@ namespace BookMyEvent.BLL.Services
             catch
             {
                 return false;
-            } 
+            }
         }
     }
 }

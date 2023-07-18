@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
+using AutoMapper;
 
 namespace BookMyEvent.BLL.Services
 {
@@ -15,14 +16,15 @@ namespace BookMyEvent.BLL.Services
         private readonly IFormRepository _organiserFormRepository;
         private readonly IRegistrationFormFieldRepository _organiserFormFieldsRepository;
         private readonly IFieldTypeRepository _fieldTypeRepository;
+        private readonly Mapper mapper;
 
         public OrganiserFormServices(IFormRepository organiserFormRepository, IRegistrationFormFieldRepository organiserFormFieldsRepository, IFieldTypeRepository fieldTypeRepository)
         {
             _organiserFormRepository = organiserFormRepository;
             _organiserFormFieldsRepository = organiserFormFieldsRepository;
             _fieldTypeRepository = fieldTypeRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
-
 
         public async Task<(Guid FormId, string Message)> AddForm(BLForm form)
         {
@@ -30,7 +32,6 @@ namespace BookMyEvent.BLL.Services
             {
                 if (form.FormId == Guid.Empty)
                 {
-                    var mapper = Automapper.InitializeAutomapper();
                     var newForm = await _organiserFormRepository.Add(mapper.Map<Form>(form));
                     //foreach (var item in registrationFormFields)
                     //{
@@ -51,10 +52,9 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 //var newRegistrationFormFields = mapper.Map<List<RegistrationFormField>>(registrationFormFields);
                 List<RegistrationFormField> newRegistrationFormFields = new List<RegistrationFormField>();
-                foreach(var formField in registrationFormFields)
+                foreach (var formField in registrationFormFields)
                 {
                     newRegistrationFormFields.Add(new RegistrationFormField()
                     {
@@ -92,7 +92,6 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var forms = await _organiserFormRepository.GetByCreatorId(id);
-                var mapper = Automapper.InitializeAutomapper();
                 var result = new List<(BLForm form, List<BLRegistrationFormFields> formFields)>();
                 foreach (var item in forms)
                 {
@@ -112,12 +111,11 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var forms = await _organiserFormRepository.GetByOrganisationId(id);
-                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<List<BLForm>>(forms);
             }
             catch (Exception ex)
             {
-                return null ;
+                return null;
             }
         }
 
@@ -126,7 +124,6 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var fieldTypes = await _fieldTypeRepository.GetAllFieldTypes();
-                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<List<BLFieldType>>(fieldTypes);
             }
             catch (Exception ex)
@@ -140,7 +137,6 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var form = await _organiserFormRepository.Get(id);
-                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<BLForm>(form);
             }
             catch (Exception ex)
@@ -154,7 +150,6 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var formFields = await _organiserFormFieldsRepository.GetAllFields(id);
-                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<List<BLRegistrationFormFields>>(formFields);
             }
             catch (Exception ex)
