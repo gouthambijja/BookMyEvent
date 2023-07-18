@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
+using AutoMapper;  
+using BookMyEvent.BLL.Utilities;
 using db.Models;
 using BookMyEvent.WebApi.Utilities;
 

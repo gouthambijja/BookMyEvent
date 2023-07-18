@@ -12,27 +12,30 @@ using BookMyEvent.WebApi.Controllers;
 using db.Models;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using AutoMapper;
+using BookMyEvent.BLL.Utilities;
+
 
 namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 {
     public class EventServiceTest
     {
         private readonly Mock<IEventRepository> _eventRepoMock;
-       
-        private Mapper _mapper;
-    
+
+        private readonly Mapper _mapper;
+
         public EventServiceTest()
         {
-            _eventRepoMock=new Mock<IEventRepository>();
+            _eventRepoMock = new Mock<IEventRepository>();
+            _mapper = Automapper.InitializeAutomapper();
         }
         [Fact]
         public async void GetEventById_SuccessTest()
         {
             //Arrange
-           var id=Guid.NewGuid();
+            var id = Guid.NewGuid();
             var eventDL = EventsMockData.GetDLEvent(id);
-            _eventRepoMock.Setup( x =>x.GetEventById( id)).ReturnsAsync( eventDL);
-           var eventServices = new EventServices(_eventRepoMock.Object,null,null);
+            _eventRepoMock.Setup(x => x.GetEventById(id)).ReturnsAsync(eventDL);
+            var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
             var result = await eventServices.GetEventById(id);
@@ -48,7 +51,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             //Arrange
             var id = Guid.NewGuid();
             var eventDL = EventsMockData.GetDLEvent(id);
-           
+
             _eventRepoMock.Setup(x => x.GetEventById(id)).ReturnsAsync((Event)null);
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
@@ -57,7 +60,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 
             //Assert
             Assert.Null(result);
-         
+
         }
 
         [Fact]
@@ -67,7 +70,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var id = Guid.NewGuid();
             var eventDL = EventsMockData.GetDLEvent(id);
 
-            _eventRepoMock.Setup(x => x.GetEventById(id)).ReturnsAsync((Event) null);
+            _eventRepoMock.Setup(x => x.GetEventById(id)).ReturnsAsync((Event)null);
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
@@ -81,11 +84,11 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
         [Fact]
         public async void UpdateEvent_SuccessTest()
         {
-           //Arrange
+            //Arrange
             var id = Guid.NewGuid();
-            var eventDL= EventsMockData.GetDLEvent(id);
-            var eventBL= EventsMockData.GetBLEvent(id);
-        
+            var eventDL = EventsMockData.GetDLEvent(id);
+            var eventBL = EventsMockData.GetBLEvent(id);
+
             _eventRepoMock.Setup(x => x.UpdateEvent(It.IsAny<Event>())).ReturnsAsync((eventDL, "Updated"));
 
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
@@ -101,7 +104,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
         [Fact]
         public async void UpdateEvent_FailureTest()
         {
-           //Arrange
+            //Arrange
             var id = Guid.NewGuid();
             var eventDL = EventsMockData.GetDLEvent(id);
             var eventBL = EventsMockData.GetBLEvent(id);
@@ -116,7 +119,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             //Assert
             Assert.Null(result.Item1);
             Assert.Equal("Event Not Found", result.Message);
-          
+
         }
         [Fact]
         public async void DeleteEvent_SuccessTest()
@@ -160,18 +163,18 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
         {
             //Arrange
             int pageNumber = 1;
-            int pageSize=10;
-            var DLEventsList= EventsMockData.GetListOfDLEvents();
+            int pageSize = 10;
+            var DLEventsList = EventsMockData.GetListOfDLEvents();
             _eventRepoMock.Setup(x => x.GetAllActivePublishedEvents(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(DLEventsList);
 
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.GetAllActivePublishedEvents(pageNumber,pageSize);
+            var result = await eventServices.GetAllActivePublishedEvents(pageNumber, pageSize);
 
             //Assert
             Assert.NotEmpty(result);
-            Assert.Equal(DLEventsList.Count,result.Count);
+            Assert.Equal(DLEventsList.Count, result.Count);
 
         }
 
@@ -240,15 +243,15 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             //Arrange
             Guid eventId = Guid.NewGuid();
             byte registrationstatusId = 1;
-            Guid updatedBy= Guid.NewGuid();
+            Guid updatedBy = Guid.NewGuid();
             DateTime updatedAt = DateTime.Now;
             var EventDL = EventsMockData.GetDLEvent(eventId);
-            _eventRepoMock.Setup(x => x.UpdateEventRegistrationStatus(It.Is<Guid>(x=>x==eventId), It.Is<byte>(x => x == registrationstatusId), It.Is<Guid>(x => x == updatedBy), It.Is<DateTime>(x => x == updatedAt))).ReturnsAsync(EventDL);
+            _eventRepoMock.Setup(x => x.UpdateEventRegistrationStatus(It.Is<Guid>(x => x == eventId), It.Is<byte>(x => x == registrationstatusId), It.Is<Guid>(x => x == updatedBy), It.Is<DateTime>(x => x == updatedAt))).ReturnsAsync(EventDL);
 
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.UpdateEventRegistrationStatus(eventId,registrationstatusId,updatedBy,updatedAt);
+            var result = await eventServices.UpdateEventRegistrationStatus(eventId, registrationstatusId, updatedBy, updatedAt);
 
             //Assert
             Assert.NotNull(result);
@@ -274,7 +277,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 
             //Assert
             Assert.Null(result);
-            
+
 
         }
 
@@ -283,7 +286,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
         {
             //Arrange
             Guid eventId = Guid.NewGuid();
-           
+
             Guid updatedBy = Guid.NewGuid();
             DateTime updatedAt = DateTime.Now;
             var EventDL = EventsMockData.GetDLEvent(eventId);
@@ -292,7 +295,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.UpdateIsCancelledEvent(eventId,  updatedBy, updatedAt);
+            var result = await eventServices.UpdateIsCancelledEvent(eventId, updatedBy, updatedAt);
 
             //Assert
             Assert.NotNull(result);
@@ -305,7 +308,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
         {
             //Arrange
             Guid eventId = Guid.NewGuid();
-           
+
             Guid updatedBy = Guid.NewGuid();
             DateTime updatedAt = DateTime.Now;
             var EventDL = EventsMockData.GetDLEvent(eventId);
@@ -318,7 +321,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 
             //Assert
             Assert.Null(result);
-           
+
 
         }
         [Fact]
@@ -361,7 +364,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 
             //Assert
             Assert.Null(result);
-         
+
 
         }
         [Fact]
@@ -369,7 +372,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
         {
             //Arrange
             Guid eventId = Guid.NewGuid();
-            Guid acceptedBy=Guid.NewGuid();
+            Guid acceptedBy = Guid.NewGuid();
             Guid updatedBy = Guid.NewGuid();
             DateTime updatedAt = DateTime.Now;
             var EventDL = EventsMockData.GetDLEvent(eventId);
@@ -378,7 +381,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.UpdateAcceptedBy(eventId,acceptedBy, updatedBy, updatedAt);
+            var result = await eventServices.UpdateAcceptedBy(eventId, acceptedBy, updatedBy, updatedAt);
 
             //Assert
             Assert.NotNull(result);
@@ -404,7 +407,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 
             //Assert
             Assert.Null(result);
-           
+
 
         }
 
@@ -423,7 +426,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.UpdateRejectedBy(eventId, rejectedBy, updatedBy, updatedAt,reason);
+            var result = await eventServices.UpdateRejectedBy(eventId, rejectedBy, updatedBy, updatedAt, reason);
 
             //Assert
             Assert.NotNull(result);
@@ -450,7 +453,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
 
             //Assert
             Assert.Null(result);
-          
+
 
         }
 
@@ -460,7 +463,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             //Arrange
             Guid orgId = Guid.NewGuid();
             var DLEventsList = EventsMockData.GetListOfDLEvents();
-            _eventRepoMock.Setup(x => x.GetAllCreatedEventsByOrganisation(It.Is<Guid>(x=>x==orgId))).ReturnsAsync(DLEventsList);
+            _eventRepoMock.Setup(x => x.GetAllCreatedEventsByOrganisation(It.Is<Guid>(x => x == orgId))).ReturnsAsync(DLEventsList);
 
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
@@ -470,7 +473,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             //Assert
             Assert.NotEmpty(result);
             Assert.Equal(DLEventsList.Count, result.Count);
-          
+
 
         }
         [Fact]
@@ -504,10 +507,10 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             string location = "Hyderabad";
             string name = "Techspace";
             bool isFree = true;
-            List<int> categoryIds =new List<int> { 1, 2, 3, 4, 5 };
+            List<int> categoryIds = new List<int> { 1, 2, 3, 4, 5 };
             int pageNumber = 1;
             int pageSize = 10;
-          
+
             var DLEventsList = EventsMockData.GetListOfDLEvents();
             _eventRepoMock.Setup(x => x.GetFilteredEvents(It.Is<DateTime>(x => x == startDate), It.Is<DateTime>(x => x == endDate), It.Is<decimal>(x => x == startPrice), It.Is<decimal>(x => x == endPrice), It.Is<string>(x => x == location),
                 It.Is<string>(x => x == name), It.Is<bool>(x => x == isFree), It.Is<List<int>>(x => x == categoryIds), It.Is<int>(x => x == pageNumber), It.Is<int>(x => x == pageSize))).ReturnsAsync(DLEventsList);
@@ -515,7 +518,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.GetFilteredEvents(startDate, endDate, startPrice, endPrice,location,name,isFree,categoryIds,pageNumber,pageSize) ;
+            var result = await eventServices.GetFilteredEvents(startDate, endDate, startPrice, endPrice, location, name, isFree, categoryIds, pageNumber, pageSize);
 
             //Assert
             Assert.NotEmpty(result);
@@ -531,13 +534,13 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             Guid eventId = Guid.NewGuid();
             Guid updatedBy = Guid.NewGuid();
             DateTime updateOn = DateTime.Now;
-           
+
             _eventRepoMock.Setup(x => x.UpdateIsActive(It.Is<Guid>(x => x == eventId), It.Is<Guid>(x => x == updatedBy), It.Is<DateTime>(x => x == updateOn))).ReturnsAsync((true, "Event Deleted Successfully"));
 
             var eventServices = new EventServices(_eventRepoMock.Object, null, null);
 
             //Act
-            var result = await eventServices.SoftDelete(eventId,updatedBy,updateOn);
+            var result = await eventServices.SoftDelete(eventId, updatedBy, updateOn);
 
             //Assert
             Assert.True(result.isActiveUpdated);

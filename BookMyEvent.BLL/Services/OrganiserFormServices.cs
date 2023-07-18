@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
 using AutoMapper;
+using BookMyEvent.BLL.Utilities;
+
 
 namespace BookMyEvent.BLL.Services
 {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.MockData;
 using BookMyEvent.BLL.Models;
 using AutoMapper;
+using BookMyEvent.BLL.Utilities;
 using db.Models;
 using BookMyEvent.BLL.Services;
 using Xunit;
