@@ -102,7 +102,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return new List<(BLForm form, List<BLRegistrationFormFields> formFields)>();
+                return null;
             }
         }
 
@@ -128,7 +128,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return new List<BLFieldType>();
+                return null;
             }
         }
 
@@ -141,7 +141,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return new BLForm();
+                return null;
             }
         }
 
@@ -154,7 +154,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return new List<BLRegistrationFormFields>();
+                return null;
             }
         }
 

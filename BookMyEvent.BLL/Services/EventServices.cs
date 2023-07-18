@@ -113,7 +113,7 @@ namespace BookMyEvent.BLL.Services
             {
                 return await eventRepository.DeleteEvent(id);
             }
-            catch (Exception ex)
+            catch 
             {
                 return (false, "error in the event services");
             }

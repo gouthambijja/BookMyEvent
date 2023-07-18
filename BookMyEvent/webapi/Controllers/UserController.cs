@@ -394,7 +394,7 @@ namespace BookMyEvent.WebApi.Controllers
             catch (Exception ex)
             {
                 _fileLogger.AddExceptionToFile("[IsEmailExists] " + ex.Message);
-                return BadRequest("error");
+                return BadRequest(ex.Message);
             }
         }
         [Authorize(Roles = "Admin")]

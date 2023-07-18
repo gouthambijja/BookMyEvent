@@ -49,9 +49,9 @@ namespace BookMyEvent.WebApi.Controllers
 
                 return Ok(newInputUserForm);
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest("Error occured in controller");
+                return BadRequest(ex.Message);
             }
         }
         /// <summary>
@@ -91,9 +91,9 @@ namespace BookMyEvent.WebApi.Controllers
                 if (userForms==null) { return BadRequest("Error in BL"); }
                 return Ok(userForms);
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest("Error in controller");
+                return BadRequest(ex.Message);
 
             }
         }

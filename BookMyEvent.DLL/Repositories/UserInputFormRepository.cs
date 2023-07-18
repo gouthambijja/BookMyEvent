@@ -58,12 +58,7 @@ namespace BookMyEvent.DLL.Repositories
                 List<Guid> inputFormIds = await _DBContext.UserInputForms.Where(f => f.UserId == userId && f.EventId == eventId)
                      .Select(f => f.UserInputFormId)
                      .ToListAsync();
-                if (inputFormIds != null)
-                {
-
-                    return inputFormIds;
-                }
-                else { return null; }
+                return inputFormIds;
             }
             catch
             {
@@ -76,12 +71,7 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<UserInputForm> inputForms = await _DBContext.UserInputForms.Where(f => f.EventId == eventId).ToListAsync();
-                if (inputForms != null)
-                {
-
-                    return inputForms;
-                }
-                else { return null; }
+                return inputForms;
             }
             catch
             {

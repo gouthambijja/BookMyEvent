@@ -16,7 +16,7 @@ namespace BookMyEvent.DLL.Repositories
         {
             this.context = context;
         }
-        public async Task<AccountCredential> AddCredential(AccountCredential credential)
+        public async Task<AccountCredential?> AddCredential(AccountCredential credential)
         {
             try
             {
@@ -30,13 +30,13 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    Console.WriteLine("Credential is null");
-                    return new AccountCredential();
+                    
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new AccountCredential();
+                return null;
             }
         }
         public async Task<AccountCredential> UpdateCredential(AccountCredential credential)
@@ -50,9 +50,9 @@ namespace BookMyEvent.DLL.Repositories
                 await context.Entry(credential).GetDatabaseValuesAsync();
                 return credential;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new AccountCredential();
+                return null;
             }
         }
         public async Task<AccountCredential> GetCredential(Guid AccountCredentialId)
@@ -69,7 +69,7 @@ namespace BookMyEvent.DLL.Repositories
                     return true;
                 return false;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }

@@ -20,8 +20,8 @@ namespace BookMyEvent.DLL.Repositories
         {
             try
             {
-                Console.WriteLine(form.FormName + " " + form.OrganisationId);
-                _DBContext.Forms.AddAsync(form);
+                
+               await _DBContext.Forms.AddAsync(form);
                 await _DBContext.SaveChangesAsync();
                 return form;
             }
@@ -110,7 +110,7 @@ namespace BookMyEvent.DLL.Repositories
                 var form = await  _DBContext.Forms.Where(e => e.FormId == formId).FirstOrDefaultAsync();
                 if (form == null) return await Task.FromResult((false, "Form not found"));
                 form.IsActive = !form.IsActive;
-                _DBContext.SaveChangesAsync();
+               await _DBContext.SaveChangesAsync();
                 return await Task.FromResult((true, "Form updated"));
             }
             catch (Exception ex)
