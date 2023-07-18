@@ -10,6 +10,7 @@ using BookMyEvent.DLL.Contracts;
 using db.Models;
 using Moq;
 using AutoMapper;
+using BookMyEvent.BLL.Utilities;
 using BookMyEvent.BLL.Services;
 using Microsoft.IdentityModel.Tokens;
 using BookMyEvent.BLL.RequestModels;
@@ -48,7 +49,7 @@ namespace BookMyEvent.xUnitTests.BookMyEvent.BLL.tests.Services.tests
             var userDAL = _mapper.Map<User>(user);
             userDAL.AccountCredentialsId = accountCredential.AccountCredentialsId;
             // Setup the AddUser method to return (true, "User Added Successfully")
-            _mockUserRepository.Setup(x => x.AddUser(It.Is<User>(x=>x.UserId == user.UserId && x.AccountCredentialsId == userDAL.AccountCredentialsId))).ReturnsAsync((true, "User Added Successfully"));
+            _mockUserRepository.Setup(x => x.AddUser(It.Is<User>(x => x.UserId == user.UserId && x.AccountCredentialsId == userDAL.AccountCredentialsId))).ReturnsAsync((true, "User Added Successfully"));
 
             // Act
             var result = await _userService.AddUser(user);
