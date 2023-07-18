@@ -14,7 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookMyEvent.BLL.Services
 {
-    internal class EventServices : IEventServices
+    public class EventServices : IEventServices
     {
         private readonly IEventRepository eventRepository;
         private readonly IOrganiserFormServices organiserFormServices;
@@ -94,8 +94,16 @@ namespace BookMyEvent.BLL.Services
                // return (eventBL, "Event Updated");
                Event eventDL =_mapper.Map<Event>(_event);
                 var result=await eventRepository.UpdateEvent(eventDL);
+                if(result.Item1 != null)
+                {
+
                 BLEvent eventBL = _mapper.Map<BLEvent>(result.Item1);
                 return (eventBL, "Event Updated");
+                }
+                else
+                {
+                    return (null, result.Message);
+                }
             }
             catch (Exception ex)
             {
@@ -107,7 +115,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                return (await eventRepository.DeleteEvent(id));
+                return await eventRepository.DeleteEvent(id);
             }
             catch (Exception ex)
             {
@@ -158,7 +166,13 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                return _mapper.Map<BLEvent>(await eventRepository.UpdateEventRegistrationStatus(eventId, registrationStatusId, updatedBy, updatedAt));
+                Event eventDL = await eventRepository.UpdateEventRegistrationStatus(eventId, registrationStatusId, updatedBy, updatedAt);
+                if(eventDL != null)
+                {
+                   BLEvent eventBL= _mapper.Map<BLEvent>(eventDL);
+                    return eventBL;
+                }
+                return null;
             }
             catch
             {
@@ -169,7 +183,16 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                return _mapper.Map<BLEvent>(await eventRepository.UpdateIsCancelledEvent(eventId, updatedBy, updatedAt));
+                Event eventDL = await eventRepository.UpdateIsCancelledEvent(eventId, updatedBy, updatedAt);
+                if( eventDL != null)
+                {
+
+                    BLEvent bLEvent=_mapper.Map<BLEvent>(eventDL);
+                    return bLEvent;
+
+                }
+                return null;
+            
             }
             catch
             {
@@ -180,7 +203,13 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                return _mapper.Map<BLEvent>(await eventRepository.UpdateIsPublishedEvent(eventId, updatedBy, updatedAt));
+                Event eventDL = await eventRepository.UpdateIsPublishedEvent(eventId, updatedBy, updatedAt);
+                if( eventDL != null)
+                {
+                    BLEvent bLEvent = _mapper.Map<BLEvent>(eventDL);
+                    return bLEvent;
+                }
+                return null;
             }
             catch
             {
