@@ -50,7 +50,7 @@ namespace BookMyEvent.WebApi.Controllers
 
                 }
                 BLEvent bLEvent = new();
-                bLEvent.EventName = Request.Form.First(e => e.Key == "EventName").Value;
+                bLEvent.EventName = Request.Form["EventName"];
                 bLEvent.StartDate = DateTime.Parse(Request.Form.First(e => e.Key == "StartDate").Value);
                 bLEvent.EndDate = DateTime.Parse(Request.Form.First(e => e.Key == "EndDate").Value);
                 bLEvent.CategoryId = byte.Parse(Request.Form.First(e => e.Key == "CategoryId").Value);
@@ -407,7 +407,7 @@ namespace BookMyEvent.WebApi.Controllers
                 filterEvent.categoryIds = filterEvent.categoryIds ?? new List<int>();
                 filterEvent.pageNumber = filterEvent.pageNumber == default ? 0 : filterEvent.pageNumber;
                 filterEvent.pageSize = filterEvent.pageSize == default ? 10 : filterEvent.pageSize;
-                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.name,filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize);
+                var result = await _eventServices.GetFilteredEvents(filterEvent.startDate, filterEvent.endDate, filterEvent.startPrice, filterEvent.endPrice, filterEvent.location, filterEvent.name, filterEvent.isFree, filterEvent.categoryIds, filterEvent.pageNumber, filterEvent.pageSize);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -476,7 +476,7 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-    
+
         /// <summary>
         /// Service to get past events by organiser
         /// </summary>
@@ -515,15 +515,15 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="organisationId"></param>
         /// <returns></returns>
         [HttpGet("GetNoOfPastEvents/{organiserId}/{organisationId}")]
-        public async Task<IActionResult> GetNoOfPastEvents(Guid organiserId,Guid organisationId)
+        public async Task<IActionResult> GetNoOfPastEvents(Guid organiserId, Guid organisationId)
         {
             try
             {
                 (int organiserPastEvents, int organisationPastEvents) NoOfPastEvents = await _eventServices.GetNoOfPastEvents(organiserId, organisationId);
                 return Ok(new
                 {
-                    organiserEvents=NoOfPastEvents.organiserPastEvents,
-                    organisationEvents=NoOfPastEvents.organisationPastEvents
+                    organiserEvents = NoOfPastEvents.organiserPastEvents,
+                    organisationEvents = NoOfPastEvents.organisationPastEvents
                 });
             }
             catch (Exception ex)
@@ -544,7 +544,7 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var result = await _eventServices.GetOrganisationRequestedEvents(orgId);
-                    return Ok(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {

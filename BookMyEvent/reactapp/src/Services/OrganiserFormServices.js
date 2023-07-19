@@ -37,6 +37,7 @@ const OrganiserFormServices = () => {
       );
       const FormId = form.data;
       FormFields.forEach((e) => {
+        console.log(e);
         RegistrationFormFields.push({
           RegistrationFormFieldId: FormId,
           FormId: FormId,
@@ -46,6 +47,7 @@ const OrganiserFormServices = () => {
           Validations: JSON.stringify(e.Validations).toString(),
           Options: JSON.stringify(e.Options).toString(),
           IsRequired: e.IsRequired,
+          FileTypeId:e.FileType,
         });
       });
       const IsFormFieldsInserted = await Axios.post(

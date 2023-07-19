@@ -26,10 +26,11 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="InputUserForms"></param>
         /// <returns>List of User form fields and those values</returns>
         [HttpPost("submitform")]
-        public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm> InputUserForms)
+        public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm?> InputUserForms)
         {
             try
             {
+
                 List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)>();
                 foreach (var _userInputForm in InputUserForms)
                 {

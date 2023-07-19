@@ -15,6 +15,8 @@ namespace BookMyEvent.BLL.Models
 
         public byte FieldTypeId { get; set; }
 
+        public byte FileTypeId { get; set; }
+
         public string Lable { get; set; } = null!;
 
         public string Validations { get; set; } = null!;

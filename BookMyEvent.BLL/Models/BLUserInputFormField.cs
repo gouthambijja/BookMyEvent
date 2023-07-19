@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,15 @@ namespace BookMyEvent.BLL.Models
 
         public string? Label { get; set; } = null!;
 
+        public byte? FileTypeId { get; set; }
+
         public string? StringResponse { get; set; }
 
         public int? NumberResponse { get; set; }
 
         public DateTime? DateResponse { get; set; }
+
+        public byte[]? FileResponse { get; set; }
+
     }
 }

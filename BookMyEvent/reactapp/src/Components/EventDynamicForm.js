@@ -30,7 +30,10 @@ const EventDynamicForm = () => {
   const [FieldOption, SetFieldOption] = useState("");
   const FormFieldInput = { width: "100%", marginBottom: "10px" };
   const FormFields = useSelector((store) => store.formFields.formFields);
-  const isFree = useSelector(    (store) => store.EventRegistrationFormFields.isFree  );
+  const FileTypes = useSelector((store) => store.formFields.fileTypes);
+  const isFree = useSelector(
+    (store) => store.EventRegistrationFormFields.isFree
+  );
   const [TicketObject, setTicketObject] = useState({
     FieldType: "Select",
     Label: "Ticket Prices",
@@ -72,15 +75,18 @@ const EventDynamicForm = () => {
     if (index == 0 && !isFree) return;
     const { name, value, checked } = event.target;
     const values = [...inputFields];
-    if(name == "Label"){
-      if(value == "Ticket Prices"){
-        toast.error("'Ticket Prices' can't be a label, enter other valid label");
+    if (name == "Label") {
+      if (value == "Ticket Prices") {
+        toast.error(
+          "'Ticket Prices' can't be a label, enter other valid label"
+        );
         return;
       }
     }
     if (name == "FieldType") {
       values[index] = NewFieldObject;
     }
+
     if (name == "minValue") {
       values[index] = {
         ...values[index],
@@ -103,16 +109,16 @@ const EventDynamicForm = () => {
   const handleAddFields = () => {
     dispatch(setInputFields([...inputFields, NewFieldObject]));
   };
-  const handleAddTicketPrices = () =>{
+  const handleAddTicketPrices = () => {
     dispatch(unsetIsFree());
-    dispatch(setInputFields([TicketObject,...inputFields]));
-  }
-  const handleRemoveTicketPrices = () =>{
+    dispatch(setInputFields([TicketObject, ...inputFields]));
+  };
+  const handleRemoveTicketPrices = () => {
     dispatch(setIsFree());
     const temp = [...inputFields];
-    temp.splice(0,1);
+    temp.splice(0, 1);
     dispatch(setInputFields([...temp]));
-  }
+  };
   const ColorfulButton = styled(Button)({
     backgroundColor: "#3f50b5",
     color: "#fff",
@@ -142,7 +148,10 @@ const EventDynamicForm = () => {
   };
   const handleRemoveFields = (index) => {
     console.log("hey");
-    if (inputFields.length != 0 && inputFields[index].Label != "Ticket Prices") {
+    if (
+      inputFields.length != 0 &&
+      inputFields[index].Label != "Ticket Prices"
+    ) {
       const values = [...inputFields];
       values.splice(index, 1);
       dispatch(setInputFields(values));
@@ -151,19 +160,19 @@ const EventDynamicForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formNameErrorMsg == "") {
-      if(inputFields.length == 0){
-        toast.warning('There should be atlest one Field');
+      if (inputFields.length == 0) {
+        toast.warning("There should be atlest one Field");
         return;
       }
-      try{
+      try {
         const response = await organisationFormServies().AddForm(FormName);
         if (response) {
           dispatch(clearFormFieldsForm());
           navigate("/organiser/addevent");
         }
-      }catch(er){
+      } catch (er) {
         toast.error(er);
-        toast.error('Form Submission Failed');
+        toast.error("Form Submission Failed");
       }
     }
   };
@@ -200,15 +209,15 @@ const EventDynamicForm = () => {
           fullWidth
         />
         <FormControlLabel
-        sx={{marginBottom:'10px'}}
+          sx={{ marginBottom: "10px" }}
           control={
             <Checkbox
               name="IsFree"
               checked={isFree}
-              onChange={()=>{
-                if(isFree == false){
+              onChange={() => {
+                if (isFree == false) {
                   handleRemoveTicketPrices();
-                }else{
+                } else {
                   handleAddTicketPrices();
                 }
               }}
@@ -265,6 +274,29 @@ const EventDynamicForm = () => {
               }
               label="Is Required"
             />
+            
+            {inputField.FieldType == "File" ? (
+              <FormControl style={{...FormFieldInput,marginTop:'10px'}}>
+              <InputLabel>Select File Type</InputLabel>
+             <Select
+                name="FileType"
+                value={
+                  inputField.FileType != undefined ? inputField.FileType : ""
+                }
+                label="Select File Type"
+                onChange={(e) => {console.log('hey');handleInputChange(e, index)}}
+                required
+                disabled={index == 0 && !isFree}
+              >
+                {FileTypes.map((option) => (
+                  <MenuItem key={++count} value={option.fileTypeId}>
+                    {option.fileTypeName}
+                  </MenuItem>
+                ))}
+              </Select></FormControl>
+            ) : (
+              <></>
+            )}
             {(inputField.FieldType == "Date" ||
               inputField.FieldType == "Number") &&
             inputField.FieldType != "" &&
@@ -320,7 +352,9 @@ const EventDynamicForm = () => {
                 <TextField
                   type={index == 0 && !isFree ? "number" : "text"}
                   style={FormFieldInput}
-                  label={index == 0 && !isFree ? "Add ticket price" : "Enter Option"}
+                  label={
+                    index == 0 && !isFree ? "Add ticket price" : "Enter Option"
+                  }
                   value={FieldOption}
                   onChange={(e) => {
                     SetFieldOption(e.target.value);

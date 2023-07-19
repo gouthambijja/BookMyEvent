@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using db.Models;
 
@@ -11,9 +12,11 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    partial class EventManagementSystemTeamZealContextModelSnapshot : ModelSnapshot
+    [Migration("20230718080425_AddedFileTypeTable_")]
+    partial class AddedFileTypeTable_
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -740,9 +743,6 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.Property<byte[]>("FileResponse")
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<byte?>("FileTypeId")
-                        .HasColumnType("tinyint");
 
                     b.Property<string>("Label")
                         .IsRequired()

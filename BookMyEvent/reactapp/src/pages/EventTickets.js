@@ -35,7 +35,7 @@ const EventTickets = () => {
     loadTickets();
   }, []);
   const formFields = useSelector((store) => store.formFields.formFields);
-  const formFieldDateId = formFields?.find((e) => e.type == "Date").fieldTypeId;
+  const formFieldDateId = formFields?.find((e) => e.type == "Date")?.fieldTypeId;
   const [event, setEvent] = useState({});
   useEffect(() => {
     const loadevent = async () => {
@@ -50,7 +50,7 @@ const EventTickets = () => {
       event.formId
     );
     let templateData = [];
-    console.log(formFields);
+  //console.log(formFields);
     formFields.forEach((field) => {
       templateData.push({ [field.lable]: `` });
     });
@@ -58,8 +58,8 @@ const EventTickets = () => {
     const fileName = `${event.eventName} Template`;
     const data = templateData;
     exportFromJson({ data, fileName, exportType });
-    console.log(templateData);
-    console.log(formFields);
+  //console.log(templateData);
+  //console.log(formFields);
   };
   const [file, setFile] = useState();
   const [RegisteredData, setRegisteredData] = useState();
@@ -93,7 +93,7 @@ const EventTickets = () => {
 
       /* Update state */
       // this.setState(, () => {
-      //   console.log(JSON.stringify(this.state.data, null, 2));
+      // //console.log(JSON.stringify(this.state.data, null, 2));
       // });
       const formFields = await OrganiserFormServices().getFieldTypesByFormId(
         event.formId
@@ -121,7 +121,7 @@ const EventTickets = () => {
           ).toISOString();
         });
       }
-      console.log(data);
+    //console.log(data);
 
       //-------------------------------------------------------------------------------------------------------------------
 
@@ -132,7 +132,7 @@ const EventTickets = () => {
           const type = formFields?.find((u) => {
             return u.lable == i;
           }).fieldTypeId;
-          console.log(e, i, fieldRegistrationId);
+        //console.log(e, i, fieldRegistrationId);
           if (type == 1 || type == 3 || type == 6 || type == 5) {
             formFieldResponse.push({
               label: i,
@@ -170,7 +170,7 @@ const EventTickets = () => {
           ["userInputFormFields"]: formResult[i],
         });
       }
-      console.log(formResultPost);
+    //console.log(formResultPost);
       setNoOfTickets(formResultPost.length);
      
         setRegisteredData(

@@ -2,7 +2,6 @@ import Axios from "../Api/Axios";
 import AxiosPrivate from "../Hooks/AxiosPrivate";
 
 const UserServices = () => {
-  console.log("hey");
   const axiosPrivate = AxiosPrivate();
   const getUserById = async (id) => {
     const response = await axiosPrivate.get(`api/User/${id}`, {

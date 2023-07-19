@@ -216,5 +216,17 @@ namespace BookMyEvent.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpGet("GetFileTypes")]
+        public async Task<IActionResult> GetFileTypes()
+        {
+            try
+            {
+                return Ok(await _organiserFormServices.GetFileTypes());
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
