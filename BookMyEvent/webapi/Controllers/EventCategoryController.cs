@@ -1,5 +1,6 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,11 @@ namespace BookMyEvent.WebApi.Controllers
     public class EventCategoryController : ControllerBase
     {
         private readonly ICategoryServices _categoryServices;
-        public EventCategoryController(ICategoryServices categoryServices)
+        private readonly FileLogger _fileLogger;
+        public EventCategoryController(ICategoryServices categoryServices, FileLogger fileLogger)
         {
             _categoryServices = categoryServices;
+            _fileLogger = fileLogger;
         }
         /// <summary>
         /// Service to Get All the EventCategories
@@ -23,10 +26,12 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
+                _fileLogger.AddInfoToFile("[Get] Fetches all the event Categories Success");
                 return Ok(await _categoryServices.GetAllEventCategories());
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[Get] Fetches all the event Categories Failure");
                 return NotFound();
             }
         }
@@ -43,15 +48,18 @@ namespace BookMyEvent.WebApi.Controllers
                 var _category = await _categoryServices.AddEventCategory(category);
                 if (_category != null)
                 {
+                    _fileLogger.AddInfoToFile("[Post] Adds the event Category Success");
                     return Ok(_category);
                 }
+                _fileLogger.AddExceptionToFile("[Post] Post event Category Failure");
                 return BadRequest("error");
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[Post] Fetches all the event Category Failure in try catch");
                 return BadRequest("error");
             }
-        }   
+        }
         /// <summary>
         /// Method to update event Category
         /// </summary>
@@ -64,10 +72,12 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 var _category = await _categoryServices.UpdateEventCategory(category);
                 if (_category != null) return Ok(_category);
+                _fileLogger.AddInfoToFile("[Put] Updates the event Category Success");
                 return BadRequest("error");
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[Put] Updates the event Category Failure");
                 return BadRequest("error");
             }
         }
