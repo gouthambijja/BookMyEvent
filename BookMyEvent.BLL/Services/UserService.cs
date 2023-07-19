@@ -130,6 +130,7 @@ namespace BookMyEvent.BLL.Services
             if (!Id.Equals(string.Empty))
             {
                 User user = await UserRepositoryDal.ToggleIsActiveById(Id, BlockedBy);
+                var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<User, BLUser>(user);
             }
             return null;

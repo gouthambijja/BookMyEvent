@@ -1,6 +1,7 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
+using BookMyEvent.WebApi.Utilities;
 using db.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,14 @@ namespace BookMyEvent.WebApi.Controllers
     [ApiController]
     [Authorize]
     [Route("[controller]")]
-    public class TicketController:ControllerBase
+    public class TicketController : ControllerBase
     {
         private readonly ITicketServices _ticketServices;
-        public TicketController(ITicketServices ticketServices)
+        private readonly FileLogger _fileLogger;
+        public TicketController(ITicketServices ticketServices, FileLogger fileLogger)
         {
             _ticketServices = ticketServices;
+            _fileLogger = fileLogger;
         }
         /// <summary>
         /// Service to Get tickets by transaction Id
@@ -31,15 +34,18 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                List<(BLTicket ticket, List<BLUserInputFormField> userDetails)> allTickets= await _ticketServices.GetAllTicketsByTransactionId(transactionId);
+                List<(BLTicket ticket, List<BLUserInputFormField> userDetails)> allTickets = await _ticketServices.GetAllTicketsByTransactionId(transactionId);
                 if (allTickets == null)
                 {
+                    _fileLogger.AddExceptionToFile("[Get] Getting All Transactions BadRequest");
                     return BadRequest("error in BL");
                 }
+                _fileLogger.AddInfoToFile("[Get] Getting Allthe Transactions Success");
                 return Ok(allTickets);
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[Get] Getting All Transactions Exceptions");
                 return BadRequest("error in controller");
             }
         }
@@ -55,17 +61,23 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                List<UserTicketsWithDetails> allTickets= await _ticketServices.GetUserEventTickets(userId, eventId);
+                List<UserTicketsWithDetails> allTickets = await _ticketServices.GetUserEventTickets(userId, eventId);
                 if (allTickets == null)
                 {
+                    _fileLogger.AddExceptionToFile("[GetAllUserEventTickets] Getting All UserEventTickets Failure");
                     return BadRequest("error in BL");
                 }
-
-                var json = JsonConvert.SerializeObject(allTickets);
-                return Ok(json);
+                else
+                {
+                    var json = JsonConvert.SerializeObject(allTickets);
+                    _fileLogger.AddInfoToFile("[GetAllUserEventTickets] Getting All UserEventTickets Success");
+                    return Ok(json);
+                }
             }
             catch
             {
+
+                _fileLogger.AddExceptionToFile("[GetAllUserEventTickets] Getting All UserEventTickets Exception");
                 return BadRequest("error in controller");
             }
         }
@@ -74,17 +86,22 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                List<UserTicketsWithDetails> allTickets = await _ticketServices.GetEventTickets( eventId);
+                List<UserTicketsWithDetails> allTickets = await _ticketServices.GetEventTickets(eventId);
                 if (allTickets == null)
                 {
+                    _fileLogger.AddExceptionToFile("[GetAllEventTickets] Getting All EventTickets BadRequest ");
                     return BadRequest("error in BL");
                 }
-
-                var json = JsonConvert.SerializeObject(allTickets);
-                return Ok(json);
+                else
+                {
+                    var json = JsonConvert.SerializeObject(allTickets);
+                    _fileLogger.AddInfoToFile("[GetAllEventTickets] Getting All EventTickets Success");
+                    return Ok(json);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetAllEventTickets] Getting All EventTickets Exception");
                 return BadRequest(ex.Message);
             }
         }
@@ -98,12 +115,22 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                bool isCancelled= await _ticketServices.CancelTicket(ticketId);
-                if (!isCancelled) { return BadRequest("Error in BL"); }
+                bool isCancelled = await _ticketServices.CancelTicket(ticketId);
+                if (!isCancelled)
+                {
+                    _fileLogger.AddExceptionToFile("[CancelTicket] CancelTicket BadRequest");
+                    return BadRequest("Error in BL");
+                }
+                _fileLogger.AddInfoToFile("[CancelTicket] CancelTicket Success");
                 return Ok(true);
 
             }
-            catch(Exception ex) { return BadRequest(ex.Message); }
+            catch (Exception ex)
+            {
+                _fileLogger.AddExceptionToFile("[CancelTicket] CancelTicket BadRequest");
+                return
+                    BadRequest(ex.Message);
+            }
         }
 
     }
