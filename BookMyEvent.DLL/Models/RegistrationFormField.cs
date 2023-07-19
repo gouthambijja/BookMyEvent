@@ -21,7 +21,7 @@ public partial class RegistrationFormField
     public bool? IsRequired { get; set; }
 
     public byte? FileTypeId { get; set; }
-    public virtual FileType FileType { get; set; } = null!;
+    public virtual FileType? FileType { get; set; } = null!;
 
     public virtual FieldType FieldType { get; set; } = null!;
 

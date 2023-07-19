@@ -166,8 +166,10 @@ const EventDynamicForm = () => {
       }
       try {
         const response = await organisationFormServies().AddForm(FormName);
+        console.log(response);
         if (response) {
           dispatch(clearFormFieldsForm());
+          console.log("hello");
           navigate("/organiser/addevent");
         }
       } catch (er) {

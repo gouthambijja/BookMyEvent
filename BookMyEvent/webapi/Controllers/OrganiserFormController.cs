@@ -47,7 +47,7 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="RegistrationFormFields"></param>
         /// <returns>true if Added else false</returns>
         [HttpPost("AddFormFields")]
-        public async Task<IActionResult> AddRegistrationFormFields(List<BLRegistrationFormFields> RegistrationFormFields)
+        public async Task<IActionResult> AddRegistrationFormFields(List<BLRegistrationFormFields?> RegistrationFormFields)
         {
             try
             {

@@ -47,7 +47,7 @@ const OrganiserFormServices = () => {
           Validations: JSON.stringify(e.Validations).toString(),
           Options: JSON.stringify(e.Options).toString(),
           IsRequired: e.IsRequired,
-          FileTypeId:e.FileType,
+          FileTypeId:e.FileType?e.FieldType:null,
         });
       });
       const IsFormFieldsInserted = await Axios.post(

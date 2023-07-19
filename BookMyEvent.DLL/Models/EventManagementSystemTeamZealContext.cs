@@ -304,7 +304,6 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Validations).IsUnicode(false);
             entity.Property(e => e.FileTypeId).IsRequired(false);
-
             entity.HasOne(d => d.FieldType).WithMany(p => p.RegistrationFormFields)
                 .HasForeignKey(d => d.FieldTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
