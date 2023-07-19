@@ -1,5 +1,6 @@
 using AutoMapper;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.DLL.Models;
 using db.Models;
 
 public static class Automapper
@@ -17,7 +18,7 @@ public static class Automapper
             //cfg.CreateMap<UserBL, LoginUserModel>();
 
             //cfg.CreateMap<Transaction, TransactionBL>();
-
+            cfg.CreateMap<BLFileType, FileType>().ReverseMap();
             //cfg.CreateMap<TransactionBL, Transaction>();
             cfg.CreateMap<BLEvent,Event>().ReverseMap();
             //cfg.CreateMap<List<BLEvent>,List<Event>>().ReverseMap();

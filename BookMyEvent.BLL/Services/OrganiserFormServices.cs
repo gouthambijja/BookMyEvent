@@ -15,12 +15,14 @@ namespace BookMyEvent.BLL.Services
         private readonly IFormRepository _organiserFormRepository;
         private readonly IRegistrationFormFieldRepository _organiserFormFieldsRepository;
         private readonly IFieldTypeRepository _fieldTypeRepository;
+        private readonly IFileTypeRepository _fileTypeRepository;
 
-        public OrganiserFormServices(IFormRepository organiserFormRepository, IRegistrationFormFieldRepository organiserFormFieldsRepository, IFieldTypeRepository fieldTypeRepository)
+        public OrganiserFormServices(IFormRepository organiserFormRepository, IRegistrationFormFieldRepository organiserFormFieldsRepository, IFieldTypeRepository fieldTypeRepository, IFileTypeRepository fileTypeRepository)
         {
             _organiserFormRepository = organiserFormRepository;
             _organiserFormFieldsRepository = organiserFormFieldsRepository;
             _fieldTypeRepository = fieldTypeRepository;
+            _fileTypeRepository = fileTypeRepository;
         }
 
 
@@ -63,7 +65,8 @@ namespace BookMyEvent.BLL.Services
                         Options = formField.Options,
                         FormId = formField.FormId,
                         Lable = formField.Lable,
-                        FieldTypeId = formField.FieldTypeId
+                        FieldTypeId = formField.FieldTypeId,
+                        FileTypeId = formField.FileTypeId
                     });
                 }
                 var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
@@ -132,6 +135,20 @@ namespace BookMyEvent.BLL.Services
             catch (Exception ex)
             {
                 return new List<BLFieldType>();
+            }
+        }
+
+        public async Task<List<BLFileType>> GetFileTypes()
+        {
+            try
+            {
+                var mapper = Automapper.InitializeAutomapper();
+                return mapper.Map<List<BLFileType>>(await _fileTypeRepository.GetAllFileTypes());
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
 
