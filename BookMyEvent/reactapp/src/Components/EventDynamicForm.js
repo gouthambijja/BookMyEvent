@@ -74,6 +74,7 @@ const EventDynamicForm = () => {
   const handleInputChange = (event, index) => {
     if (index == 0 && !isFree) return;
     const { name, value, checked } = event.target;
+    console.log(name,value);
     const values = [...inputFields];
     if (name == "Label") {
       if (value == "Ticket Prices") {
@@ -169,7 +170,7 @@ const EventDynamicForm = () => {
         console.log(response);
         if (response) {
           dispatch(clearFormFieldsForm());
-          console.log("hello");
+          toast.success("Form submission succes!");
           navigate("/organiser/addevent");
         }
       } catch (er) {
