@@ -1,5 +1,6 @@
 using AutoMapper;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.DLL.Models;
 using db.Models;
 
 namespace BookMyEvent.BLL.Utilities;
@@ -23,6 +24,7 @@ public static class Automapper
             cfg.CreateMap<BLOrganisation, Organisation>().ReverseMap();
             cfg.CreateMap<BLEventCategory, EventCategory>().ReverseMap();
             cfg.CreateMap<BLFieldType, FieldType>().ReverseMap();
+            cfg.CreateMap<BLFileType, FileType>().ReverseMap();
         });
         var mapper = new Mapper(config);
         return mapper;

@@ -74,7 +74,7 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/Register" element={<RegisterUser />} />
                         <Route element={<RequireAuth allowedroles={["User"]} />}>
-                            <Route path="/tickets/:eventId" element={<UserTicketList />} />
+                            <Route path="/tickets/:eventId" element={<UserTicketList />} loader={storeLoader.FormFieldsLoader}/>
                             <Route path="/registeredEvents" element={<RegisteredEvents />} />
                             <Route
                                 path="/registerEvent/:eventId/:formId"

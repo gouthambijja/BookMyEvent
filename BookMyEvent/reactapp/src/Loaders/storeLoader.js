@@ -1,7 +1,7 @@
 import Axios from "../Api/Axios";
 import store from "../App/store";
 import { getCategoryThunk } from "../Features/ReducerSlices/CategorySlice";
-import { getFormFieldsThunk } from "../Features/ReducerSlices/FormFieldsSlice";
+import { getFileTypesThunk, getFormFieldsThunk } from "../Features/ReducerSlices/FormFieldsSlice";
 import { fetchOrganisations } from "../Features/ReducerSlices/OrganisationsSlice";
 import { fetchOrganisationOrganisers } from "../Features/ReducerSlices/OrganisersSlice";
 
@@ -18,9 +18,13 @@ import { IncrementHomePageNumber, fetchEvents } from "../Features/ReducerSlices/
       }
     };
     const FormFieldsLoader = async() =>{
-        if(store.getState().formFields.formFields.length > 0)return null;
+        if(store.getState().formFields.formFields.length > 0 && store.getState().formFields.fileTypes.length > 0 )return null;
         else{
+          if(store.getState().formFields.fileTypes.length > 0 )
             await store.dispatch(getFormFieldsThunk()).unwrap();
+            else{
+              await store.dispatch(getFileTypesThunk()).unwrap();
+            }
             return null;
         }
     }

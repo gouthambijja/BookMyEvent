@@ -10,6 +10,6 @@ namespace BookMyEvent.BLL.RequestModels
     public class SubmitUserInputForm
     {
         public BLUserInputForm? UserInputFormBL { get; set; }
-        public List<BLUserInputFormField?> UserInputFormFields { get; set; }
+        public List<BLUserInputFormField?> UserInputFormFields{ get; set; }
     }
 }

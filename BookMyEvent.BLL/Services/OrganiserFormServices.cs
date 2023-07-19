@@ -19,13 +19,15 @@ namespace BookMyEvent.BLL.Services
         private readonly IRegistrationFormFieldRepository _organiserFormFieldsRepository;
         private readonly IFieldTypeRepository _fieldTypeRepository;
         private readonly Mapper mapper;
+        private readonly IFileTypeRepository _fileTypeRepository;
 
-        public OrganiserFormServices(IFormRepository organiserFormRepository, IRegistrationFormFieldRepository organiserFormFieldsRepository, IFieldTypeRepository fieldTypeRepository)
+        public OrganiserFormServices(IFormRepository organiserFormRepository, IRegistrationFormFieldRepository organiserFormFieldsRepository, IFieldTypeRepository fieldTypeRepository, IFileTypeRepository fileTypeRepository)
         {
             _organiserFormRepository = organiserFormRepository;
             _organiserFormFieldsRepository = organiserFormFieldsRepository;
             _fieldTypeRepository = fieldTypeRepository;
             mapper = Automapper.InitializeAutomapper();
+            _fileTypeRepository = fileTypeRepository;
         }
 
         public async Task<(Guid FormId, string Message)> AddForm(BLForm form)
@@ -65,7 +67,8 @@ namespace BookMyEvent.BLL.Services
                         Options = formField.Options,
                         FormId = formField.FormId,
                         Lable = formField.Lable,
-                        FieldTypeId = formField.FieldTypeId
+                        FieldTypeId = formField.FieldTypeId,
+                        FileTypeId = formField.FileTypeId
                     });
                 }
                 var result = await _organiserFormFieldsRepository.AddMany(newRegistrationFormFields);
@@ -130,6 +133,20 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
+                return null;
+            }
+        }
+
+        public async Task<List<BLFileType>> GetFileTypes()
+        {
+            try
+            {
+                var mapper = Automapper.InitializeAutomapper();
+                return mapper.Map<List<BLFileType>>(await _fileTypeRepository.GetAllFileTypes());
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }

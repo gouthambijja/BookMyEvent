@@ -36,7 +36,7 @@ const UserTickets = () => {
                 <Typography variant="body1">No tickets available.</Typography>
             ) : (
               <>
-                    {tickets.map((ticket, index) => (<Ticket ticket={{ ticket: ticket, index: index, event:event}} />))}
+                    {tickets.map((ticket, index) => (<div><Ticket ticket={{ ticket: ticket, index: index, event:event}} /></div>))}
            </> )}
         </div>
     );

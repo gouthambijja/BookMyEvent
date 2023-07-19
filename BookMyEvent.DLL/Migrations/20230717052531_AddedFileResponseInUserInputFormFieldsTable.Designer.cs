@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using db.Models;
 
@@ -11,9 +12,11 @@ using db.Models;
 namespace BookMyEvent.DLL.Migrations
 {
     [DbContext(typeof(EventManagementSystemTeamZealContext))]
-    partial class EventManagementSystemTeamZealContextModelSnapshot : ModelSnapshot
+    [Migration("20230717052531_AddedFileResponseInUserInputFormFieldsTable")]
+    partial class AddedFileResponseInUserInputFormFieldsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,20 +24,6 @@ namespace BookMyEvent.DLL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BookMyEvent.DLL.Models.FileType", b =>
-                {
-                    b.Property<byte>("FileTypeId")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("FileTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("FileTypeId");
-
-                    b.ToTable("FileTypes");
-                });
 
             modelBuilder.Entity("db.Models.AccountCredential", b =>
                 {
@@ -470,9 +459,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<byte>("FieldTypeId")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("FileTypeId")
-                        .HasColumnType("tinyint");
-
                     b.Property<Guid>("FormId")
                         .HasColumnType("uniqueidentifier");
 
@@ -502,8 +488,6 @@ namespace BookMyEvent.DLL.Migrations
                         .HasName("PK__Registra__6823EFDD4809FA0A");
 
                     b.HasIndex("FieldTypeId");
-
-                    b.HasIndex("FileTypeId");
 
                     b.HasIndex("FormId");
 
@@ -741,9 +725,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<byte[]>("FileResponse")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<byte?>("FileTypeId")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -929,12 +910,6 @@ namespace BookMyEvent.DLL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_fieldId");
 
-                    b.HasOne("BookMyEvent.DLL.Models.FileType", "FileType")
-                        .WithMany("RegistrationFormFields")
-                        .HasForeignKey("FileTypeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_FileTypeId_FileType");
-
                     b.HasOne("db.Models.Form", "Form")
                         .WithMany("RegistrationFormFields")
                         .HasForeignKey("FormId")
@@ -942,8 +917,6 @@ namespace BookMyEvent.DLL.Migrations
                         .HasConstraintName("FK_formId");
 
                     b.Navigation("FieldType");
-
-                    b.Navigation("FileType");
 
                     b.Navigation("Form");
                 });
@@ -1061,11 +1034,6 @@ namespace BookMyEvent.DLL.Migrations
                     b.Navigation("RegistrationFormField");
 
                     b.Navigation("UserInputForm");
-                });
-
-            modelBuilder.Entity("BookMyEvent.DLL.Models.FileType", b =>
-                {
-                    b.Navigation("RegistrationFormFields");
                 });
 
             modelBuilder.Entity("db.Models.AccountCredential", b =>

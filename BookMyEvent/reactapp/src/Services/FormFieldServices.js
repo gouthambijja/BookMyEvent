@@ -6,7 +6,11 @@ const FormFieldServices = () => {
         const response = await Axios.get("/api/OrganiserForm/FieldTypes");
         return response.data;
     }
-    return {getFormFields};
+    const getFileTypes = async () =>{
+        const response = await Axios.get("/api/OrganiserForm/GetFileTypes");
+        return response.data;
+    }
+    return {getFormFields,getFileTypes};
 }
 
 export default FormFieldServices;
