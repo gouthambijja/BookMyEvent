@@ -1,5 +1,6 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
+using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,9 +14,11 @@ namespace BookMyEvent.WebApi.Controllers
     public class OrganisationController : ControllerBase
     {
         private readonly IOrganisationServices _organisationServices;
-        public OrganisationController(IOrganisationServices organisationServices)
+        private readonly FileLogger _fileLogger;
+        public OrganisationController(IOrganisationServices organisationServices, FileLogger fileLogger)
         {
             _organisationServices = organisationServices;
+            _fileLogger = fileLogger;
         }
         /// <summary>
         /// service to Get All the Organizations
@@ -28,7 +31,8 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organisationServices.GetAllOrganisations(pageNumber, pageSize);
             //Console.WriteLine(result.Count());
-            return Ok(new {organisations = result.bLOrganisations, total = result.totalBLOrganisations});
+            _fileLogger.AddInfoToFile("[GetOrganizations] Fetches all the Organizations Success");
+            return Ok(new { organisations = result.bLOrganisations, total = result.totalBLOrganisations });
         }
         /// <summary>
         /// Service to GEt a single Organization
@@ -39,9 +43,16 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> GetOrganisationById(Guid id)
         {
             var result = await _organisationServices.GetOrganisationById(id);
-            if(result is not null)
+            if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[GetOrganizationById] Fetches Organization By ID Success");
                 return Ok(result);
-            else return NotFound("Organisation not found");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[GetOrganizationbyId]getches the Organization Failure");
+                return NotFound("Organisation not found");
+            }
         }
         /// <summary>
         /// Service to Update Organization
@@ -52,9 +63,16 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> UpdateOrganisation(BLOrganisation organisation)
         {
             var result = await _organisationServices.UpdateOrganisation(organisation);
-            if(result is not null)
+            if (result is not null)
+            {
+                _fileLogger.AddInfoToFile("[UpdateOrganization] Updates the Organization Success");
                 return Ok(result);
-            else return BadRequest("Organisation not updated");
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[UpdateOrganization] Updates the Organization Failure");
+                return BadRequest("Organisation not updated");
+            }
         }
         /// <summary>
         /// Service to Check OrganizationName is Valid Or Not
@@ -66,6 +84,7 @@ namespace BookMyEvent.WebApi.Controllers
         public async Task<IActionResult> CheckOrganisationName(string orgName)
         {
             var result = await _organisationServices.IsOrganisationNameTaken(orgName);
+            _fileLogger.AddInfoToFile("[CheckOrganizationName] Verifies the Organization Name is Valid or not ");
             return Ok(result);
         }
         /// <summary>
@@ -80,16 +99,18 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var orgId = await _organisationServices.GetOrgIdByName(orgName);
-                if(orgId is not null)
+                if (orgId is not null)
                 {
+                    _fileLogger.AddInfoToFile("[GetOrgIdByName] Fetches OrganizationId by Name Success");
                     return Ok(new
                     {
-                        orgId=orgId,
-                        isExists=true
+                        orgId = orgId,
+                        isExists = true
                     });
                 }
                 else
                 {
+                    _fileLogger.AddInfoToFile("[GetOrgByName] Fetching OrganizationIdBy Name Failure");
                     return Ok(new
                     {
                         orgId = "",
@@ -97,10 +118,11 @@ namespace BookMyEvent.WebApi.Controllers
 
                     });
                 }
-               
+
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[GetOrgByName] Fetches Organization Failure");
                 return BadRequest("error");
             }
         }
@@ -114,8 +136,15 @@ namespace BookMyEvent.WebApi.Controllers
         {
             var result = await _organisationServices.BlockOrganisation(orgId, blockerId);
             if (result.IsOrganisationBlockToggled)
+            {
+                _fileLogger.AddInfoToFile("[DeleteOrganization] Delete Organization Success");
                 return Ok(result.Message);
-            else return BadRequest(result.Message);
+            }
+            else
+            {
+                _fileLogger.AddExceptionToFile("[DeleteOrganization] Delete Organization Failure");
+                return BadRequest(result.Message);
+            }
         }
     }
 }
