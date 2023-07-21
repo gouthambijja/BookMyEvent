@@ -74,12 +74,12 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/Register" element={<RegisterUser />} />
                         <Route element={<RequireAuth allowedroles={["User"]} />}>
-                            <Route path="/tickets/:eventId" element={<UserTicketList />} loader={storeLoader.FormFieldsLoader}/>
+                            <Route path="/tickets/:eventId" element={<UserTicketList />}/>
                             <Route path="/registeredEvents" element={<RegisteredEvents />} />
                             <Route
                                 path="/registerEvent/:eventId/:formId"
                                 element={<RegisterEvent />}
-                                loader={storeLoader.FormFieldsLoader}
+                                
                             ></Route>
                             <Route path="profile" element={<Profile />} />
                         </Route>
@@ -96,16 +96,14 @@ const App = () => {
                                     />
                                 }
                             >
-                                <Route index element={<OrganiserHomePage />}></Route>
+                                <Route index element={<OrganiserHomePage />} loader={storeLoader.FormFieldsLoader }></Route>
                                 <Route
                                     path="createNewEventRegistrationForm"
                                     element={<EventDynamicForm />}
-                                    loader={storeLoader.FormFieldsLoader}
                                 />
                                 <Route
                                     path="AddEvent"
                                     element={<AddEvent />}
-                                    loader={storeLoader.FormFieldsLoader}
                                 ></Route>
                                 <Route
                                     path="OrganisationTree/:id"
@@ -125,7 +123,7 @@ const App = () => {
                                     path="organisationPastEvents"
                                     element={<InfiniteOrganisationPastEvents />}
                                 />
-                                <Route path="event/:eventId" element={<EventTickets />} loader={storeLoader.FormFieldsLoader} />
+                                <Route path="event/:eventId" element={<EventTickets />}  />
                             </Route>
                         </Route>
                     </Route>
