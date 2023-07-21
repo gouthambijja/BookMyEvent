@@ -112,7 +112,7 @@ const App = () => {
                                 <Route path="PeerRequests" element={<PeerRequest />}></Route>
                                 <Route path="addSecondaryOwner" element={<AddSecondary />} />
                                 <Route path="profile" element={<Profile />} />
-                                <Route path="eventReq" element={<EventRequestsPage />} />
+                                <Route path="eventRequests" element={<EventRequestsPage />} />
                                 <Route path="myPastEvents" element={<InfiniteMyPastEvents />} />
                                 <Route
                                     path="organisationEvents"
