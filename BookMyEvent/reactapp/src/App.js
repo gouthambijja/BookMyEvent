@@ -85,18 +85,20 @@ const App = () => {
                         </Route>
                     </Route>
                     {/* ------------------------------------------------------------------------- */}
-                    <Route path="organiser" element={<Organiser />}>
+                    <Route path="organiser" element={<Organiser />} loader={storeLoader.FormFieldsLoader}>
                         <Route path="login" element={<Login />}></Route>
                         <Route path="register" element={<RegisterOrganiser />} />
-                        <Route element={<PersistLogin />}>
+                        <Route element={<PersistLogin />} >
                             <Route
                                 element={
                                     <RequireAuth
                                         allowedroles={["Owner", "Peer", "Secondary_Owner"]}
                                     />
+                                    
                                 }
+                                // loader={storeLoader.RequestsLoader}
                             >
-                                <Route index element={<OrganiserHomePage />} loader={storeLoader.FormFieldsLoader }></Route>
+                                <Route index element={<OrganiserHomePage />} ></Route>
                                 <Route
                                     path="createNewEventRegistrationForm"
                                     element={<EventDynamicForm />}
