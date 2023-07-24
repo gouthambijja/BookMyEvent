@@ -22,7 +22,11 @@ import { IncrementHomePageNumber, fetchEvents } from "../Features/ReducerSlices/
         else{
           if(store.getState().formFields.fileTypes.length > 0 )
             await store.dispatch(getFormFieldsThunk()).unwrap();
+            else if(store.getState().formFields.formFields.length > 0 ){
+              await store.dispatch(getFileTypesThunk()).unwrap();
+            }
             else{
+              await store.dispatch(getFormFieldsThunk()).unwrap();
               await store.dispatch(getFileTypesThunk()).unwrap();
             }
             return null;

@@ -74,7 +74,6 @@ const EventDynamicForm = () => {
   const handleInputChange = (event, index) => {
     if (index == 0 && !isFree) return;
     const { name, value, checked } = event.target;
-    console.log(name,value);
     const values = [...inputFields];
     if (name == "Label") {
       if (value == "Ticket Prices") {
