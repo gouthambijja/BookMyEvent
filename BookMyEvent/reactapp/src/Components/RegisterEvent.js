@@ -11,7 +11,7 @@ import {
   Button,
 } from "@mui/material";
 import OrganiserFormServices from "../Services/OrganiserFormServices";
-import { useNavigate, useParams } from "react-router-dom";
+import { json, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import store from "../App/store";
 import EventServices from "../Services/EventServices";
@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { AddRegisteredEventId } from "../Features/ReducerSlices/HomeEventsSlice";
 import { UpdateAvailableSeats } from "../Features/ReducerSlices/HomeEventsSlice";
 import { CoPresentOutlined } from "@mui/icons-material";
+import { getFileTypesThunk, getFormFieldsThunk } from "../Features/ReducerSlices/FormFieldsSlice";
 
 const RegisterEvent = () => {
   const [eventRegistrationFormFields, setEventRegistrationFormFields] =
@@ -33,8 +34,8 @@ const RegisterEvent = () => {
   let fetchedFormFields = [];
   const { eventId, formId } = useParams();
   const [TotalPrice, setTotalPrice] = useState(0);
-  const FormFieldTypes = useSelector((store) => store.formFields.formFields);
-  const FileTypes = useSelector(store=> store.formFields.fileTypes);
+  const [FormFieldTypes,setFormFieldTypes] = useState([]);
+  const [FileTypes,setFileTypes] = useState([]);
   const [fieldRegistrationId, setFieldRegistrationId] = useState();
   useEffect(() => {
     const loadUserEventRegistrationFormFields = async () => {
@@ -43,7 +44,7 @@ const RegisterEvent = () => {
       //console.log(event);
       const formFields = await OrganiserFormServices().getFieldTypesByFormId(
         formId
-      );
+      )
       console.log(formFields);
       formFields.forEach((e) => {
         setFieldRegistrationId((prev) => {
@@ -53,15 +54,25 @@ const RegisterEvent = () => {
       setEventRegistrationFormFields([
         ...eventRegistrationFormFields,
         [...formFields],
-      ]);
+      ]);      
+      if(store.getState().formFields.formFields.length != 0){
+        setFormFieldTypes(store.getState().formFields.formFields);
+      }else{
+        await dispatch(getFormFieldsThunk()).unwrap();
+        setFormFieldTypes(store.getState().formFields.formFields);
+      }
+      if(store.getState().formFields.fileTypes.length != 0){
+        setFileTypes(store.getState().formFields.fileTypes);
+      }else{
+        await dispatch(getFileTypesThunk()).unwrap();
+        setFileTypes(store.getState().formFields.fileTypes);
+      }
       fetchedFormFields = [...formFields];
       //console.log(fetchedFormFields);
     };
     loadUserEventRegistrationFormFields();
-    return () => {
-      loadUserEventRegistrationFormFields();
-    };
   }, []);
+
   const [formData, setFormData] = useState([]);
 
   const handlechange = (event, index, label) => {
@@ -79,12 +90,12 @@ const RegisterEvent = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-  
+
       reader.onload = (e) => {
         console.log(e.target.result);
         resolve(e.target.result.split(',')[1]);
       };
-  
+
       reader.onerror = (error) => {
         reject(error);
       };
@@ -131,7 +142,7 @@ const RegisterEvent = () => {
           formFieldResponse.push({
             label: i,
             fileResponse: file,
-            fileTypeId:FileTypes.find(a => a.fileTypeName == e[i].type)?.fileTypeId,
+            fileTypeId: FileTypes.find(a => a.fileTypeName == e[i].type)?.fileTypeId,
             registrationFormFieldId: fieldRegistrationId[i],
           });
           console.log(formFieldResponse);
@@ -233,8 +244,10 @@ const RegisterEvent = () => {
   return (
     <>
       {toggleRegistrationTransaction ? (
+
         <form style={formContainerStyle} onSubmit={handleSubmit}>
           {eventRegistrationFormFields.map((person, index) => (
+
             <div
               key={cnt++}
               style={{
@@ -249,7 +262,7 @@ const RegisterEvent = () => {
               {person?.map((formField) => (
                 <div key={cnt++}>
                   {FormFieldTypes[Number(formField?.fieldTypeId) - 1]?.type ==
-                  "Text" ? (
+                    "Text" ? (
                     <TextField
                       style={{
                         marginBottom: "20px",
@@ -295,7 +308,7 @@ const RegisterEvent = () => {
                         maxWidth: "800px",
                       }}
                       type="file"
-                      inputProps={{accept:FileTypes.find(e => e.fileTypeId == Number(formField.fileTypeId))?.fileTypeName}}
+                      inputProps={{ accept: FileTypes.find(e => e.fileTypeId == Number(formField.fileTypeId))?.fileTypeName }}
                       name={formField.lable}
                       label={formField.lable}
                       value={formData[index]?.[formField.lable]}
@@ -369,7 +382,7 @@ const RegisterEvent = () => {
                     "Select" ? (
                     (event.isFree == false &&
                       formField.lable == "Ticket Prices") ||
-                    formField.lable != "Ticket Prices" ? (
+                      formField.lable != "Ticket Prices" ? (
                       <FormControl
                         style={{
                           marginBottom: "20px",

@@ -214,7 +214,7 @@ namespace BookMyEvent.WebApi.Controllers
             {
 
 
-                _logger.LogInformation("my first log");
+                _logger.LogInformation("user login requested.");
                 var passwordSalt = _configuration["Encryption:PasswordSalt"];
 
                 login.Password = HashPassword.GetHash(login.Password + passwordSalt);
