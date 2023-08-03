@@ -30,12 +30,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Ticket();
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new Ticket();
+                return null;
             }
         }
         public async Task<List<Ticket>> GetTicketByTransactionId(Guid transactionId)
@@ -44,7 +44,7 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await context.Tickets.Where(e => e.TransactionId.Equals(transactionId)).ToListAsync();
             }
-            return new List<Ticket>();
+            return null;
         }
         public async Task<Ticket> GetTicketByTicketId(Guid TicketId)
         {
@@ -52,7 +52,7 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await context.Tickets.FirstOrDefaultAsync(e => e.TicketId.Equals(TicketId));
             }
-            return new Ticket();
+            return null;
         }
 
         public async Task<Ticket> GetTicketByFormId(Guid FormId)
@@ -61,7 +61,7 @@ namespace BookMyEvent.DLL.Repositories
             {
                 return await context.Tickets.FirstOrDefaultAsync(e => e.UserInputFormId.Equals(FormId));
             }
-            return new Ticket();
+            return null;
         }
         public async Task<List<Ticket>?> GetTicketByEventId(Guid EventId)
         {
@@ -80,7 +80,7 @@ namespace BookMyEvent.DLL.Repositories
                 await context.SaveChangesAsync();
                 return ticket;
             }
-            return new Ticket();
+            return null;
         }
         //public async Task<List<Ticket>> AddMultipleTickets(List<Ticket> ticketList)
         //{

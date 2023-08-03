@@ -1,6 +1,7 @@
 ﻿using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
+using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +10,15 @@ namespace BookMyEvent.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Roles = "User")]
-    public class UserInputFormController:ControllerBase
+    [Authorize]
+    public class UserInputFormController : ControllerBase
     {
         private readonly IUserInputFormService _userInputFormService;
-        public UserInputFormController(IUserInputFormService userInputFormService)
+        private readonly FileLogger _fileLogger;
+        public UserInputFormController(IUserInputFormService userInputFormService, FileLogger fileLogger)
         {
             _userInputFormService = userInputFormService;
+            _fileLogger = fileLogger;
         }
         /// <summary>
         /// Service To Add user input Form
@@ -23,12 +26,13 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="InputUserForms"></param>
         /// <returns>List of User form fields and those values</returns>
         [HttpPost("submitform")]
-        public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm> InputUserForms)
+        public async Task<IActionResult> SubmitUserInputForm([FromBody] List<SubmitUserInputForm?> InputUserForms)
         {
             try
             {
+
                 List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> userForms = new List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)>();
-                foreach(var _userInputForm in InputUserForms)
+                foreach (var _userInputForm in InputUserForms)
                 {
                     (BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields) SingleForm;
                     SingleForm.userInputForm = _userInputForm.UserInputFormBL;
@@ -36,22 +40,23 @@ namespace BookMyEvent.WebApi.Controllers
                     userForms.Add(SingleForm);
                 }
 
-                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> newUserForms= await _userInputFormService.SubmitUserInputForm(userForms);
-                if(newUserForms==null) { return BadRequest("Error in Business layer"); }
+                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> userInputFormFields)> newUserForms = await _userInputFormService.SubmitUserInputForm(userForms);
+                if (newUserForms == null) { _fileLogger.AddExceptionToFile("[SubmitUserInputForm] Submitting UserInputForm FirstBadRequest"); return BadRequest("Error in Business layer"); }
                 List<SubmitUserInputForm> newInputUserForm = new List<SubmitUserInputForm>();
-                foreach(var form in newUserForms)
+                foreach (var form in newUserForms)
                 {
-                    SubmitUserInputForm _form=new SubmitUserInputForm();
+                    SubmitUserInputForm _form = new SubmitUserInputForm();
                     _form.UserInputFormBL = form.userInputForm;
-                    _form.UserInputFormFields=form.userInputFormFields;
+                    _form.UserInputFormFields = form.userInputFormFields;
                     newInputUserForm.Add(_form);
                 }
-
+                _fileLogger.AddInfoToFile("[SubmittingUserInputForm] SubmittingUserInputForm Success");
                 return Ok(newInputUserForm);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Error occured in controller");
+                _fileLogger.AddExceptionToFile("[SubmittingUserInputForm] SubmittingUserINputForm Failure Badrequest second");
+                return BadRequest(ex.Message);
             }
         }
         /// <summary>
@@ -67,12 +72,17 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                List<List<BLUserInputFormField>> userForms= await _userInputFormService.GetUserFormsOfUserIdByEventId(userId, EventId);
-                if(userForms==null) { return BadRequest("Error in BL"); }
+                List<List<BLUserInputFormField>> userForms = await _userInputFormService.GetUserFormsOfUserIdByEventId(userId, EventId);
+                if (userForms == null)
+                {
+                    _fileLogger.AddExceptionToFile("[GetFormsofUserIdByEventId] Getting Forms of userIdNyEventIf Badrequest"); return BadRequest("Error in BL");
+                }
+                _fileLogger.AddInfoToFile("[GetUserFormsofUSerIdByEventId] GettingUSerForms Success ");
                 return Ok(userForms);
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[GetUserFormsofUserIdByEventID] Getting UserForms Failure badrequest");
                 return BadRequest("Error in controller");
             }
         }
@@ -87,13 +97,15 @@ namespace BookMyEvent.WebApi.Controllers
         {
             try
             {
-                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> userForms= await _userInputFormService.GetAllUserFormsByEventId(eventId);
-                if (userForms==null) { return BadRequest("Error in BL"); }
+                List<(BLUserInputForm userInputForm, List<BLUserInputFormField> UserInputFormFields)> userForms = await _userInputFormService.GetAllUserFormsByEventId(eventId);
+                if (userForms == null) { _fileLogger.AddExceptionToFile("[GetAllUserFormsByEventId] Getting All UserFormsByEventID Failure"); return BadRequest("Error in BL"); }
+                _fileLogger.AddInfoToFile("[GetAllUserFormsByEventId] Getting All UserForms Success");
                 return Ok(userForms);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Error in controller");
+                _fileLogger.AddExceptionToFile("[GetAllUserFormsByEventID] Getting All USerForms BadRequest");
+                return BadRequest(ex.Message);
 
             }
         }

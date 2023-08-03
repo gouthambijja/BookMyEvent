@@ -16,6 +16,7 @@ public partial class Administration
     public string Email { get; set; } = null!;
 
     public string PhoneNumber { get; set; } = null!;
+    public string? RejectedReason { get; set; } 
 
     public Guid? AccountCredentialsId { get; set; }
 
@@ -76,4 +77,8 @@ public partial class Administration
     public virtual Role Role { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+
+    public virtual ICollection<UserInputForm> UserInputForms { get; set; } = new List<UserInputForm>();
+
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookMyEvent.BLL.Utilities;
 using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.DLL.Contracts;
@@ -12,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace BookMyEvent.BLL.Services
 {
-    public class TransactionServices:ITransactionServices
+    public class TransactionServices : ITransactionServices
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly IEventRepository eventRepository;
-        private readonly ITicketServices ticketServices;   
-        private Mapper _mapper;
+        private readonly ITicketServices ticketServices;
+        private readonly Mapper _mapper;
 
-        public TransactionServices(ITransactionRepository transactionRepository,ITicketServices ticketServices, IEventRepository eventRepository)
+        public TransactionServices(ITransactionRepository transactionRepository, ITicketServices ticketServices, IEventRepository eventRepository)
         {
             this.transactionRepository = transactionRepository;
             this.ticketServices = ticketServices;
@@ -27,14 +28,14 @@ namespace BookMyEvent.BLL.Services
             this.eventRepository = eventRepository;
         }
 
-        public async Task<BLTransaction> Add((BLTransaction transaction,List<BLUserInputForm> forms) bLTransaction)
+        public async Task<BLTransaction> Add((BLTransaction transaction, List<BLUserInputForm> forms) bLTransaction)
         {
             try
             {
                 var transactionDL = _mapper.Map<Transaction>(bLTransaction.transaction);
                 var CurrentTransaction = _mapper.Map<BLTransaction>(await transactionRepository.AddTransaction(transactionDL));
                 List<BLTicket> tickets = new List<BLTicket>(bLTransaction.forms.Count());
-                foreach(var form in bLTransaction.forms)
+                foreach (var form in bLTransaction.forms)
                 {
                     BLTicket ticket = new BLTicket();
                     ticket.TransactionId = CurrentTransaction.TransactionId;
@@ -44,8 +45,8 @@ namespace BookMyEvent.BLL.Services
                     tickets.Add(ticket);
                 }
                 //declared a varialbe IsSuccess to store if the tickets are added succesfully or not
-                bool IsSuccess =  await ticketServices.AddManyTickets(tickets);
-                if(IsSuccess)
+                bool IsSuccess = await ticketServices.AddManyTickets(tickets);
+                if (IsSuccess)
                 {
                     return CurrentTransaction;
                 }
@@ -73,21 +74,21 @@ namespace BookMyEvent.BLL.Services
                 return null;
             }
         }
-     
 
-        public async Task<(List<Guid>? RegisteredEventIds,int NoOfTransactions,decimal Amount)> GetUserInfo(Guid userId)
+
+        public async Task<(List<Guid>? RegisteredEventIds, int NoOfTransactions, decimal Amount)> GetUserInfo(Guid userId)
         {
             try
             {
                 var eventIds = await transactionRepository.GetAllDistinctEventIds(userId);
-                int transactions= await transactionRepository.GetNoOfTransactionsByUserId(userId);
-                decimal Amount= await transactionRepository.GetTotalAmountByUserId(userId);
-                return (eventIds,transactions,Amount);
+                int transactions = await transactionRepository.GetNoOfTransactionsByUserId(userId);
+                decimal Amount = await transactionRepository.GetTotalAmountByUserId(userId);
+                return (eventIds, transactions, Amount);
 
             }
             catch
             {
-                return(null,0,0);
+                return (null, 0, 0);
             }
         }
         public async Task<List<BLTransaction>> GetAllTransactionsByEventId(Guid eventId)
@@ -96,7 +97,7 @@ namespace BookMyEvent.BLL.Services
             {
                 List<Transaction> transactionsListDL = await transactionRepository.GetTransactionsByEventId(eventId);
                 List<BLTransaction> transactionsListBL = new List<BLTransaction>();
-                foreach(var transaction in transactionsListDL)
+                foreach (var transaction in transactionsListDL)
                 {
                     BLTransaction transactionBL = _mapper.Map<BLTransaction>(transaction);
                     transactionsListBL.Add(transactionBL);
@@ -105,7 +106,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch
             {
-                return new List<BLTransaction>();
+                return null;
             }
         }
 
@@ -125,9 +126,9 @@ namespace BookMyEvent.BLL.Services
             }
             catch
             {
-                return new List<BLTransaction>();
+                return null;
             }
         }
-        
+
     }
 }

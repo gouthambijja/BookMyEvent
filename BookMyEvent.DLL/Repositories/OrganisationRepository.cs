@@ -38,14 +38,7 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 Organisation? organisation = await _dbcontext.Organisations.FindAsync(orgId);
-                if (organisation != null)
-                {
-                    return organisation;
-                }
-                else
-                {
-                    return null;
-                }
+                return organisation;
             }
             catch
             {

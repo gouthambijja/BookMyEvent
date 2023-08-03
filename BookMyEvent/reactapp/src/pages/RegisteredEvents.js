@@ -22,30 +22,30 @@ const RegisteredEvents = () => {
       setEvents(registeredEvents);
     };
     loadRegisteredEvents();
-    return ()=>{
+    return () => {
       loadRegisteredEvents();
-  }
+    }
   }, []);
-  const handleViewTickets = async(eventId) =>{
+  const handleViewTickets = async (eventId) => {
     navigate(`/tickets/${eventId}`)
   }
   return (
-    <div style={{width:'100%',padding:'30px'}}>
-      {events.map((event,index) => (
-        <div key={cnt++} style={{margin:'0px auto',maxWidth:'800px',marginBottom:'10px'}}>
+    <div style={{ width: '100%', padding: '30px' }}>
+      {events.map((event, index) => (
+        <div key={cnt++} style={{ margin: '0px auto', maxWidth: '800px', marginBottom: '10px' }}>
           <Card >
             <CardMedia
               component="img"
               height="200"
               image={`data:image/jpeg;base64,${event.profileImgBody}`}
               alt={event.eventName}
-              sx={{objectFit:'cover',objectPosition:'center'}}
+              sx={{ objectFit: 'cover', objectPosition: 'center' }}
             />
-            <CardContent sx={{display:'flex' ,justifyContent:'space-between'}}>
+            <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h5" component="div">
                 {event.eventName}
               </Typography>
-              <Button variant="contained" color="primary" onClick={()=>handleViewTickets(event.eventId)}>
+              <Button variant="contained" color="primary" onClick={() => handleViewTickets(event.eventId)}>
                 View Tickets
               </Button>
             </CardContent>

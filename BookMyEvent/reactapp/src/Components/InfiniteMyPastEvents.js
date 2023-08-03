@@ -56,7 +56,7 @@ const InfiniteMyPastEvents = () => {
                 marginTop: "60px",
             }}
         >
-            {events.length}
+           
             {events.length > 0 ?
             
              events.map((event) => (

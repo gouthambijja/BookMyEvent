@@ -27,6 +27,18 @@ export const fetchRequestedPeers = createAsyncThunk(
         }
     }
 );
+export const fetchNoOfRequestedPeers = createAsyncThunk(
+    "organisers/fetchNoOfRequestedPeers",
+    async (organisationId, { rejectWithValue }) => {
+        try {
+            const response = await orgServices().getNoOfRequestedPeers(organisationId);
+            return response;
+        }
+        catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 export const fetchOrganisationOrganisers = createAsyncThunk(
     "organisers/fetchOrganisationOrganisers",
@@ -108,6 +120,7 @@ const organisersSlice = createSlice({
         loading: false,
         error: null,
         message: null,
+        NoOfRequestedOrganisers:0,
     },
     reducers: {
         clearReqOrganisers: (state) => {
@@ -149,6 +162,12 @@ const organisersSlice = createSlice({
             state.error = true
             state.message = payload;
         });
+        builder.addCase(fetchNoOfRequestedPeers.fulfilled, (state, { payload }) => {
+            state.loading = false;
+            state.error = false;
+            state.NoOfRequestedOrganisers = payload;
+            state.message = "fetched successfully";
+        });
         builder.addCase(fetchOrganisationOrganisers.pending, (state) => {
             state.loading = true;
         });
@@ -173,6 +192,7 @@ const organisersSlice = createSlice({
             if (index !== -1) {
                 state.requestedOrganisers.splice(index, 1);
                 state.myOrganisationOrganisers.push(action.payload);
+                state.NoOfRequestedOrganisers=state.NoOfRequestedOrganisers-1;
             }
             //need to write the code to remove the organiser from the requested table and move it to organisation list
             state.message = "Organiser accepted successfully";
@@ -191,6 +211,7 @@ const organisersSlice = createSlice({
             const index = state.requestedOrganisers.findIndex((e) => e.administratorId === action.payload.administratorId);
             if (index !== -1) {
                 state.requestedOrganisers.splice(index, 1);
+                state.NoOfRequestedOrganisers=state.NoOfRequestedOrganisers-1;
             }
             state.message = "Organiser rejected successfully";
         });

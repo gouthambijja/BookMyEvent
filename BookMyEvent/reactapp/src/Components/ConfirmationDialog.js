@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     Button,
@@ -7,20 +7,44 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    TextField,
 } from '@material-ui/core';
 
-const ConfirmationDialog = ({ open, title, content, onConfirm, onCancel }) => {
+const ConfirmationDialog = ({ open, title, content, onConfirm, onCancel, showReason = false }) => {
+    const [reason, setReason] = useState('');
+
+    const handleConfirm = () => {
+        onConfirm(showReason ? reason : null);
+        setReason('');
+    };
+
+    const handleCancel = () => {
+        onCancel();
+        setReason('');
+    };
+
+    const handleReasonChange = (event) => {
+        setReason(event.target.value);
+    };
     return (
-        <Dialog open={open} onClose={onCancel}>
+        <Dialog open={open} onClose={handleCancel}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{content}</DialogContentText>
+                {showReason && (
+                    <TextField
+                        label="Reason"
+                        value={reason}
+                        onChange={handleReasonChange}
+                        fullWidth
+                    />
+                )}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onCancel} color="primary">
+                <Button onClick={handleCancel} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={onConfirm} color="primary">
+                <Button onClick={handleConfirm} color="primary">
                     Confirm
                 </Button>
             </DialogActions>
@@ -34,6 +58,7 @@ ConfirmationDialog.propTypes = {
     content: PropTypes.string.isRequired,
     onConfirm: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+    showReason: PropTypes.bool,
 };
 
 export default ConfirmationDialog;

@@ -22,6 +22,20 @@ namespace BookMyEvent.DLL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BookMyEvent.DLL.Models.FileType", b =>
+                {
+                    b.Property<byte>("FileTypeId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("FileTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FileTypeId");
+
+                    b.ToTable("FileTypes");
+                });
+
             modelBuilder.Entity("db.Models.AccountCredential", b =>
                 {
                     b.Property<Guid>("AccountCredentialsId")
@@ -120,6 +134,9 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.Property<Guid?>("RejectedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RejectedReason")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("RoleId")
                         .HasColumnType("tinyint");
@@ -453,6 +470,9 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<byte>("FieldTypeId")
                         .HasColumnType("tinyint");
 
+                    b.Property<byte?>("FileTypeId")
+                        .HasColumnType("tinyint");
+
                     b.Property<Guid>("FormId")
                         .HasColumnType("uniqueidentifier");
 
@@ -482,6 +502,8 @@ namespace BookMyEvent.DLL.Migrations
                         .HasName("PK__Registra__6823EFDD4809FA0A");
 
                     b.HasIndex("FieldTypeId");
+
+                    b.HasIndex("FileTypeId");
 
                     b.HasIndex("FormId");
 
@@ -571,6 +593,9 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
+                    b.Property<Guid?>("AdministratorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 0)");
 
@@ -588,11 +613,13 @@ namespace BookMyEvent.DLL.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TransactionId")
                         .HasName("PK__Transact__55433A6B86BD076C");
+
+                    b.HasIndex("AdministratorId");
 
                     b.HasIndex("EventId");
 
@@ -682,14 +709,19 @@ namespace BookMyEvent.DLL.Migrations
                     b.Property<Guid>("UserInputFormId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("AdministratorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserInputFormId")
                         .HasName("PK__UserInpu__A2369B98D4D521DB");
+
+                    b.HasIndex("AdministratorId");
 
                     b.HasIndex("EventId");
 
@@ -705,6 +737,12 @@ namespace BookMyEvent.DLL.Migrations
 
                     b.Property<DateTime?>("DateResponse")
                         .HasColumnType("datetime");
+
+                    b.Property<byte[]>("FileResponse")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte?>("FileTypeId")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Label")
                         .IsRequired()
@@ -891,6 +929,12 @@ namespace BookMyEvent.DLL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_fieldId");
 
+                    b.HasOne("BookMyEvent.DLL.Models.FileType", "FileType")
+                        .WithMany("RegistrationFormFields")
+                        .HasForeignKey("FileTypeId")
+                        .IsRequired()
+                        .HasConstraintName("FK_FileTypeId_FileType");
+
                     b.HasOne("db.Models.Form", "Form")
                         .WithMany("RegistrationFormFields")
                         .HasForeignKey("FormId")
@@ -898,6 +942,8 @@ namespace BookMyEvent.DLL.Migrations
                         .HasConstraintName("FK_formId");
 
                     b.Navigation("FieldType");
+
+                    b.Navigation("FileType");
 
                     b.Navigation("Form");
                 });
@@ -931,6 +977,11 @@ namespace BookMyEvent.DLL.Migrations
 
             modelBuilder.Entity("db.Models.Transaction", b =>
                 {
+                    b.HasOne("db.Models.Administration", "Administration")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AdministratorId")
+                        .HasConstraintName("FK_Transactions_Administrators");
+
                     b.HasOne("db.Models.Event", "Event")
                         .WithMany("Transactions")
                         .HasForeignKey("EventId")
@@ -942,6 +993,8 @@ namespace BookMyEvent.DLL.Migrations
                         .HasForeignKey("UserId")
                         .IsRequired()
                         .HasConstraintName("FK_Transactions_Users");
+
+                    b.Navigation("Administration");
 
                     b.Navigation("Event");
 
@@ -967,6 +1020,11 @@ namespace BookMyEvent.DLL.Migrations
 
             modelBuilder.Entity("db.Models.UserInputForm", b =>
                 {
+                    b.HasOne("db.Models.Administration", "Administration")
+                        .WithMany("UserInputForms")
+                        .HasForeignKey("AdministratorId")
+                        .HasConstraintName("FK_ADMINISTRATORID_ADMINISTRATION");
+
                     b.HasOne("db.Models.Event", "Event")
                         .WithMany("UserInputForms")
                         .HasForeignKey("EventId")
@@ -978,6 +1036,8 @@ namespace BookMyEvent.DLL.Migrations
                         .HasForeignKey("UserId")
                         .IsRequired()
                         .HasConstraintName("FK_UserID_Users");
+
+                    b.Navigation("Administration");
 
                     b.Navigation("Event");
 
@@ -1001,6 +1061,11 @@ namespace BookMyEvent.DLL.Migrations
                     b.Navigation("RegistrationFormField");
 
                     b.Navigation("UserInputForm");
+                });
+
+            modelBuilder.Entity("BookMyEvent.DLL.Models.FileType", b =>
+                {
+                    b.Navigation("RegistrationFormFields");
                 });
 
             modelBuilder.Entity("db.Models.AccountCredential", b =>
@@ -1029,6 +1094,10 @@ namespace BookMyEvent.DLL.Migrations
                     b.Navigation("InverseDeletedByNavigation");
 
                     b.Navigation("InverseRejectedByNavigation");
+
+                    b.Navigation("Transactions");
+
+                    b.Navigation("UserInputForms");
 
                     b.Navigation("Users");
                 });

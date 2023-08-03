@@ -92,6 +92,14 @@ const getRequestedPeers = async (orgId) => {
     return response.data;
 };
 
+const getNoOfRequestedPeers = async (orgId) => {
+    const response = await Axios.get(`${apiBase}/Organisation/${orgId}/NoOfRequestedPeers`, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+    });
+    return response.data;
+};
+
 const acceptOrganiser = async (administrator) => {
     const response = await Axios.put(`${apiBase}/${administrator.administratorId}/Accept`, administrator, {
         headers: { 'Content-Type': 'application/json' },
@@ -173,6 +181,7 @@ return {
     isEmailTaken,
     getAllOwners,
     checkEmail,
+    getNoOfRequestedPeers,
 };
 }
 export default OrganiserServices;

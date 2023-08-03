@@ -33,6 +33,7 @@ namespace BookMyEvent.DLL
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IEventRepository,EventRepository>();
             services.AddScoped<IEventImageRepository, EventImageRepository>();
+            services.AddScoped<IFileTypeRepository,FileTypeRepository>();
         }
     }
 }

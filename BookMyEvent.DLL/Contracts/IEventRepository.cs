@@ -63,17 +63,6 @@ namespace BookMyEvent.DLL.Contracts
         Task<List<Event>> GetAllActivePublishedEvents(int pageNumber, int pageSize);
 
         /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and are of a particular category
-        /// </summary>
-        /// <param name="categoryId">
-        /// Takes the Id of the category as input as byte type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsByCategoryId(byte categoryId);
-
-        /// <summary>
         /// An Asynchronous method that gets all the events that are active and published and created by particular organization
         /// </summary>
         /// <param name="orgId">
@@ -94,123 +83,6 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a list of Event objects
         /// </returns>
         Task<List<Event>> GetAllActivePublishedEventsByLocation(string location);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and starts from the date
-        /// </summary>
-        /// <param name="date">
-        /// Takes the date of the event as input as DateTime type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsByStartDate(DateTime date);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and ends by the date
-        /// </summary>
-        /// <param name="date">
-        /// Takes the date of the event as input as DateTime type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsByEndDate(DateTime date);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and starts from the start date and ends by the end date
-        /// </summary>
-        /// <param name="startDate">
-        /// Takes the start date of the event as input as DateTime type
-        /// </param>
-        /// <param name="endDate">
-        /// Takes the end date of the event as input as DateTime type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate, DateTime endDate);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and has starting price
-        /// </summary>
-        /// <param name="startingPrice">
-        /// Takes the starting price of the event as input as decimal type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsHavingMoreThanPrice(decimal startingPrice);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and has ending price
-        /// </summary>
-        /// <param name="endingPrice">
-        /// Takes the ending price of the event as input as decimal type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsHavingLessThanPrice(decimal endingPrice);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and has price in the range
-        /// </summary>
-        /// <param name="startingPrice">
-        /// Takes the starting price of the event as input as decimal type
-        /// </param>
-        /// <param name="endingPrice">
-        /// Takes the ending price of the event as input as decimal type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsHavingPriceRange(decimal startingPrice, decimal endingPrice);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and has name
-        /// </summary>
-        /// <param name="name">
-        /// Takes the name of the event as input as string type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedEventsHavingName(string name);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published based on the mode of event
-        /// </summary>
-        /// <param name="isOffline">
-        /// Takes the mode of event as input as bool type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        //Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active and published and based on is free or not
-        /// </summary>
-        /// <param name="isFree">
-        /// Takes the is free as input as bool type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActivePublishedIsFreeEvents(bool isFree);
-
-        /// <summary>
-        /// An Asynchronous method that gets all the events that are active based on is published or not
-        /// </summary>
-        /// <param name="isPublished">
-        /// Takes the is published as input as bool type
-        /// </param>
-        /// <returns>
-        /// Returns a list of Event objects
-        /// </returns>
-        Task<List<Event>> GetAllActiveEventsByIsPublished(bool isPublished);
-
 
         /// <summary>
         /// An asynchronous mthod to update the event registration status
@@ -302,10 +174,13 @@ namespace BookMyEvent.DLL.Contracts
         /// <param name="updatedAt">
         /// Takes the updated at as input as DateTime type
         /// </param>
+        /// <param name="reason">
+        /// Takes the reason as input as string type
+        /// </param>
         /// <returns>
         /// Returns a Event object
         /// </returns>
-        Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt);
+        Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason);
 
         /// <summary>
         /// An asynchronous mthod to get list of all the events created by an organisation
@@ -340,7 +215,7 @@ namespace BookMyEvent.DLL.Contracts
         /// <returns>
         /// Returns a list of Event objects
         /// </returns>
-        Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
+        Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize);
 
         /// <summary>
         /// An asynchronous method to update the IsActive status of an event
@@ -392,6 +267,15 @@ namespace BookMyEvent.DLL.Contracts
         /// Returns a list of Event objects
         /// </returns>
         Task<List<Event>> GetOrganisationRequestedEvents(Guid organisationId);
+
+        /// <summary>
+        /// An asynchronous method to get the number of present active event requests in an organisation
+        /// </summary>
+        /// <param name="organisationId"></param>
+        /// <returns>
+        /// Returns an integer
+        /// </returns>
+        Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId);
         /// <summary>
         /// return all the events whose ids present in the eventIds list
         /// </summary>
@@ -403,10 +287,27 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <param name="eventId"></param>
         /// <param name="availableSeats"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a boolean saying if the available seats is updated or not
+        /// </returns>
         Task<bool> UpdateEventAvailableSeats(Guid eventId,int availableSeats);
 
+        /// <summary>
+        /// An asynchronous method to get the number of past event of an organiser
+        /// </summary>
+        /// <param name="organiserId"></param>
+        /// <returns>
+        /// Returns an integer
+        /// </returns>
         Task<int> GetOrganiserTotalNoOfPastEvents(Guid organiserId);
+
+        /// <summary>
+        /// An asynchronous method to get the number of past event of an organisation
+        /// </summary>
+        /// <param name="organisationId"></param>
+        /// <returns>
+        /// Returns an integer
+        /// </returns>
         Task<int> GetOrganisationTotalNoOfPastEvents(Guid organisationId);
     }
 }

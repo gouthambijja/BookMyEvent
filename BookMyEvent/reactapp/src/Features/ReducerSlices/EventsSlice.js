@@ -185,7 +185,18 @@ export const fetchOrganisationEventsRequests = createAsyncThunk(
     }
 );
 
-
+export const fetchNoOfOrganisationEventsRequests = createAsyncThunk(
+    "events/fetchNoOfOrganisationEventsRequests",
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await eventServices().getOrganisationNoOfEventRequests(id);
+            return response;
+        }
+        catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 export const fetchMyEventsRequests = createAsyncThunk(
     "events/fetchMyEventsRequests",
     async (id, { rejectWithValue }) => {
@@ -220,6 +231,7 @@ let eventsSlice = createSlice({
         message: "",
         organiserNoOfPastEvents:0,
         organisationNoOfPastEvents:0,
+        noOfEventRequests:0,
     },
     reducers: {
         clearMessage: (state) => {
@@ -436,6 +448,7 @@ let eventsSlice = createSlice({
             //console.log(index)
             if (index !== -1) {
                 state.eventRequests.splice(index,1);
+                state.noOfEventRequests=state.noOfEventRequests-1;
                 if(state.organisationEvents.length != 0){
 
                     state.organisationEvents.push(action.payload);
@@ -458,6 +471,7 @@ let eventsSlice = createSlice({
         builder.addCase(rejectEvent.fulfilled, (state, action) => {
             let index = state.eventRequests.findIndex((event) => event.eventId === action.payload.eventId);
             if (index !== -1) {
+                state.noOfEventRequests=state.noOfEventRequests-1;
                 state.eventRequests.splice(index, 1);
             };
             index = state.organisationEvents.findIndex((event) => event.eventId === action.payload.eventId);
@@ -522,7 +536,7 @@ let eventsSlice = createSlice({
         builder.addCase(fetchOrganisationEventsRequests.fulfilled, (state, action) => {
             state.loading = true;
             state.error = false;
-            state.message = "Successfully fetched organisation requests";
+            state.message = "Successfully fetched organisation event requests";
             state.isOrgPastEventsFetched = true;
             state.eventRequests = action.payload;
         });
@@ -530,6 +544,13 @@ let eventsSlice = createSlice({
             state.loading = false;
             state.error = true;
             state.message = action.payload;
+        });
+        builder.addCase(fetchNoOfOrganisationEventsRequests.fulfilled, (state, action) => {
+            state.loading = true;
+            state.error = false;
+            state.message = "Successfully fetched organisation no of requests";
+           
+            state.noOfEventRequests = action.payload;
         });
         builder.addCase(fetchMyEventsRequests.pending, (state) => {
             state.loading = true;

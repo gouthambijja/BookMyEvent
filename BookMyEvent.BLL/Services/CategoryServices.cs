@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookMyEvent.BLL.Utilities;
 using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.DLL.Contracts;
@@ -15,7 +16,7 @@ namespace BookMyEvent.BLL.Services
     public class CategoryServices : ICategoryServices
     {
         private readonly IEventCategoryRepository _eventCategoryRepository;
-        private Mapper _mapper;
+        private readonly Mapper _mapper;
         public CategoryServices(IEventCategoryRepository eventCategoryRepository)
         {
             _eventCategoryRepository = eventCategoryRepository;
@@ -40,9 +41,9 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var categories =  await _eventCategoryRepository.GetAllEventCategories();
+                var categories = await _eventCategoryRepository.GetAllEventCategories();
                 var BLcategories = new List<BLEventCategory>();
-                foreach(var category in categories)
+                foreach (var category in categories)
                 {
                     BLcategories.Add(new BLEventCategory()
                     {
