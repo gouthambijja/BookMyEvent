@@ -10,9 +10,11 @@ import { Menu } from "@material-ui/icons";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import Badge from '@mui/material/Badge';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const NoOfRequestedPeers = useSelector(store => store.organisers.NoOfRequestedOrganisers);
+  let NoOfEventRequests = useSelector((state) => state.events.noOfEventRequests);
   const auth = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const handleNavLogo = () => {
@@ -31,7 +33,7 @@ export default function Navbar() {
             {true ? (
               <IconButton
                 size="large"
-                edge="start"
+                                edge="start"
                 color="inherit"
                 aria-label="menu"
                 sx={{ mr: 2 }}
@@ -39,7 +41,13 @@ export default function Navbar() {
                   setOpen(!open);
                 }}
               >
-                <Menu />
+                {NoOfEventRequests==0 && NoOfRequestedPeers == 0?
+
+                <Menu /> :
+                <Badge  color="error" variant="dot">
+
+                <Menu /> 
+                </Badge>}
               </IconButton>
             ) : (
               <></>

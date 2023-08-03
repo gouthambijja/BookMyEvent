@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BookMyEvent.DLL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace db.Models;
@@ -46,6 +47,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
     public virtual DbSet<UserInputForm> UserInputForms { get; set; }
 
     public virtual DbSet<UserInputFormField> UserInputFormFields { get; set; }
+
+    public virtual DbSet<FileType> FileTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -300,7 +303,7 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.Validations).IsUnicode(false);
-
+            entity.Property(e => e.FileTypeId).IsRequired(false);
             entity.HasOne(d => d.FieldType).WithMany(p => p.RegistrationFormFields)
                 .HasForeignKey(d => d.FieldTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -310,7 +313,13 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.FormId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_formId");
+            entity.HasOne(d => d.FileType).WithMany(p => p.RegistrationFormFields)
+                .HasForeignKey(db => db.FileTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FileTypeId_FileType");
         });
+
+        
 
         modelBuilder.Entity<RegistrationStatus>(entity =>
         {
@@ -367,6 +376,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.Property(e => e.TransactionTime)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.UserId).IsRequired(false); // Set UserId column as nullable
+            entity.Property(e => e.AdministratorId).IsRequired(false);
 
             entity.HasOne(d => d.Event).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.EventId)
@@ -377,6 +388,10 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Transactions_Users");
+            entity.HasOne(d => d.Administration).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.AdministratorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Transactions_Administrators");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -429,6 +444,9 @@ public partial class EventManagementSystemTeamZealContext : DbContext
             entity.ToTable("UserInputForm");
 
             entity.Property(e => e.UserInputFormId).ValueGeneratedNever();
+            entity.Property(e => e.UserId).IsRequired(false);
+            entity.Property(e => e.AdministratorId).IsRequired(false);
+
 
             entity.HasOne(d => d.Event).WithMany(p => p.UserInputForms)
                 .HasForeignKey(d => d.EventId)
@@ -439,6 +457,11 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserID_Users");
+
+            entity.HasOne(d => d.Administration).WithMany(p => p.UserInputForms)
+                .HasForeignKey(d => d.AdministratorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ADMINISTRATORID_ADMINISTRATION");
         });
 
         modelBuilder.Entity<UserInputFormField>(entity =>
@@ -451,6 +474,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.StringResponse).IsUnicode(false);
+            entity.Property(e => e.FileResponse).IsRequired(false);
+            
 
             entity.HasOne(d => d.RegistrationFormField).WithMany(p => p.UserInputFormFields)
                 .HasForeignKey(d => d.RegistrationFormFieldId)
@@ -461,6 +486,8 @@ public partial class EventManagementSystemTeamZealContext : DbContext
                 .HasForeignKey(d => d.UserInputFormId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserInputFormIdd_UserInputForm");
+
+            
         });
 
         OnModelCreatingPartial(modelBuilder);

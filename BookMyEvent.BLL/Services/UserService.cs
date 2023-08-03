@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookMyEvent.BLL.Utilities;
 using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
@@ -17,12 +18,14 @@ namespace BookMyEvent.BLL.Services
 {
     public class UserService : IUserService
     {
-        public IUserRepository UserRepositoryDal { get; set; }
+        private readonly IUserRepository UserRepositoryDal;
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
+        private readonly Mapper mapper;
         public UserService(IUserRepository userRepositoryDal, IAccountCredentialsRepository accountCredentialsRepository)
         {
             this.UserRepositoryDal = userRepositoryDal;
             _accountCredentialsRepository = accountCredentialsRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
         public async Task<(bool IsUserAdded, string Message)> AddUser(BLUser user)
         {
@@ -30,12 +33,8 @@ namespace BookMyEvent.BLL.Services
             {
                 if (user != null)
                 {
-                  
-                   
-                   
-                    var accountCred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = user.Password, UpdatedOn =DateTime.Now });
+                    var accountCred = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = user.Password, UpdatedOn = DateTime.Now });
                     user.AccountCredentialsId = accountCred.AccountCredentialsId;
-                    var mapper = Automapper.InitializeAutomapper();
                     var User = mapper.Map<BLUser, User>(user);
                     return await UserRepositoryDal.AddUser(User);
                 }
@@ -43,15 +42,10 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (false, string.Empty);
+                return (false,ex.Message);
             }
         }
-        private static string GetHash(string text)
-        {
-            var sha256 = SHA256.Create();
-            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
-            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-        }
+       
         public async Task<(Guid UserId, string Message)> BlockUser(Guid UserId)
         {
             try
@@ -64,7 +58,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (UserId, "Bll Block Error");
+                return (UserId, ex.Message);
             }
         }
         public async Task<bool> ChangePassword(Guid UserId, string Password)
@@ -77,7 +71,7 @@ namespace BookMyEvent.BLL.Services
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -86,7 +80,6 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-
                 if (!UserId.Equals(string.Empty))
                 {
                     return await UserRepositoryDal.DeleteUser(UserId);
@@ -95,7 +88,7 @@ namespace BookMyEvent.BLL.Services
             }
             catch (Exception ex)
             {
-                return (false, "Bll Error");
+                return (false, ex.Message);
             }
         }
         public async Task<BLUser> GetUserByEmail(string Email)
@@ -105,34 +98,29 @@ namespace BookMyEvent.BLL.Services
                 if (Email is not null)
                 {
                     User user = await UserRepositoryDal.GetUserByEmail(Email);
-                    var mapper = Automapper.InitializeAutomapper();
                     return mapper.Map<User, BLUser>(user);
                 }
-                return new BLUser();
+                return null;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new BLUser();
+                return null;
             }
         }
         public async Task<BLUser> GetUserById(Guid UserId)
         {
             User user = await UserRepositoryDal.GetUserById(UserId);
-            var mapper = Automapper.InitializeAutomapper();
             return mapper.Map<User, BLUser>(user);
         }
         public async Task<List<BLUser>> GetUsers()
         {
             List<User> UsersList = await UserRepositoryDal.GetAllUsers();
-            var mapper = Automapper.InitializeAutomapper();
             return mapper.Map<List<User>, List<BLUser>>(UsersList);
         }
         public async Task<Guid> Login(BLLoginModel login)
         {
             if (login is not null)
             {
-          
-               
                 return await UserRepositoryDal.IsUserExists(login.Email, login.Password);
             }
             return Guid.Empty;
@@ -141,21 +129,19 @@ namespace BookMyEvent.BLL.Services
         {
             if (!Id.Equals(string.Empty))
             {
-                User user = await UserRepositoryDal.ToggleIsActiveById(Id,BlockedBy);
+                User user = await UserRepositoryDal.ToggleIsActiveById(Id, BlockedBy);
                 var mapper = Automapper.InitializeAutomapper();
                 return mapper.Map<User, BLUser>(user);
             }
-            return new BLUser();
+            return null;
         }
         public async Task<(BLUser, string Message)> UpdateUser(BLUser user)
         {
             if (user is not null)
             {
-                var mapper = Automapper.InitializeAutomapper();
                 User user1 = mapper.Map<BLUser, User>(user);
-              var resp= await UserRepositoryDal.UpdateUser(user1);
+                var resp = await UserRepositoryDal.UpdateUser(user1);
                 return (mapper.Map<BLUser>(resp.Item1), resp.Item2);
-                
             }
             return (null, "Not Updated");
         }
@@ -184,7 +170,6 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 Console.WriteLine("i've reached bll get filtered users _________________________________________________________________________________________________________________________________________");
-                var mapper = Automapper.InitializeAutomapper();
                 var users = await UserRepositoryDal.GetFilteredUsers(name, email, phoneNumber, isActive);
                 return mapper.Map<List<BLUser>>(users);
             }

@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const ProfilePage = () => {
     const profile = useSelector((store) => store.profile.info);
+    const Profile = useSelector((state) => (state.profile.info));
     const auth = useSelector(store => store.auth);
     const registeredEventIds = useSelector(store => store.homeEvents.registeredEventIds);
     const NoOfTransactions = useSelector(store => store.homeEvents.NoOfTransactions);
@@ -228,7 +229,7 @@ const ProfilePage = () => {
 
             </div>
         </Card>
-        {auth.role !== "Admin" ?
+        {auth.role !== "Admin" && Profile.isAccepted == true ?
             <Card className={classes.statastiCard} >
                 <div style={{ height: "100%", display: "flex", flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
 

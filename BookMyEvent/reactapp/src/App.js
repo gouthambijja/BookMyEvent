@@ -47,6 +47,7 @@ import EventTickets from "./pages/EventTickets";
 import EditEventCard from "./Components/EditEventCard";
 import Categories from "./pages/Categories";
 import UserListPage from "./pages/UsersListPage";
+import VerificationPage from "./pages/VerificationPage";
 
 
 
@@ -73,38 +74,38 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/Register" element={<RegisterUser />} />
                         <Route element={<RequireAuth allowedroles={["User"]} />}>
-                            <Route path="/tickets/:eventId" element={<UserTicketList />} />
+                            <Route path="/tickets/:eventId" element={<UserTicketList />}/>
                             <Route path="/registeredEvents" element={<RegisteredEvents />} />
                             <Route
                                 path="/registerEvent/:eventId/:formId"
                                 element={<RegisterEvent />}
-                                loader={storeLoader.FormFieldsLoader}
+                                
                             ></Route>
                             <Route path="profile" element={<Profile />} />
                         </Route>
                     </Route>
                     {/* ------------------------------------------------------------------------- */}
-                    <Route path="organiser" element={<Organiser />}>
+                    <Route path="organiser" element={<Organiser />} loader={storeLoader.FormFieldsLoader}>
                         <Route path="login" element={<Login />}></Route>
                         <Route path="register" element={<RegisterOrganiser />} />
-                        <Route element={<PersistLogin />}>
+                        <Route element={<PersistLogin />} >
                             <Route
                                 element={
                                     <RequireAuth
                                         allowedroles={["Owner", "Peer", "Secondary_Owner"]}
                                     />
+                                    
                                 }
+                                // loader={storeLoader.RequestsLoader}
                             >
-                                <Route index element={<OrganiserHomePage />}></Route>
+                                <Route index element={<OrganiserHomePage />} ></Route>
                                 <Route
                                     path="createNewEventRegistrationForm"
                                     element={<EventDynamicForm />}
-                                    loader={storeLoader.FormFieldsLoader}
                                 />
                                 <Route
                                     path="AddEvent"
                                     element={<AddEvent />}
-                                    loader={storeLoader.OrganisationFormLoaders}
                                 ></Route>
                                 <Route
                                     path="OrganisationTree/:id"
@@ -113,7 +114,7 @@ const App = () => {
                                 <Route path="PeerRequests" element={<PeerRequest />}></Route>
                                 <Route path="addSecondaryOwner" element={<AddSecondary />} />
                                 <Route path="profile" element={<Profile />} />
-                                <Route path="eventReq" element={<EventRequestsPage />} />
+                                <Route path="eventRequests" element={<EventRequestsPage />} />
                                 <Route path="myPastEvents" element={<InfiniteMyPastEvents />} />
                                 <Route
                                     path="organisationEvents"
@@ -124,7 +125,7 @@ const App = () => {
                                     path="organisationPastEvents"
                                     element={<InfiniteOrganisationPastEvents />}
                                 />
-                                <Route path="event/:eventId" element={<EventTickets />} />
+                                <Route path="event/:eventId" element={<EventTickets />}  />
                             </Route>
                         </Route>
                     </Route>

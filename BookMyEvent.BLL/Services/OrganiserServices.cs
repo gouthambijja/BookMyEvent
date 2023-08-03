@@ -1,4 +1,6 @@
-﻿using BookMyEvent.BLL.Contracts;
+﻿using AutoMapper;
+using BookMyEvent.BLL.Utilities;
+using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
@@ -15,11 +17,14 @@ namespace BookMyEvent.BLL.Services
         private readonly IAdministrationRepository _administrationRepository;
         private readonly IOrganisationServices _organisationServices;
         private readonly IAccountCredentialsRepository _accountCredentialsRepository;
+        private readonly Mapper mapper;
+
         public Organiserservices(IAdministrationRepository administrationRepository, IOrganisationServices organisationServices, IAccountCredentialsRepository accountCredentialsRepository)
         {
             _administrationRepository = administrationRepository;
             _organisationServices = organisationServices;
             _accountCredentialsRepository = accountCredentialsRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
         public async Task<bool> AcceptOrganiser(Guid administratorId, Guid? acceptedBy, byte RoleId, Guid orgId)
         {
@@ -36,7 +41,7 @@ namespace BookMyEvent.BLL.Services
                 }
                 return await _administrationRepository.UpdateIsAcceptedAndAcceptedBy(acceptedBy, administratorId);
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -90,8 +95,7 @@ namespace BookMyEvent.BLL.Services
                 //    return (false, Message, null);
                 //}
                 //else
-                //{
-                //    var mapper = Automapper.InitializeAutomapper();
+                //{  
                 //    var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
                 //    administrator.AccountCredentialsId = passModel.AccountCredentialsId;
                 //    Console.WriteLine(administrator.AccountCredentialsId);
@@ -116,8 +120,6 @@ namespace BookMyEvent.BLL.Services
                 //    }
                 //}
 
-
-                var mapper = Automapper.InitializeAutomapper();
                 (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(administrator.Email);
                 if (IsAvailable)
                 {
@@ -130,13 +132,11 @@ namespace BookMyEvent.BLL.Services
                     //{
                     var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = administrator.Password, UpdatedOn = DateTime.Now });
                     administrator.AccountCredentialsId = passModel.AccountCredentialsId;
-                    Console.WriteLine(administrator.AccountCredentialsId);
-                    Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                  
                     if (passModel != null)
                     {
                         var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(administrator));
-                        Console.WriteLine(newAdministrator.AdministratorId);
-                        Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                        
                         if (newAdministrator != null)
                         {
                             return (true, "Organiser registration successfull", mapper.Map<BLAdministrator>(newAdministrator));
@@ -163,11 +163,10 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetAdministrationsByOrgId(orgId);
                 return mapper.Map<List<BLAdministrator>>(result);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -177,11 +176,10 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetPrimaryAdministrators();
                 return mapper.Map<List<BLAdministrator>>(result);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -192,13 +190,25 @@ namespace BookMyEvent.BLL.Services
 
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetPeerAdministratorRequests(orgId);
                 return mapper.Map<List<BLAdministrator>>(result);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
+            }
+        }
+        public async Task<int> GetNoOfRequestedOrganisers(Guid orgId)
+        {
+
+            try
+            {
+                var result = await _administrationRepository.GetNoOfPeerAdministratorRequests(orgId);
+                return result;
+            }
+            catch 
+            {
+                return 0;
             }
         }
 
@@ -206,11 +216,10 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetPrimaryAdministratorRequests();
                 return mapper.Map<List<BLAdministrator>>(result);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -220,11 +229,10 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.GetAdministratorById(administratorId);
                 return mapper.Map<BLAdministrator>(result);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }
@@ -263,7 +271,7 @@ namespace BookMyEvent.BLL.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -274,14 +282,12 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var result = await _administrationRepository.GetAdministratorByEmail(email);
-
                 if (result != null)
                 {
                     if (result.RoleId == 1) return (Guid.Empty, 0, false, "Email doesn't exists");
                     var res = await _accountCredentialsRepository.CheckPassword(result.AccountCredentialsId, password);
                     if (res)
                     {
-
                         return (result.AdministratorId, result.RoleId, true, "Login Successfull");
                     }
                     else
@@ -304,7 +310,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
+
                 (bool IsAvailable, string Message) = await IsOrganiserAvailableWithEmail(owner.Email);
                 if (IsAvailable)
                 {
@@ -318,13 +324,11 @@ namespace BookMyEvent.BLL.Services
                         owner.OrganisationId = newOrg.org.OrganisationId;
                         var passModel = await _accountCredentialsRepository.AddCredential(new AccountCredential { Password = owner.Password, UpdatedOn = DateTime.Now });
                         owner.AccountCredentialsId = passModel.AccountCredentialsId;
-                        Console.WriteLine(owner.AccountCredentialsId);
-                        Console.WriteLine("this is the cred Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                        
                         if (passModel != null)
                         {
                             var newAdministrator = await _administrationRepository.AddAdministrator(mapper.Map<Administration>(owner));
-                            Console.WriteLine(newAdministrator.AdministratorId);
-                            Console.WriteLine("this is the admin Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                           
                             if (newAdministrator != null)
                             {
                                 return (true, "Organiser registration successfull");
@@ -355,7 +359,7 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
+
                 var res = await IsOrganiserAvailableWithEmail(peer.Email);
                 if (res.IsOrganiserEmailAvailable)
                 {
@@ -382,11 +386,11 @@ namespace BookMyEvent.BLL.Services
             }
         }
 
-        public async Task<bool> RejectOrganiser(Guid administratorId, Guid? rejectedBy)
+        public async Task<bool> RejectOrganiser(Guid administratorId, Guid? rejectedBy, string reason)
         {
             try
             {
-                var result = await _administrationRepository.UpdateRejectedByAndIsActive(administratorId, rejectedBy);
+                var result = await _administrationRepository.UpdateRejectedByAndIsActive(administratorId, rejectedBy, reason);
                 if (result)
                 {
                     return true;
@@ -396,7 +400,7 @@ namespace BookMyEvent.BLL.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
                 return false;
             }
@@ -406,11 +410,10 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _administrationRepository.UpdateAdministrator(mapper.Map<Administration>(administrator));
                 return mapper.Map<BLAdministrator>(result);
             }
-            catch (Exception ex)
+            catch 
             {
                 return null;
             }

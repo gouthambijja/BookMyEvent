@@ -5,6 +5,7 @@ const apiBase = "/UserInputForm";
 const UserInputForm = () =>{
     const Axios = AxiosPrivate();
     const submitUserInputForm = async (inputUserForms) => {
+        console.log(inputUserForms);
     const response = await Axios.post(`${apiBase}/submitform`, inputUserForms, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,

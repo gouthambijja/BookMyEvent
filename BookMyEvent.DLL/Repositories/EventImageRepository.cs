@@ -23,11 +23,7 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 List<EventImage> eventImages = await _context.EventImages.Where(i => i.EventId.Equals(eventId)).ToListAsync();
-                if(eventImages != null)
-                {
-                    return eventImages;
-                }
-                return null;
+                return eventImages;
             }
             catch
             {
@@ -45,9 +41,9 @@ namespace BookMyEvent.DLL.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch(Exception ex)
+            catch
             {
-                Console.WriteLine(ex);
+               
                 return false;
             }
         }
@@ -57,11 +53,7 @@ namespace BookMyEvent.DLL.Repositories
             try
             {
                 EventImage eventProfileImage = await _context.EventImages.Where(i => i.EventId.Equals(eventId) && i.ImgType.Equals("profile")).FirstOrDefaultAsync();
-                if (eventProfileImage != null)
-                {
-                    return eventProfileImage.ImgBody;
-                }
-                return null;
+                return eventProfileImage.ImgBody;
             }
             catch
             {

@@ -47,21 +47,21 @@ namespace BookMyEvent.DLL.Repositories
             }
 
         }
-        public async Task<Guid> GetUserIdByTransactionId(Guid transactionId)
+        public async Task<Guid?> GetUserIdByTransactionId(Guid transactionId)
         {
             try
             {
                 Transaction? transaction = await context.Transactions.FindAsync(transactionId);
                 if (transaction != null)
                 {
-                    Guid userId = transaction.UserId;
+                    Guid? userId = transaction.UserId;
                     return userId;
                 }
-                else { return Guid.Empty; }
+                else { return null; }
             }
             catch
             {
-                return Guid.Empty; // or any appropriate value indicating an error occurred
+                return null; 
             }
         }
         public async Task<List<Transaction>> GetTransactionsByEventId(Guid EventId)
@@ -74,7 +74,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch
             {
-                return new List<Transaction>();
+                return null;
             }
         }
         public async Task<Transaction> AddTransaction(Transaction transaction)
@@ -90,12 +90,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Transaction();
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new Transaction();
+                return null;
             }
         }
         public async Task<Transaction> DeleteTransaction(Guid TransactionId)
@@ -109,11 +109,11 @@ namespace BookMyEvent.DLL.Repositories
                     context.SaveChanges();
                     return transaction;
                 }
-                return new Transaction();
+                return null;
             }
-            catch (Exception e)
+            catch 
             {
-                return new Transaction();
+                return null;
             }
         }
 
@@ -124,7 +124,7 @@ namespace BookMyEvent.DLL.Repositories
                 var eventIds = await context.Transactions.Where(t => t.UserId == UserId).Select(t => t.EventId).Distinct().ToListAsync();
                 return eventIds;
             }
-            catch (Exception e)
+            catch 
             {
                 return null;
             }

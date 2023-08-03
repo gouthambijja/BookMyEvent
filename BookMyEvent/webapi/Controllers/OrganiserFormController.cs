@@ -2,6 +2,7 @@
 using BookMyEvent.BLL.Models;
 using BookMyEvent.BLL.RequestModels;
 using BookMyEvent.BLL.Services;
+using BookMyEvent.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,11 @@ namespace BookMyEvent.WebApi.Controllers
     public class OrganiserFormController : ControllerBase
     {
         private readonly IOrganiserFormServices _organiserFormServices;
-        public OrganiserFormController(IOrganiserFormServices organiserFormServices)
+        private readonly FileLogger _fileLogger;
+        public OrganiserFormController(IOrganiserFormServices organiserFormServices, FileLogger fileLogger)
         {
             _organiserFormServices = organiserFormServices;
+            _fileLogger = fileLogger;
         }
         /// <summary>
         /// Service to Add New Form
@@ -29,11 +32,13 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 (Guid FormId, string Message) result = await _organiserFormServices.AddForm(form);
+                _fileLogger.AddInfoToFile("[AddNewForm] Adding New Form Success");
                 return Ok(result.FormId);
             }
             catch
             {
-                return BadRequest();
+                _fileLogger.AddExceptionToFile("[AddNewForm] Adding New Form Failure");
+                return BadRequest("error");
             }
         }
         /// <summary>
@@ -42,14 +47,16 @@ namespace BookMyEvent.WebApi.Controllers
         /// <param name="RegistrationFormFields"></param>
         /// <returns>true if Added else false</returns>
         [HttpPost("AddFormFields")]
-        public async Task<IActionResult> AddRegistrationFormFields(List<BLRegistrationFormFields> RegistrationFormFields)
+        public async Task<IActionResult> AddRegistrationFormFields(List<BLRegistrationFormFields?> RegistrationFormFields)
         {
             try
             {
+                _fileLogger.AddInfoToFile("[AddRegistrationFormFields] Adding Registration form Fieds Success");
                 return Ok(await _organiserFormServices.AddRegistrationFormFields(RegistrationFormFields));
             }
             catch
             {
+                _fileLogger.AddExceptionToFile("[AddRegistrationFormFields] Adding RegistrationFormFields Failure");
                 return BadRequest(false);
             }
         }
@@ -61,6 +68,7 @@ namespace BookMyEvent.WebApi.Controllers
         [HttpGet("isFormNameTaken/{formname}")]
         public async Task<IActionResult> IsFormNameTaken(string formname)
         {
+            _fileLogger.AddInfoToFile("[IsFromTaken] Verifying Form Name Success");
             return Ok(await _organiserFormServices.IsformNameTaken(formname));
         }
         /// <summary>
@@ -75,12 +83,15 @@ namespace BookMyEvent.WebApi.Controllers
             {
                 if (FormId != null)
                 {
+                    _fileLogger.AddInfoToFile("[GetFormById] Getting Form By Id Success");
                     return Ok(await _organiserFormServices.GetFormById(FormId));
                 }
+                _fileLogger.AddInfoToFile("[GetFormByID] Getting FormById NotFound");
                 return NotFound();
             }
             catch (Exception ex)
             {
+                _fileLogger.AddInfoToFile("[GetFormById] GettingFormById Exception");
                 return BadRequest(ex.Message);
             }
         }
@@ -97,12 +108,15 @@ namespace BookMyEvent.WebApi.Controllers
                 List<BLFieldType> fieldtypes = await _organiserFormServices.GetFieldTypes();
                 if (fieldtypes.Count != 0)
                 {
-                    return Ok(fieldtypes);  
+                    _fileLogger.AddInfoToFile("[GetAllFieldTypes] Getting All fieldtypes Success");
+                    return Ok(fieldtypes);
                 }
+                _fileLogger.AddExceptionToFile("[GetAllFieldTypes] Getting All fieldtypes BadRequest");
                 return BadRequest();
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetAllFieldTypes] Getting All fieldtypes BadRequest");
                 return BadRequest(ex.Message);
             }
         }
@@ -120,12 +134,15 @@ namespace BookMyEvent.WebApi.Controllers
                 List<BLRegistrationFormFields> formfields = await _organiserFormServices.GetFormFieldsByFormId(FormId);
                 if (formfields.Count != 0)
                 {
+                    _fileLogger.AddInfoToFile("[GetFieldTypesByFormId] Getting All fieldtypes byformid Success");
                     return Ok(formfields);
                 }
+                _fileLogger.AddExceptionToFile("[GetFieldTypesBbyFormId] Getting All fieldtypesbyformid Notfound");
                 return NotFound();
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetFieldTypesByFormId] Getting All fieldtypes By formId Badrequest");
                 return BadRequest(ex.Message);
             }
         }
@@ -140,10 +157,12 @@ namespace BookMyEvent.WebApi.Controllers
             try
             {
                 var result = await _organiserFormServices.GetAllOrganisationForms(OrgId);
+                _fileLogger.AddInfoToFile("[GetAllOrganizationForms] Getting All OranizationForms Success");
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                _fileLogger.AddExceptionToFile("[GetAllOrganizationForms] Getting All OrganizationForms Exception");
                 return BadRequest(ex.Message);
             }
         }
@@ -160,12 +179,15 @@ namespace BookMyEvent.WebApi.Controllers
                 var result = await _organiserFormServices.GetAllFormsCreatedBy(OrganizerId);
                 if (result.Count != 0)
                 {
+                    _fileLogger.AddInfoToFile("[GetAllFormsCreatedByOrganizer] Getting All ORganizerForms Success");
                     return Ok(result);
                 }
+                _fileLogger.AddExceptionToFile("[GetAllFormsCreatedByOrganizer] Getting All OrganizerForms NorFound");
                 return NotFound();
             }
             catch (Exception e)
             {
+                _fileLogger.AddExceptionToFile("[GetAllFormsCreatedByOrganizer] Getting All OrganizerForms Exception");
                 return BadRequest(e.Message);
             }
         }
@@ -182,11 +204,26 @@ namespace BookMyEvent.WebApi.Controllers
                 var result = await _organiserFormServices.DeleteForm(FormId);
                 if (result.IsFormDeleted == true)
                 {
+                    _fileLogger.AddInfoToFile("[DeleteForm] DeletingForm Success");
                     return Ok(result);
                 }
+                _fileLogger.AddExceptionToFile("[DeleteForm] DeleteForm Failure");
                 return NotFound();
             }
             catch (Exception ex)
+            {
+                _fileLogger.AddExceptionToFile("[GetAllFieldTypes] Delete Form Exception");
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("GetFileTypes")]
+        public async Task<IActionResult> GetFileTypes()
+        {
+            try
+            {
+                return Ok(await _organiserFormServices.GetFileTypes());
+            }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

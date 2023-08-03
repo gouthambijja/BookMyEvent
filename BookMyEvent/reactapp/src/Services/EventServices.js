@@ -172,7 +172,13 @@ const getOrganisationEventRequests = async (organisationId) => {
     });
     return response.data;
 }
-
+const getOrganisationNoOfEventRequests = async (organisationId) => {
+    const response = await Axios.get(`${apiBase}/NoOfOrganisationRequests/${organisationId}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+    });
+    return response.data;
+}
 const getEventImages = async (eventId) => {
     const response = await Axios.get(`${apiBase}/geteventimages/${eventId}`, {
         headers: { "Content-Type": "application/json" },
@@ -201,6 +207,7 @@ return {
     getOrganiserEventRequests,
     getOrganisationEventRequests,
     getNoOfPastEvents,
+    getOrganisationNoOfEventRequests,
 };
 }
 export default EventServices;

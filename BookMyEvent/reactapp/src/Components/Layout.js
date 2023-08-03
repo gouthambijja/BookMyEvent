@@ -13,11 +13,12 @@ const footerStyle = {
   position:'relative',
   zIndex:'100'
 };
+
 const Layout = () => {
   return (
     <div >
       <Navbar/>
-      <div style={{paddingTop:'64px',minHeight:'calc( 100vh - 52px) '}}>
+      <div style={{paddingTop:'64px',minHeight:'calc( 100vh - 52px) '}} >
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

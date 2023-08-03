@@ -26,7 +26,7 @@ namespace BookMyEvent.DLL.Repositories
                 await _db.Entry(_event).GetDatabaseValuesAsync();
                 return _event;
             }
-            catch (Exception ex) { return null; }
+            catch  { return null; }
         }
 
         public async Task<(bool, string Message)> DeleteEvent(Guid id)
@@ -65,50 +65,9 @@ namespace BookMyEvent.DLL.Repositories
 
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByCategoryId(byte categoryId)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.CategoryId == categoryId && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByEndDate(DateTime date)
-        {
-
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EndDate <= date && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActiveEventsByIsPublished(bool isPublished)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -119,48 +78,9 @@ namespace BookMyEvent.DLL.Repositories
                 var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.Location == location && x.RegistrationStatusId != 3).ToList();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<Event>();
-            }
-        }
-
-        //public async Task<List<Event>> GetAllActivePublishedEventsByMode(bool isOffline)
-        //{
-        //    try
-        //    {
-        //        var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.IsOffline == isOffline && x.RegistrationStatusId != 3).ToList();
-        //        return events;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new List<Event>();
-        //    }
-        //}
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByStartDate(DateTime date)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.StartDate >= date && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsByStartDateAndEndDate(DateTime startDate, DateTime endDate)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.StartDate >= startDate && x.EndDate <= endDate && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -171,78 +91,9 @@ namespace BookMyEvent.DLL.Repositories
                 var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.OrganisationId == orgId && x.RegistrationStatusId != 3).ToList();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingLessThanPrice(decimal endingPrice)
-        {
-
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventEndingPrice <= endingPrice && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingMoreThanPrice(decimal startingPrice)
-        {
-
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventStartingPrice >= startingPrice && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingName(string name)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventName.Contains(name) && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedEventsHavingPriceRange(decimal startingPrice, decimal endingPrice)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.EventStartingPrice >= startingPrice && x.EventEndingPrice <= endingPrice && x.RegistrationStatusId != 3).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
-            }
-        }
-
-        public async Task<List<Event>> GetAllActivePublishedIsFreeEvents(bool isFree)
-        {
-            try
-            {
-                var events = _db.Events.Where(x => x.IsActive == true && x.IsPublished && x.IsFree == isFree).ToList();
-                return events;
-            }
-            catch (Exception ex)
-            {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -254,7 +105,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -274,12 +125,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new Event();
+                return null;
 
             }
         }
@@ -318,12 +169,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return (new Event(), "Event Not Found");
+                    return (null, "Event Not Found");
                 }
             }
             catch (Exception ex)
             {
-                return (new Event(), "Event Not Updated");
+                return (null, ex.Message);
             }
         }
 
@@ -343,12 +194,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -368,12 +219,12 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -393,16 +244,16 @@ namespace BookMyEvent.DLL.Repositories
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new Event();
+                return null;
             }
         }
 
-        public async Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt)
+        public async Task<Event> UpdateRejectedBy(Guid eventId, Guid rejectedBy, Guid updatedBy, DateTime updatedAt, string reason)
         {
             try
             {
@@ -412,18 +263,19 @@ namespace BookMyEvent.DLL.Repositories
                     _event.RejectedBy = rejectedBy;
                     _event.UpdatedBy = updatedBy;
                     _event.UpdatedOn = updatedAt;
+                    _event.RejectedReason = reason;
                     await _db.SaveChangesAsync();
                     await _db.Entry(_event).ReloadAsync();
                     return _event;
                 }
                 else
                 {
-                    return new Event();
+                    return null;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                return new Event();
+                return null;
             }
         }
 
@@ -434,9 +286,9 @@ namespace BookMyEvent.DLL.Repositories
                 var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.OrganisationId == orgId && x.AcceptedBy != null).ToListAsync();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<Event>();
+                return null;
             }
         }
 
@@ -447,13 +299,13 @@ namespace BookMyEvent.DLL.Repositories
                 var events = await _db.Events.Where(x => x.IsActive == true && x.EndDate >= DateTime.Now && x.CreatedBy == organiserId && x.AcceptedBy != null).ToListAsync();
                 return events;
             }
-            catch (Exception ex)
+            catch 
             {
-                return new List<Event>();
+                return null;
             }
         }
 
-        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
+        public async Task<List<Event>> GetFilteredEvents(DateTime? startDate, DateTime? endDate, decimal? startPrice, decimal? endPrice, string? location,string? name, bool? isFree, List<int>? categoryIds, int pageNumber, int? pageSize)
         {
             try
             {
@@ -464,6 +316,7 @@ namespace BookMyEvent.DLL.Repositories
                     e.EventStartingPrice >= startPrice &&
                     e.EventEndingPrice <= endPrice &&
                     ((location != "" && location != null) ? (e.Location.Contains(location) || e.State.Contains(location) || e.Country.Contains(location) || e.City.Contains(location)) : true) &&
+                    ((name != "" && name != null)?e.EventName.Contains(name):true) &&
                     (isFree == true ? e.IsFree : true) &&
                     (categoryIds == null || categoryIds.Count() == 0 || categoryIds.Contains(e.CategoryId)) &&
                     e.IsActive == true &&
@@ -476,8 +329,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                // Handle any exceptions
-                Console.WriteLine(ex);
+               
                 throw new Exception("Failed to fetch filtered events from the database.", ex);
             }
         }
@@ -503,7 +355,7 @@ namespace BookMyEvent.DLL.Repositories
             }
             catch (Exception ex)
             {
-                return (false, "Event Not Updated");
+                return (false, ex.Message);
             }
         }
 
@@ -605,6 +457,18 @@ namespace BookMyEvent.DLL.Repositories
             }
         }
 
+        public async Task<int> GetNoOfOrganisationRequestedEvents(Guid organisationId)
+        {
+            try
+            {
+                var events =await _db.Events.CountAsync(x => x.OrganisationId == organisationId && x.AcceptedBy == null && x.RejectedBy == null && x.IsActive == true);
+                return events;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to fetch requested events from the database.", ex);
+            }
+        }
         public async Task<List<Event>> GetEventsByEventIds(List<Guid> eventIds)
         {
             try

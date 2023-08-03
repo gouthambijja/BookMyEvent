@@ -181,12 +181,12 @@ const RegisterUser = () => {
     return hashHex;
   }
   const handleGoogleSignIn = async (credentialResponse) => {
-    const response = await userServices().isEmailTaken(credentialResponse.email);
+    const credentials = jwtDecode(credentialResponse.credential);
+    const response = await userServices().isEmailTaken(credentials.email);
       if (response.isEmailTaken) {
         toast.error('Registration Failed! Email already present in the database.');
         return;
       } 
-    const credentials = jwtDecode(credentialResponse.credential);
     //console.log(credentials);
     const hash = await hashPassword(credentials.sub);
     const formData = {

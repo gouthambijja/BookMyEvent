@@ -23,7 +23,7 @@ namespace BookMyEvent.DLL.Contracts
         /// </summary>
         /// <param name="transactionId"></param>
         /// <returns> UserID of that Transaction </returns>
-        public Task<Guid> GetUserIdByTransactionId(Guid transactionId);
+        public Task<Guid?> GetUserIdByTransactionId(Guid transactionId);
         /// <summary>
         /// Method used to return all the Transactions associated with the Event 
         /// </summary>

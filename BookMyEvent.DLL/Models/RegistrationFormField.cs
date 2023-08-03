@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookMyEvent.DLL.Models;
+using System;
 using System.Collections.Generic;
 
 namespace db.Models;
@@ -18,6 +19,9 @@ public partial class RegistrationFormField
     public string? Options { get; set; }
 
     public bool? IsRequired { get; set; }
+
+    public byte? FileTypeId { get; set; }
+    public virtual FileType? FileType { get; set; } = null!;
 
     public virtual FieldType FieldType { get; set; } = null!;
 

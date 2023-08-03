@@ -1,4 +1,6 @@
-﻿using BookMyEvent.BLL.Contracts;
+﻿using AutoMapper;
+using BookMyEvent.BLL.Utilities;
+using BookMyEvent.BLL.Contracts;
 using BookMyEvent.BLL.Models;
 using BookMyEvent.DLL.Contracts;
 using db.Models;
@@ -15,20 +17,21 @@ namespace BookMyEvent.BLL.Services
 
         private readonly IOrganisationRepository _organisationRepository;
         private readonly IAdministrationRepository _administrationRepository;
+        private readonly Mapper mapper;
 
         public OrganisationServices(IOrganisationRepository organisationRepository, IAdministrationRepository administrationRepository)
         {
             _organisationRepository = organisationRepository;
             _administrationRepository = administrationRepository;
+            mapper = Automapper.InitializeAutomapper();
         }
 
         public async Task<(BLOrganisation? org, bool IsSuccessfull, string Message)> CreateOrganisation(BLOrganisation organisation)
         {
             try
             {
-                if(!(await (_organisationRepository.IsOrgNameAvailable(organisation.OrganisationName))))
+                if (!(await (_organisationRepository.IsOrgNameAvailable(organisation.OrganisationName))))
                 {
-                    var mapper = Automapper.InitializeAutomapper();
                     var result = await _organisationRepository.AddOrganisation(mapper.Map<Organisation>(organisation));
                     return (mapper.Map<BLOrganisation>(result.org), result.IsSuccessfull, result.Message);
                 }
@@ -45,10 +48,10 @@ namespace BookMyEvent.BLL.Services
             try
             {
                 var result = await _organisationRepository.ChangeIsActiveToFalse(organisationId);
-                if(result)
+                if (result)
                 {
                     var res2 = await _administrationRepository.UpdateAllOrganisationOrganisersIsActive(organisationId, blockerId);
-                    if(res2)
+                    if (res2)
                     {
                         return (true, "Organisation blocked successfully");
                     }
@@ -67,10 +70,9 @@ namespace BookMyEvent.BLL.Services
 
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _organisationRepository.GetAllOrganisation(pageNumber, pageSize);
                 var mappedResult = mapper.Map<List<BLOrganisation>>(result.organisations);
-                return new (mappedResult, result.totalOranisations);
+                return new(mappedResult, result.totalOranisations);
             }
             catch (Exception ex)
             {
@@ -82,13 +84,12 @@ namespace BookMyEvent.BLL.Services
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _organisationRepository.GetOrganisationById(organisationId);
                 return mapper.Map<BLOrganisation>(result);
             }
             catch (Exception ex)
             {
-                return new BLOrganisation();
+                return null;
             }
         }
 
@@ -114,23 +115,21 @@ namespace BookMyEvent.BLL.Services
             {
                 throw ex;
             }
-
         }
 
         public async Task<BLOrganisation> UpdateOrganisation(BLOrganisation organisation)
         {
             try
             {
-                var mapper = Automapper.InitializeAutomapper();
                 var result = await _organisationRepository.UpdateOrganisation(mapper.Map<Organisation>(organisation));
                 return mapper.Map<BLOrganisation>(result);
             }
             catch (Exception ex)
             {
-                return new BLOrganisation();
+                return null;
             }
         }
-       public async Task<bool> AcceptOrganisation(Guid orgId)
+        public async Task<bool> AcceptOrganisation(Guid orgId)
         {
             try
             {
@@ -141,6 +140,5 @@ namespace BookMyEvent.BLL.Services
                 return false;
             }
         }
-
     }
 }

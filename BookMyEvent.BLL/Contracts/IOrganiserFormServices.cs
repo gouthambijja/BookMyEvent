@@ -96,6 +96,6 @@ namespace BookMyEvent.BLL.Contracts
         /// <param name="registrationFormFields"></param>
         /// <returns>return true if success else false</returns>
         public Task<bool> AddRegistrationFormFields(List<BLRegistrationFormFields> registrationFormFields);
-
+        Task<List<BLFileType>> GetFileTypes();
     }
 }
